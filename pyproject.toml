@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "axi"
+version = "1.0.0"
+dependencies = [
+    "torch>=2.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["python"]
+include = ["axi*"]
