@@ -1,3 +1,0 @@
-0000000000000000000000000000000000000000 dd118152ab84137afcb2e386aef4300e28187fda AXI <axi@example.com> 1790968194 +0000	commit (initial): feat: initial RFC-001 reference implementation for AXI runtime
-dd118152ab84137afcb2e386aef4300e28187fda 21f854c0482c14f4e211d756bcef4b5eac92c4b3 AXI <axi@example.com> 1790968373 +0000	commit (amend): feat: initial RFC-001 reference implementation for AXI runtime
-21f854c0482c14f4e211d756bcef4b5eac92c4b3 f6ad62da0dc206e11a5fcb280524f05bbb69d596 AXI <axi@example.com> 1790968631 +0000	commit: fix(axi-dpo): eliminate panic on unmapped RHS edges and update RFC spec
