@@ -1,7 +1,11 @@
 README.md
 pyproject.toml
+python/axi/__init__.py
+python/axi/grammar_mask.py
 python/axi.egg-info/PKG-INFO
 python/axi.egg-info/SOURCES.txt
 python/axi.egg-info/dependency_links.txt
 python/axi.egg-info/requires.txt
 python/axi.egg-info/top_level.txt
+python/axi/kernels/__init__.py
+python/axi/kernels/triton_slice_patch.py
