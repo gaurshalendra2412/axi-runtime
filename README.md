@@ -1,5 +1,7 @@
 RFC-001: The AXI Architecture
 An Axiomatic, Coordinate-Invariant State-Transition Runtime for Foundation Models
+
+[![CI](https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml/badge.svg)](https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml)
 � � �
 1. Problem Statement & Motivation
 Autoregressive transformers serialize multi-dimensional state graphs into 1D token streams governed by monotonic Rotary Positional Embeddings (RoPE). Under long-horizon enterprise workloads, this introduces three systemic failure modes:
