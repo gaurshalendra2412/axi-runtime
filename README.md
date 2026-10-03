@@ -1,4 +1,6 @@
 # RFC-001: The AXI Architecture
+[![CI](https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml/badge.svg)](https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml)
+
 ### An Axiomatic, Coordinate-Invariant State-Transition Runtime for Foundation Models
 
 [![Rust](https://img.shields.io/badge/Rust-1.75%2B-blue.svg)](#)
