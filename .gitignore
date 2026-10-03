@@ -1,0 +1,9 @@
+target/
+*.rlib
+*.rmeta
+*.d
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+venv/
