@@ -31,6 +31,7 @@ import torch
 try:
     import triton
     import triton.language as tl
+    from triton.runtime.errors import OutOfResources
 
     HAS_TRITON = True
 except ImportError:  # CPU-only environments (e.g. CI)
@@ -38,6 +39,10 @@ except ImportError:  # CPU-only environments (e.g. CI)
 
 BLOCK_M = 64
 BLOCK_N = 64
+# Backward-pass launch configs (query-tile size, pipeline stages), tried in
+# order. Smaller GPUs (e.g. T4: 64 KB shared memory) need the smaller ones,
+# especially for head_dim=128.
+_BWD_CONFIGS = [(64, 2), (32, 1), (16, 1)]
 
 
 # --------------------------------------------------------------------------
@@ -392,31 +397,43 @@ class _BlockSparseAttentionFn(torch.autograd.Function):
         dv_pool = torch.zeros_like(v_pool)
         nw = 4 if d <= 64 else 8
 
-        _bwd_dq_kernel[(triton.cdiv(m, BLOCK_M), h, b)](
-            q, do, lse, delta, dq, k_pool, v_pool, bt, bl, na, ctx.scale,
-            q.stride(0), q.stride(1), q.stride(2), q.stride(3),
-            do.stride(0), do.stride(1), do.stride(2), do.stride(3),
-            dq.stride(0), dq.stride(1), dq.stride(2), dq.stride(3),
-            k_pool.stride(0), k_pool.stride(1), k_pool.stride(2), k_pool.stride(3),
-            v_pool.stride(0), v_pool.stride(1), v_pool.stride(2), v_pool.stride(3),
-            bt.stride(0), bt.stride(1),
-            h, m,
-            BLOCK_M=BLOCK_M, BLOCK_N=BLOCK_N, BLOCK_D=d,
-            num_warps=nw, num_stages=2,
-        )
-        _bwd_dkv_kernel[(bt.shape[1], h, b)](
-            q, do, lse, delta, dk_pool, dv_pool, k_pool, v_pool, bt, bl, na, ctx.scale,
-            q.stride(0), q.stride(1), q.stride(2), q.stride(3),
-            do.stride(0), do.stride(1), do.stride(2), do.stride(3),
-            k_pool.stride(0), k_pool.stride(1), k_pool.stride(2), k_pool.stride(3),
-            v_pool.stride(0), v_pool.stride(1), v_pool.stride(2), v_pool.stride(3),
-            dk_pool.stride(0), dk_pool.stride(1), dk_pool.stride(2), dk_pool.stride(3),
-            dv_pool.stride(0), dv_pool.stride(1), dv_pool.stride(2), dv_pool.stride(3),
-            bt.stride(0), bt.stride(1),
-            h, m,
-            BLOCK_M=BLOCK_M, BLOCK_N=BLOCK_N, BLOCK_D=d,
-            num_warps=nw, num_stages=2,
-        )
+        for bm, stages in _BWD_CONFIGS:
+            try:
+                _bwd_dq_kernel[(triton.cdiv(m, bm), h, b)](
+                    q, do, lse, delta, dq, k_pool, v_pool, bt, bl, na, ctx.scale,
+                    q.stride(0), q.stride(1), q.stride(2), q.stride(3),
+                    do.stride(0), do.stride(1), do.stride(2), do.stride(3),
+                    dq.stride(0), dq.stride(1), dq.stride(2), dq.stride(3),
+                    k_pool.stride(0), k_pool.stride(1), k_pool.stride(2), k_pool.stride(3),
+                    v_pool.stride(0), v_pool.stride(1), v_pool.stride(2), v_pool.stride(3),
+                    bt.stride(0), bt.stride(1),
+                    h, m,
+                    BLOCK_M=bm, BLOCK_N=BLOCK_N, BLOCK_D=d,
+                    num_warps=nw, num_stages=stages,
+                )
+                _bwd_dkv_kernel[(bt.shape[1], h, b)](
+                    q, do, lse, delta, dk_pool, dv_pool, k_pool, v_pool, bt, bl, na, ctx.scale,
+                    q.stride(0), q.stride(1), q.stride(2), q.stride(3),
+                    do.stride(0), do.stride(1), do.stride(2), do.stride(3),
+                    k_pool.stride(0), k_pool.stride(1), k_pool.stride(2), k_pool.stride(3),
+                    v_pool.stride(0), v_pool.stride(1), v_pool.stride(2), v_pool.stride(3),
+                    dk_pool.stride(0), dk_pool.stride(1), dk_pool.stride(2), dk_pool.stride(3),
+                    dv_pool.stride(0), dv_pool.stride(1), dv_pool.stride(2), dv_pool.stride(3),
+                    bt.stride(0), bt.stride(1),
+                    h, m,
+                    BLOCK_M=bm, BLOCK_N=BLOCK_N, BLOCK_D=d,
+                    num_warps=nw, num_stages=stages,
+                )
+                break
+            except OutOfResources:
+                # Launch failed before running (not enough shared memory):
+                # nothing was written, so retrying with a smaller config is safe.
+                continue
+        else:
+            raise RuntimeError(
+                "Backward kernels do not fit in this GPU's shared memory "
+                "even with the smallest tile configuration."
+            )
         return dq, dk_pool, dv_pool, None, None, None, None
 
 
