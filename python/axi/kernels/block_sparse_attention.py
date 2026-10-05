@@ -39,10 +39,11 @@ except ImportError:  # CPU-only environments (e.g. CI)
 
 BLOCK_M = 64
 BLOCK_N = 64
-# Backward-pass launch configs (query-tile size, pipeline stages), tried in
-# order. Smaller GPUs (e.g. T4: 64 KB shared memory) need the smaller ones,
-# especially for head_dim=128.
-_BWD_CONFIGS = [(64, 2), (32, 1), (16, 1)]
+# Backward-pass launch configs (query-tile, key-sub-tile, pipeline stages),
+# tried in order. Each physical KV block (BLOCK_N tokens) is processed in
+# BLOCK_N // key-sub-tile pieces, so small-shared-memory GPUs (e.g. T4: 64 KB)
+# can still run head_dim=128.
+_BWD_CONFIGS = [(64, 64, 2), (32, 64, 1), (32, 32, 1), (16, 32, 1), (16, 16, 1)]
 
 
 # --------------------------------------------------------------------------
@@ -170,6 +171,7 @@ if HAS_TRITON:
 
     # ----------------------------------------------------------------------
     # Backward dQ: parallel over query tiles, loops over active KV blocks
+    # (each block processed in NUM_SUB pieces of BLOCK_N tokens)
     # ----------------------------------------------------------------------
     @triton.jit
     def _bwd_dq_kernel(
@@ -186,6 +188,7 @@ if HAS_TRITON:
         BLOCK_M: tl.constexpr,
         BLOCK_N: tl.constexpr,
         BLOCK_D: tl.constexpr,
+        NUM_SUB: tl.constexpr,
     ):
         start_m = tl.program_id(0)
         off_h = tl.program_id(1).to(tl.int64)
@@ -194,7 +197,6 @@ if HAS_TRITON:
         offs_m = start_m * BLOCK_M + tl.arange(0, BLOCK_M)
         offs_m64 = offs_m.to(tl.int64)
         offs_d = tl.arange(0, BLOCK_D)
-        offs_n = tl.arange(0, BLOCK_N)
         mask_m = offs_m < M
 
         q = tl.load(
@@ -215,23 +217,25 @@ if HAS_TRITON:
         for idx in range(0, n_active):
             phys = tl.load(Block_Table + off_z * stride_tb + idx * stride_tn).to(tl.int64)
             blen = tl.load(Block_Lens + off_z * stride_tb + idx * stride_tn)
-            mask_n = offs_n < blen
+            for sub in range(0, NUM_SUB):
+                offs_n = sub * BLOCK_N + tl.arange(0, BLOCK_N)
+                mask_n = offs_n < blen
 
-            k = tl.load(
-                K_pool + phys * stride_kb + off_h * stride_kh
-                + offs_n[:, None] * stride_kn + offs_d[None, :] * stride_kd,
-                mask=mask_n[:, None], other=0.0)  # [N, D]
-            v = tl.load(
-                V_pool + phys * stride_vb + off_h * stride_vh
-                + offs_n[:, None] * stride_vn + offs_d[None, :] * stride_vd,
-                mask=mask_n[:, None], other=0.0)  # [N, D]
+                k = tl.load(
+                    K_pool + phys * stride_kb + off_h * stride_kh
+                    + offs_n[:, None] * stride_kn + offs_d[None, :] * stride_kd,
+                    mask=mask_n[:, None], other=0.0)  # [N, D]
+                v = tl.load(
+                    V_pool + phys * stride_vb + off_h * stride_vh
+                    + offs_n[:, None] * stride_vn + offs_d[None, :] * stride_vd,
+                    mask=mask_n[:, None], other=0.0)  # [N, D]
 
-            qk = tl.dot(q, tl.trans(k)) * sm_scale
-            p = tl.exp(qk - lse_i[:, None])
-            p = tl.where(mask_m[:, None] & mask_n[None, :], p, 0.0)
-            dp = tl.dot(do, tl.trans(v))
-            ds = p * (dp - delta_i[:, None]) * sm_scale
-            dq_acc += tl.dot(ds.to(k.dtype), k)
+                qk = tl.dot(q, tl.trans(k)) * sm_scale
+                p = tl.exp(qk - lse_i[:, None])
+                p = tl.where(mask_m[:, None] & mask_n[None, :], p, 0.0)
+                dp = tl.dot(do, tl.trans(v))
+                ds = p * (dp - delta_i[:, None]) * sm_scale
+                dq_acc += tl.dot(ds.to(k.dtype), k)
 
         tl.store(
             dQ + off_z * stride_dqb + off_h * stride_dqh
@@ -239,8 +243,8 @@ if HAS_TRITON:
             dq_acc.to(dQ.dtype.element_ty), mask=mask_m[:, None])
 
     # ----------------------------------------------------------------------
-    # Backward dK/dV: one program per ACTIVE physical block (no atomics;
-    # requires every physical block to appear at most once in the batch).
+    # Backward dK/dV: one program per (ACTIVE physical block, sub-piece).
+    # No atomics; requires every physical block to appear at most once.
     # ----------------------------------------------------------------------
     @triton.jit
     def _bwd_dkv_kernel(
@@ -258,8 +262,11 @@ if HAS_TRITON:
         BLOCK_M: tl.constexpr,
         BLOCK_N: tl.constexpr,
         BLOCK_D: tl.constexpr,
+        NUM_SUB: tl.constexpr,
     ):
-        active_idx = tl.program_id(0)
+        pid0 = tl.program_id(0)
+        active_idx = pid0 // NUM_SUB
+        sub = pid0 % NUM_SUB
         off_h = tl.program_id(1).to(tl.int64)
         off_z = tl.program_id(2).to(tl.int64)
 
@@ -268,7 +275,7 @@ if HAS_TRITON:
             phys = tl.load(Block_Table + off_z * stride_tb + active_idx * stride_tn).to(tl.int64)
             blen = tl.load(Block_Lens + off_z * stride_tb + active_idx * stride_tn)
 
-            offs_n = tl.arange(0, BLOCK_N)
+            offs_n = sub * BLOCK_N + tl.arange(0, BLOCK_N)
             offs_d = tl.arange(0, BLOCK_D)
             offs_m = tl.arange(0, BLOCK_M)
             mask_n = offs_n < blen
@@ -320,7 +327,6 @@ if HAS_TRITON:
                 dV_pool + phys * stride_dvb + off_h * stride_dvh
                 + offs_n[:, None] * stride_dvn + offs_d[None, :] * stride_dvd,
                 dv_acc.to(dV_pool.dtype.element_ty), mask=mask_n[:, None])
-
 
 # --------------------------------------------------------------------------
 # Python wrappers
@@ -397,7 +403,7 @@ class _BlockSparseAttentionFn(torch.autograd.Function):
         dv_pool = torch.zeros_like(v_pool)
         nw = 4 if d <= 64 else 8
 
-        for bm, stages in _BWD_CONFIGS:
+        for bm, bn, stages in _BWD_CONFIGS:
             try:
                 _bwd_dq_kernel[(triton.cdiv(m, bm), h, b)](
                     q, do, lse, delta, dq, k_pool, v_pool, bt, bl, na, ctx.scale,
@@ -408,10 +414,10 @@ class _BlockSparseAttentionFn(torch.autograd.Function):
                     v_pool.stride(0), v_pool.stride(1), v_pool.stride(2), v_pool.stride(3),
                     bt.stride(0), bt.stride(1),
                     h, m,
-                    BLOCK_M=bm, BLOCK_N=BLOCK_N, BLOCK_D=d,
+                    BLOCK_M=bm, BLOCK_N=bn, BLOCK_D=d, NUM_SUB=BLOCK_N // bn,
                     num_warps=nw, num_stages=stages,
                 )
-                _bwd_dkv_kernel[(bt.shape[1], h, b)](
+                _bwd_dkv_kernel[(bt.shape[1] * (BLOCK_N // bn), h, b)](
                     q, do, lse, delta, dk_pool, dv_pool, k_pool, v_pool, bt, bl, na, ctx.scale,
                     q.stride(0), q.stride(1), q.stride(2), q.stride(3),
                     do.stride(0), do.stride(1), do.stride(2), do.stride(3),
@@ -421,7 +427,7 @@ class _BlockSparseAttentionFn(torch.autograd.Function):
                     dv_pool.stride(0), dv_pool.stride(1), dv_pool.stride(2), dv_pool.stride(3),
                     bt.stride(0), bt.stride(1),
                     h, m,
-                    BLOCK_M=bm, BLOCK_N=BLOCK_N, BLOCK_D=d,
+                    BLOCK_M=bm, BLOCK_N=bn, BLOCK_D=d, NUM_SUB=BLOCK_N // bn,
                     num_warps=nw, num_stages=stages,
                 )
                 break
