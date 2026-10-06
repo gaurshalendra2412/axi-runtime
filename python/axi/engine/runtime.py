@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 from .cico_parser import CICOParser, CICOParseError
 from .gate import Graph, check, apply
+from .diagnostics import propose_repair
 from .pager import Pager, OutOfPhysicalBlocks, Conflict
 
 W = 1 << 16
@@ -15,6 +16,7 @@ class Outcome:
     committed: bool
     stage: str   # parse | memory | gate | commit
     reason: str = ""
+    repair: str = None   # full repaired proposal (CICO text) when the gate failure is auto-repairable
 
 
 class Runtime:
@@ -36,7 +38,9 @@ class Runtime:
             tx.rollback(); return Outcome(False, "memory", "out of physical blocks")
         res = check(self.graph, delta)
         if not res.ok:
-            tx.rollback(); return Outcome(False, "gate", res.reason)
+            tx.rollback()
+            rep = propose_repair(self.graph, delta)
+            return Outcome(False, "gate", res.reason, rep.text if rep and rep.repairable else None)
         for d in delta.node_deltas:
             if d.op == "DEL": tx.unmap_page(vpn_of((d.r, d.c)))
         try:

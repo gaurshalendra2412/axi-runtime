@@ -76,6 +76,13 @@ class Transaction:
                 base = self._p._table.get(vpn)
             self._unmaps[vpn] = base
 
+    def prepare(self) -> bool:
+        """2PC phase 1 check: True iff commit() would not hit a Conflict right now. Valid for commit
+        only if proposals are serialized by a coordinator (nothing else commits in between)."""
+        p = self._p
+        with p._lock:
+            return all(p._table.get(v) == b for v, b in list(self._base.items()) + list(self._unmaps.items()))
+
     def commit(self):
         assert self._open; p = self._p
         with p._lock:

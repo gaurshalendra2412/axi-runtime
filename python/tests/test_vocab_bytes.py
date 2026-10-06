@@ -25,3 +25,8 @@ def test_gpt2_style_vocab_gives_correct_masks():
     after = {vocab[i] for i in m.allowed_token_ids("END") if vocab[i]}
     assert b" " in after and b"\n" in after
     for q in dfa.states(): assert m.allowed_token_ids(q) == m.allowed_token_ids_naive(q)
+
+
+if __name__ == "__main__":
+    for n, f in list(globals().items()):
+        if n.startswith("test_"): f(); print("PASS", n)
