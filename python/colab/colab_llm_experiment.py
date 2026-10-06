@@ -68,8 +68,8 @@ def timing(model, device, lengths=(4096, 16384, 32768), spec=64, chunk=2048):
                 sync(); t = time.perf_counter(); past = prefill(ids, L); sync(); t_full = time.perf_counter() - t
                 if not hasattr(past, "crop"): print("  cache has no crop(); old transformers"); return
                 sync(); t = time.perf_counter(); past = prefill(ids, L + spec, past, L); sync(); t_spec = time.perf_counter() - t
-                sync(); t = time.perf_counter(); past.crop(L); sync(); t_crop = time.perf_counter() - t
-                sync(); t = time.perf_counter(); past.crop(L // 4); past = prefill(ids, L, past, L // 4); sync(); t_suf = time.perf_counter() - t
+                sync(); t = time.perf_counter(); past.crop(-spec); sync(); t_crop = time.perf_counter() - t
+                sync(); t = time.perf_counter(); past.crop(-(L - L // 4)); past = prefill(ids, L, past, L // 4); sync(); t_suf = time.perf_counter() - t
                 print(f"{L:>11} | {t_full*1e3:>10.0f} ms | {t_spec*1e3:>11.0f} ms | {t_crop*1e6:>10.0f} us | {t_suf*1e3:>26.0f} ms")
                 del past; torch.cuda.empty_cache()
             except torch.cuda.OutOfMemoryError:

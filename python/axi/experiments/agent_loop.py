@@ -126,6 +126,14 @@ def feedback_text(variant: str, obs) -> str:
             if o.kind == "dangling": parts.append(f"OBSTRUCTION dangling node=({o.node[0]},{o.node[1]}) attached: " + " ".join(_edge_txt(e) for e in o.edges))
             else: parts.append(f"OBSTRUCTION {o.kind} " + (f"node=({o.node[0]},{o.node[1]})" if o.node else f"edge={o.edge}"))
         return "\n".join(parts) + tail
+    if variant == "structured_imperative":
+        parts = []
+        for o in obs:
+            if o.kind == "dangling":
+                parts.append(f"OBSTRUCTION dangling node=({o.node[0]},{o.node[1]})\nREQUIRED: the delta must also delete these edges: "
+                             + " ".join(_edge_txt(e) for e in o.edges) + f"\nKeep DEL[{o.node[0]},{o.node[1]}] in the delta.")
+            else: parts.append(f"OBSTRUCTION {o.kind} " + (f"node=({o.node[0]},{o.node[1]})" if o.node else f"edge={o.edge}"))
+        return "\n".join(parts) + tail
     if variant == "prose_plain":
         return "That change was rejected because it would break the graph (for example removing a service that others still depend on)." + tail
     if variant == "prose_detailed":
@@ -180,7 +188,7 @@ def run_task(llm, task: Task, hint_rules=False, degree_threshold=4) -> dict:
         if res.ok: apply(final, d1)
     out["M2_gate"] = _rec(task.graph, final, task, rejected=rej, obstructions=[o.kind for o in obs])
     # M3 retries (only when the gate rejected a parseable proposal)
-    for variant in ("prose_plain", "prose_detailed", "structured"):
+    for variant in ("prose_plain", "prose_detailed", "structured", "structured_imperative"):
         key = f"M3_retry_{variant}"
         if not rej or d1 is None:
             out[key] = dict(out["M2_gate"], retried=False, tokens=0); continue
@@ -204,7 +212,7 @@ def run_experiment(llm, tasks, hint_rules=False, progress=None) -> dict:
     return {"rows": rows, "summary": summarize(rows)}
 
 
-MODES = ["M0_unconstrained", "M1_constrained", "M2_gate", "M3_retry_prose_plain", "M3_retry_prose_detailed", "M3_retry_structured", "M5_auto_repair"]
+MODES = ["M0_unconstrained", "M1_constrained", "M2_gate", "M3_retry_prose_plain", "M3_retry_prose_detailed", "M3_retry_structured", "M3_retry_structured_imperative", "M5_auto_repair"]
 
 
 def summarize(rows) -> dict:
@@ -216,6 +224,7 @@ def summarize(rows) -> dict:
             d[m] = dict(success=sum(v["success"] for v in x) / n, corrupted=sum(v["corrupted"] for v in x) / n,
                         strict_parse=(sum(v.get("strict_parse", False) for v in x) / n) if "strict_parse" in x[0] else None,
                         avg_tokens=(sum(v.get("tokens", 0) for v in x) / n) if x and "tokens" in x[0] else None)
+        d["gate_blocked_blind_successes"] = sum(1 for r in rs if r["M1_constrained"]["success"] and r["M2_gate"].get("rejected"))
         s[scope] = d
     return s
 
@@ -225,4 +234,5 @@ def print_summary(summary):
         print(f"\n== {scope} (n={d['n']}) ==   mode | task success | corrupted graph | strict-parse")
         for m in MODES:
             v = d[m]; sp = "-" if v["strict_parse"] is None else f"{v['strict_parse']*100:5.1f}%"
-            print(f"  {m:26s} {v['success']*100:6.1f}%   {v['corrupted']*100:6.1f}%   {sp}")
+            print(f"  {m:32s} {v['success']*100:6.1f}%   {v['corrupted']*100:6.1f}%   {sp}")
+        print(f"  (tasks where blind apply was right but the gate rejected: {d['gate_blocked_blind_successes']})")

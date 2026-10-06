@@ -68,6 +68,21 @@ def format_delta(delta: StateTransitionDelta) -> str:
     return " ".join(items)
 
 
+def normalize(g: Graph, delta: StateTransitionDelta):
+    """Drop only PROVABLY redundant items: exact duplicates, and ADDs of a node/edge that already exists with the
+    identical value/weight (a no-op in sequential semantics). Anything ambiguous (e.g. different value) is kept."""
+    seen, nodes, edges, dropped = set(), [], [], []
+    for d in delta.node_deltas:
+        key = ("n", d.op, d.r, d.c, d.val)
+        redundant = key in seen or (d.op == "ADD" and (d.r, d.c) in g.nodes and g.nodes[(d.r, d.c)] == d.val)
+        seen.add(key); (dropped if redundant else nodes).append(d)
+    for e in delta.edge_deltas:
+        key = ("e", e.op, e.u, e.v, e.relation, e.weight); k = (e.u, e.v, e.relation)
+        redundant = key in seen or (e.op == "ADD" and k in g.edges and g.edges[k] == e.weight)
+        seen.add(key); (dropped if redundant else edges).append(e)
+    return StateTransitionDelta(nodes, edges), dropped
+
+
 @dataclass
 class Repair:
     obstructions: List[Obstruction]
@@ -76,12 +91,17 @@ class Repair:
     added_ops: str = ""                                  # CICO text of the ops the repair ADDED (the hint)
     repaired: Optional[StateTransitionDelta] = None
     text: Optional[str] = None                           # full repaired proposal, ready to resubmit
+    dropped: list = field(default_factory=list)          # redundant items removed by normalize()
 
 
 def propose_repair(g: Graph, delta: StateTransitionDelta, degree_threshold: int = 4) -> Optional[Repair]:
-    obs = diagnose(g, delta)
-    if not obs: return None
-    if any(o.kind != "dangling" for o in obs): return Repair(obs, False)
+    obs0 = diagnose(g, delta)
+    if not obs0: return None
+    base, dropped = normalize(g, delta)
+    obs = diagnose(g, base) if dropped else obs0
+    if not obs: return Repair(obs0, True, {}, "", base, format_delta(base), dropped)
+    if any(o.kind != "dangling" for o in obs): return Repair(obs0, False)
+    delta = base
     dual_nodes, new_edges, strat = set(), {}, {}
     for o in obs:
         if len(o.edges) <= degree_threshold:
@@ -93,4 +113,4 @@ def propose_repair(g: Graph, delta: StateTransitionDelta, degree_threshold: int 
     # a dual-kept node's edges need no deletion; but an edge shared with a primal node must still go (primal wins for that edge)
     added = [EdgeDelta("DEL", u, v, r, w) for (u, v, r), w in sorted(new_edges.items())]
     repaired = StateTransitionDelta(nodes, list(delta.edge_deltas) + added)
-    return Repair(obs, True, strat, format_delta(StateTransitionDelta([], added)), repaired, format_delta(repaired))
+    return Repair(obs0, True, strat, format_delta(StateTransitionDelta([], added)), repaired, format_delta(repaired), dropped)

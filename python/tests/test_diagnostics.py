@@ -115,6 +115,37 @@ def test_closed_loop_through_runtime():
     assert healed > 20, healed
 
 
+def test_redundant_add_is_dropped_and_dangling_still_repaired():
+    g = Graph(); [g.add_node((i, 0), 9) for i in range(3)]; g.add_edge((0, 0), (1, 0), "dep", 5)
+    # the 3B model's real failure shape: re-ADD of an existing node (same value) plus a node delete with dependents
+    r = propose_repair(g, CICOParser.parse_transition_delta("ADD[1,0:9] DEL[1,0]"))
+    assert r.repairable and "ADD" not in r.text and "DEL[(0,0)->(1,0):dep#5]" in r.text and len(r.dropped) == 1
+    assert check(g, r.repaired).ok
+
+
+def test_ambiguous_add_is_not_silently_dropped():
+    g = Graph(); [g.add_node((i, 0), 9) for i in range(2)]
+    r = propose_repair(g, CICOParser.parse_transition_delta("ADD[1,0:3]"))      # different value: could be an update intent
+    assert r is not None and not r.repairable and r.dropped == []
+
+
+def test_duplicate_items_and_idempotent_edge_add_dropped_semantics_preserved():
+    rng = random.Random(4); n_fixed = 0
+    for _ in range(1500):
+        g = rand_graph(rng, 12, .25); n = rng.choice(list(g.nodes))
+        ideal = [f"DEL[{n[0]},{n[1]}]"] + [f"DEL[({u[0]},{u[1]})->({v[0]},{v[1]}):{r}#{g.edges[(u, v, r)]}]" for (u, v, r) in sorted(g.incident(n))]
+        ref = Graph(); [ref.add_node(k, v) for k, v in g.nodes.items()]; [ref.add_edge(*k, w) for k, w in g.edges.items()]
+        from axi.engine.gate import apply
+        apply(ref, CICOParser.parse_transition_delta(" ".join(ideal)))
+        noisy = list(ideal[:1]) + ["ADD[%d,%d:%d]" % (*n, g.nodes[n])] + ideal[1:] + ideal[1:2]        # redundant ADD + duplicated item
+        d = CICOParser.parse_transition_delta(" ".join(noisy)); r = propose_repair(g, d)
+        if r is None: continue
+        assert r.repairable, noisy
+        out = Graph(); [out.add_node(k, v) for k, v in g.nodes.items()]; [out.add_edge(*k, w) for k, w in g.edges.items()]
+        apply(out, r.repaired); assert out.nodes == ref.nodes and out.edges == ref.edges; n_fixed += 1
+    assert n_fixed > 800
+
+
 if __name__ == "__main__":
     for n, f in list(globals().items()):
         if n.startswith("test_"): f(); print("PASS", n)
