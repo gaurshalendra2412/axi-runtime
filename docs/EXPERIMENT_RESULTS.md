@@ -12,7 +12,7 @@ Qwen/Qwen2.5-Instruct models, fp16. Scripts: `python/colab/colab_llm_experiment.
 | strict parse | 96.7% -> 100% (constrained) | 93.3% -> 100% |
 The model never emitted a plain service delete (it wrote self-loop edge deletes), so the gate/repair had nothing to fix.
 
-## Qwen2.5-3B-Instruct — three seeds, both regimes
+## Qwen2.5-3B-Instruct — seeds 0-2 (tables below) and seed 3 (own section after them), both regimes
 
 Seed 0 was the development seed (the imperative retry wording and `normalize()` were written after reading its failures).
 **Seeds 1 and 2 were run afterwards on fresh tasks, with unchanged code.** Cells are `seed 0 / seed 1 / seed 2`. 60 tasks per seed,
@@ -125,12 +125,62 @@ corruption from ~40% to 0%.
 The delta language cannot express an in-place update: `ADD` of an existing node -> `ident_node`; `DEL`+`ADD` of the same key ->
 `ident_node` / `ident_edge`. The benchmark has no update tasks.
 
-## Built, not yet run on a real model
-* **M6 ground-and-complete** (mode `M6_ground_complete`): cuts operations that name things not in the graph, corrects a wrong weight, then deletes every
-  remaining incident edge. Sandbox only (synthetic fuzz); `python/tests/test_ground_complete.py`. Needs `--seed 3` or later.
-* **Containment test** (`--cascade-episodes 10 --cascade-steps 8`): 8 sequential requests on one live graph under four policies (blind / gate /
-  gate+M5 / gate+M6). Scripted stand-in only so far.
-Seeds 0-2 numbers above are unchanged and do not include either.
+## Seed 3: the first fresh seed for M6 and the containment test (Colab T4, Qwen2.5-3B, `max_new_tokens=400`)
+M6 (ground-and-complete) and the containment test were written after seed 2 was read, so seed 3 is the first run that counts for them.
+M0-M5 ran on unchanged code (the 400-token cap is the only change since seeds 0-2). 60 tasks, 30 `delete_dep`.
+
+| mode | no rule: success (all) | no rule: delete_dep | rule in prompt: success (all) | rule in prompt: delete_dep |
+|---|---|---|---|---|
+| M0 unconstrained | 50.0 % | 0.0 % | 53.3 % | 10.0 % |
+| M1 constrained | 50.0 % | 0.0 % | 55.0 % | 13.3 % |
+| M2 gate only | 50.0 % | 0.0 % | 41.7 % | 3.3 % |
+| M3 retry, vague prose | 51.7 % | 3.3 % | 51.7 % | 16.7 % |
+| M3 retry, detailed prose | 98.3 % | 96.7 % | 53.3 % | 26.7 % |
+| M3 retry, structured (v1) | 65.0 % | 30.0 % | 46.7 % | 13.3 % |
+| M3 retry, structured imperative | 100 % | 100 % | 48.3 % | 16.7 % |
+| M5 deterministic repair | 100 % | 100 % | 51.7 % | 23.3 % |
+| **M6 ground-and-complete** | **100 %** | **100 %** | **95.0 %** | **90.0 %** |
+
+Corruption: blind apply (M1) corrupts 100 % of delete_dep without the rule and 76.7 % with it; every gated mode, including M6, is 0 %.
+* **Four seeds now agree** on the no-rule ordering of the retry wordings (delete_dep, s0/s1/s2/s3): vague 16.7/20.0/6.7/3.3 %, structured v1 36.7/46.7/33.3/30.0 %,
+  detailed prose 93.3/86.7/93.3/96.7 %, imperative **100/100/100/100 %** (120 of 120 delete_dep tasks, 240 of 240 overall).
+* With the rule in the prompt, imperative retry on delete_dep is 33.3/30.0/46.7/16.7 % and M5 is 46.7/50.0/30.0/23.3 %: report a range, not a number.
+* **M6 in the rule regime: 27 of 30 correct (26 repaired, plus one admissible proposal applied untouched; the count of 1 is inferred).** The 3 left are all
+  `ident_node`: after the cut step, the model still adds a service that already exists with a different value, i.e. an update, which the language cannot
+  express (row 17). They were left alone on purpose and the graph stayed intact (0 % corruption). I have not yet read those 3 raw outputs.
+* M6 recovers the gate-rejected-but-blind-right cases (8 overall, 3 on delete_dep): the harmless phantom edge deletes are cut instead of rejected.
+* **How to read M6.** The model only has to name the right service. The runtime cuts the false claims and writes the missing edge deletes. So the
+  headline is *safety plus completion by the runtime* (0 % corruption, 90 % of the intended edits), not "the model reached 90 %". The M3 retry numbers are the
+  ones that involve a second model call, and in the rule regime they stay at 13-27 %.
+* **Constrained strict-parse: 100 % in both regimes, 0 of 60 unparsed with the rule in the prompt** (seeds 0-2 at the 120-token cap: 98.3 / 100 / 96.7 %).
+  Consistent with the truncation explanation; the clean test (re-run seed 2 with the rule and the 400 cap, the two failing outputs should now parse) has not been done.
+  Unconstrained strict-parse with the rule: 76.7 % overall, 53.3 % on delete_dep (seed 2: 78.3 / 56.7 %).
+
+Scorecard, seed 3, delete_dep (same definitions as above):
+
+| | no rule | rule in prompt |
+|---|---|---|
+| blind apply corrupts / after the gate | 100 % / 0 % | 76.7 % / 0 % |
+| proposals naming things not in the graph | 0 % | 36.7 % (seed 2: 32.1 %) |
+| proposals leaving dangling edges | 100 % | 76.7 % (seed 2: 78.6 %) |
+| constrained: loud / silent | 0 % / 100 % | 0 % / 76.7 % |
+| after feedback, vague prose: repeats same / still rejected | 6.7 % / 86.7 % | 3.7 % / 85.2 % |
+| after feedback, imperative: repeats same / still rejected | 0 % / 0 % | 0 % / 85.2 % |
+
+The "models change their answer but stay rejected" finding (misdirected compliance) repeats on a second seed: repeats 0-15 %, still rejected 70-89 % in the rule regime.
+
+### Containment test (8 episodes x 8 steps per policy, no rule in the prompt, seed 3; concept-map row 27)
+| policy | share of episodes with a corrupted graph after step 1 / 2 / 3 / 4 ... 8 | mean dangling edges at step 8 |
+|---|---|---|
+| blind apply | 38 % / 75 % / 88 % / 100 % ... 100 % | 7.75 |
+| gate only | 0 % at every step | 0 |
+| gate + M5 repair | 0 % at every step | 0 |
+| gate + M6 repair | 0 % at every step | 0 |
+
+Read with care: (1) with blind apply, corruption persists **by construction** (nothing ever removes a dangling edge), so the informative part is how fast it
+appears (38 % of episodes at step 1, all by step 4) and how much of it piles up. (2) 8 episodes = 64 steps per policy; percentages move in steps of 12.5 points.
+(3) The step-success column the script prints (blind 45.3 %, gate 35.9 %, repair 100 %) is **not comparable across policies**: each policy leaves a different graph,
+so the later requests differ. Quote the corruption rows only. (4) One model, synthetic graphs.
 
 ## KV-cache timing (Tesla T4, Qwen2.5-0.5B, no logits computed)
 | context | full prefill | append 64 spec tokens | rollback = crop | edit at 25%, re-prefill rest |
