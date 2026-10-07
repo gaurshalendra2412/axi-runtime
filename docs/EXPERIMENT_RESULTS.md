@@ -75,6 +75,10 @@ So without the rule 100% of failures are the single kind the repair and the impe
 This is why imperative retry and M5 stall at 30-50%: the current feedback text and `propose_repair` only handle `dangling`; the other
 kinds are reported but not repaired (`propose_repair(...).repairable == False`, checked).
 
+### Reproducibility (seed 3, rule regime, run twice)
+The seed-3 rule-in-prompt run was repeated in a fresh Colab session (7 Oct): every printed number in the summary tables was identical to the first run
+(all nine modes, both panels, the "blind right but gate rejected" counts 8 and 3). Same model, greedy decoding, T4. One seed, one model.
+
 ### Reproducibility (seed 2 run twice)
 Seed 2 was run a second time on a different Colab notebook (the first hit its GPU limit; fresh runtime, model re-downloaded). Every
 number printed (both regimes, all modes, all kinds, strict-parse counts, the two truncated outputs) is identical to the first run.
@@ -145,9 +149,14 @@ Corruption: blind apply (M1) corrupts 100 % of delete_dep without the rule and 7
 * **Four seeds now agree** on the no-rule ordering of the retry wordings (delete_dep, s0/s1/s2/s3): vague 16.7/20.0/6.7/3.3 %, structured v1 36.7/46.7/33.3/30.0 %,
   detailed prose 93.3/86.7/93.3/96.7 %, imperative **100/100/100/100 %** (120 of 120 delete_dep tasks, 240 of 240 overall).
 * With the rule in the prompt, imperative retry on delete_dep is 33.3/30.0/46.7/16.7 % and M5 is 46.7/50.0/30.0/23.3 %: report a range, not a number.
-* **M6 in the rule regime: 27 of 30 correct (26 repaired, plus one admissible proposal applied untouched; the count of 1 is inferred).** The 3 left are all
-  `ident_node`: after the cut step, the model still adds a service that already exists with a different value, i.e. an update, which the language cannot
-  express (row 17). They were left alone on purpose and the graph stayed intact (0 % corruption). I have not yet read those 3 raw outputs.
+* **M6 in the rule regime: 27 of 30 correct (26 repaired, plus one admissible proposal applied untouched; the count of 1 is inferred).** The 3 left are misses; they were left alone on purpose and
+  the graph stayed intact (0 % corruption).
+  **Correction (7 Oct, after reading one raw output).** I first wrote that all 3 are `ident_node` updates the language cannot express. That was not supported.
+  On the re-run, the filter "M6 gave a reason it could not repair" printed **one** output, not three, so at most one of the three is that case and the other
+  two are still unread. The one that was read: request "Delete the service at (1,2)." (node value 5, three incident edges); model text
+  `ADD[1,2:0] DEL[(0,0)->(1,2):dep#2] DEL[(1,2)->(0,0):dep#7] DEL[(1,2)->(1,0):owns#2]`. The request was a plain delete, not an update. The model wrote
+  `ADD[1,2:0]` where `DEL[1,2]` was needed (it looks like a "set it to 0" improvisation) and named the first edge `dep` instead of `owns`. M6 refuses to guess
+  around that. It is a model error, not a gap in the language. The benchmark has no update tasks, so no failure in it can be an update the user wanted.
 * M6 recovers the gate-rejected-but-blind-right cases (8 overall, 3 on delete_dep): the harmless phantom edge deletes are cut instead of rejected.
 * **How to read M6.** The model only has to name the right service. The runtime cuts the false claims and writes the missing edge deletes. So the
   headline is *safety plus completion by the runtime* (0 % corruption, 90 % of the intended edits), not "the model reached 90 %". The M3 retry numbers are the
