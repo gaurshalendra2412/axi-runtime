@@ -9,6 +9,7 @@ import numpy as np
 from axi.engine.cico_decoder import CICOGrammarDFA, TokenMasker
 from axi.engine.gpu_mask import TokenDFATable, TorchMaskTable
 from axi.experiments.agent_loop import make_tasks, run_experiment, print_summary
+from axi.experiments.cascade import run_cascade, print_cascade
 from colab.colab_check import vocab_bytes_from_tokens
 
 
@@ -40,7 +41,7 @@ def build_hf_llm(name, device):
             return mask.mask_(scores, self.state)
 
     class HFLLM:
-        def generate(self, messages, constrained, max_new_tokens=120):
+        def generate(self, messages, constrained, max_new_tokens=400):
             enc = tok.apply_chat_template(messages, add_generation_prompt=True, return_tensors="pt", return_dict=True)
             enc = {k: v.to(device) for k, v in enc.items()}; pl = enc["input_ids"].shape[1]
             procs = LogitsProcessorList([CICOProc(pl)]) if constrained else None
@@ -80,7 +81,9 @@ def timing(model, device, lengths=(4096, 16384, 32768), spec=64, chunk=2048):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--model", default="Qwen/Qwen2.5-0.5B-Instruct"); ap.add_argument("--n", type=int, default=60)
     ap.add_argument("--seed", type=int, default=0); ap.add_argument("--hint-rules", action="store_true"); ap.add_argument("--skip-timing", action="store_true")
-    ap.add_argument("--out", default="/content/axi_llm_results.json"); a = ap.parse_args()
+    ap.add_argument("--out", default="/content/axi_llm_results.json")
+    ap.add_argument("--cascade-episodes", type=int, default=0, help="if > 0, also run the containment test (concept-map row 27): E episodes x T steps per policy")
+    ap.add_argument("--cascade-steps", type=int, default=8); ap.add_argument("--cascade-out", default="/content/axi_cascade.json"); a = ap.parse_args()
     import torch
     device = "cuda"; llm, model = build_hf_llm(a.model, device)
     tasks = make_tasks(a.n, a.seed); print(f"\n== Part 1: agent loop, {a.n} tasks, hint_rules={a.hint_rules} ==")
@@ -88,4 +91,8 @@ if __name__ == "__main__":
     print_summary(res["summary"]); json.dump(res, open(a.out, "w"), indent=1, default=str); print("\nraw transcripts saved to", a.out)
     ex = next((r for r in res["rows"] if r["kind"] == "delete_dep"), None)
     if ex: print("\nexample (delete_dep):\n  M0 text:", repr(ex["M0_unconstrained"]["text"]), "\n  M1 text:", repr(ex["M1_constrained"]["text"]), "\n  gate obstructions:", ex["M2_gate"]["obstructions"])
+    if a.cascade_episodes > 0:
+        print(f"\n== Part 3: containment test, {a.cascade_episodes} episodes x {a.cascade_steps} steps x 4 policies ==")
+        cas = run_cascade(llm, a.cascade_episodes, a.cascade_steps, a.seed, progress=lambda i, n: print(f"  episode {i}/{n}", end="\r"))
+        print_cascade(cas["summary"]); json.dump(cas, open(a.cascade_out, "w"), indent=1, default=str); print("\ncascade transcripts saved to", a.cascade_out)
     if not a.skip_timing: timing(model, device)

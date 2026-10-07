@@ -52,9 +52,12 @@ Seed 0 was the development seed (the imperative retry wording and `normalize()` 
 
 * The collapse is real and repeats: imperative retry on delete_dep goes from 100% (no rule) to 33.3 / 30.0 / 46.7 %. The size of the
   drop varies by seed, so report "roughly 30-47%", not one number. M5 is noisy too (30-50%).
-* Strict parse of the *constrained* output: 98.3 / 100 / 96.7 % overall (96.7 / 100 / 93.3 % on delete_dep), so the mask does not
-  always guarantee a parsed delta here. Cause not yet established (hypothesis: output cut off at `max_new_tokens=120` when the
-  model lists many edges; check `tokens` on the failing rows). Unconstrained strict parse falls to 88.3 / 88.3 / 78.3 % (56.7% on delete_dep, seed 2).
+* Strict parse of the *constrained* output: 98.3 / 100 / 96.7 % overall (96.7 / 100 / 93.3 % on delete_dep), so the mask did not
+  always give a parsed delta here. **Cause found (seed 2): truncation.** Both failing outputs have `tokens 120` and stop mid-item
+  (`... DEL[(0,0)->(2,1):dep#`). The model lists many edges and the 120-token cap cuts the output; the mask only guarantees that every
+  *prefix* is valid, not that the output is finished. Seed 0's single failing row was not inspected. The cap is now 400
+  (`colab_llm_experiment.py`); seeds 0-2 in this document all ran with 120, so the hint-regime numbers (about 2 of 60 outputs per seed) are
+  to be re-run with 400 before the paper quotes them. Unconstrained strict parse falls to 88.3 / 88.3 / 78.3 % (56.7% on delete_dep, seed 2).
 * Gate-rejected-but-blind-right: 6 / 5 / 5 overall, 2 / 2 / 2 on delete_dep.
 
 ### Why the rule in the prompt hurts: the failure mode changes (seed 2, delete_dep, n=30)
@@ -72,6 +75,45 @@ So without the rule 100% of failures are the single kind the repair and the impe
 This is why imperative retry and M5 stall at 30-50%: the current feedback text and `propose_repair` only handle `dangling`; the other
 kinds are reported but not repaired (`propose_repair(...).repairable == False`, checked).
 
+### Reproducibility (seed 2 run twice)
+Seed 2 was run a second time on a different Colab notebook (the first hit its GPU limit; fresh runtime, model re-downloaded). Every
+number printed (both regimes, all modes, all kinds, strict-parse counts, the two truncated outputs) is identical to the first run.
+This shows greedy decoding on a T4 gives the same result twice; it does **not** replace more seeds or more models.
+
+### Delete Test scorecard on the real logs (seed 2, delete_dep, n=30; `python -m axi.experiments.scorecard`)
+The three columns are named after the challenges in the Cinderella Project text; the operational definitions are ours, not Rajnish's
+(see `RAJNISH_CONCEPT_MAP.md` row 23).
+
+| | no rule in prompt | rule in prompt |
+|---|---|---|
+| **rule compliance**: blind apply corrupts the graph (M1) / after the gate | 100% / 0% | 76.7% / 0% |
+| **reality perception**: proposals that name things not in the graph | 0% | 32.1% (9 of 28 parsed) |
+| proposals that leave dangling edges | 100% | 78.6% (22 of 28 parsed) |
+| **silent vs loud**, unconstrained: loud (nothing extractable) / silent (corrupts) | 3.3% / 96.7% | 0% / 76.7% |
+| **silent vs loud**, constrained: loud (unparseable) / silent (corrupts) | 0% / 100% | 6.7% / 76.7% |
+
+The 9 and 22 equal the hand count of the obstruction mix above (the denominator is the 28 proposals that parsed).
+All kinds together (n=60): no rule, constrained silent 50.0% / loud 0%; rule, constrained silent 38.3% / loud 3.3%, phantom references 22.4%.
+
+After feedback, per retry wording (delete_dep; `retried` = proposals the gate rejected first):
+
+| wording | no rule: retried / repeats same / still rejected / success | rule: retried / repeats same / still rejected / success |
+|---|---|---|
+| vague prose | 30 / 3.3% / 90.0% / 6.7% | 26 / 0.0% / 92.3% / 13.3% |
+| detailed prose | 30 / 0.0% / 6.7% / 93.3% | 26 / 3.8% / 61.5% / 40.0% |
+| structured (v1) | 30 / 10.0% / 66.7% / 33.3% | 26 / 7.7% / 76.9% / 26.7% |
+| structured imperative | 30 / 0.0% / 0.0% / 100% | 26 / 3.8% / 53.8% / 46.7% |
+
+Reading:
+* **Failure is silent.** Without the gate, 76.7-100% of constrained delete_dep proposals corrupt the graph with a perfectly parseable
+  delta; the loud share is 0-6.7%. This is the snake-vs-tiger row (16) on real data.
+* **A wrong hypothesis, corrected.** I expected vague feedback to make the model *repeat* its rejected proposal. It does not: it
+  repeats 0-10% of the time. It changes the answer, and the new answer is still rejected (90.0% / 92.3% for vague prose). The better
+  description is *misdirected compliance*: the model reacts to the feedback but has not been told what to change. Whether that is
+  what Rajnish means by ego-defense is for him to say; the "repeats the same proposal" reading is not supported.
+* **Reality perception is a property of the prompt, not only of the model.** With the rule stated, a third of the proposals refer to
+  edges that are not in the graph (0% without it). The gate names these (`match_edge`) but nothing repairs them yet.
+
 ### Gate stricter than the outcome needs (hint regime: 6 / 5 / 5 per seed)
 Reproduced on toy graphs: `blind_apply` silently ignores deletes of edges that do not exist, the gate does not. In the seed-1
 examples 4 of 5 contain a phantom edge delete (a no-op), and 1 is `ADD[0,0:9] DEL[0,0] ...` (add-then-delete of the same node = net delete).
@@ -82,6 +124,13 @@ corruption from ~40% to 0%.
 ### Expressiveness gap found while reading the concept texts
 The delta language cannot express an in-place update: `ADD` of an existing node -> `ident_node`; `DEL`+`ADD` of the same key ->
 `ident_node` / `ident_edge`. The benchmark has no update tasks.
+
+## Built, not yet run on a real model
+* **M6 ground-and-complete** (mode `M6_ground_complete`): cuts operations that name things not in the graph, corrects a wrong weight, then deletes every
+  remaining incident edge. Sandbox only (synthetic fuzz); `python/tests/test_ground_complete.py`. Needs `--seed 3` or later.
+* **Containment test** (`--cascade-episodes 10 --cascade-steps 8`): 8 sequential requests on one live graph under four policies (blind / gate /
+  gate+M5 / gate+M6). Scripted stand-in only so far.
+Seeds 0-2 numbers above are unchanged and do not include either.
 
 ## KV-cache timing (Tesla T4, Qwen2.5-0.5B, no logits computed)
 | context | full prefill | append 64 spec tokens | rollback = crop | edit at 25%, re-prefill rest |

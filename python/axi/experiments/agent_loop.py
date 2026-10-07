@@ -6,6 +6,8 @@ Six modes per task (same prompt, greedy decoding):
   M2 constrained + gate                               (reject on obstruction, no retry)
   M3 constrained + gate + 1 retry, feedback = {prose_plain, prose_detailed, structured}
   M5 constrained + gate + deterministic auto-repair   (no second LLM call)
+  M6 constrained + gate + ground-and-complete repair  (no second LLM call; cuts claims that are not in the graph, then closes dangling edges;
+                                                       added after seed 2 was read, so only seeds >= 3 count for it; concept-map rows 25-26)
 Success = final graph equals the expected graph exactly (right change, no collateral, well-formed).
 """
 import random
@@ -16,7 +18,7 @@ from typing import Dict, List, Optional, Tuple
 from axi.engine.cico_parser import (CICOParser, CICOParseError, NodeDelta, EdgeDelta, StateTransitionDelta,
                                     NODE_ADD, NODE_DEL, EDGE)
 from axi.engine.gate import Graph, check, apply
-from axi.engine.diagnostics import diagnose, propose_repair, format_delta
+from axi.engine.diagnostics import diagnose, propose_repair, ground_and_complete, format_delta
 
 SYSTEM = """You maintain a service graph. Services sit at grid coordinates and are written [row,col:value]. Edges are written (r,c)->(r,c):relation#weight.
 Reply with ONLY a state delta and no explanation. A delta is a list of items separated by single spaces:
@@ -34,9 +36,9 @@ Rule: a service can only be removed in the same delta that removes every edge at
 
 # ---------------------------------------------------------------- graphs & tasks
 def copy_graph(g: Graph) -> Graph:
-    h = Graph()
-    for n, v in g.nodes.items(): h.add_node(n, v)
-    for (u, v, r), w in g.edges.items(): h.add_edge(u, v, r, w)
+    """Exact copy, also of a CORRUPTED graph (edges whose endpoint is missing), which the cascade test needs."""
+    h = Graph(); h.nodes = dict(g.nodes); h.edges = dict(g.edges)
+    for k in h.edges: h._inc[k[0]].add(k); h._inc[k[1]].add(k)
     return h
 
 
@@ -201,6 +203,13 @@ def run_task(llm, task: Task, hint_rules=False, degree_threshold=4) -> dict:
     if d1 is not None and not rej: apply(final, d1)
     elif rep is not None and rep.repairable and check(task.graph, rep.repaired).ok: apply(final, rep.repaired)
     out["M5_auto_repair"] = _rec(task.graph, final, task, rejected=False, llm_calls_extra=0)
+    # M6 ground-and-complete (no second LLM call). An admissible proposal is applied untouched.
+    final = copy_graph(task.graph); gr = ground_and_complete(task.graph, d1, degree_threshold) if d1 is not None else None
+    if d1 is not None and not rej: apply(final, d1)
+    elif gr is not None and gr.repairable and check(task.graph, gr.repaired).ok: apply(final, gr.repaired)
+    out["M6_ground_complete"] = _rec(task.graph, final, task, rejected=False, llm_calls_extra=0,
+                                     repaired=bool(gr is not None and gr.repairable), n_cut=len(gr.cut) if gr else 0, n_grounded=len(gr.grounded) if gr else 0,
+                                     completed=gr.completed if gr else "", reason=gr.reason if gr and not gr.repairable else "")
     return out
 
 
@@ -212,7 +221,7 @@ def run_experiment(llm, tasks, hint_rules=False, progress=None) -> dict:
     return {"rows": rows, "summary": summarize(rows)}
 
 
-MODES = ["M0_unconstrained", "M1_constrained", "M2_gate", "M3_retry_prose_plain", "M3_retry_prose_detailed", "M3_retry_structured", "M3_retry_structured_imperative", "M5_auto_repair"]
+MODES = ["M0_unconstrained", "M1_constrained", "M2_gate", "M3_retry_prose_plain", "M3_retry_prose_detailed", "M3_retry_structured", "M3_retry_structured_imperative", "M5_auto_repair", "M6_ground_complete"]
 
 
 def summarize(rows) -> dict:

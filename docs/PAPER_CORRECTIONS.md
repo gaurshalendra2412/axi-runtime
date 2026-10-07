@@ -25,7 +25,7 @@ Every row below was checked against `docs/EXPERIMENT_RESULTS.md`, the Colab outp
 | 4 | "`DEL[0,1]` ... `DEL[u,v]`" and "`ADD[0,1:9]` adds an edge with payload :9" | In the CICO language `DEL[0,1]` deletes the **node at row 0, column 1**. `ADD[0,1:9]` adds a **node** at (0,1) with value 9. `ident_node` arises because that node already exists. | Fix both sentences and the proof of Theorem 1. |
 | 5 | Theorem 1: `R_corrupt(M1) = 1.0` whenever rho(G) > 0 | (a) rho > 0 only says some edge exists, not that the deleted node has one — the premise needs deg(v) > 0. (b) 1.0 is a measured rate for one model's proposals, not something grammar decoding can prove. | Use the Proposition below (statement that *is* provable) and report 100% as a measurement. |
 | 6 | "inflates attention entropy" / "phase dispersion" explains the rule-stuffing drop | Never measured. Seed-1 transcripts suggest a simpler cause: with the rule the model tries to delete the incident edges but lists phantom or mis-stated edges (`match_edge`), or writes `ADD[r,c:v] DEL[r,c]` (`ident_node`). | Describe the observed behaviour; keep entropy as an untested hypothesis. |
-| 7 | "100% strict-parse for grammar-constrained decoding" and "unconstrained 100% strict parse" | Constrained: 100% with no rule in the prompt on every seed, but with the rule 98.3 / 100 / 96.7% overall (96.7 / 100 / 93.3% delete_dep); cause unknown (check `tokens` on failing rows: truncation at 120?). Unconstrained: 100 / 91.7 / 98.3% (no rule), 88.3 / 88.3 / 78.3% (rule). | Report ranges over seeds. The mask removing parse failures while the proposals it rescues all corrupt the graph is itself a clean Syntax Fallacy illustration. |
+| 7 | "100% strict-parse for grammar-constrained decoding" and "unconstrained 100% strict parse" | Constrained: 100% with no rule in the prompt on every seed, but with the rule 98.3 / 100 / 96.7% overall (96.7 / 100 / 93.3% delete_dep); **cause found: the 120-token output cap** (seed 2: both failing rows have `tokens 120`, cut mid-item); cap now 400, so quote the constrained strict-parse rate only from a re-run with the new cap (or state the cap). Note the mask guarantees valid *prefixes*, not a finished output. Unconstrained: 100 / 91.7 / 98.3% (no rule), 88.3 / 88.3 / 78.3% (rule). | Report ranges over seeds. The mask removing parse failures while the proposals it rescues all corrupt the graph is itself a clean Syntax Fallacy illustration. |
 | 8 | M5 "100%" presented as an AI result | M5 is a deterministic repair and the success criterion is "graph equals cascade-delete". It shows the pipeline works, not that a model got smarter. | Say so in one sentence; headline the M3 numbers (a real second LLM call). |
 | 9 | Layer 4 as D4 with per-cell tau(i,j) = min over g of g.(i,j) | Verified code is **C4** per-cell phase attention (`engine/c4.py`) and, new, **D4 per-grid** canonicalization (`engine/d4.py`). Per-cell lexicographic minimum is not what either does. | Describe D4 as grid-level canonicalization + one stored transform id. |
 | 10 | "Complete Hardware Acceleration Stack" / "warp-level radix trie" / "NVLink 2.8 us on 8 GPUs" | Not built or measured here. What exists: device mask table (`TokenDFATable`), 4-process gloo consensus. | Use the wording in section D. |
@@ -33,6 +33,8 @@ Every row below was checked against `docs/EXPERIMENT_RESULTS.md`, the Colab outp
 | 12 | Affiliation "AXI Research Initiative", email `r.choubey@axi-runtime.org` | Not verifiable from the repo. | Both authors confirm real affiliation and a contact address they actually own. |
 | 13 | "global suite = additions, attribute patches, topology removals" | The generator has four kinds: `delete_dep`, `delete_leaf`, `add_node`, `add_edge` (5:2:1:2). | Describe the real mix. Note: "attribute patches" cannot be expressed in the current delta language at all (verified: `ADD` of an existing node -> `ident_node`; edge-weight change -> `ident_edge`); see `RAJNISH_CONCEPT_MAP.md` row 17. |
 | 14 | Synthetic-benchmark scope | One model family, greedy decoding, synthetic graphs, 50% trap tasks by design; "success" encodes the policy that deleting a node also deletes its edges. | Add a Limitations paragraph. |
+| 15 | Describing AXI as controlling the model's latent space / attention (matches the blog post "The AXI engineering framework ...") | The repo is an **external runtime** (mask, gate, retry, repair, canonicalization). Nothing here changes weights or attention, and nothing measured shows computation "resolving inside the weights". | Scope the paper to the runtime. Put model-internal ideas (strict block mask, C4 attention) under "future work, needs training". |
+| 16 | Any M6 (ground-and-complete) number | M6 was designed after the seed-2 failures were read. Seeds 0-2 therefore do not count for it, and its synthetic-fuzz result (790/790) says nothing about the real model. | Report M6 only from a fresh seed (>= 3), next to M5 and the M3 retry numbers, and say plainly that repair does the bookkeeping. |
 
 ## C. Drop-in replacement for Theorem 1 (provable)
 
@@ -65,9 +67,12 @@ Every row below was checked against `docs/EXPERIMENT_RESULTS.md`, the Colab outp
 
 ## E. Checks still open
 
-1. `--seed 1` (and `--seed 2`), with and without `--hint-rules`; the headline numbers are the fresh-seed ones.
-2. Why constrained strict-parse is 98.3% in the hint regime (cell below).
-3. The 4 non-trap tasks where blind apply was right but the gate rejected (hint regime).
+1. ~~`--seed 1` and `--seed 2`, with and without `--hint-rules`~~ **done** (three seeds; seed 2 also re-run and identical).
+2. ~~Why constrained strict-parse is below 100% in the hint regime~~ **answered for seed 2** (truncation at 120 tokens). Still open: re-run the hint regime with the 400-token cap and confirm 100%.
+3. ~~The non-trap tasks where blind apply was right but the gate rejected~~ **explained** (phantom edge deletes, add-then-delete of one node); see `EXPERIMENT_RESULTS.md`.
+4. Put seeds 0 and 1 through `python -m axi.experiments.scorecard` too (only seed 2 has been), so the scorecard numbers also come in three seeds.
+
+The cell below is the one that found the truncation (kept for reference; adjust the file name):
 
 ```python
 import json
