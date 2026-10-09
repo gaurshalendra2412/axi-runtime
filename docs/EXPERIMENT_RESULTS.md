@@ -191,6 +191,66 @@ appears (38 % of episodes at step 1, all by step 4) and how much of it piles up.
 (3) The step-success column the script prints (blind 45.3 %, gate 35.9 %, repair 100 %) is **not comparable across policies**: each policy leaves a different graph,
 so the later requests differ. Quote the corruption rows only. (4) One model, synthetic graphs.
 
+## Qwen2.5-7B (4-bit), seed 3: the same 60 tasks, both regimes (Colab T4, run 8 Oct 2026)
+Prediction and reading rule were written before the run (`SCALE_TEST_7B.md`, which also has the full reading and the limits). Raw outputs: `docs/results/axi_Qwen2.5-7B-Instruct_seed3_{norule,rule}.json`.
+3B is fp16, 7B is NF4 4-bit (the 7B does not fit the T4 in fp16), so size and quantization are mixed in every comparison below.
+
+**No rule in the prompt** (success; 'corrupted' is the share of delete_dep tasks that ended with a broken graph)
+
+| mode | 3B all | 3B delete_dep | 7B all | 7B delete_dep | 7B corrupted (delete_dep) |
+|---|---|---|---|---|---|
+| M0 unconstrained | 50.0 % | 0.0 % | 50.0 % | 0.0 % | 100.0 % |
+| M1 constrained | 50.0 % | 0.0 % | 50.0 % | 0.0 % | 100.0 % |
+| M2 gate only | 50.0 % | 0.0 % | 50.0 % | 0.0 % | 0.0 % |
+| M3 retry, vague prose | 51.7 % | 3.3 % | 55.0 % | 10.0 % | 0.0 % |
+| M3 retry, detailed prose | 98.3 % | 96.7 % | 100.0 % | 100.0 % | 0.0 % |
+| M3 retry, structured (v1) | 65.0 % | 30.0 % | 50.0 % | 0.0 % | 0.0 % |
+| M3 retry, structured imperative | 100.0 % | 100.0 % | 100.0 % | 100.0 % | 0.0 % |
+| M5 deterministic repair | 100.0 % | 100.0 % | 100.0 % | 100.0 % | 0.0 % |
+| M6 ground-and-complete | 100.0 % | 100.0 % | 100.0 % | 100.0 % | 0.0 % |
+
+**Rule stated in the prompt** (success; 'corrupted' is the share of delete_dep tasks that ended with a broken graph)
+
+| mode | 3B all | 3B delete_dep | 7B all | 7B delete_dep | 7B corrupted (delete_dep) |
+|---|---|---|---|---|---|
+| M0 unconstrained | 53.3 % | 10.0 % | 53.3 % | 36.7 % | 63.3 % |
+| M1 constrained | 55.0 % | 13.3 % | 53.3 % | 36.7 % | 63.3 % |
+| M2 gate only | 41.7 % | 3.3 % | 46.7 % | 33.3 % | 0.0 % |
+| M3 retry, vague prose | 51.7 % | 16.7 % | 50.0 % | 40.0 % | 0.0 % |
+| M3 retry, detailed prose | 53.3 % | 26.7 % | 56.7 % | 53.3 % | 0.0 % |
+| M3 retry, structured (v1) | 46.7 % | 13.3 % | 60.0 % | 60.0 % | 0.0 % |
+| M3 retry, structured imperative | 48.3 % | 16.7 % | 60.0 % | 60.0 % | 0.0 % |
+| M5 deterministic repair | 51.7 % | 23.3 % | 56.7 % | 53.3 % | 0.0 % |
+| M6 ground-and-complete | 95.0 % | 90.0 % | 73.3 % | 76.7 % | 0.0 % |
+
+* **Pre-registered reading:** no rule, `delete_dep`, blind apply (M1): 30 of 30 corrupted (95 % interval 88.6 to 100). By the rule fixed in advance, scale alone did not fix it on this task. Every gated mode: 0 of 60 corrupted in both regimes.
+* Structured v1 retry fell from 30 % to 0 % (no rule). Cause: in 30 of 30 retries the 7B returned only the edge deletes and dropped `DEL[r,c]` of the service; the gate admits that and the service stays. The imperative wording ("Keep DEL[r,c]") is 30 of 30.
+* Not predicted, rule regime: the 7B uses the rule better on `delete_dep` (blind apply right 36.7 %, 3B 10 to 13 %) but over-applies it on the 12 `delete_leaf` tasks (0 of 12 exact, all 12 carry extra edge deletes; the gate admits 7 of them because the extra deletes name real edges of other services). All 16 M6 misses contain such a delete and none of the 44 M6 successes does. M6 is 73.3 % (3B 95.0 %). The gate checks legality, not whether the change is the one requested.
+* Scorecard, 7B, `delete_dep`, no rule / rule: blind apply corrupts 100 % / 63.3 % (3B 100 % / 76.7 %); proposals naming things not in the graph 0 % / 26.7 % (3B 0 % / 36.7 %); proposals leaving dangling edges 100 % / 66.7 % (3B 100 % / 76.7 %).
+* Post-hoc, not a result: dropping every edge delete that does not touch a service deleted in the same delta turns the saved 7B outputs into 60 of 60 under M6 (46 deletes dropped, rule regime). Needs a fresh seed and a task kind where an edge delete alone is correct.
+
+## Latency of the modes, from the 7B runs, and the long-horizon test (8 Oct 2026)
+* **Measured, no new run** (`LATENCY_7B.md`): on the 120 saved 7B runs the gate check is a few microseconds, the diagnosis a few more, the M5 repair about 15 to 20 and the M6 repair about 35 to 60, against about 1 s (no rule) to 2.5 s (rule) for one constrained model call; check plus diagnosis is about a hundred-thousandth of one call. M2, M5 and M6 add no model call; an M3 retry adds one (2 to 5 times the time on the rejected tasks). Model seconds per correct task: M6 0.97 (no rule) and 3.39 (rule); the best retry wording 2.30 and 6.57. Grammar-constrained decoding gave the same text as unconstrained in 120 of 120 tasks at a time ratio of 0.99 to 1.01. CPU numbers are one machine and vary by about 1.7 times between runs.
+* **Long horizon, run 8 Oct** (`LONG_HORIZON_TEST.md`, files `docs/results/axi_long_*`, Qwen2.5-7B 4-bit, Colab T4): 30-step episodes with a fixed request script, drift = distance to an oracle's state. **No rule, 12 episodes:** blind apply was corrupted in 12 of 12 episodes, each at its first delete that has dependents, and ended with 14.1 dangling edges on average; the gate alone never corrupted but its state moved to distance 23.3 (blind 15.0) because it refused all 95 such deletes; gate plus M6 was exactly the intended state on 358 of 360 steps (the two off are one legal add_edge written from the wrong source service). **Rule stated, 8 episodes:** gate and M6 0 corrupted again; blind apply corrupted in 7 of 8 (6 of 8 by step 10, predicted at least 80 %: missed by one episode); M6 exact on only 55 % of steps, all 34 wrong items real edges the model deleted unasked (legal, so the gate admits them), 30 of which later vanished when the oracle deleted a service they belonged to. On the same 8 request scripts M6 was exact on 238 of 240 steps without the rule and 132 with it. **Chat kept (history mode, no rule, 4 episodes):** the held state stayed exact (105 of 105 steps), time per step was 5.1 times higher in the last quarter than the first (state mode 0.89 times; about 7.8 times as much per step near step 19), the raw proposals did not change (0 of 24 delete-with-dependents admitted, and 0 of 95 in state mode), and two of four episodes ran out of GPU memory at about 5,100 and 5,500 tokens. Nine of ten pre-registered rows held; one missed.
+
+## Scope test: keep only the changes the request names (run 8 Oct 2026; `SCOPE_TEST.md`, `tests/test_scope_result.py`)
+Qwen2.5-7B 4-bit, Colab T4, greedy, fresh seed 7; prediction and reading rules fixed in the page before the run; files `docs/results/axi_scope_{single,long}_{rule,norule}_Qwen2.5-7B_seed7.json`. All 13 reading-rule lines came out yes and all 6 predictions held.
+* **One request at a time (140 tasks per regime, 7 kinds):** rule stated: blind apply 94, gate 87, repair_m6 **118**, scope_m7 **134**, scope_delta 80 (helped 16 tasks, harmed 0; old deletes 24 of 40 against 40 of 40; delete_leaf 5 of 20 against 20 of 20). No rule: blind 99, gate 99, repair_m6 135, scope_m7 135 (identical graphs on 140 of 140), scope_delta 80. The post-hoc baseline scope_delta solved 0 of 60 per regime on lone edge deletes, service-plus-edge deletes and implicit-target deletes. All 11 misses of scope_m7 are `delete_weight` ("remove every edge with weight w", no service named): the filter has nothing to read, and the model deleted a real edge of another weight in 9 of the 11.
+* **30 requests in a row (12 episodes rule stated, 8 no rule):** rule stated: repair_m6 exact on 263 of 360 steps (73.1 %, 11 of 12 episodes went off), scope_m7 on 354 (98.3 %, 1 episode, one event: an edge written from the wrong source, which the filter dropped, leaving it missing). No rule: both 237 of 240 (98.8 %), the same one event (a wrong service coordinate). Neither policy was ever corrupted.
+* **Not predicted:** with the rule stated the 7B wrote 3,975 tokens against 2,040 without it on the same requests (317 s against 193 s); the filter removes the extra deletes from the state but they are generated first. No rule with plain M6 (135 of 140) did as well as rule plus scope_m7 (134). The filter costs about 11 microseconds per request and adds no model call.
+* **Limits:** requests name targets by coordinate (the one thing the filter reads); one model; the two failure modes written down beforehand (an extra edge between two named services; a request naming a service it does not touch) never occurred, so they are untested; 12 and 8 episodes.
+
+## Bigger-model test, Qwen2.5-14B (run 9 Oct 2026; 14 of 15 pre-registered reading-rule lines yes)
+Files: `docs/results/axi_14b_{single_rule,single_norule,long_rule,long_norule}_Qwen2.5-14B_seed7.json` (Qwen2.5-14B-Instruct 4-bit, Colab T4, greedy, seed 7; the same 140 tasks and the same episode seeds as the 7B scope test; Part 1 and Part 2 came from two Colab sessions, no file mixes sessions). Prediction and reading rules were fixed before the run in `SCALE_TEST_14B.md`, which has the full Result below them. `tests/test_bigger_model_result.py` recomputes every number below from the saved rows. No output was unparsed (0 of 280 single-step outputs, 0 of 900 recorded policy steps).
+
+* **Verdict by the wording fixed in advance:** all 10 [guard] lines yes; 4 of 5 [need] lines yes. The one no: with no rule, blind apply was right on 11 of 20 delete_dep requests and the line was 10 or fewer (7B: 0 of 20). It missed by one task. Reading: at 14B the raw model needs the framework less than the 7B did, and the framework is a guard with a smaller, measured gain.
+* **One request at a time (140 tasks per regime), 14B against 7B:** no rule: blind 111 (99), gate 107 (99), repair_m6 135 (135), scope_m7 136 (135). Rule stated: blind 100 (94), gate 93 (87), repair_m6 117 (118), scope_m7 133 (134). Graphs left corrupted by blind apply 24 (36) and 17 (24); by gate, M6 and scope_m7 0 in both regimes. scope_m7 over M6 with the rule stated: helped 16 tasks, harmed 0 (7B: the same 16). Without the rule: helped 1, harmed 0 (a stray edge delete the filter dropped).
+* **30 requests in a row, 14B (7B on the same first episodes):** rule stated, 6 episodes: blind 76 of 180 exact steps (42.2 %), repair_m6 152 (84.4 %; 7B 124, 68.9 %), scope_m7 180 (100 %; 7B 180). No rule, 4 episodes: blind 8 of 120 (6.7 %), repair_m6 and scope_m7 120 of 120 (7B 117 each). Blind apply was corrupted in every one of the 10 episodes; gate-based policies in none.
+* **Gain of the framework:** M6 over blind apply (no rule, single) 24 tasks, 17.1 points (7B 36, 25.7); scope_m7 over blind apply (rule stated, single) 33 tasks, 23.6 points (7B 40, 28.6); scope_m7 over M6 over 30 steps (rule stated) 28 of 180 steps, 15.6 points (7B 56, 31.1), shrunk because M6 got better, not because scope_m7 changed.
+* **Not changed by size:** the service delete with a separate edge delete (delete_pair) 4 of 20 for the raw model and for the gate in both regimes (M6 and scope_m7 20 of 20); with the rule stated, stray edge deletions on 16 tasks (the 7B 16, 13 of them the same); all 11 misses of scope_m7 are `delete_weight`, where the request names no service (the 7B also 11).
+* **Not predicted:** the rule costs the 14B less than the 7B but still costs: 3,510 tokens against 2,685 without it (1.3 times; 7B 1.9), 539 s against 448 s of model time (1.2 times; 7B 1.6). Mean time per request 3.20 s (no rule) and 3.85 s (rule), 2.3 and 1.7 times the 7B's. The filter costs about 13 microseconds and adds no model call. The best arrangement is still no rule plus scope_m7 (136 of 140, 448 s) against rule plus scope_m7 (133, 539 s).
+* **Limits:** one family and one size step (Qwen 14B against 7B, 4-bit, greedy, synthetic graphs); every request names its targets by coordinate (in ordinary words the filter is exactly M6, untested); the one no is one task, so neither "the 14B no longer needs it" (24 of 140 graphs still corrupted without it) nor "the need fell by exactly this much" can be read from it; six and four episodes in Part 2, scope_m7 with no off step in ten, which cannot separate the two sizes; two Colab sessions; whether greedy output on the T4 is identical across sessions was not tested.
+
 ## KV-cache timing (Tesla T4, Qwen2.5-0.5B, no logits computed)
 | context | full prefill | append 64 spec tokens | rollback = crop | edit at 25%, re-prefill rest |
 |---|---|---|---|---|

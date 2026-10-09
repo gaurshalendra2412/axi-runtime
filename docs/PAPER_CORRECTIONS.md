@@ -120,6 +120,7 @@ Every row below was checked against `docs/EXPERIMENT_RESULTS.md`, the Colab outp
 | Block independence, strict mask vs RFC mask | 0.0 vs 95.4 max change downstream |
 | Cross-rank all-or-nothing commit (4 gloo processes) | 934 commits / 2,066 aborts / 3,000 steps, identical page tables |
 | axi-wire reference codec (Python, no CRC), 10,000 edges | pack 34 us vs json.dumps 9,994 us; unpack 1.9 us vs json.loads 8,279 us |
+| Structure vs scale, Qwen2.5-7B (4-bit) vs 3B (fp16), same 60 tasks, seed 3 | no rule: blind apply corrupts 30/30 delete-with-dependents at both sizes; every gated mode 0 % corruption in both regimes (`SCALE_TEST_7B.md`). Rule stated: 7B M6 73.3 % against 3B 95.0 % (the gate admits real but unrequested edge deletes). One seed, one family |
 
 ## E. Checks still open
 
@@ -127,6 +128,7 @@ Every row below was checked against `docs/EXPERIMENT_RESULTS.md`, the Colab outp
 2. ~~Why constrained strict-parse is below 100% in the hint regime~~ **answered for seed 2** (truncation at 120 tokens). Still open: re-run the hint regime with the 400-token cap and confirm 100%.
 3. ~~The non-trap tasks where blind apply was right but the gate rejected~~ **explained** (phantom edge deletes, add-then-delete of one node); see `EXPERIMENT_RESULTS.md`.
 4. Put seeds 0 and 1 through `python -m axi.experiments.scorecard` too (only seed 2 has been), so the scorecard numbers also come in three seeds.
+5. Scale: the 7B result (`SCALE_TEST_7B.md`) is one seed and mixes size with 4-bit quantization. Open: a fresh seed, a 1.5B point, an fp16 comparison of the same size, and the scope-containment idea (edge deletes must touch a service deleted in the same delta) on a seed and task kinds not used to find it.
 
 The cell below is the one that found the truncation (kept for reference; adjust the file name):
 

@@ -1,0 +1,4795 @@
+{
+ "rows": [
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 142,
+    "seconds": 8.946997107000016,
+    "text": "DEL[1,0] DEL[(2,2)->(0,1):dep#3] DEL[(2,2)->(0,1):owns#8] DEL[(1,2)->(0,0):owns#9] DEL[(1,2)->(2,3):owns#7] DEL[(0,0)->(1,3):owns#7] DEL[(0,0)->(2,3):dep#4] DEL[(0,0)->(2,3):owns#3] DEL[(2,3)->(0,1):dep#1] DEL[(2,3)->(1,3):owns#1]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 142,
+    "seconds": 9.097455911999987,
+    "text": "DEL[1,0] DEL[(2,2)->(0,1):dep#3] DEL[(2,2)->(0,1):owns#8] DEL[(1,2)->(0,0):owns#9] DEL[(1,2)->(2,3):owns#7] DEL[(0,0)->(1,3):owns#7] DEL[(0,0)->(2,3):dep#4] DEL[(0,0)->(2,3):owns#3] DEL[(2,3)->(0,1):dep#1] DEL[(2,3)->(1,3):owns#1]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 142,
+    "seconds": 9.695296482000003,
+    "text": "DEL[1,0] DEL[(2,2)->(0,1):dep#3] DEL[(2,2)->(0,1):owns#8] DEL[(1,2)->(0,0):owns#9] DEL[(1,2)->(2,3):owns#7] DEL[(0,0)->(1,3):owns#7] DEL[(0,0)->(2,3):dep#4] DEL[(0,0)->(2,3):owns#3] DEL[(2,3)->(0,1):dep#1] DEL[(2,3)->(1,3):owns#1]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "retried": true,
+    "tokens": 157,
+    "seconds": 10.289865799000154,
+    "text": "DEL[1,0] DEL[(1,0)->(2,3):owns#7] DEL[(2,2)->(0,1):dep#3] DEL[(2,2)->(0,1):owns#8] DEL[(1,2)->(0,0):owns#9] DEL[(1,2)->(2,3):owns#7] DEL[(0,0)->(1,3):owns#7] DEL[(0,0)->(2,3):dep#4] DEL[(0,0)->(2,3):owns#3] DEL[(2,3)->(0,1):dep#1] DEL[(2,3)->(1,3):owns#1]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "retried": true,
+    "tokens": 16,
+    "seconds": 1.941877108999961,
+    "text": "DEL[(1,0)->(2,3):owns#7]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "retried": true,
+    "tokens": 157,
+    "seconds": 10.015769022000086,
+    "text": "DEL[1,0] DEL[(2,2)->(0,1):dep#3] DEL[(2,2)->(0,1):owns#8] DEL[(1,2)->(0,0):owns#9] DEL[(1,2)->(2,3):owns#7] DEL[(0,0)->(1,3):owns#7] DEL[(0,0)->(2,3):dep#4] DEL[(0,0)->(2,3):owns#3] DEL[(2,3)->(0,1):dep#1] DEL[(2,3)->(1,3):owns#1] DEL[(1,0)->(2,3):owns#7]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "DEL[(1,0)->(2,3):owns#7]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 82,
+    "seconds": 5.492444907999925,
+    "text": "DEL[2,0] DEL[(2,0)->(1,0):dep#1] DEL[(2,0)->(1,3):dep#2] DEL[(2,2)->(0,1):owns#5] DEL[(2,2)->(0,2):dep#6] DEL[(2,2)->(1,3):owns#7]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 82,
+    "seconds": 5.055642100999876,
+    "text": "DEL[2,0] DEL[(2,0)->(1,0):dep#1] DEL[(2,0)->(1,3):dep#2] DEL[(2,2)->(0,1):owns#5] DEL[(2,2)->(0,2):dep#6] DEL[(2,2)->(1,3):owns#7]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 4.151812514000085,
+    "text": "DEL[2,2] DEL[(2,2)->(0,1):owns#5] DEL[(2,2)->(0,2):dep#6] DEL[(2,2)->(1,3):owns#7]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 67,
+    "seconds": 4.387456719999818,
+    "text": "DEL[2,0] DEL[(1,3)->(2,0):dep#7] DEL[(2,2)->(0,1):owns#5] DEL[(2,2)->(0,2):dep#6] DEL[(2,2)->(1,3):owns#7]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 67,
+    "seconds": 4.425392805000001,
+    "text": "DEL[2,0] DEL[(1,3)->(2,0):dep#7] DEL[(2,2)->(0,1):owns#5] DEL[(2,2)->(0,2):dep#6] DEL[(2,2)->(1,3):owns#7]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 67,
+    "seconds": 4.950940540999909,
+    "text": "DEL[2,0] DEL[(1,3)->(2,0):dep#7] DEL[(2,2)->(0,1):owns#5] DEL[(2,2)->(0,2):dep#6] DEL[(2,2)->(1,3):owns#7]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "DEL[(1,3)->(2,0):dep#7]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 22,
+    "seconds": 1.7189721289998943,
+    "text": "DEL[0,3] DEL[(0,0)->(0,3):dep#1]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 22,
+    "seconds": 1.6998842180000793,
+    "text": "DEL[0,3] DEL[(0,0)->(0,3):dep#1]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 2.519161352000083,
+    "text": "DEL[2,3] DEL[(0,3)->(2,3):dep#1] DEL[(0,3)->(2,3):owns#5]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 2.6211696299999403,
+    "text": "DEL[2,3] DEL[(0,3)->(2,3):dep#1] DEL[(0,3)->(2,3):owns#5]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "match_weight",
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 67,
+    "seconds": 4.932697043999951,
+    "text": "DEL[2,3] DEL[(0,3)->(2,3):dep#1] DEL[(0,3)->(2,3):owns#5] DEL[(1,3)->(0,3):owns#2] DEL[(2,0)->(2,2):owns#3]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.709818294000115,
+    "text": "DEL[2,3] DEL[(0,3)->(2,3):dep#8] DEL[(0,3)->(2,3):owns#5]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.5382906840000032,
+    "text": "DEL[2,3] DEL[(0,3)->(2,3):dep#1] DEL[(0,3)->(2,3):owns#5] DEL[(0,3)->(2,3):dep#8]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 4.211786521000022,
+    "text": "DEL[2,3] DEL[(0,3)->(2,3):dep#1] DEL[(0,3)->(2,3):owns#5] DEL[(0,3)->(2,3):dep#8]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 0,
+    "n_grounded": 1,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 2.583967752000035,
+    "text": "DEL[1,0] DEL[(0,3)->(1,0):dep#2] DEL[(1,0)->(2,0):owns#4]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 2.577043730000014,
+    "text": "DEL[1,0] DEL[(0,3)->(1,0):dep#2] DEL[(1,0)->(2,0):owns#4]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_leaf",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 97,
+    "seconds": 6.492185809000148,
+    "text": "DEL[1,2] DEL[(2,0)->(1,1):dep#2] DEL[(1,1)->(2,0):dep#9] DEL[(1,1)->(2,2):owns#5] DEL[(0,3)->(2,1):dep#6] DEL[(0,1)->(2,1):owns#6] DEL[(2,3)->(0,3):dep#6]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 97,
+    "seconds": 5.9335247250000975,
+    "text": "DEL[1,2] DEL[(2,0)->(1,1):dep#2] DEL[(1,1)->(2,0):dep#9] DEL[(1,1)->(2,2):owns#5] DEL[(0,3)->(2,1):dep#6] DEL[(0,1)->(2,1):owns#6] DEL[(2,3)->(0,3):dep#6]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_leaf",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 2.5494101920000958,
+    "text": "DEL[1,3] DEL[(2,3)->(0,1):owns#6] DEL[(2,3)->(1,0):owns#2]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 2.8856465569999727,
+    "text": "DEL[1,3] DEL[(2,3)->(0,1):owns#6] DEL[(2,3)->(1,0):owns#2]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_node",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 9,
+    "seconds": 1.172968684999887,
+    "text": "ADD[3,3:9]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 9,
+    "seconds": 0.9991371269998126,
+    "text": "ADD[3,3:9]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_edge",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 16,
+    "seconds": 1.3911323160000393,
+    "text": "ADD[(0,3)->(2,0):dep#4]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 16,
+    "seconds": 1.432906623000008,
+    "text": "ADD[(0,3)->(2,0):dep#4]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_edge",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 16,
+    "seconds": 1.4153477519998887,
+    "text": "ADD[(2,0)->(1,3):dep#5]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 16,
+    "seconds": 1.4011993320000329,
+    "text": "ADD[(2,0)->(1,3):dep#5]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 52,
+    "seconds": 3.5297002349998365,
+    "text": "DEL[1,3] DEL[(1,0)->(1,3):owns#8] DEL[(1,3)->(0,1):dep#5] DEL[(1,3)->(0,3):owns#6]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 52,
+    "seconds": 3.7688085090001096,
+    "text": "DEL[1,3] DEL[(1,0)->(1,3):owns#8] DEL[(1,3)->(0,1):dep#5] DEL[(1,3)->(0,3):owns#6]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 22,
+    "seconds": 1.7415129989999514,
+    "text": "DEL[2,0] DEL[(1,0)->(2,0):owns#8]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 22,
+    "seconds": 1.7328499509999347,
+    "text": "DEL[2,0] DEL[(1,0)->(2,0):owns#8]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.5938028119999217,
+    "text": "DEL[2,0] DEL[(1,0)->(2,0):owns#8] DEL[(0,0)->(2,0):dep#8]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.855552355999862,
+    "text": "DEL[2,0] DEL[(0,0)->(2,0):dep#8] DEL[(1,0)->(2,0):owns#8]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.997033060000149,
+    "text": "DEL[2,0] DEL[(0,0)->(2,0):dep#8] DEL[(1,0)->(2,0):owns#8]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.722793817000138,
+    "text": "DEL[2,0] DEL[(0,0)->(2,0):dep#8] DEL[(1,0)->(2,0):owns#8]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "DEL[(0,0)->(2,0):dep#8]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 22,
+    "seconds": 1.7580543770000077,
+    "text": "DEL[0,3] DEL[(0,3)->(1,1):dep#2]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 22,
+    "seconds": 1.7254189440000118,
+    "text": "DEL[0,3] DEL[(0,3)->(1,1):dep#2]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 22,
+    "seconds": 1.73509422799998,
+    "text": "DEL[1,2] DEL[(2,0)->(1,2):dep#4]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 22,
+    "seconds": 2.030466083999954,
+    "text": "DEL[1,2] DEL[(2,0)->(1,2):dep#4]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 2.816118399000061,
+    "text": "DEL[1,2] DEL[(1,2)->(0,0):dep#7] DEL[(1,2)->(1,0):owns#2]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 2.5801011499997912,
+    "text": "DEL[1,2] DEL[(1,2)->(0,0):dep#7] DEL[(1,2)->(1,0):owns#2]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "retried": true,
+    "tokens": 31,
+    "seconds": 2.3949100249999447,
+    "text": "DEL[(1,2)->(1,0):owns#2] DEL[(1,2)->(0,0):dep#7]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 22,
+    "seconds": 1.8680263160001687,
+    "text": "DEL[(0,0)->(1,2):owns#2] DEL[1,2]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 4.154321039000024,
+    "text": "DEL[1,2] DEL[(0,0)->(1,2):owns#2] DEL[(1,2)->(0,0):dep#7] DEL[(1,2)->(1,0):owns#2]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.544869955999957,
+    "text": "DEL[1,2] DEL[(0,0)->(1,2):owns#2] DEL[(1,2)->(0,0):dep#7] DEL[(1,2)->(1,0):owns#2]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "DEL[(0,0)->(1,2):owns#2]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_leaf",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 22,
+    "seconds": 1.7233197770001425,
+    "text": "DEL[2,2] DEL[(1,1)->(2,1):dep#1]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 22,
+    "seconds": 1.7556102569999439,
+    "text": "DEL[2,2] DEL[(1,1)->(2,1):dep#1]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_leaf",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 97,
+    "seconds": 6.554540094000004,
+    "text": "DEL[0,1] DEL[(0,3)->(2,0):dep#8] DEL[(1,0)->(0,3):dep#8] DEL[(1,1)->(1,2):owns#7] DEL[(1,2)->(2,0):dep#4] DEL[(1,2)->(2,3):owns#2] DEL[(1,3)->(2,3):owns#7]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 97,
+    "seconds": 5.898352299999942,
+    "text": "DEL[0,1] DEL[(0,3)->(2,0):dep#8] DEL[(1,0)->(0,3):dep#8] DEL[(1,1)->(1,2):owns#7] DEL[(1,2)->(2,0):dep#4] DEL[(1,2)->(2,3):owns#2] DEL[(1,3)->(2,3):owns#7]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_node",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 9,
+    "seconds": 1.017626369000027,
+    "text": "ADD[2,4:8]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 9,
+    "seconds": 1.0249695459999657,
+    "text": "ADD[2,4:8]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_edge",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 16,
+    "seconds": 1.648835500999894,
+    "text": "ADD[(1,0)->(2,3):dep#1]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 16,
+    "seconds": 1.561415770999929,
+    "text": "ADD[(1,0)->(2,3):dep#1]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_edge",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 16,
+    "seconds": 1.4436357959998531,
+    "text": "ADD[(0,1)->(2,3):dep#5]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 16,
+    "seconds": 1.3968949349998638,
+    "text": "ADD[(0,1)->(2,3):dep#5]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 22,
+    "seconds": 1.7339047180000762,
+    "text": "DEL[2,3] DEL[(2,3)->(1,2):owns#3]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 22,
+    "seconds": 1.7361930609999945,
+    "text": "DEL[2,3] DEL[(2,3)->(1,2):owns#3]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 22,
+    "seconds": 1.7321474329999091,
+    "text": "DEL[0,2] DEL[(0,0)->(2,3):dep#7]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 22,
+    "seconds": 1.8325527459999194,
+    "text": "DEL[0,2] DEL[(0,0)->(2,3):dep#7]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 3.109257153000044,
+    "text": "DEL[0,2] DEL[(2,3)->(0,2):dep#9] DEL[(2,3)->(1,0):dep#5]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 22,
+    "seconds": 1.9176719099998536,
+    "text": "DEL[0,2] DEL[(2,3)->(0,2):dep#9]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.5979085650001252,
+    "text": "DEL[0,2] DEL[(0,0)->(2,3):dep#7] DEL[(2,3)->(0,2):dep#9]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.743740957,
+    "text": "DEL[0,2] DEL[(0,0)->(2,3):dep#7] DEL[(2,3)->(0,2):dep#9]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "DEL[(2,3)->(0,2):dep#9]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 52,
+    "seconds": 3.9150972309998906,
+    "text": "DEL[1,1] DEL[(0,3)->(1,1):owns#1] DEL[(1,3)->(2,0):owns#3] DEL[(2,0)->(1,1):owns#3]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 52,
+    "seconds": 3.362541998000097,
+    "text": "DEL[1,1] DEL[(0,3)->(1,1):owns#1] DEL[(1,3)->(2,0):owns#3] DEL[(2,0)->(1,1):owns#3]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.421860750000178,
+    "text": "DEL[1,1] DEL[(0,3)->(1,1):owns#1] DEL[(1,3)->(2,0):owns#3] DEL[(2,0)->(1,1):owns#3]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 22,
+    "seconds": 1.8598736829999325,
+    "text": "DEL[1,1] DEL[(1,1)->(1,3):owns#5]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "retried": true,
+    "tokens": 67,
+    "seconds": 4.866441486999975,
+    "text": "DEL[1,1] DEL[(0,3)->(1,1):owns#1] DEL[(1,3)->(2,0):owns#3] DEL[(2,0)->(1,1):owns#3] DEL[(1,1)->(1,3):owns#5]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "retried": true,
+    "tokens": 67,
+    "seconds": 4.371569566999824,
+    "text": "DEL[1,1] DEL[(0,3)->(1,1):owns#1] DEL[(1,3)->(2,0):owns#3] DEL[(2,0)->(1,1):owns#3] DEL[(1,1)->(1,3):owns#5]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "DEL[(1,1)->(1,3):owns#5]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 2.5825628909999523,
+    "text": "DEL[1,0] DEL[(0,1)->(1,0):dep#5] DEL[(0,3)->(1,0):owns#3]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 2.7426704290001,
+    "text": "DEL[1,0] DEL[(0,1)->(1,0):dep#5] DEL[(0,3)->(1,0):owns#3]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 52,
+    "seconds": 3.707515699999931,
+    "text": "DEL[1,1] DEL[(0,3)->(1,1):owns#9] DEL[(1,3)->(1,1):dep#3] DEL[(2,2)->(1,1):dep#1]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 52,
+    "seconds": 3.4473460120000254,
+    "text": "DEL[1,1] DEL[(0,3)->(1,1):owns#9] DEL[(1,3)->(1,1):dep#3] DEL[(2,2)->(1,1):dep#1]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "match_edge",
+     "match_edge",
+     "match_edge",
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 46,
+    "seconds": 3.2318498269999054,
+    "text": "DEL[(0,3)->(1,1):owns#9] DEL[(1,3)->(1,1):dep#3] DEL[(2,2)->(1,1):dep#1]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 67,
+    "seconds": 5.127514792000056,
+    "text": "DEL[1,1] DEL[(0,3)->(1,1):owns#9] DEL[(1,3)->(1,1):dep#3] DEL[(2,2)->(1,1):dep#1] DEL[(1,1)->(0,3):owns#9]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.663369720999981,
+    "text": "DEL[1,1] DEL[(0,3)->(1,1):owns#9] DEL[(1,3)->(1,1):dep#3] DEL[(2,2)->(1,1):dep#1]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 67,
+    "seconds": 4.498715844999879,
+    "text": "DEL[1,1] DEL[(0,3)->(1,1):owns#9] DEL[(1,3)->(1,1):dep#3] DEL[(2,2)->(1,1):dep#1] DEL[(1,1)->(0,3):owns#9]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 3,
+    "n_grounded": 0,
+    "completed": "DEL[(1,1)->(0,3):owns#9]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_leaf",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 67,
+    "seconds": 4.80099718800011,
+    "text": "DEL[1,2] DEL[(0,0)->(1,2):dep#1] DEL[(1,0)->(2,3):dep#2] DEL[(2,0)->(1,2):owns#1] DEL[(2,3)->(1,2):dep#1]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 67,
+    "seconds": 4.279271479999807,
+    "text": "DEL[1,2] DEL[(0,0)->(1,2):dep#1] DEL[(1,0)->(2,3):dep#2] DEL[(2,0)->(1,2):owns#1] DEL[(2,3)->(1,2):dep#1]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "match_edge",
+     "match_edge",
+     "match_edge"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.609364886999856,
+    "text": "DEL[1,2] DEL[(0,0)->(1,2):dep#1] DEL[(2,0)->(1,2):owns#1] DEL[(2,3)->(1,2):dep#1]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 4.095019151000088,
+    "text": "DEL[1,2] DEL[(0,0)->(1,2):dep#1] DEL[(2,0)->(1,2):owns#1] DEL[(2,3)->(1,2):dep#1]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.6302389569998468,
+    "text": "DEL[1,2] DEL[(0,0)->(1,2):dep#1] DEL[(2,0)->(1,2):owns#1] DEL[(2,3)->(1,2):dep#1]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.6339938919998076,
+    "text": "DEL[1,2] DEL[(0,0)->(1,2):dep#1] DEL[(2,0)->(1,2):owns#1] DEL[(2,3)->(1,2):dep#1]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 3,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_leaf",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 22,
+    "seconds": 1.952449065999872,
+    "text": "DEL[0,2] DEL[(0,0)->(2,2):owns#5]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 22,
+    "seconds": 2.0122273399999813,
+    "text": "DEL[0,2] DEL[(0,0)->(2,2):owns#5]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_node",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 9,
+    "seconds": 1.00943043999996,
+    "text": "ADD[1,0:6]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 9,
+    "seconds": 1.008117312999957,
+    "text": "ADD[1,0:6]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_edge",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 16,
+    "seconds": 1.3850068340000234,
+    "text": "ADD[(2,3)->(2,1):dep#9]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 16,
+    "seconds": 1.4037281480000274,
+    "text": "ADD[(2,3)->(2,1):dep#9]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_edge",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 16,
+    "seconds": 1.4210883270000068,
+    "text": "ADD[(2,0)->(1,3):dep#9]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 16,
+    "seconds": 1.4021232990000954,
+    "text": "ADD[(2,0)->(1,3):dep#9]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 2.789351277999913,
+    "text": "DEL[0,3] DEL[(0,3)->(0,0):owns#8] DEL[(0,3)->(0,1):dep#1]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 2.8230888409998443,
+    "text": "DEL[0,3] DEL[(0,3)->(0,0):owns#8] DEL[(0,3)->(0,1):dep#1]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.7055516610000723,
+    "text": "DEL[0,3] DEL[(0,3)->(0,1):dep#1] DEL[(0,3)->(0,0):owns#8]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 22,
+    "seconds": 1.8966393629998493,
+    "text": "DEL[0,3] DEL[(2,3)->(0,3):dep#6]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.5295282269999007,
+    "text": "DEL[0,3] DEL[(2,3)->(0,3):dep#6] DEL[(0,3)->(0,0):owns#8] DEL[(0,3)->(0,1):dep#1]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 4.097467528999914,
+    "text": "DEL[0,3] DEL[(0,3)->(0,0):owns#8] DEL[(0,3)->(0,1):dep#1] DEL[(2,3)->(0,3):dep#6]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "DEL[(2,3)->(0,3):dep#6]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 22,
+    "seconds": 1.7131348049999815,
+    "text": "DEL[2,0] DEL[(1,2)->(2,0):owns#2]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 22,
+    "seconds": 1.7496874729999945,
+    "text": "DEL[2,0] DEL[(1,2)->(2,0):owns#2]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "match_edge",
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.5859236969999984,
+    "text": "DEL[2,0] DEL[(0,1)->(2,0):owns#4] DEL[(1,2)->(2,0):owns#2]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.726787184999921,
+    "text": "DEL[2,0] DEL[(0,1)->(2,0):owns#4] DEL[(2,0)->(2,3):owns#2]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 3.1313055420000637,
+    "text": "DEL[2,0] DEL[(0,1)->(2,0):owns#4] DEL[(2,0)->(2,3):owns#2]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.7401288080000086,
+    "text": "DEL[2,0] DEL[(0,1)->(2,0):owns#4] DEL[(2,0)->(2,3):owns#2]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 1,
+    "n_grounded": 0,
+    "completed": "DEL[(0,1)->(2,0):owns#4] DEL[(2,0)->(2,3):owns#2]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 2.5621133479999116,
+    "text": "DEL[1,0] DEL[(2,0)->(1,0):dep#8] DEL[(2,1)->(1,0):dep#9]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 2.5307611630000793,
+    "text": "DEL[1,0] DEL[(2,0)->(1,0):dep#8] DEL[(2,1)->(1,0):dep#9]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "match_edge",
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 67,
+    "seconds": 4.905215501999919,
+    "text": "DEL[1,0] DEL[(2,0)->(1,0):dep#8] DEL[(2,1)->(1,0):dep#9] DEL[(1,0)->(2,1):dep#9] DEL[(1,0)->(2,2):owns#9]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.7293212659999426,
+    "text": "DEL[1,0] DEL[(1,0)->(2,1):dep#9] DEL[(1,0)->(2,2):owns#9]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.549874764999913,
+    "text": "DEL[1,0] DEL[(2,0)->(1,0):dep#8] DEL[(2,1)->(1,0):dep#9] DEL[(2,2)->(1,0):owns#9]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 67,
+    "seconds": 5.037362663999829,
+    "text": "DEL[1,0] DEL[(2,0)->(1,0):dep#8] DEL[(2,1)->(1,0):dep#9] DEL[(1,0)->(2,1):dep#9] DEL[(1,0)->(2,2):owns#9]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 1,
+    "n_grounded": 0,
+    "completed": "DEL[(1,0)->(2,1):dep#9] DEL[(1,0)->(2,2):owns#9]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 22,
+    "seconds": 1.728160416000037,
+    "text": "DEL[2,1] DEL[(0,1)->(2,1):dep#6]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 22,
+    "seconds": 1.7274718390001453,
+    "text": "DEL[2,1] DEL[(0,1)->(2,1):dep#6]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.586588028999813,
+    "text": "DEL[2,1] DEL[(0,1)->(2,1):dep#6] DEL[(1,2)->(2,1):dep#8]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 22,
+    "seconds": 1.8545072919998802,
+    "text": "DEL[2,1] DEL[(1,2)->(2,1):dep#8]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.912184242999956,
+    "text": "DEL[2,1] DEL[(0,1)->(2,1):dep#6] DEL[(1,2)->(2,1):dep#8]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.8956933350000327,
+    "text": "DEL[2,1] DEL[(0,1)->(2,1):dep#6] DEL[(1,2)->(2,1):dep#8]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "DEL[(1,2)->(2,1):dep#8]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 52,
+    "seconds": 3.3941108760000134,
+    "text": "DEL[1,2] DEL[(2,1)->(0,0):dep#4] DEL[(2,1)->(0,2):owns#7] DEL[(2,2)->(1,2):owns#5]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 52,
+    "seconds": 3.3834651239999403,
+    "text": "DEL[1,2] DEL[(2,1)->(0,0):dep#4] DEL[(2,1)->(0,2):owns#7] DEL[(2,2)->(1,2):owns#5]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 67,
+    "seconds": 5.006567548000021,
+    "text": "DEL[1,2] DEL[(0,2)->(2,0):owns#8] DEL[(0,2)->(2,1):owns#7] DEL[(0,2)->(2,3):owns#4] DEL[(2,1)->(0,2):owns#7]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 22,
+    "seconds": 1.8865548019998641,
+    "text": "DEL[1,2] DEL[(1,2)->(2,0):owns#8]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "retried": true,
+    "tokens": 67,
+    "seconds": 4.406380407000142,
+    "text": "DEL[1,2] DEL[(2,1)->(0,0):dep#4] DEL[(2,1)->(0,2):owns#7] DEL[(2,2)->(1,2):owns#5] DEL[(1,2)->(2,0):owns#8]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "retried": true,
+    "tokens": 67,
+    "seconds": 4.993379632999677,
+    "text": "DEL[1,2] DEL[(1,2)->(2,0):owns#8] DEL[(2,1)->(0,0):dep#4] DEL[(2,1)->(0,2):owns#7] DEL[(2,2)->(1,2):owns#5]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "DEL[(1,2)->(2,0):owns#8]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_leaf",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 2.5715006090003953,
+    "text": "DEL[2,2] DEL[(2,1)->(0,3):dep#6] DEL[(2,1)->(1,1):owns#4]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 2.5752339789996768,
+    "text": "DEL[2,2] DEL[(2,1)->(0,3):dep#6] DEL[(2,1)->(1,1):owns#4]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_leaf",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 2.5809067510003842,
+    "text": "DEL[1,2] DEL[(0,2)->(1,2):dep#1] DEL[(2,1)->(1,2):dep#5]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 2.6957995100001426,
+    "text": "DEL[1,2] DEL[(0,2)->(1,2):dep#1] DEL[(2,1)->(1,2):dep#5]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "match_edge",
+     "match_edge"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 3.04903573699994,
+    "text": "DEL[1,2] DEL[(0,2)->(1,2):dep#1] DEL[(2,1)->(1,2):dep#5]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.722958605000258,
+    "text": "DEL[1,2] DEL[(0,2)->(1,2):dep#1] DEL[(2,1)->(1,2):dep#5]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.716258557999936,
+    "text": "DEL[1,2] DEL[(0,2)->(1,2):dep#1] DEL[(2,1)->(1,2):dep#5]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.7243354860002,
+    "text": "DEL[1,2] DEL[(0,2)->(1,2):dep#1] DEL[(2,1)->(1,2):dep#5]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 2,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_node",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 9,
+    "seconds": 1.1111937690002378,
+    "text": "ADD[1,5:5]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 9,
+    "seconds": 1.1464869850001378,
+    "text": "ADD[1,5:5]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_edge",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 16,
+    "seconds": 1.568128457000057,
+    "text": "ADD[(1,2)->(2,2):dep#8]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 16,
+    "seconds": 1.4128626679998888,
+    "text": "ADD[(1,2)->(2,2):dep#8]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_edge",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 16,
+    "seconds": 1.3985214169997562,
+    "text": "ADD[(1,1)->(0,3):dep#5]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 16,
+    "seconds": 1.4281021470001178,
+    "text": "ADD[(1,1)->(0,3):dep#5]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 2.551082876000237,
+    "text": "DEL[1,1] DEL[(0,1)->(1,1):owns#6] DEL[(1,1)->(0,1):owns#5]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 2.6078156779999517,
+    "text": "DEL[1,1] DEL[(0,1)->(1,1):owns#6] DEL[(1,1)->(0,1):owns#5]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 82,
+    "seconds": 5.635040400999969,
+    "text": "DEL[1,1] DEL[(0,1)->(1,1):owns#6] DEL[(0,3)->(1,1):dep#6] DEL[(1,3)->(2,1):dep#9] DEL[(1,3)->(2,2):dep#8] DEL[(2,1)->(2,2):dep#6]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 22,
+    "seconds": 1.8973098010001195,
+    "text": "DEL[1,1] DEL[(0,3)->(1,1):dep#6]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.5976727590000337,
+    "text": "DEL[1,1] DEL[(0,1)->(1,1):owns#6] DEL[(1,1)->(0,1):owns#5] DEL[(0,3)->(1,1):dep#6]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 4.151658766999844,
+    "text": "DEL[1,1] DEL[(0,1)->(1,1):owns#6] DEL[(1,1)->(0,1):owns#5] DEL[(0,3)->(1,1):dep#6]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "DEL[(0,3)->(1,1):dep#6]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 52,
+    "seconds": 3.3882285180002327,
+    "text": "DEL[1,3] DEL[(1,0)->(2,3):dep#7] DEL[(1,1)->(2,3):dep#7] DEL[(1,2)->(1,3):owns#2]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 52,
+    "seconds": 3.4010756259999653,
+    "text": "DEL[1,3] DEL[(1,0)->(2,3):dep#7] DEL[(1,1)->(2,3):dep#7] DEL[(1,2)->(1,3):owns#2]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "retried": true,
+    "tokens": 46,
+    "seconds": 3.4290796469999805,
+    "text": "DEL[(1,0)->(2,3):dep#7] DEL[(1,1)->(2,3):dep#7] DEL[(1,2)->(1,3):owns#2]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.9970151079996867,
+    "text": "DEL[1,3] DEL[(0,2)->(1,3):owns#3] DEL[(1,0)->(1,3):owns#3]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.6312770429999546,
+    "text": "DEL[1,3] DEL[(0,2)->(1,3):owns#3] DEL[(1,0)->(1,3):owns#3] DEL[(1,2)->(1,3):owns#2]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "retried": true,
+    "tokens": 82,
+    "seconds": 5.44488120699998,
+    "text": "DEL[1,3] DEL[(0,2)->(1,3):owns#3] DEL[(1,0)->(1,3):owns#3] DEL[(1,0)->(2,3):dep#7] DEL[(1,1)->(2,3):dep#7] DEL[(1,2)->(1,3):owns#2]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "DEL[(0,2)->(1,3):owns#3] DEL[(1,0)->(1,3):owns#3]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 22,
+    "seconds": 2.0693897210003342,
+    "text": "DEL[1,0] DEL[(1,0)->(0,1):owns#6]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 22,
+    "seconds": 1.754768502999923,
+    "text": "DEL[1,0] DEL[(1,0)->(0,1):owns#6]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 22,
+    "seconds": 1.7351410020000912,
+    "text": "DEL[2,3] DEL[(2,3)->(2,0):owns#4]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 22,
+    "seconds": 1.7583656589999919,
+    "text": "DEL[2,3] DEL[(2,3)->(2,0):owns#4]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 2.5441310000001067,
+    "text": "DEL[0,2] DEL[(0,0)->(0,2):dep#2] DEL[(1,2)->(0,2):dep#2]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 2.7723401189996366,
+    "text": "DEL[0,2] DEL[(0,0)->(0,2):dep#2] DEL[(1,2)->(0,2):dep#2]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "match_edge",
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 31,
+    "seconds": 2.64702337899962,
+    "text": "DEL[(0,0)->(0,2):dep#2] DEL[(1,2)->(0,2):dep#2]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 22,
+    "seconds": 1.8849657699997806,
+    "text": "DEL[0,2] DEL[(2,1)->(0,2):dep#2]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.565599440999904,
+    "text": "DEL[0,2] DEL[(0,0)->(0,2):dep#2] DEL[(1,2)->(0,2):dep#2] DEL[(2,1)->(0,2):dep#2]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.637265387000298,
+    "text": "DEL[0,2] DEL[(0,0)->(0,2):dep#2] DEL[(1,2)->(0,2):dep#2] DEL[(2,1)->(0,2):dep#2]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 1,
+    "n_grounded": 0,
+    "completed": "DEL[(2,1)->(0,2):dep#2]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_leaf",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 82,
+    "seconds": 5.489477700000407,
+    "text": "DEL[1,3] DEL[(1,2)->(2,3):dep#7] DEL[(1,0)->(2,3):owns#4] DEL[(2,0)->(1,2):dep#5] DEL[(2,1)->(2,0):owns#2] DEL[(2,3)->(2,1):dep#8]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 82,
+    "seconds": 5.106359762000011,
+    "text": "DEL[1,3] DEL[(1,2)->(2,3):dep#7] DEL[(1,0)->(2,3):owns#4] DEL[(2,0)->(1,2):dep#5] DEL[(2,1)->(2,0):owns#2] DEL[(2,3)->(2,1):dep#8]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_leaf",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 2.8401744130001134,
+    "text": "DEL[2,1] DEL[(2,0)->(2,1):dep#6] DEL[(2,2)->(2,1):owns#2]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 2.7661553240000103,
+    "text": "DEL[2,1] DEL[(2,0)->(2,1):dep#6] DEL[(2,2)->(2,1):owns#2]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "match_edge",
+     "match_edge"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.7008951039997555,
+    "text": "DEL[2,1] DEL[(2,0)->(2,1):dep#6] DEL[(2,2)->(2,1):owns#2]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.722272062000229,
+    "text": "DEL[2,1] DEL[(2,0)->(2,1):dep#6] DEL[(2,2)->(2,1):owns#2]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.724079251999683,
+    "text": "DEL[2,1] DEL[(2,0)->(2,1):dep#6] DEL[(2,2)->(2,1):owns#2]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 3.1576414549999754,
+    "text": "DEL[2,1] DEL[(2,0)->(2,1):dep#6] DEL[(2,2)->(2,1):owns#2]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 2,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_node",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 9,
+    "seconds": 1.0066313890001766,
+    "text": "ADD[1,2:2]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 9,
+    "seconds": 1.0190987460000542,
+    "text": "ADD[1,2:2]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_edge",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 16,
+    "seconds": 1.4220418660001997,
+    "text": "ADD[(1,1)->(0,0):dep#5]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 16,
+    "seconds": 1.4035244990000137,
+    "text": "ADD[(1,1)->(0,0):dep#5]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_edge",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 16,
+    "seconds": 1.3857916609999847,
+    "text": "ADD[(1,0)->(2,2):dep#6]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 16,
+    "seconds": 1.384391764999691,
+    "text": "ADD[(1,0)->(2,2):dep#6]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 82,
+    "seconds": 5.721134045999861,
+    "text": "DEL[0,0] DEL[(1,0)->(0,0):dep#3] DEL[(1,3)->(0,0):dep#3] DEL[(0,3)->(2,3):owns#2] DEL[(0,1)->(2,3):dep#5] DEL[(2,3)->(0,1):dep#7]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 82,
+    "seconds": 5.132501359999878,
+    "text": "DEL[0,0] DEL[(1,0)->(0,0):dep#3] DEL[(1,3)->(0,0):dep#3] DEL[(0,3)->(2,3):owns#2] DEL[(0,1)->(2,3):dep#5] DEL[(2,3)->(0,1):dep#7]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "match_edge",
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 82,
+    "seconds": 5.899438541000109,
+    "text": "DEL[0,0] DEL[(1,0)->(0,0):dep#3] DEL[(1,3)->(0,0):dep#3] DEL[(0,3)->(2,3):owns#2] DEL[(0,1)->(2,3):dep#5] DEL[(2,3)->(0,1):dep#7]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 97,
+    "seconds": 6.2498549769998135,
+    "text": "DEL[0,0] DEL[(1,0)->(0,0):dep#3] DEL[(1,3)->(0,0):dep#3] DEL[(1,3)->(0,0):owns#6] DEL[(0,3)->(2,3):owns#2] DEL[(0,1)->(2,3):dep#5] DEL[(2,3)->(0,1):dep#7]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 97,
+    "seconds": 6.742510890000176,
+    "text": "DEL[0,0] DEL[(1,0)->(0,0):dep#3] DEL[(1,3)->(0,0):dep#3] DEL[(0,3)->(2,3):owns#2] DEL[(0,1)->(2,3):dep#5] DEL[(2,3)->(0,1):dep#7] DEL[(1,3)->(0,0):owns#6]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 97,
+    "seconds": 6.190639218000342,
+    "text": "DEL[0,0] DEL[(1,0)->(0,0):dep#3] DEL[(1,3)->(0,0):dep#3] DEL[(0,3)->(2,3):owns#2] DEL[(0,1)->(2,3):dep#5] DEL[(2,3)->(0,1):dep#7] DEL[(1,3)->(0,0):owns#6]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 1,
+    "n_grounded": 0,
+    "completed": "DEL[(1,3)->(0,0):owns#6]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 2.588683576999756,
+    "text": "DEL[0,2] DEL[(0,2)->(0,0):owns#6] DEL[(0,2)->(1,2):dep#5]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 3.1253585899999052,
+    "text": "DEL[0,2] DEL[(0,2)->(0,0):owns#6] DEL[(0,2)->(1,2):dep#5]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.694397798999944,
+    "text": "DEL[0,2] DEL[(0,2)->(1,2):dep#5] DEL[(0,2)->(0,0):owns#6]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.5479968909999116,
+    "text": "DEL[0,2] DEL[(2,2)->(0,2):dep#9] DEL[(0,2)->(0,0):owns#6] DEL[(0,2)->(1,2):dep#5]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.6319616780001525,
+    "text": "DEL[0,2] DEL[(2,2)->(0,2):dep#9] DEL[(0,2)->(0,0):owns#6] DEL[(0,2)->(1,2):dep#5]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 3.96609112599981,
+    "text": "DEL[0,2] DEL[(0,2)->(0,0):owns#6] DEL[(0,2)->(1,2):dep#5] DEL[(2,2)->(0,2):dep#9]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "DEL[(2,2)->(0,2):dep#9]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 22,
+    "seconds": 1.7248744299999998,
+    "text": "DEL[0,3] DEL[(0,2)->(0,3):owns#1]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 22,
+    "seconds": 1.7670181439998487,
+    "text": "DEL[0,3] DEL[(0,2)->(0,3):owns#1]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "match_edge",
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 22,
+    "seconds": 1.7694681520001723,
+    "text": "DEL[0,3] DEL[(0,1)->(0,3):owns#5]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.7308673219999946,
+    "text": "DEL[0,3] DEL[(0,1)->(0,3):owns#5] DEL[(2,2)->(0,3):owns#1]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 52,
+    "seconds": 4.083794007000051,
+    "text": "DEL[0,3] DEL[(0,2)->(0,3):owns#1] DEL[(0,1)->(0,3):owns#5] DEL[(2,2)->(0,3):owns#1]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.7711353149998104,
+    "text": "DEL[0,3] DEL[(0,1)->(0,3):owns#5] DEL[(2,2)->(0,3):owns#1]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 1,
+    "n_grounded": 0,
+    "completed": "DEL[(0,1)->(0,3):owns#5] DEL[(2,2)->(0,3):owns#1]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 2.547450101999857,
+    "text": "DEL[1,2] DEL[(2,2)->(1,2):owns#6] DEL[(2,3)->(1,2):owns#5]"
+   },
+   "M1_constrained": {
+    "corrupted": true,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 2.640976353000042,
+    "text": "DEL[1,2] DEL[(2,2)->(1,2):owns#6] DEL[(2,3)->(1,2):owns#5]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "match_edge",
+     "dangling"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 82,
+    "seconds": 5.767005503000291,
+    "text": "DEL[1,2] DEL[(2,2)->(1,2):owns#6] DEL[(2,3)->(1,2):owns#5] DEL[(0,2)->(1,2):dep#5] DEL[(1,0)->(1,2):dep#1] DEL[(1,3)->(1,2):dep#5]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.768722446999618,
+    "text": "DEL[1,2] DEL[(1,2)->(2,2):owns#6] DEL[(1,2)->(2,3):dep#9]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.737824207000358,
+    "text": "DEL[1,2] DEL[(2,2)->(1,2):owns#6] DEL[(2,3)->(1,2):owns#5]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 3.1350982769999973,
+    "text": "DEL[1,2] DEL[(1,2)->(2,2):owns#6] DEL[(1,2)->(2,3):dep#9]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 1,
+    "n_grounded": 0,
+    "completed": "DEL[(1,2)->(2,2):owns#6] DEL[(1,2)->(2,3):dep#9]",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_dep",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 22,
+    "seconds": 1.8784525780001786,
+    "text": "DEL[0,3] DEL[(1,3)->(0,3):dep#6]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 22,
+    "seconds": 1.7263103370000863,
+    "text": "DEL[0,3] DEL[(1,3)->(0,3):dep#6]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_leaf",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 2.581546198000069,
+    "text": "DEL[1,0] DEL[(0,0)->(1,0):owns#8] DEL[(2,0)->(0,2):owns#1]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": false,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 2.5859734239998033,
+    "text": "DEL[1,0] DEL[(0,0)->(1,0):owns#8] DEL[(2,0)->(0,2):owns#1]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "match_edge"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 112,
+    "seconds": 7.6555564079999385,
+    "text": "DEL[1,0] DEL[(0,0)->(1,0):owns#8] DEL[(2,0)->(0,2):owns#1] DEL[(0,1)->(0,0):dep#2] DEL[(0,2)->(1,1):owns#2] DEL[(1,1)->(1,2):owns#6] DEL[(0,2)->(1,1):dep#2] DEL[(2,3)->(0,1):owns#6]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.7227965820002282,
+    "text": "DEL[1,0] DEL[(0,0)->(1,0):owns#8] DEL[(2,0)->(0,2):owns#1]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 16,
+    "seconds": 1.548151926999708,
+    "text": "DEL[(0,0)->(1,0):owns#8]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 16,
+    "seconds": 1.5594966949997797,
+    "text": "DEL[(0,0)->(1,0):owns#8]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 1,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "delete_leaf",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 37,
+    "seconds": 3.10468711600015,
+    "text": "DEL[2,1] DEL[(2,0)->(2,1):owns#5] DEL[(2,1)->(2,3):owns#2]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 37,
+    "seconds": 2.609431423999922,
+    "text": "DEL[2,1] DEL[(2,0)->(2,1):owns#5] DEL[(2,1)->(2,3):owns#2]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "obstructions": [
+     "match_edge",
+     "match_edge"
+    ]
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.7861076889998913,
+    "text": "DEL[2,1] DEL[(2,0)->(2,1):owns#5] DEL[(2,1)->(2,3):owns#2]"
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.756768584999918,
+    "text": "DEL[2,1] DEL[(2,0)->(2,1):owns#4] DEL[(2,1)->(2,3):owns#2]"
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 2.9523680059996877,
+    "text": "DEL[2,1] DEL[(2,0)->(2,1):owns#5] DEL[(2,1)->(2,3):owns#2]"
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": false,
+    "rejected": true,
+    "retried": true,
+    "tokens": 37,
+    "seconds": 3.1182402290000937,
+    "text": "DEL[2,1] DEL[(2,0)->(2,1):owns#5] DEL[(2,1)->(2,3):owns#2]"
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": false,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": true,
+    "n_cut": 2,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_node",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 9,
+    "seconds": 1.0195091629998387,
+    "text": "ADD[2,5:4]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 9,
+    "seconds": 1.0525428029995965,
+    "text": "ADD[2,5:4]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_edge",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 16,
+    "seconds": 1.4273824710003282,
+    "text": "ADD[(2,3)->(1,2):dep#8]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 16,
+    "seconds": 1.4124008220001087,
+    "text": "ADD[(2,3)->(1,2):dep#8]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  },
+  {
+   "kind": "add_edge",
+   "M0_unconstrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "lenient_parse": true,
+    "tokens": 16,
+    "seconds": 1.4109094089999417,
+    "text": "ADD[(0,0)->(1,0):dep#4]"
+   },
+   "M1_constrained": {
+    "corrupted": false,
+    "success": true,
+    "strict_parse": true,
+    "tokens": 16,
+    "seconds": 1.41077095799983,
+    "text": "ADD[(0,0)->(1,0):dep#4]"
+   },
+   "M2_gate": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": []
+   },
+   "M3_retry_prose_plain": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_prose_detailed": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M3_retry_structured_imperative": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "obstructions": [],
+    "retried": false,
+    "tokens": 0
+   },
+   "M5_auto_repair": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0
+   },
+   "M6_ground_complete": {
+    "corrupted": false,
+    "success": true,
+    "rejected": false,
+    "llm_calls_extra": 0,
+    "repaired": false,
+    "n_cut": 0,
+    "n_grounded": 0,
+    "completed": "",
+    "reason": ""
+   }
+  }
+ ],
+ "summary": {
+  "all": {
+   "n": 60,
+   "M0_unconstrained": {
+    "success": 0.5333333333333333,
+    "corrupted": 0.31666666666666665,
+    "strict_parse": 1.0,
+    "avg_tokens": 34.25
+   },
+   "M1_constrained": {
+    "success": 0.5333333333333333,
+    "corrupted": 0.31666666666666665,
+    "strict_parse": 1.0,
+    "avg_tokens": 34.25
+   },
+   "M2_gate": {
+    "success": 0.4666666666666667,
+    "corrupted": 0.0,
+    "strict_parse": null,
+    "avg_tokens": null
+   },
+   "M3_retry_prose_plain": {
+    "success": 0.5,
+    "corrupted": 0.0,
+    "strict_parse": null,
+    "avg_tokens": 22.766666666666666
+   },
+   "M3_retry_prose_detailed": {
+    "success": 0.5666666666666667,
+    "corrupted": 0.0,
+    "strict_parse": null,
+    "avg_tokens": 17.916666666666668
+   },
+   "M3_retry_structured": {
+    "success": 0.6,
+    "corrupted": 0.0,
+    "strict_parse": null,
+    "avg_tokens": 19.966666666666665
+   },
+   "M3_retry_structured_imperative": {
+    "success": 0.6,
+    "corrupted": 0.0,
+    "strict_parse": null,
+    "avg_tokens": 23.066666666666666
+   },
+   "M5_auto_repair": {
+    "success": 0.5666666666666667,
+    "corrupted": 0.0,
+    "strict_parse": null,
+    "avg_tokens": null
+   },
+   "M6_ground_complete": {
+    "success": 0.7333333333333333,
+    "corrupted": 0.0,
+    "strict_parse": null,
+    "avg_tokens": null
+   },
+   "gate_blocked_blind_successes": 4
+  },
+  "delete_dep": {
+   "n": 30,
+   "M0_unconstrained": {
+    "success": 0.36666666666666664,
+    "corrupted": 0.6333333333333333,
+    "strict_parse": 1.0,
+    "avg_tokens": 40.0
+   },
+   "M1_constrained": {
+    "success": 0.36666666666666664,
+    "corrupted": 0.6333333333333333,
+    "strict_parse": 1.0,
+    "avg_tokens": 40.0
+   },
+   "M2_gate": {
+    "success": 0.3333333333333333,
+    "corrupted": 0.0,
+    "strict_parse": null,
+    "avg_tokens": null
+   },
+   "M3_retry_prose_plain": {
+    "success": 0.4,
+    "corrupted": 0.0,
+    "strict_parse": null,
+    "avg_tokens": 36.36666666666667
+   },
+   "M3_retry_prose_detailed": {
+    "success": 0.5333333333333333,
+    "corrupted": 0.0,
+    "strict_parse": null,
+    "avg_tokens": 29.166666666666668
+   },
+   "M3_retry_structured": {
+    "success": 0.6,
+    "corrupted": 0.0,
+    "strict_parse": null,
+    "avg_tokens": 33.96666666666667
+   },
+   "M3_retry_structured_imperative": {
+    "success": 0.6,
+    "corrupted": 0.0,
+    "strict_parse": null,
+    "avg_tokens": 40.166666666666664
+   },
+   "M5_auto_repair": {
+    "success": 0.5333333333333333,
+    "corrupted": 0.0,
+    "strict_parse": null,
+    "avg_tokens": null
+   },
+   "M6_ground_complete": {
+    "success": 0.7666666666666667,
+    "corrupted": 0.0,
+    "strict_parse": null,
+    "avg_tokens": null
+   },
+   "gate_blocked_blind_successes": 1
+  }
+ },
+ "meta": {
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "load_4bit": true,
+  "seed": 3,
+  "max_new_tokens": 400,
+  "n": 60,
+  "hint_rules": true
+ }
+}

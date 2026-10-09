@@ -1,0 +1,1082 @@
+{
+ "rows": [
+  {
+   "kind": "delete_dep",
+   "text": "DEL[1,0]",
+   "tokens": 7,
+   "seconds": 0.9300227239999685
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,3]",
+   "tokens": 7,
+   "seconds": 1.0009986479999498
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(2,1)->(2,3):owns#4]",
+   "tokens": 16,
+   "seconds": 1.6061806480000769
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[0,0] DEL[(0,3)->(2,2):owns#5]",
+   "tokens": 22,
+   "seconds": 1.6908896630000072
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,2)->(1,0):owns#6]",
+   "tokens": 16,
+   "seconds": 1.4050791009999557
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[3,3:9]",
+   "tokens": 9,
+   "seconds": 1.0272280629999386
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(2,1)->(1,2):dep#3]",
+   "tokens": 16,
+   "seconds": 1.430715348999911
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[0,3]",
+   "tokens": 7,
+   "seconds": 0.8359822150000582
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[1,1]",
+   "tokens": 7,
+   "seconds": 0.8382350320000569
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(2,3)->(0,3):dep#6]",
+   "tokens": 16,
+   "seconds": 1.4330533240000705
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[2,2] DEL[(2,1)->(0,2):dep#7]",
+   "tokens": 22,
+   "seconds": 2.156236247000038
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,3)->(2,1):owns#3]",
+   "tokens": 16,
+   "seconds": 1.6520411619999322
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[2,4:6]",
+   "tokens": 9,
+   "seconds": 1.036757204999958
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(0,2)->(1,3):dep#3]",
+   "tokens": 16,
+   "seconds": 1.50921838499994
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[2,1]",
+   "tokens": 7,
+   "seconds": 0.846527022000032
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[1,1]",
+   "tokens": 7,
+   "seconds": 0.8476229310000463
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(0,1)->(2,1):dep#1]",
+   "tokens": 16,
+   "seconds": 1.4609267870000622
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[0,1] DEL[(1,3)->(2,0):owns#4]",
+   "tokens": 22,
+   "seconds": 1.8161234969999214
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(2,0)->(0,3):owns#6]",
+   "tokens": 16,
+   "seconds": 1.352105915999914
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[3,1:1]",
+   "tokens": 9,
+   "seconds": 1.2685249560000784
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(2,2)->(1,3):dep#5]",
+   "tokens": 16,
+   "seconds": 1.73079438700006
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[2,2]",
+   "tokens": 7,
+   "seconds": 0.932310163000011
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[2,2]",
+   "tokens": 7,
+   "seconds": 0.8540968969999767
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(1,3)->(2,1):dep#3]",
+   "tokens": 16,
+   "seconds": 1.4659605990000273
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[1,1] DEL[(1,3)->(1,2):dep#1]",
+   "tokens": 22,
+   "seconds": 1.8207397140000694
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(2,0)->(1,2):dep#2]",
+   "tokens": 16,
+   "seconds": 1.4550133149999738
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[3,1:3]",
+   "tokens": 9,
+   "seconds": 1.0412340360001053
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,3)->(0,1):dep#1]",
+   "tokens": 16,
+   "seconds": 1.362437835000037
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[2,1]",
+   "tokens": 7,
+   "seconds": 0.8563087730000234
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,3]",
+   "tokens": 7,
+   "seconds": 1.0212100410000176
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(2,2)->(1,3):dep#7]",
+   "tokens": 16,
+   "seconds": 1.7256064389999892
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[1,3] DEL[(2,1)->(2,3):dep#4]",
+   "tokens": 22,
+   "seconds": 1.8358872199999041
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,1)->(0,0):owns#5] DEL[(0,1)->(2,2):dep#5]",
+   "tokens": 31,
+   "seconds": 2.3472734969999465
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[3,5:9]",
+   "tokens": 9,
+   "seconds": 1.0460043929999756
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(2,2)->(0,1):dep#2]",
+   "tokens": 16,
+   "seconds": 1.433658449999939
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[1,0]",
+   "tokens": 7,
+   "seconds": 0.856606931999977
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,3]",
+   "tokens": 7,
+   "seconds": 0.9156944170000543
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(1,0)->(1,3):owns#3]",
+   "tokens": 16,
+   "seconds": 1.393995423999968
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[0,0] DEL[(1,3)->(1,0):dep#4]",
+   "tokens": 22,
+   "seconds": 2.1885092049999457
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(2,1)->(1,0):owns#3]",
+   "tokens": 16,
+   "seconds": 1.3943543770000133
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[2,4:5]",
+   "tokens": 9,
+   "seconds": 1.0192699979999134
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(2,2)->(0,1):dep#8]",
+   "tokens": 16,
+   "seconds": 1.472961158999965
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[0,0]",
+   "tokens": 7,
+   "seconds": 0.9097035059999143
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,2]",
+   "tokens": 7,
+   "seconds": 0.8910704930000293
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(1,3)->(1,0):dep#2]",
+   "tokens": 16,
+   "seconds": 1.4392503159999706
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[1,1] DEL[(0,2)->(2,1):dep#5]",
+   "tokens": 22,
+   "seconds": 1.7874397209999415
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,1)->(2,2):owns#7] DEL[(1,0)->(1,3):owns#7] DEL[(2,2)->(0,3):dep#9]",
+   "tokens": 46,
+   "seconds": 3.533685506000097
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[3,1:6]",
+   "tokens": 9,
+   "seconds": 1.053683236999973
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(0,2)->(1,3):dep#9]",
+   "tokens": 16,
+   "seconds": 1.349026909000031
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[1,2]",
+   "tokens": 7,
+   "seconds": 0.8257581760000221
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[1,2]",
+   "tokens": 7,
+   "seconds": 0.8951999170000136
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(1,2)->(1,0):dep#3]",
+   "tokens": 16,
+   "seconds": 1.4209242490001088
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[2,0] DEL[(0,0)->(2,1):dep#4]",
+   "tokens": 22,
+   "seconds": 1.7054255950000652
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,2)->(0,3):owns#3]",
+   "tokens": 16,
+   "seconds": 1.4139401830000224
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[4,1:2]",
+   "tokens": 9,
+   "seconds": 1.001242499
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(0,2)->(2,2):dep#8]",
+   "tokens": 16,
+   "seconds": 1.598062218999985
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[2,3]",
+   "tokens": 7,
+   "seconds": 0.932211164000023
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,1]",
+   "tokens": 7,
+   "seconds": 0.9723309100000961
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(2,1)->(0,2):owns#1]",
+   "tokens": 16,
+   "seconds": 1.4373496530000693
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[0,2] DEL[(2,1)->(2,2):owns#1]",
+   "tokens": 22,
+   "seconds": 1.7599221939999552
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,1)->(2,2):dep#9]",
+   "tokens": 16,
+   "seconds": 1.3711966299999858
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[3,5:6]",
+   "tokens": 9,
+   "seconds": 0.9514058269999168
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(0,0)->(2,1):dep#6]",
+   "tokens": 16,
+   "seconds": 1.4238848960000041
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[0,3]",
+   "tokens": 7,
+   "seconds": 0.8310959960000446
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[2,3]",
+   "tokens": 7,
+   "seconds": 0.842712430000006
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(0,0)->(1,1):dep#9]",
+   "tokens": 16,
+   "seconds": 1.4728552920000766
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[0,1] DEL[(1,1)->(1,3):owns#8]",
+   "tokens": 22,
+   "seconds": 2.150813298999992
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,2)->(0,3):owns#8] DEL[(0,3)->(2,2):owns#8] DEL[(0,3)->(0,2):owns#8]",
+   "tokens": 46,
+   "seconds": 3.1127498030000424
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[1,1:6]",
+   "tokens": 9,
+   "seconds": 0.9482499159998952
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,2)->(2,3):dep#6]",
+   "tokens": 16,
+   "seconds": 1.4481667329999937
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[2,0]",
+   "tokens": 7,
+   "seconds": 0.8383591629999501
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,3]",
+   "tokens": 7,
+   "seconds": 0.9042759719999367
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(1,2)->(1,3):owns#3]",
+   "tokens": 16,
+   "seconds": 1.4399341859999595
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[1,2] DEL[(0,0)->(2,3):dep#9]",
+   "tokens": 22,
+   "seconds": 1.993582186000026
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,1)->(2,0):owns#8]",
+   "tokens": 16,
+   "seconds": 1.6661484989999735
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[2,3:2]",
+   "tokens": 9,
+   "seconds": 1.0398229439999795
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(2,0)->(0,1):dep#6]",
+   "tokens": 16,
+   "seconds": 1.4421100490000072
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[0,2]",
+   "tokens": 7,
+   "seconds": 0.8573395740000933
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,1]",
+   "tokens": 7,
+   "seconds": 0.9175739120000799
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(0,3)->(0,0):dep#1]",
+   "tokens": 16,
+   "seconds": 1.4377847189999784
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[1,3] DEL[(1,2)->(0,0):owns#3]",
+   "tokens": 22,
+   "seconds": 1.7916048350000437
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,3)->(0,2):dep#5] DEL[(2,1)->(2,0):dep#5]",
+   "tokens": 31,
+   "seconds": 2.267151099999978
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[2,2:5]",
+   "tokens": 9,
+   "seconds": 1.1673835709999594
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(2,0)->(2,2):dep#1]",
+   "tokens": 16,
+   "seconds": 1.761779793999949
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[0,2]",
+   "tokens": 7,
+   "seconds": 0.83841183800007
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[1,3]",
+   "tokens": 7,
+   "seconds": 0.8373102580000022
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(0,1)->(1,0):owns#2]",
+   "tokens": 16,
+   "seconds": 1.4227538640000148
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[1,2] DEL[(1,3)->(0,0):dep#8]",
+   "tokens": 22,
+   "seconds": 1.747691269000029
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,2)->(2,3):dep#7]",
+   "tokens": 16,
+   "seconds": 1.414161906000004
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[1,1:2]",
+   "tokens": 9,
+   "seconds": 0.9393529999999828
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(0,2)->(2,1):dep#5]",
+   "tokens": 16,
+   "seconds": 1.444751027000052
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[1,3]",
+   "tokens": 7,
+   "seconds": 0.9195341939999935
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[2,3]",
+   "tokens": 7,
+   "seconds": 0.9326853189999156
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(1,0)->(2,1):dep#4]",
+   "tokens": 16,
+   "seconds": 1.6596000120000554
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[0,1] DEL[(2,2)->(2,1):owns#3]",
+   "tokens": 22,
+   "seconds": 1.7915546560000166
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,1)->(0,0):owns#2]",
+   "tokens": 16,
+   "seconds": 1.4093889069999932
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[1,4:2]",
+   "tokens": 9,
+   "seconds": 1.029483930000083
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,2)->(1,0):dep#2]",
+   "tokens": 16,
+   "seconds": 1.4190765739999733
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[1,1]",
+   "tokens": 7,
+   "seconds": 0.8349549739999702
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[2,2]",
+   "tokens": 7,
+   "seconds": 0.8391344330000265
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(2,0)->(1,1):owns#8]",
+   "tokens": 16,
+   "seconds": 1.3413839600000301
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[2,0] DEL[(2,1)->(1,0):owns#7]",
+   "tokens": 22,
+   "seconds": 1.9375639820000288
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,2)->(2,1):dep#4] DEL[(2,0)->(1,3):owns#6]",
+   "tokens": 31,
+   "seconds": 2.5933945790000053
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[0,1:9]",
+   "tokens": 9,
+   "seconds": 1.0282086030000528
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,3)->(1,2):dep#9]",
+   "tokens": 16,
+   "seconds": 1.4236800449999691
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[1,0]",
+   "tokens": 7,
+   "seconds": 0.8407199490001176
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[2,2]",
+   "tokens": 7,
+   "seconds": 0.9079393970000638
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(1,1)->(0,1):dep#1]",
+   "tokens": 16,
+   "seconds": 1.4053933350000989
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[2,1] DEL[(2,3)->(1,3):owns#3]",
+   "tokens": 22,
+   "seconds": 1.7926058619998457
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,2)->(1,3):owns#1] DEL[(1,0)->(2,3):owns#1] DEL[(2,3)->(2,1):dep#2]",
+   "tokens": 46,
+   "seconds": 3.449612557999899
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[4,4:2]",
+   "tokens": 9,
+   "seconds": 1.10335651399987
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(0,1)->(1,1):dep#3]",
+   "tokens": 16,
+   "seconds": 1.4219327840000915
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[0,2]",
+   "tokens": 7,
+   "seconds": 0.8459101170001304
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[1,1]",
+   "tokens": 7,
+   "seconds": 0.9273003509999853
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(0,1)->(0,2):dep#2]",
+   "tokens": 16,
+   "seconds": 1.4409920959999454
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[2,1] DEL[(1,1)->(2,2):owns#6]",
+   "tokens": 22,
+   "seconds": 1.7469393400001536
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,1)->(2,1):owns#7]",
+   "tokens": 16,
+   "seconds": 1.3834880719998637
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[4,1:7]",
+   "tokens": 9,
+   "seconds": 0.966929933000074
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,1)->(0,0):dep#8]",
+   "tokens": 16,
+   "seconds": 1.5851165439999022
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[2,0]",
+   "tokens": 7,
+   "seconds": 0.9246113709998554
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,0]",
+   "tokens": 7,
+   "seconds": 0.998983527000064
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(0,0)->(2,1):owns#2]",
+   "tokens": 16,
+   "seconds": 1.4558362429997942
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[2,2] DEL[(1,1)->(2,0):dep#9]",
+   "tokens": 22,
+   "seconds": 1.7835176099999899
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,2)->(2,3):dep#3] DEL[(2,3)->(0,0):dep#9] DEL[(2,3)->(1,1):dep#2]",
+   "tokens": 46,
+   "seconds": 3.1373019329998897
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[3,5:9]",
+   "tokens": 9,
+   "seconds": 1.0053484210000079
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,2)->(1,3):dep#9]",
+   "tokens": 16,
+   "seconds": 1.422180242999957
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[0,2]",
+   "tokens": 7,
+   "seconds": 0.8340645310001946
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,0]",
+   "tokens": 7,
+   "seconds": 1.0176291459999902
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(0,1)->(0,3):dep#5]",
+   "tokens": 16,
+   "seconds": 1.7366997870001342
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[1,1] DEL[(0,0)->(1,2):dep#2]",
+   "tokens": 22,
+   "seconds": 1.7634924040000897
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(2,3)->(0,1):owns#8]",
+   "tokens": 16,
+   "seconds": 1.3450522240000282
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[2,4:8]",
+   "tokens": 9,
+   "seconds": 1.0122660939998696
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,2)->(2,0):dep#5]",
+   "tokens": 16,
+   "seconds": 1.4452454170000237
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[1,0]",
+   "tokens": 7,
+   "seconds": 0.8573363560001326
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[1,2]",
+   "tokens": 7,
+   "seconds": 0.9142005039998367
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(2,3)->(2,1):dep#7]",
+   "tokens": 16,
+   "seconds": 1.3478011050001442
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[2,1] DEL[(2,0)->(2,3):dep#2]",
+   "tokens": 22,
+   "seconds": 1.938917242000116
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,0)->(2,3):dep#2] DEL[(2,2)->(2,3):dep#2]",
+   "tokens": 31,
+   "seconds": 2.620472522
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[4,4:2]",
+   "tokens": 9,
+   "seconds": 1.0065016959999866
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,0)->(1,1):dep#7]",
+   "tokens": 16,
+   "seconds": 1.3443333049999637
+  }
+ ],
+ "summary": {
+  "delete_dep": {
+   "n": 20,
+   "blind": {
+    "success": 0,
+    "corrupted": 20
+   },
+   "gate": {
+    "success": 0,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 20,
+    "corrupted": 0
+   }
+  },
+  "delete_leaf": {
+   "n": 20,
+   "blind": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "gate": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 20,
+    "corrupted": 0
+   }
+  },
+  "delete_edge": {
+   "n": 20,
+   "blind": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "gate": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 0,
+    "corrupted": 0
+   }
+  },
+  "delete_pair": {
+   "n": 20,
+   "blind": {
+    "success": 4,
+    "corrupted": 16
+   },
+   "gate": {
+    "success": 4,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 0,
+    "corrupted": 0
+   }
+  },
+  "delete_weight": {
+   "n": 20,
+   "blind": {
+    "success": 15,
+    "corrupted": 0
+   },
+   "gate": {
+    "success": 15,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 15,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 15,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 0,
+    "corrupted": 0
+   }
+  },
+  "add_node": {
+   "n": 20,
+   "blind": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "gate": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 20,
+    "corrupted": 0
+   }
+  },
+  "add_edge": {
+   "n": 20,
+   "blind": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "gate": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 20,
+    "corrupted": 0
+   }
+  },
+  "old_deletes": {
+   "n": 40,
+   "blind": {
+    "success": 20,
+    "corrupted": 20
+   },
+   "gate": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 40,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 40,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 40,
+    "corrupted": 0
+   }
+  },
+  "all": {
+   "n": 140,
+   "blind": {
+    "success": 99,
+    "corrupted": 36
+   },
+   "gate": {
+    "success": 99,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 135,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 135,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 80,
+    "corrupted": 0
+   }
+  },
+  "paired": {
+   "helped": 0,
+   "harmed": 0,
+   "both_right": 135,
+   "both_wrong": 5
+  },
+  "m7_equals_m6": {
+   "delete_dep": 20,
+   "delete_leaf": 20,
+   "delete_edge": 20,
+   "delete_pair": 20,
+   "delete_weight": 20,
+   "add_node": 20,
+   "add_edge": 20,
+   "old_deletes": 40,
+   "all": 140
+  },
+  "dropped": {
+   "tasks_with_drops": 0,
+   "items": 0,
+   "tasks_with_drops_and_right": 0
+  }
+ },
+ "meta": {
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "seed": 7,
+  "n": 140,
+  "hint_rules": false,
+  "test": "scope_single_step"
+ }
+}

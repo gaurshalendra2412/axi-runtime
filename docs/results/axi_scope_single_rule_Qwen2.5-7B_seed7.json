@@ -1,0 +1,1082 @@
+{
+ "rows": [
+  {
+   "kind": "delete_dep",
+   "text": "DEL[1,0] DEL[(2,0)->(1,0):dep#2]",
+   "tokens": 22,
+   "seconds": 2.1044298140000137
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,3] DEL[(1,2)->(0,2):owns#3]",
+   "tokens": 22,
+   "seconds": 1.7591304649999984
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(2,1)->(2,3):owns#4]",
+   "tokens": 16,
+   "seconds": 1.447275354999988
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[0,0] DEL[(0,3)->(2,2):owns#5]",
+   "tokens": 22,
+   "seconds": 1.7661905390000356
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,2)->(1,0):owns#6]",
+   "tokens": 16,
+   "seconds": 1.415153303000011
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[3,3:9]",
+   "tokens": 9,
+   "seconds": 1.0156896759999654
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(2,1)->(1,2):dep#3]",
+   "tokens": 16,
+   "seconds": 1.4346953819999726
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[0,3] DEL[(0,3)->(2,1):owns#6]",
+   "tokens": 22,
+   "seconds": 1.8565756550000287
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[1,1] DEL[(0,1)->(2,2):owns#9] DEL[(1,0)->(0,3):dep#3] DEL[(1,0)->(0,3):owns#9] DEL[(0,0)->(1,0):owns#8] DEL[(1,2)->(0,2):dep#2]",
+   "tokens": 82,
+   "seconds": 5.758641021000017
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(2,3)->(0,3):dep#6]",
+   "tokens": 16,
+   "seconds": 1.4137057480000976
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[2,2] DEL[(2,1)->(0,2):dep#7]",
+   "tokens": 22,
+   "seconds": 1.7807244230000379
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,3)->(2,1):owns#3]",
+   "tokens": 16,
+   "seconds": 1.4083472519999987
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[2,4:6]",
+   "tokens": 9,
+   "seconds": 1.0191492339999968
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(0,2)->(1,3):dep#3]",
+   "tokens": 16,
+   "seconds": 1.6010584649999373
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[2,1] DEL[(0,0)->(2,1):dep#8]",
+   "tokens": 22,
+   "seconds": 2.1529773089999935
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[1,1] DEL[(0,3)->(0,1):owns#2] DEL[(1,0)->(0,1):owns#5]",
+   "tokens": 37,
+   "seconds": 2.5977187770000683
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(0,1)->(2,1):dep#1]",
+   "tokens": 16,
+   "seconds": 1.4346548680000524
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[0,1] DEL[(1,3)->(2,0):owns#4]",
+   "tokens": 22,
+   "seconds": 1.764038585000094
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(2,0)->(0,3):owns#6] DEL[(2,1)->(0,3):dep#8]",
+   "tokens": 31,
+   "seconds": 2.2594198790000064
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[3,1:1]",
+   "tokens": 9,
+   "seconds": 1.0584587189999866
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(2,2)->(1,3):dep#5]",
+   "tokens": 16,
+   "seconds": 1.6652875839999979
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[2,2] DEL[(2,2)->(0,2):dep#4]",
+   "tokens": 22,
+   "seconds": 2.008833439
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[2,2] DEL[(2,0)->(0,1):owns#3] DEL[(1,2)->(1,0):owns#8] DEL[(0,1)->(2,3):owns#8] DEL[(0,0)->(2,3):owns#7]",
+   "tokens": 67,
+   "seconds": 4.367385923000029
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(1,3)->(2,1):dep#3]",
+   "tokens": 16,
+   "seconds": 1.4761707609999348
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[1,1] DEL[(1,3)->(1,2):dep#1]",
+   "tokens": 22,
+   "seconds": 1.8259322179999344
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(2,0)->(1,2):dep#2]",
+   "tokens": 16,
+   "seconds": 1.4415628079999578
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[3,1:3]",
+   "tokens": 9,
+   "seconds": 1.1594761339999877
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,3)->(0,1):dep#1]",
+   "tokens": 16,
+   "seconds": 1.727152937000028
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[2,1] DEL[(2,1)->(1,0):dep#8] DEL[(2,1)->(1,1):owns#7] DEL[(2,1)->(1,3):dep#8]",
+   "tokens": 52,
+   "seconds": 3.4909317059999694
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,3] DEL[(1,3)->(2,1):owns#5] DEL[(2,3)->(0,2):owns#4]",
+   "tokens": 37,
+   "seconds": 2.672860361000062
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(2,2)->(1,3):dep#7]",
+   "tokens": 16,
+   "seconds": 1.4640687160000425
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[1,3] DEL[(2,1)->(2,3):dep#4]",
+   "tokens": 22,
+   "seconds": 1.8353766320000204
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,1)->(0,0):owns#5] DEL[(1,1)->(0,3):dep#2] DEL[(1,1)->(0,3):owns#3]",
+   "tokens": 46,
+   "seconds": 3.723646464000012
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[3,5:9]",
+   "tokens": 9,
+   "seconds": 1.1082958910000116
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(2,2)->(0,1):dep#2]",
+   "tokens": 16,
+   "seconds": 1.4797768100000894
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[1,0] DEL[(1,0)->(1,2):owns#1]",
+   "tokens": 22,
+   "seconds": 1.8193951150000203
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,3] DEL[(0,2)->(0,0):dep#1] DEL[(1,1)->(0,0):dep#7] DEL[(2,0)->(0,0):owns#8] DEL[(2,0)->(0,2):owns#6]",
+   "tokens": 67,
+   "seconds": 4.467948236999973
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(1,0)->(1,3):owns#3]",
+   "tokens": 16,
+   "seconds": 1.7207474529999445
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[0,0] DEL[(1,3)->(1,0):dep#4]",
+   "tokens": 22,
+   "seconds": 2.0430375590000267
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(2,1)->(1,0):owns#3]",
+   "tokens": 16,
+   "seconds": 1.453860867000003
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[2,4:5]",
+   "tokens": 9,
+   "seconds": 1.0876944019998973
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(2,2)->(0,1):dep#8]",
+   "tokens": 16,
+   "seconds": 1.485248879999972
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[0,0] DEL[(2,3)->(0,0):dep#5]",
+   "tokens": 22,
+   "seconds": 1.8276140559999021
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,2] DEL[(1,1)->(1,2):dep#4] DEL[(1,2)->(1,1):dep#6] DEL[(1,2)->(1,1):owns#7] DEL[(1,3)->(2,0):owns#7] DEL[(1,3)->(2,2):owns#7] DEL[(2,1)->(1,1):owns#2] DEL[(2,1)->(1,3):owns#7] DEL[(2,1)->(2,2):owns#6] DEL[(2,2)->(1,2):owns#3]",
+   "tokens": 142,
+   "seconds": 9.254332191000003
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(1,3)->(1,0):dep#2]",
+   "tokens": 16,
+   "seconds": 1.5472551550000162
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[1,1] DEL[(0,2)->(2,1):dep#5]",
+   "tokens": 22,
+   "seconds": 1.8316767840000239
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,1)->(0,3):dep#7] DEL[(1,0)->(1,3):owns#7] DEL[(2,2)->(0,1):dep#7]",
+   "tokens": 46,
+   "seconds": 3.282710497000039
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[3,1:6]",
+   "tokens": 9,
+   "seconds": 1.1573613200000636
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(0,2)->(1,3):dep#9]",
+   "tokens": 16,
+   "seconds": 1.562375234000001
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[1,2] DEL[(0,2)->(1,2):owns#7] DEL[(2,1)->(1,2):dep#6]",
+   "tokens": 37,
+   "seconds": 2.6140090720000444
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[1,2] DEL[(0,2)->(1,2):dep#6] DEL[(2,2)->(1,2):dep#4]",
+   "tokens": 37,
+   "seconds": 2.7066779459998997
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(1,2)->(1,0):dep#3]",
+   "tokens": 16,
+   "seconds": 1.5124001309999358
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[2,0] DEL[(0,0)->(2,1):dep#4]",
+   "tokens": 22,
+   "seconds": 1.8082181789999368
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,2)->(0,3):owns#3] DEL[(1,3)->(1,2):dep#1]",
+   "tokens": 31,
+   "seconds": 2.853467949999981
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[4,1:2]",
+   "tokens": 9,
+   "seconds": 1.0523007210000515
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(0,2)->(2,2):dep#8]",
+   "tokens": 16,
+   "seconds": 1.4854323749999594
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[2,3] DEL[(2,0)->(2,3):owns#3] DEL[(2,2)->(2,3):owns#4]",
+   "tokens": 37,
+   "seconds": 2.6801104219999843
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,1] DEL[(0,0)->(2,2):owns#2] DEL[(1,3)->(2,1):dep#4] DEL[(1,3)->(2,1):owns#7] DEL[(2,1)->(0,0):owns#8] DEL[(2,1)->(1,0):owns#9]",
+   "tokens": 82,
+   "seconds": 5.43130230099996
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(2,1)->(0,2):owns#1]",
+   "tokens": 16,
+   "seconds": 1.7606913070000019
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[0,2] DEL[(2,1)->(2,2):owns#1]",
+   "tokens": 22,
+   "seconds": 1.843417531
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,1)->(2,2):dep#9]",
+   "tokens": 16,
+   "seconds": 1.4559275569999954
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[3,5:6]",
+   "tokens": 9,
+   "seconds": 1.0468825919999745
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(0,0)->(2,1):dep#6]",
+   "tokens": 16,
+   "seconds": 1.4951448140000139
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[0,3] DEL[(0,3)->(2,0):owns#2]",
+   "tokens": 22,
+   "seconds": 1.8128901920000544
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[2,3] DEL[(2,0)->(0,3):dep#1] DEL[(2,0)->(0,3):owns#7] DEL[(2,2)->(1,3):owns#4] DEL[(1,2)->(2,2):owns#4] DEL[(1,3)->(2,2):dep#6] DEL[(0,3)->(1,2):owns#7] DEL[(0,3)->(1,3):dep#1]",
+   "tokens": 112,
+   "seconds": 7.655446252000047
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(0,0)->(1,1):dep#9]",
+   "tokens": 16,
+   "seconds": 1.470571552000024
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[0,1] DEL[(1,1)->(1,3):owns#8]",
+   "tokens": 22,
+   "seconds": 1.8290074989999994
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,3)->(0,2):owns#8] DEL[(0,3)->(2,2):owns#8]",
+   "tokens": 31,
+   "seconds": 2.28837300400005
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[1,1:6]",
+   "tokens": 9,
+   "seconds": 1.0372482359999822
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,2)->(2,3):dep#6]",
+   "tokens": 16,
+   "seconds": 1.6508342569999286
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[2,0] DEL[(1,0)->(2,0):dep#9] DEL[(1,0)->(2,0):owns#8]",
+   "tokens": 37,
+   "seconds": 2.951901234999923
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,3] DEL[(2,0)->(2,3):dep#4] DEL[(2,3)->(0,2):dep#6] DEL[(2,3)->(1,0):dep#7] DEL[(2,3)->(1,1):owns#5]",
+   "tokens": 67,
+   "seconds": 4.407463027999938
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(1,2)->(1,3):owns#3]",
+   "tokens": 16,
+   "seconds": 1.4553115219999881
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[1,2] DEL[(0,0)->(2,3):dep#9]",
+   "tokens": 22,
+   "seconds": 1.8038490800000773
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,1)->(2,0):owns#8]",
+   "tokens": 16,
+   "seconds": 1.5748444749999635
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[2,3:2]",
+   "tokens": 9,
+   "seconds": 1.165340178000065
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(2,0)->(0,1):dep#6]",
+   "tokens": 16,
+   "seconds": 1.5159193839999716
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[0,2] DEL[(0,2)->(1,2):dep#2] DEL[(0,2)->(1,3):owns#7] DEL[(0,2)->(2,0):owns#5]",
+   "tokens": 52,
+   "seconds": 3.5372079859999985
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,1] DEL[(1,1)->(2,0):owns#6] DEL[(2,0)->(0,2):dep#8] DEL[(2,2)->(0,2):owns#5] DEL[(2,2)->(0,3):dep#7] DEL[(2,3)->(0,2):dep#3] DEL[(2,3)->(0,3):dep#2] DEL[(2,3)->(1,1):dep#1]",
+   "tokens": 112,
+   "seconds": 7.29777573299998
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(0,3)->(0,0):dep#1]",
+   "tokens": 16,
+   "seconds": 1.5469338169999673
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[1,3] DEL[(1,2)->(0,0):owns#3]",
+   "tokens": 22,
+   "seconds": 1.8477973800000882
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,3)->(0,2):dep#5] DEL[(2,1)->(2,0):dep#5]",
+   "tokens": 31,
+   "seconds": 2.3212576839999883
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[2,2:5]",
+   "tokens": 9,
+   "seconds": 1.0487471929999401
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(2,0)->(2,2):dep#1]",
+   "tokens": 16,
+   "seconds": 1.4822115480000093
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[0,2] DEL[(0,2)->(2,2):owns#1] DEL[(0,3)->(2,1):dep#2] DEL[(1,2)->(0,2):owns#1] DEL[(1,2)->(0,3):dep#6] DEL[(2,1)->(0,2):dep#5] DEL[(2,1)->(0,3):owns#9]",
+   "tokens": 97,
+   "seconds": 6.866120375000037
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[1,3] DEL[(0,3)->(1,3):owns#2]",
+   "tokens": 22,
+   "seconds": 1.8146990620000452
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(0,1)->(1,0):owns#2]",
+   "tokens": 16,
+   "seconds": 1.4814147880000519
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[1,2] DEL[(1,3)->(0,0):dep#8]",
+   "tokens": 22,
+   "seconds": 1.8118625079999902
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,2)->(2,3):dep#7]",
+   "tokens": 16,
+   "seconds": 1.4602994020000324
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[1,1:2]",
+   "tokens": 9,
+   "seconds": 1.0620556599999418
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(0,2)->(2,1):dep#5]",
+   "tokens": 16,
+   "seconds": 1.692255105000072
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[1,3] DEL[(1,3)->(1,2):owns#1] DEL[(1,3)->(2,3):owns#6]",
+   "tokens": 37,
+   "seconds": 2.8355426599999873
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[2,3] DEL[(2,0)->(2,3):owns#9] DEL[(2,1)->(2,3):owns#9]",
+   "tokens": 37,
+   "seconds": 2.639179641999931
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(1,0)->(2,1):dep#4]",
+   "tokens": 16,
+   "seconds": 1.463176778999923
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[0,1] DEL[(2,2)->(2,1):owns#3]",
+   "tokens": 22,
+   "seconds": 1.8480442339999854
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,1)->(0,0):owns#2]",
+   "tokens": 16,
+   "seconds": 1.4689971049999713
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[1,4:2]",
+   "tokens": 9,
+   "seconds": 1.0855500619999248
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,2)->(1,0):dep#2]",
+   "tokens": 16,
+   "seconds": 1.715077363999967
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[1,1] DEL[(1,1)->(1,2):owns#4] DEL[(2,0)->(1,1):dep#4]",
+   "tokens": 37,
+   "seconds": 2.6427098920000844
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[2,2] DEL[(0,2)->(2,2):owns#9]",
+   "tokens": 22,
+   "seconds": 1.8035095420000289
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(2,0)->(1,1):owns#8]",
+   "tokens": 16,
+   "seconds": 1.4593545729999278
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[2,0] DEL[(2,1)->(1,0):owns#7]",
+   "tokens": 22,
+   "seconds": 1.8735312769999837
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,2)->(2,1):owns#4] DEL[(2,0)->(1,3):owns#6]",
+   "tokens": 31,
+   "seconds": 2.3127493019999292
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[0,1:9]",
+   "tokens": 9,
+   "seconds": 1.189765652999995
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,3)->(1,2):dep#9]",
+   "tokens": 16,
+   "seconds": 1.7840210289999732
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[1,0] DEL[(1,0)->(1,1):dep#9] DEL[(1,0)->(1,2):dep#9]",
+   "tokens": 37,
+   "seconds": 2.6741725959999485
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[2,2] DEL[(0,2)->(2,2):dep#6] DEL[(2,0)->(2,2):dep#3] DEL[(2,1)->(2,2):dep#7] DEL[(2,3)->(2,2):dep#8]",
+   "tokens": 67,
+   "seconds": 4.367954789999999
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(1,1)->(0,1):dep#1]",
+   "tokens": 16,
+   "seconds": 1.4671706740000445
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[2,1] DEL[(2,3)->(1,3):owns#3]",
+   "tokens": 22,
+   "seconds": 1.9967857489999687
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,2)->(1,3):owns#2] DEL[(1,0)->(2,3):owns#1] DEL[(1,3)->(0,2):owns#2] DEL[(2,1)->(1,0):owns#5] DEL[(2,3)->(2,1):dep#2]",
+   "tokens": 76,
+   "seconds": 5.280323162000059
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[4,4:2]",
+   "tokens": 9,
+   "seconds": 1.062158087000057
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(0,1)->(1,1):dep#3]",
+   "tokens": 16,
+   "seconds": 1.5027357200000324
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[0,2] DEL[(0,2)->(0,3):dep#9]",
+   "tokens": 22,
+   "seconds": 1.8293094619999692
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[1,1] DEL[(0,1)->(1,0):dep#2] DEL[(0,2)->(0,1):owns#1] DEL[(0,2)->(1,3):dep#2] DEL[(0,3)->(1,3):owns#9] DEL[(1,0)->(0,1):dep#6] DEL[(1,0)->(2,2):dep#6] DEL[(1,3)->(1,0):owns#9] DEL[(2,2)->(1,3):dep#3] DEL[(2,3)->(0,3):dep#5] DEL[(2,3)->(1,0):owns#2]",
+   "tokens": 157,
+   "seconds": 10.369080649000011
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(0,1)->(0,2):dep#2]",
+   "tokens": 16,
+   "seconds": 1.496286758999986
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[2,1] DEL[(1,1)->(2,2):owns#6]",
+   "tokens": 22,
+   "seconds": 1.7985285660000727
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,1)->(2,1):owns#7]",
+   "tokens": 16,
+   "seconds": 1.6328544479999891
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[4,1:7]",
+   "tokens": 9,
+   "seconds": 1.1891561749999937
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,1)->(0,0):dep#8]",
+   "tokens": 16,
+   "seconds": 1.467277256999978
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[2,0] DEL[(0,3)->(2,0):dep#2] DEL[(2,0)->(2,3):dep#2] DEL[(2,0)->(2,3):owns#3]",
+   "tokens": 52,
+   "seconds": 3.5397912019999467
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,0] DEL[(0,2)->(1,3):dep#6] DEL[(0,3)->(1,0):owns#8] DEL[(0,3)->(2,2):owns#4] DEL[(1,2)->(1,0):owns#5] DEL[(1,2)->(1,3):dep#2] DEL[(1,2)->(2,0):owns#1] DEL[(1,3)->(0,2):owns#8] DEL[(2,0)->(1,2):dep#8]",
+   "tokens": 127,
+   "seconds": 8.521177755999929
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(0,0)->(2,1):owns#2]",
+   "tokens": 16,
+   "seconds": 1.4793054059999804
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[2,2] DEL[(1,1)->(2,0):dep#9]",
+   "tokens": 22,
+   "seconds": 1.8103801580000436
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(0,2)->(2,3):dep#3]",
+   "tokens": 16,
+   "seconds": 1.4411524050000253
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[3,5:9]",
+   "tokens": 9,
+   "seconds": 1.0666622740000093
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,2)->(1,3):dep#9]",
+   "tokens": 16,
+   "seconds": 1.466485591000037
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[0,2] DEL[(0,2)->(1,1):owns#8] DEL[(0,2)->(1,2):dep#6]",
+   "tokens": 37,
+   "seconds": 2.7936673099999325
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[0,0] DEL[(0,2)->(2,0):dep#4]",
+   "tokens": 22,
+   "seconds": 2.1199332190000177
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(0,1)->(0,3):dep#5]",
+   "tokens": 16,
+   "seconds": 1.474210413000037
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[1,1] DEL[(0,0)->(1,2):dep#2]",
+   "tokens": 22,
+   "seconds": 1.843723847000092
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(2,3)->(0,1):owns#8]",
+   "tokens": 16,
+   "seconds": 1.4412980949999792
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[2,4:8]",
+   "tokens": 9,
+   "seconds": 1.0700821450000149
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,2)->(2,0):dep#5]",
+   "tokens": 16,
+   "seconds": 1.4668059529999482
+  },
+  {
+   "kind": "delete_dep",
+   "text": "DEL[1,0] DEL[(2,0)->(1,0):dep#2] DEL[(1,3)->(1,0):owns#7] DEL[(2,1)->(1,0):dep#4]",
+   "tokens": 52,
+   "seconds": 3.934233281999923
+  },
+  {
+   "kind": "delete_leaf",
+   "text": "DEL[1,2] DEL[(2,0)->(0,0):dep#7] DEL[(1,0)->(2,2):dep#7] DEL[(1,0)->(2,2):owns#1] DEL[(0,1)->(2,2):dep#7] DEL[(0,1)->(0,2):dep#7] DEL[(0,1)->(0,0):owns#7] DEL[(2,2)->(0,1):owns#6] DEL[(2,2)->(0,0):owns#6]",
+   "tokens": 127,
+   "seconds": 8.127079363999997
+  },
+  {
+   "kind": "delete_edge",
+   "text": "DEL[(2,3)->(2,1):dep#7]",
+   "tokens": 16,
+   "seconds": 1.4749684169999
+  },
+  {
+   "kind": "delete_pair",
+   "text": "DEL[2,1] DEL[(2,0)->(2,3):dep#2]",
+   "tokens": 22,
+   "seconds": 2.0694267170000558
+  },
+  {
+   "kind": "delete_weight",
+   "text": "DEL[(1,0)->(2,3):dep#2] DEL[(2,2)->(2,3):dep#2]",
+   "tokens": 31,
+   "seconds": 2.677146942000036
+  },
+  {
+   "kind": "add_node",
+   "text": "ADD[4,4:2]",
+   "tokens": 9,
+   "seconds": 1.0757264879999866
+  },
+  {
+   "kind": "add_edge",
+   "text": "ADD[(1,0)->(1,1):dep#7]",
+   "tokens": 16,
+   "seconds": 1.4747770769999988
+  }
+ ],
+ "summary": {
+  "delete_dep": {
+   "n": 20,
+   "blind": {
+    "success": 11,
+    "corrupted": 8
+   },
+   "gate": {
+    "success": 9,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 19,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 20,
+    "corrupted": 0
+   }
+  },
+  "delete_leaf": {
+   "n": 20,
+   "blind": {
+    "success": 5,
+    "corrupted": 0
+   },
+   "gate": {
+    "success": 0,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 5,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 20,
+    "corrupted": 0
+   }
+  },
+  "delete_edge": {
+   "n": 20,
+   "blind": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "gate": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 0,
+    "corrupted": 0
+   }
+  },
+  "delete_pair": {
+   "n": 20,
+   "blind": {
+    "success": 4,
+    "corrupted": 16
+   },
+   "gate": {
+    "success": 4,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 0,
+    "corrupted": 0
+   }
+  },
+  "delete_weight": {
+   "n": 20,
+   "blind": {
+    "success": 14,
+    "corrupted": 0
+   },
+   "gate": {
+    "success": 14,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 14,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 14,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 0,
+    "corrupted": 0
+   }
+  },
+  "add_node": {
+   "n": 20,
+   "blind": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "gate": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 20,
+    "corrupted": 0
+   }
+  },
+  "add_edge": {
+   "n": 20,
+   "blind": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "gate": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 20,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 20,
+    "corrupted": 0
+   }
+  },
+  "old_deletes": {
+   "n": 40,
+   "blind": {
+    "success": 16,
+    "corrupted": 8
+   },
+   "gate": {
+    "success": 9,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 24,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 40,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 40,
+    "corrupted": 0
+   }
+  },
+  "all": {
+   "n": 140,
+   "blind": {
+    "success": 94,
+    "corrupted": 24
+   },
+   "gate": {
+    "success": 87,
+    "corrupted": 0
+   },
+   "repair_m6": {
+    "success": 118,
+    "corrupted": 0
+   },
+   "scope_m7": {
+    "success": 134,
+    "corrupted": 0
+   },
+   "scope_delta": {
+    "success": 80,
+    "corrupted": 0
+   }
+  },
+  "paired": {
+   "helped": 16,
+   "harmed": 0,
+   "both_right": 118,
+   "both_wrong": 6
+  },
+  "m7_equals_m6": {
+   "delete_dep": 19,
+   "delete_leaf": 5,
+   "delete_edge": 20,
+   "delete_pair": 20,
+   "delete_weight": 20,
+   "add_node": 20,
+   "add_edge": 20,
+   "old_deletes": 24,
+   "all": 124
+  },
+  "dropped": {
+   "tasks_with_drops": 16,
+   "items": 80,
+   "tasks_with_drops_and_right": 16
+  }
+ },
+ "meta": {
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "seed": 7,
+  "n": 140,
+  "hint_rules": true,
+  "test": "scope_single_step"
+ }
+}

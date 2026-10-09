@@ -23,6 +23,7 @@ from axi.engine.diagnostics import propose_repair, ground_and_complete
 from axi.experiments.agent_loop import Task, base_messages, blind_apply, copy_graph, same_graph, strict_parse
 
 POLICIES = ("blind", "gate", "repair_m5", "repair_m6")
+SCOPE_POLICIES = ("scope_m7", "scope_delta")       # scope containment (axi/engine/scope.py, docs/SCOPE_TEST.md): 'scope_m7' needs the request text
 KINDS = ["delete_dep"] * 5 + ["delete_leaf"] * 2 + ["add_node"] + ["add_edge"] * 2
 
 
@@ -69,9 +70,15 @@ def pick_task(rng: random.Random, g: Graph, kind: str) -> Optional[Task]:
     return Task(kind, copy_graph(g), instr, ideal, exp)
 
 
-def next_state(policy: str, g: Graph, d) -> Graph:
+def next_state(policy: str, g: Graph, d, instruction: Optional[str] = None) -> Graph:
     if d is None: return copy_graph(g)                                   # unparseable: nothing is applied (loud failure)
     if policy == "blind": return copy_graph(blind_apply(g, d))          # re-copy: blind_apply edits the dicts directly and leaves the adjacency index stale
+    if policy in SCOPE_POLICIES:
+        from axi.engine.scope import admit_scoped
+        if policy == "scope_m7" and instruction is None: raise ValueError("scope_m7 needs the request text")
+        r = admit_scoped(g, d, instruction, "named" if policy == "scope_m7" else "delta"); h = copy_graph(g)
+        if r.final_delta is not None: apply(h, r.final_delta)
+        return h
     h = copy_graph(g)
     if check(g, d).ok: apply(h, d); return h
     if policy == "gate": return h

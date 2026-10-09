@@ -1,6 +1,7 @@
 """No-training experiment on a real open LLM (Colab T4). Run from repo root:
     pip -q install transformers
     python python/colab/colab_llm_experiment.py --n 60
+7B on a T4:  pip -q install bitsandbytes accelerate;  python python/colab/colab_llm_experiment.py --model Qwen/Qwen2.5-7B-Instruct --load-4bit --skip-timing --seed 3 --n 60
 Part 1: agent loop (6 modes).  Part 2: rollback vs re-prefill timing on a real KV cache.
 Works with byte-level-BPE tokenizers (GPT-2 / Qwen / Llama-3 style)."""
 import argparse, json, os, sys, time
@@ -13,13 +14,19 @@ from axi.experiments.cascade import run_cascade, print_cascade
 from colab.colab_check import vocab_bytes_from_tokens
 
 
-def build_hf_llm(name, device):
+def build_hf_llm(name, device, load_4bit=False):
     import torch
     from transformers import AutoTokenizer, AutoModelForCausalLM, LogitsProcessor, LogitsProcessorList
     tok = AutoTokenizer.from_pretrained(name)
-    try: model = AutoModelForCausalLM.from_pretrained(name, dtype=torch.float16)
-    except TypeError: model = AutoModelForCausalLM.from_pretrained(name, torch_dtype=torch.float16)
-    model = model.to(device).eval()
+    if load_4bit:          # for models that do not fit the T4 in fp16 (Qwen2.5-7B is ~15 GB in fp16): NF4 weights, fp16 compute; needs `pip install bitsandbytes accelerate`
+        from transformers import BitsAndBytesConfig
+        q = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=torch.float16, bnb_4bit_use_double_quant=True)
+        try: model = AutoModelForCausalLM.from_pretrained(name, quantization_config=q, device_map={"": 0}, dtype=torch.float16).eval()      # fp16 for the layers that are not quantized (embeddings, output head)
+        except TypeError: model = AutoModelForCausalLM.from_pretrained(name, quantization_config=q, device_map={"": 0}, torch_dtype=torch.float16).eval()
+    else:
+        try: model = AutoModelForCausalLM.from_pretrained(name, dtype=torch.float16)
+        except TypeError: model = AutoModelForCausalLM.from_pretrained(name, torch_dtype=torch.float16)
+        model = model.to(device).eval()
     n = len(tok); strings = [""] * n
     for t, i in tok.get_vocab().items():
         if i < n: strings[i] = t
@@ -43,7 +50,7 @@ def build_hf_llm(name, device):
     class HFLLM:
         def generate(self, messages, constrained, max_new_tokens=400):
             enc = tok.apply_chat_template(messages, add_generation_prompt=True, return_tensors="pt", return_dict=True)
-            enc = {k: v.to(device) for k, v in enc.items()}; pl = enc["input_ids"].shape[1]
+            enc = {k: v.to(device) for k, v in enc.items()}; pl = enc["input_ids"].shape[1]; self.last_prompt_tokens = pl      # read by the long-horizon runner
             procs = LogitsProcessorList([CICOProc(pl)]) if constrained else None
             torch.cuda.synchronize(); t0 = time.perf_counter()
             out = model.generate(**enc, max_new_tokens=max_new_tokens, do_sample=False, logits_processor=procs, eos_token_id=eos, pad_token_id=eos)
@@ -81,13 +88,15 @@ def timing(model, device, lengths=(4096, 16384, 32768), spec=64, chunk=2048):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--model", default="Qwen/Qwen2.5-0.5B-Instruct"); ap.add_argument("--n", type=int, default=60)
     ap.add_argument("--seed", type=int, default=0); ap.add_argument("--hint-rules", action="store_true"); ap.add_argument("--skip-timing", action="store_true")
+    ap.add_argument("--load-4bit", action="store_true", help="load the model in 4-bit (bitsandbytes NF4); use for 7B on a T4")
     ap.add_argument("--out", default="/content/axi_llm_results.json")
     ap.add_argument("--cascade-episodes", type=int, default=0, help="if > 0, also run the containment test (concept-map row 27): E episodes x T steps per policy")
     ap.add_argument("--cascade-steps", type=int, default=8); ap.add_argument("--cascade-out", default="/content/axi_cascade.json"); a = ap.parse_args()
     import torch
-    device = "cuda"; llm, model = build_hf_llm(a.model, device)
+    device = "cuda"; llm, model = build_hf_llm(a.model, device, a.load_4bit)
     tasks = make_tasks(a.n, a.seed); print(f"\n== Part 1: agent loop, {a.n} tasks, hint_rules={a.hint_rules} ==")
     res = run_experiment(llm, tasks, a.hint_rules, progress=lambda i, n: print(f"  task {i}/{n}", end="\r"))
+    res["meta"] = dict(model=a.model, load_4bit=a.load_4bit, n=a.n, seed=a.seed, hint_rules=a.hint_rules, max_new_tokens=400, gpu=torch.cuda.get_device_name(0))
     print_summary(res["summary"]); json.dump(res, open(a.out, "w"), indent=1, default=str); print("\nraw transcripts saved to", a.out)
     ex = next((r for r in res["rows"] if r["kind"] == "delete_dep"), None)
     if ex: print("\nexample (delete_dep):\n  M0 text:", repr(ex["M0_unconstrained"]["text"]), "\n  M1 text:", repr(ex["M1_constrained"]["text"]), "\n  gate obstructions:", ex["M2_gate"]["obstructions"])
