@@ -70,19 +70,25 @@ def pick_task(rng: random.Random, g: Graph, kind: str) -> Optional[Task]:
     return Task(kind, copy_graph(g), instr, ideal, exp)
 
 
-def next_state(policy: str, g: Graph, d, instruction: Optional[str] = None) -> Graph:
+def next_state(policy: str, g: Graph, d, instruction: Optional[str] = None, names=None, degree_threshold: int = 4) -> Graph:
     if d is None: return copy_graph(g)                                   # unparseable: nothing is applied (loud failure)
+    if policy == "scope_words":                                           # named scope read from words as well as coordinates (docs/WORDS_TEST.md)
+        if instruction is None or names is None: raise ValueError("scope_words needs the request text and the name table")
+        from axi.engine.scope import admit_scoped
+        r = admit_scoped(g, d, instruction, "named", degree_threshold, names=names); h = copy_graph(g)
+        if r.final_delta is not None: apply(h, r.final_delta)
+        return h
     if policy == "blind": return copy_graph(blind_apply(g, d))          # re-copy: blind_apply edits the dicts directly and leaves the adjacency index stale
     if policy in SCOPE_POLICIES:
         from axi.engine.scope import admit_scoped
         if policy == "scope_m7" and instruction is None: raise ValueError("scope_m7 needs the request text")
-        r = admit_scoped(g, d, instruction, "named" if policy == "scope_m7" else "delta"); h = copy_graph(g)
+        r = admit_scoped(g, d, instruction, "named" if policy == "scope_m7" else "delta", degree_threshold); h = copy_graph(g)
         if r.final_delta is not None: apply(h, r.final_delta)
         return h
     h = copy_graph(g)
     if check(g, d).ok: apply(h, d); return h
     if policy == "gate": return h
-    rep = propose_repair(g, d) if policy == "repair_m5" else ground_and_complete(g, d)
+    rep = propose_repair(g, d, degree_threshold) if policy == "repair_m5" else ground_and_complete(g, d, degree_threshold)
     if rep is not None and rep.repairable:
         r = rep.repaired
         if check(g, r).ok: apply(h, r)

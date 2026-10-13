@@ -73,19 +73,30 @@ class ScopeResult:
     repaired: bool = False                                   # ground-and-complete had to run and succeeded
     final_delta: Optional[StateTransitionDelta] = None       # what to apply; None = apply nothing
     reason: str = ""
+    grounding: Optional[object] = None                       # the `grounding.Grounding` of the request, when a name table was given
 
     @property
     def text(self) -> str: return format_delta(self.final_delta) if self.final_delta is not None else ""
 
 
-def admit_scoped(g: Graph, delta: StateTransitionDelta, instruction: Optional[str] = None, mode: str = "named", degree_threshold: int = 4) -> ScopeResult:
-    """Scope filter, then the M6 path. mode 'named' needs the request text; mode 'delta' is the post-hoc baseline."""
+def admit_scoped(g: Graph, delta: StateTransitionDelta, instruction: Optional[str] = None, mode: str = "named", degree_threshold: int = 4, names=None) -> ScopeResult:
+    """Scope filter, then the M6 path. mode 'named' needs the request text; mode 'delta' is the post-hoc baseline.
+    `names` (a `grounding.NameIndex`, optional) lets the request name services in words as well as by coordinate (docs/WORDS_TEST.md). A request that is ambiguous, or names
+    something the table does not know and nothing else, applies nothing. Without `names` the behaviour is exactly the earlier one (coordinates only)."""
     assert mode in ("named", "delta")
+    grounding = None
     if mode == "named":
-        named = named_services(instruction); scoped, dropped = contain_scope(delta, named)
+        if names is not None:
+            from .grounding import ground
+            grounding = ground(instruction or "", names); named = set(grounding.named)
+            if grounding.status in ("ambiguous", "unresolved"):
+                why = ("ambiguous: " + "; ".join(f"'{p}' fits {len(c)} services" for p, c in grounding.ambiguous)) if grounding.ambiguous else ("unresolved: " + "; ".join(f"'{p}'" for p in grounding.unresolved))
+                return ScopeResult(mode, named, [], reason="request not grounded, nothing applied (" + why + ")", grounding=grounding)
+        else: named = named_services(instruction)
+        scoped, dropped = contain_scope(delta, named)
     else:
         named = None; scoped, dropped = contain_delta_internal(delta)
-    res = ScopeResult(mode, named, dropped)
+    res = ScopeResult(mode, named, dropped, grounding=grounding)
     if not scoped.node_deltas and not scoped.edge_deltas:
         res.reason = "nothing within scope" if dropped else "empty proposal"; return res
     if check(g, scoped).ok:
