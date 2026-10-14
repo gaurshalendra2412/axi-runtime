@@ -1,37 +1,114 @@
-RFC-001: The AXI Architecture
-An Axiomatic, Coordinate-Invariant State-Transition Runtime for Foundation Models
+# AXI Runtime
+
+**A checking layer between an AI model and the state it edits, so the model's small slips do not pile up.**
 
 [![CI](https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml/badge.svg)](https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml)
-� � �
-1. Problem Statement & Motivation
-Autoregressive transformers serialize multi-dimensional state graphs into 1D token streams governed by monotonic Rotary Positional Embeddings (RoPE). Under long-horizon enterprise workloads, this introduces three systemic failure modes:
-Coordinate and Relational Drift: Spatial, relational, and tabular topologies degrade under 1D serialization, causing coordinate hallucinations and off-by-one errors.
-The "Reasoning Token Tax": Conventional Chain-of-Thought (CoT) prompting spends hundreds of discursive natural language tokens to compute basic state transitions, inflating P99 inference latency and inference costs.
-Stochastic State Corruption: Post-hoc schema validation (e.g., JSON schema regex masks) fails to enforce categorical relational invariants, risking downstream database corruption.
-The AXI framework demotes the foundation model to a heuristic transition proposer while delegating verification to a deterministic category-theoretic gatekeeper.
-2. Core Architectural Pillars
-I. Invariant Coordinate Tuples (axi-ir)
-Entities and relationships are represented as permutation-invariant tuples:
-Nodes: $\tau_v = (\mathbf{z}_v : \mathbf{x}_v)$
-Edges: $\tau_e = (\mathbf{z}_u, \mathbf{z}v, \mathcal{R} : \mathbf{w}{uv})$
-Topological identifiers $\mathbf{z}_v$ are derived via normalized graph Laplacians or $k$-step Random Walk Positional Encodings (RWPE), eliminating dependence on sequential token positions.
-II. Category-Theoretic Double Pushout (DPO) Gates (axi-dpo)
-State transitions are evaluated as categorical rewrite spans $L \stackrel{l}{\hookleftarrow} K \stackrel{r}{\hookrightarrow} R$ over an adhesive category of typed graphs:
-Identification Condition: Verifies that distinct pattern elements mapping to the same host element are preserved in interface $K$.
-Dangling Edge Condition: Rejects node deletions if external edges remain attached in the host graph without being matched in $L$.
-Pushout Complement ($D$): Excises consumed state elements only when boundary conditions hold, blocking invalid state commits before database execution.
-III. Topological Paged Memory Management (axi-cache)
-Decouples physical GPU KV-cache slots from sequence position:
-Topological Block Table: Maps invariant coordinates $\mathbf{z}_v$ to physical VRAM page IDs.
-Copy-on-Write Shadow Paging: Candidate transitions write to transient shadow blocks. Passing DPO checks triggers an $\mathcal{O}(1)$ atomic pointer swap; rejections drop shadow blocks with zero rollback recomputation.
-3. Active Research Frontiers
-This codebase is an architectural reference prototype. Full multi-node production deployment requires addressing the following systems-level challenges:
-Causal Attention Factorization: Developing block-diagonal attention masks to allow in-place KV-cache patching without corrupting historical causal attention dependencies.
-BPE Tokenizer Prefix Tries: Compiling byte-level Deterministic Finite Automata (DFAs) over Byte-Pair Encoding vocabularies to handle multi-character token merges.
-Serving Runtime Integration: Mapping virtual coordinate pages directly into contiguous PagedAttention block structures within vLLM and TensorRT-LLM runtimes.
-4. Attribution & Intellectual Lineage
-The theoretical origin of this work is Rajnish Choubey, through The Cinderella Project and The Sovereign Manifesto.
-5. Build & Test
-cargo test --workspace
-pip install -e .
-python python/tests/test_end_to_end_pipeline.py
+
+Even a very good model slips now and then. What matters is what a slip does to the state afterwards.
+
+AXI keeps the real state **outside** the model. At every step the model is shown the exact state and asked for one change. AXI then checks the change against the rules, completes what the rules can complete, and commits it all or not at all. The next step starts again from the exact state, so a slip does not carry forward.
+
+The idea, the framework and the architecture are **Rajnish Choubey's**. This repository holds the code, tests and measurements that implement and check them. See [Credits](#credits).
+
+---
+
+## The result that matters most
+
+One model (Gemini 3.8 Flash), one job (editing a service graph of 17 to 22 services on average), one run of **4,000 requests in a row**, 3.7 million tokens sent in all.
+
+* **With AXI keeping the state, it was exactly right at 4,000 of 4,000 steps** and never corrupted. The prompt stayed about the same size (1.16 times from the first tenth of the run to the last) and the speed did not fall (0.94 times).
+* **The model itself is good:** its reply was right 3,954 times out of 4,000 (98.85 percent). All 46 slips were of one kind. Asked to "delete a service and also remove this edge", it left out the service's other connections. A fixed, rule-based repair completed all 46.
+* **The same slips, applied as written, did real damage.** On the first 400 requests of the same stream, the replies applied as written left the state exactly right on 85 steps of 400 (21 percent) and corrupted it on 223 (56 percent). Once a slip got in, the state stayed wrong for 36 to 150 steps at a time (the last stretch was still going when the 400 steps ended).
+* **A gate that only refuses bad replies** kept the state well formed (never corrupted) but did not make it right: exactly right on 84 of 400, and off the right state on every step from 210 to 400.
+
+The spend was about the same for all three ways of keeping the state. What differed was how many steps ended with the right state:
+
+| First 400 requests | Steps with the right state | Spent | Cost of one step with the right state |
+|---|---|---|---|
+| AXI (repair + scope filter) | 400 | $0.47 | $0.0012 |
+| Replies applied as written | 85 | $0.45 | $0.0052 (4.5 times as much) |
+| Gate only (refuses bad replies) | 84 | $0.48 | $0.0057 (4.9 times as much) |
+
+Priced at $0.75 per million tokens in and $3.75 out (thinking counted as out), every call counted. The cost column was worked out from the saved files after the results were read, so it is not one of the pre-written reading rules.
+
+**What this does not show.** It is one sampled run on one model and one job; a repeat would give different numbers, and the second run has not been made. The repair rule (a deleted service takes its dependants with it) is the job's own rule, and the model was never told it, so this shows the layer works when the rule is known, not that it can find rules. We did not measure a chat that keeps its history, an agent that reads its state back and corrects itself, or energy.
+
+Full page, every number, and what it does not show: [`docs/MILLION_TOKEN_TEST_HARD.md`](docs/MILLION_TOKEN_TEST_HARD.md).
+
+### Earlier results on smaller models
+
+* Qwen2.5-3B, four seeds, 60 tasks each, no rule in the prompt: applying the model's (grammar-constrained) output as written corrupted the graph on 120 of 120 "delete a service that still has dependants" tasks. With the gate, corruption was 0. Deterministic repair got every task right on all four seeds (240 of 240).
+* Qwen2.5-7B, 30 requests in a row: applying as written corrupted the state in 12 of 12 episodes. The gate corrupted it in 0 of 360 steps.
+
+Both are on synthetic service graphs, in Colab. The tables and what is still open are in [`docs/VERIFIED.md`](docs/VERIFIED.md) and [`docs/EXPERIMENT_RESULTS.md`](docs/EXPERIMENT_RESULTS.md).
+
+---
+
+## How the tests are done
+
+* **Written before the run.** Each page for a model run fixes the questions, the predictions and the reading rules before any number exists.
+* **Locked, then appended.** The result goes below a line at the end of the page, and the text above the line is not changed. For the 4,000-step page and several others, a test checks this by hash.
+* **A NO is printed as a NO.** The headline run had fourteen reading rules: twelve passed, one read NO and says so on the page, and one was not run.
+* **Pages are recomputed.** For the result pages, a test rebuilds every number from the raw run files and fails if the page and the files disagree.
+* **Tests are tested.** Many are also run against deliberately broken copies of the code ("mutants"); `docs/VERIFIED.md` gives the number caught where this was done.
+
+---
+
+## Run it yourself
+
+```bash
+git clone https://github.com/gaurshalendra2412/axi-runtime
+cd axi-runtime
+```
+
+**Python tests** (needs Python 3 and numpy; takes about three minutes; the four tests that need PyTorch or a GPU are skipped):
+
+```bash
+PYTHONPATH=python python3 python/tests/run_all.py
+```
+
+**Recompute the headline result** from the saved run files (about 20 seconds):
+
+```bash
+cd python
+PYTHONPATH=. python3 tests/test_million_hard_result.py
+```
+
+**Rust crates:** `cargo test --workspace` (this is what the CI badge above runs).
+
+**Re-running the model experiments** needs your own API key and costs real money (the 4,000-step run cost $4.95 at the prices above). The Colab notebooks are in `python/colab/`. Keep the key in Colab's secrets and never put it in the repository.
+
+---
+
+## What is where
+
+| Folder | What it holds |
+|---|---|
+| `crates/` | Rust prototype, early stage. The `axi-ir` crate includes four small modules (coordinate tuples, schema, router, positional encoding). The graph-rewrite check (`axi-dpo`) and the shadow pager are written but not yet included in a crate, and `axi-cache` is a placeholder. The gate and pager that are tested and measured are the Python ones below. |
+| `python/axi/engine/` | The gate, the diagnosis and repair, the scope filter, the strict parser for the change language, the pager, the end-to-end runtime |
+| `python/axi/experiments/` | The experiment code, including the 4,000-step run and the code that rebuilds its result page |
+| `python/tests/` | The test files; most say in their header what they show and what they do not |
+| `python/colab/` | Colab notebooks used for the model runs |
+| `docs/` | Every test page (written before its run) and the honest status table |
+| `docs/results/` | The raw run files: every request and every model reply |
+
+**A few words used above.** *State:* the graph of services and the edges between them. *Change* (or *delta*): one proposed edit, written in a small strict language. *Gate:* the deterministic check that accepts or refuses a change. *Dangling edge:* an edge left pointing at a service that was deleted.
+
+## Start reading here
+
+1. [`docs/MILLION_TOKEN_TEST_HARD.md`](docs/MILLION_TOKEN_TEST_HARD.md): the 4,000-step run.
+2. [`docs/VERIFIED.md`](docs/VERIFIED.md): what is measured, what is only checked by tests, and what is **not** measured.
+3. [`docs/EXPERIMENT_RESULTS.md`](docs/EXPERIMENT_RESULTS.md): the earlier Qwen runs.
+4. [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md): other groups working on neighbouring ideas, and what we cannot claim against them.
+5. [`docs/RFC-001.md`](docs/RFC-001.md): the original design note.
+
+## Status
+
+A reference prototype and a set of measurements, not a product. The working, tested parts are in Python; the Rust crates are a partly wired sketch of the same design. Everything was measured on synthetic service graphs and grids, on the models named in `docs/`. The goals in the original design note (speed, cost, constant-time swaps) are what the design is meant to achieve; `docs/VERIFIED.md` says which of them have been measured here.
+
+## Credits
+
+* The idea, the framework, the architecture and the structural maps of AXI are by **Rajnish Choubey**.
+* The code, tests and measurements in this repository implement and check his framework. They were written by **Shalendra Gaur**, working with an AI coding assistant (Claude). The assistant is a tool here: it is not an author and it owns nothing in this work. Shalendra Gaur is responsible for the code, the tests and every claim made from them.
+* The mappings from Rajnish's writing to code (`docs/RAJNISH_CONCEPT_MAP.md`) are readings we propose. They are his to accept or reject, and a row he rejects is removed.
+* Prior work we build on is cited, not claimed: double-pushout graph rewriting (Ehrig, Pfender and Schneider, 1973), adhesive categories (Lack and Sobocinski, 2004), grammar-constrained decoding (for example Outlines, Willard and Louf, 2023) and paged KV caches (vLLM). More in [`docs/CREDITS.md`](docs/CREDITS.md).
