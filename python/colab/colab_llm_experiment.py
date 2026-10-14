@@ -56,7 +56,8 @@ def build_hf_llm(name, device, load_4bit=False):
             out = model.generate(**enc, max_new_tokens=max_new_tokens, do_sample=False, logits_processor=procs, eos_token_id=eos, pad_token_id=eos)
             torch.cuda.synchronize(); dt = time.perf_counter() - t0
             new = out[0, pl:]; return tok.decode(new, skip_special_tokens=True), int(new.shape[0]), dt
-    return HFLLM(), model
+    llm = HFLLM(); llm.tok, llm.table, llm.eos = tok, table, eos          # the KV test (axi/experiments/kv_torch.py) needs the tokenizer and the grammar table too
+    return llm, model
 
 
 def timing(model, device, lengths=(4096, 16384, 32768), spec=64, chunk=2048):
