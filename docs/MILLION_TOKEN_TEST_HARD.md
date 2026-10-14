@@ -87,3 +87,141 @@ That a model is accurate "at a million tokens" in the sense of one conversation 
 
 ## How it is run
 `python/colab/axi_million_hard.ipynb` with `axi-colab-million.zip` on Colab's free CPU runtime (no GPU is needed). The key lives in Colab Secrets and is never printed or saved. Billing is turned on by the owner in Google AI Studio for the key's project, and the owner types in the two prices and the budget from the AI Studio price page (the cell stops with a message if any of the three is missing). Cells 1 to 5 prepare, the 20-step check follows, then run 1 (about 4,000 steps; one to three hours of calls; progress shown every 100 steps and saved to Google Drive every 25), then the contrast, the control and, if wanted, run 2. If the session stops, or the budget is used, run Cells 2 to 5 again (raise the budget in Cell 5 if that was the reason) and then the same cell: it continues from the last saved step. The files that come back are read here by `python/tests/test_million_hard_result.py`, which recomputes every number of the Result below from them.
+
+---
+
+# Result (run 1 and the contrast of 13 and 14 Oct 2026, seed 20261031, on the owner's Colab with his paid key; the control and run 2 have not been made yet and each gets its own section below when its files arrive)
+
+Everything above this line is unchanged (a hash in `tests/test_million_hard.py` checks it). Files: `docs/results/axi_million_hard_run1_seed20261031_default.json` (the 4,000 steps, every reply), `docs/results/axi_million_hard_cache_after_run1.jsonl` (the saved-reply file as it was when run 1 ended: the 20-step check and the 4,000 calls, with the two retries after a busy server) and `docs/results/axi_million_hard_contrast_seed20261031_default.json` (the contrast: blind, gate and repair_m6, 400 steps each, received after run 1; the run 1 part of this section was first written before it arrived and the contrast was then added). `python/axi/experiments/million_hard_result.py` was written after the run (`million.py` and `million_hard.py`, which the run used, were not touched): it calls the page's own `verdict_hard`, replays the stream over the saved replies, and renders the tables below. `tests/test_million_hard_result.py` recomputes every number of this section from the three files and checks that the tables on this page are, character for character, the ones the code renders.
+
+## The fourteen reading rules, run 1 and the contrast
+1. yes [guard] the main run (scope_m7, the hard stream, up to two re-asks, the repair deleting up to 8 dependants, one of the two registered seeds) reached step 4,000 with every step on file, and the replay of its saved replies reproduces every saved flag of every step and checks every re-ask
+2. yes [guard] scope_m7 was never corrupted (no edge pointing at a missing service) at any step of the main run
+3. yes [instrument] at most 0.5 percent of the steps of the main run ended with a reply the strict parser refused (after the re-asks)
+4. NO [instrument] blind apply, on the same requests, was corrupted on at least 80 percent of its first 400 steps
+5. yes [claim] tokens sent in the main run (prompt, visible reply and thinking tokens of every call, as the service counted them) are at least 2,500,000
+6. yes [claim] in every one of the ten tenths of the main run, at least 80 percent of the steps hold exactly the oracle's state
+7. yes [claim] at least 90 percent of all steps of the main run hold exactly the oracle's state
+8. yes [claim] the distance to the oracle never exceeded 4 items at any step of the main run
+9. yes [claim] the mean distance to the oracle in the last tenth of the main run is at most 0.5 above that of the first tenth
+10. yes [claim] among the steps of the main run that start from the oracle's state and ask for a change that can be applied, at most 1.0 percent did not do what was asked
+11. yes [claim] the mean prompt tokens of the last tenth of the main run are at most 1.5 times those of the first tenth
+12. yes [claim] the mean seconds a step takes in the last tenth of the main run are at most 1.5 times those of the first tenth
+13. yes [claim] in steps 201 to 400, scope_m7's mean distance to the oracle is at most 0.5, and smaller than blind apply's and smaller than the gate's, on the same requests
+14. not run [claim] the main run on the second seed also reached step 4,000, and lines 2, 3 and 6 to 12 also hold for it, so that the two runs together sent at least 5,000,000 tokens (only if run 2 was made)
+
+**Headline (lines 1, 2, 3, 5, 6, 7, 8, 9, 10): PASSED.** Line 13 reads yes; **line 4 reads NO** (it is not a headline line); line 14 needs run 2 and is "not run". The lines and thresholds were not changed after any output.
+
+**The sentence the page allows, with the figures filled in.** On Gemini 3.8 Flash, in one sampled run of 4,000 requests (3.7 million tokens sent) on a dense service graph (17 to 22 services on average), the held state kept by the framework (scope filter, deterministic repair deleting up to 8 dependants, up to two re-asks) was exactly the right state on 100 percent of the steps (4,000 of 4,000) and at least 80 percent in every tenth (it was 100 percent in every tenth), was never more than 0 items from it, and was never corrupted; blind application of the same model's replies was corrupted on 55.8 percent of its first 400 steps. Nothing is added to the sentence: not "accurate at a million tokens" (the model never saw more than one state and one request), not any other model or task, not "better than a chat that keeps its history" (not measured), not a price. It does not carry "and on a second seed" (line 14, not run).
+
+**Line 4 NO, in the page's own terms.** Blind apply was corrupted on 223 of its first 400 steps (55.8 percent), under the bar of 80 percent. The page says a NO on this line is reported as exactly that: it is a statement about how often the model broke the raw state on this stream, not a failure of anything. The raw state **was** broken, first at step 16 and again after later requests; it was corrupted in 5 separate stretches (steps 16 to 87, 132 to 151, 210 to 259, 262 to 302, 361 to 400) and not corrupted in between. Four stretches ended, at steps 88, 152, 260, 303: twice a later request added a service back at the coordinate the leftover edges pointed at (the state is then well formed again, and still wrong), twice a later delete of a service named the leftover edges; the last stretch was still going at step 400. What decided the line is how long leftover edges live in this stream.
+
+## What was run
+* The file records `gemini-3.8-flash`, the hard stream, seed 20261031, 4,000 steps, policy scope_m7, up to two re-asks, the repair deleting up to 8 dependants, no rule about dependants stated, no scripted reply. The saved-reply file records the model's default thinking (no setting) and default temperature, at most 8,192 output tokens, and every one of its 4,020 calls ended with a normal stop (none cut off, and the adapter's `normalized` flag is false on all, i.e. no reply was changed by it).
+* **The 20-step check** (the first 20 calls in the saved-reply file) averaged 723.8 prompt tokens, 92.5 thinking tokens and 2.11 seconds a call, 840 tokens a step in all. That is under the page's trigger of 150 thinking tokens, so **thinking was left at the model's default**, as the page required. (Prediction: more than 150, 65 percent. It was not.)
+* **Run 1** took the calls from 13 Oct 21:30 to 14 Oct 00:27 (IST, from the timestamps in the file), 2.8 hours of calls in about 2.9 hours. **Two retries after a busy server** (a wait of about two minutes each, after calls 1,283 and 3,217 of the run); the run continued from where it was and the replay of the saved replies reproduces every flag (line 1).
+* **The contrast** (blind, gate and repair_m6, the registered settings, seed 20261031, 400 steps each; each arm keeps its own held state and shows the model that state). Where an arm's prompt equals one already asked, the saved reply is reused and nothing is sent: 86 steps of blind and 85 of gate (the first 15 steps, which are the same for every arm, and the stretches in which an arm's state is the oracle's again), and **all 400 of repair_m6**, whose held state equals run 1's at every step, so that arm is a replay of run 1's replies and not a separate sample. Live: 314 calls for blind and 315 for gate; no reply was refused in either. Each arm's saved replies reproduce every saved flag of every step (the test replays all three).
+
+## The numbers
+* **Tokens sent, as the service counted them:** 3,661,209 = 2,926,781 prompt + 80,984 visible reply + 653,444 thinking. 4,000 calls for 4,000 steps (no step was asked twice). Thinking was 17.8 percent of the tokens.
+* **Time:** 10,198 seconds in calls (2.83 hours), 2.55 a call on average, 1.82 the median; 60 calls (1.5 percent) took more than 10 seconds and the longest took 62.5.
+* **Arithmetic at the prices the owner typed in ($0.75 in, $3.75 out, thinking counted as out; not a result of this page, which does not make price statements):** $4.95 for the run, of which $2.45 is thinking; $0.32 for the blind arm and $0.37 for the gate arm of the contrast ($0.69 together; repair_m6 sent nothing).
+
+| tenth | steps | share exact | mean distance | mean prompt tokens | mean thinking tokens | mean seconds | mean services | mean edges |
+|---|---|---|---|---|---|---|---|---|
+| 1 (1 to 400) | 400 | 100.0% | 0.00 | 648.8 | 163.9 | 2.57 | 17.1 | 21.8 |
+| 2 (401 to 800) | 400 | 100.0% | 0.00 | 756.6 | 148.4 | 2.52 | 21.7 | 27.6 |
+| 3 (801 to 1,200) | 400 | 100.0% | 0.00 | 788.5 | 203.0 | 2.84 | 21.2 | 30.2 |
+| 4 (1,201 to 1,600) | 400 | 100.0% | 0.00 | 702.8 | 183.8 | 2.69 | 21.5 | 23.6 |
+| 5 (1,601 to 2,000) | 400 | 100.0% | 0.00 | 722.5 | 153.9 | 2.55 | 20.9 | 25.4 |
+| 6 (2,001 to 2,400) | 400 | 100.0% | 0.00 | 882.2 | 158.3 | 2.46 | 22.2 | 37.0 |
+| 7 (2,401 to 2,800) | 400 | 100.0% | 0.00 | 618.6 | 145.7 | 2.35 | 19.1 | 18.4 |
+| 8 (2,801 to 3,200) | 400 | 100.0% | 0.00 | 760.0 | 175.5 | 2.57 | 21.2 | 28.1 |
+| 9 (3,201 to 3,600) | 400 | 100.0% | 0.00 | 681.5 | 153.8 | 2.53 | 20.4 | 22.6 |
+| 10 (3,601 to 4,000) | 400 | 100.0% | 0.00 | 755.4 | 147.3 | 2.41 | 20.0 | 28.4 |
+
+Line 11: the mean prompt of the last tenth is 755.4 tokens against 648.8 in the first (1.16 times); line 12: 2.41 seconds against 2.57 (0.94 times). The prompt follows the size of the graph and not the step: the largest mean prompt is in tenth 6 (882.2 tokens; the graph had 37.0 edges on average) and the smallest in tenth 7 (618.6; 18.4 edges). The distance to the oracle is 0.00 in every tenth, so the comparison of the first and the last (line 9) is 0.00 against 0.00.
+
+## What the reading rules do not show
+**Every one of the 4,000 steps ended on the oracle's exact state.** There was no new offset (a step that starts on the oracle's state and ends off it), the largest distance was 0 and no state was ever malformed. So the page's second question, how long an offset lasts, has no data in this run: **no offset ever started.**
+
+**Of the three things the framework adds to a plain apply, only one did anything in this run.** No reply was refused by the strict parser, so the re-ask was never used (0 steps asked twice, 0 extra calls). The scope filter removed 0 items in 0 steps. The repair changed the outcome of **46 steps (1.15 percent)**, described next.
+
+**What the model did, by kind of request** (the stream is replayed over the saved replies and each reply is compared with the request's ideal reply; "other order" means the same items in another order, which does not change the state):
+
+| request | requests | reply = the ideal reply | same items, other order | other items | steps ending off the oracle's state | mean thinking tokens |
+|---|---|---|---|---|---|---|
+| add an edge | 2,410 | 2,410 | 0 | 0 | 0 | 58.1 |
+| add a service | 739 | 739 | 0 | 0 | 0 | 47.2 |
+| delete a service with 4 to 8 dependants (hub) | 346 | 342 | 4 | 0 | 0 | 422.1 |
+| delete a service with 1 to 3 dependants | 126 | 118 | 8 | 0 | 0 | 325.1 |
+| delete a service without dependants | 129 | 129 | 0 | 0 | 0 | 372.6 |
+| delete an edge | 121 | 121 | 0 | 0 | 0 | 66.7 |
+| delete a service and an edge | 129 | 75 | 8 | 46 | 0 | 1824.7 |
+| all | 4,000 | 3,934 | 20 | 46 | 0 | 163.4 |
+
+* 66 of the 4,000 replies differ from the ideal reply as text. **20 have the right items in another order** (8 of the deletes with one to three dependants, 4 hub deletes, 8 service-and-edge deletes); all of them ended exact. **46 have other items, and in all 46 the reply is the ideal reply with items left out: none added, none changed.** All 46 are in one kind of request, "Delete the service at (x,y), and also remove the edge from … to …".
+* In that kind, **which items were left out is the service's dependants**: the reply deleted the service and the named edge and not the edges that point to or from the service, so applied as written the state would hold edges pointing at a deleted service.
+
+| dependants of the service to delete | delete-service-and-edge requests | replies that left some of them out | share |
+|---|---|---|---|
+| 0 | 32 | 0 | 0% |
+| 1 | 29 | 21 | 72% |
+| 2 | 36 | 14 | 39% |
+| 3 | 32 | 11 | 34% |
+| all | 129 | 46 | 36% |
+
+* When the service has dependants, the model left some out in 46 of 97 replies (47 percent); when it has none there is nothing to leave out (0 of 32). In the two other kinds that delete a service that has dependants, "Delete the service at (x,y)." with one to three of them (126 requests) and with four to eight (346), **it named every dependant every time: 472 of 472** (12 in another order). The omissions are therefore on the one request that names an edge as well. A possible reading is that the model takes "delete this service, and also remove this edge" to mean exactly those two things; I did not test why, and a request worded another way could behave differently. The dependants left out were never more than 3.
+* **What each policy would have done with the saved replies, from the oracle's state, one step at a time.** This is a replay of the saved replies (each applied to the oracle's state before its step), **not the contrast** (below): the contrast runs those policies live on their own held states, which show the model different prompts.
+
+| what is done with the reply | steps (of 4,000) ending off the oracle's state | of which with a corrupted state |
+|---|---|---|
+| applied as written (blind) | 46 | 46 |
+| applied only if the gate accepts it (gate) | 46 | 0 |
+| repaired by the deterministic completion, deleting up to 8 dependants (repair_m6) | 0 | 0 |
+| the scope filter, then the same repair (scope_m7, the framework as run) | 0 | 0 |
+
+  Applied as written, 46 replies (1.15 percent of the steps) would each have left edges pointing at a deleted service; the gate would have refused them and kept a service the oracle has deleted; the repair added the dependants, which is the rule the oracle uses and the model was not told. With the framework's own default of 4 dependants the result is the same on these replies (0 steps off the oracle's state for repair_m6 and for scope_m7), because every service whose dependants were left out had at most 3, and the hub deletes (4 to 8 dependants) were named in full by the model: **the setting of 8, fixed on the page before the run, made no difference to the 4,000 replies of this run.**
+* **Against the page's own bar for line 10** (at most 1.0 percent of the asks not done as asked): the framework's held state did what was asked on 4,000 of 4,000 asks (0 not done); the raw replies applied as written from a correct state did not on 46 of 4,000 (1.15 percent), which is over that bar. This is the same replay as the table above, not a reading-rule line, and the bar was written for the framework's state; it says that line 10 passes here because of the repair and not because the model never slipped.
+* **Thinking.** The mean was 163.4 tokens a step but the median was 54 (95th percentile 573); 61 calls used more than 1,000 and the largest used 7,862 of the 8,192 allowed. By kind the mean was 47 to 67 for adding a service or an edge and for deleting an edge, 325 to 422 for deleting a service, and **1,825 for the service-and-edge request**, the one the model slipped on.
+
+## The contrast: the same first 400 requests, four ways of keeping the state
+| policy, first 400 requests | steps exactly the oracle's | steps corrupted | mean distance, steps 201 to 400 | mean distance, all 400 | largest distance | steps that started right and ended off | requests that could not be applied as written | replies reused from run 1 | tokens sent by the arm |
+|---|---|---|---|---|---|---|---|---|---|
+| scope_m7, the framework (run 1's first 400 steps) | 400 | 0 | 0.00 | 0.00 | 0 | 0 | 0 | - | - |
+| blind: the replies applied as written | 85 | 223 | 1.83 | 1.60 | 5 | 4 | 9 | 86 | 253,132 |
+| gate: applied only if the gate accepts, otherwise nothing | 84 | 0 | 4.63 | 3.55 | 8 | 3 | 16 | 85 | 272,660 |
+| repair_m6: the repair alone, without the scope filter | 400 | 0 | 0.00 | 0.00 | 0 | 0 | 0 | 400 | 0 |
+
+* **The framework against the model's replies as written.** Applied as written, the replies left the state exactly right on 85 of 400 steps (21.2 percent) and corrupted on 223 (55.8 percent); the framework (scope_m7, run 1's first 400 steps) was exactly right on 400 of 400. **Line 13 (steps 201 to 400, mean distance to the oracle): scope_m7 0.00, blind 1.83, gate 4.63: yes.**
+* **Where it starts.** The arms are the same for the first 15 steps, and at step 16 all three are given the same saved reply: the first "delete a service, and also remove this edge" of the stream, in which the model left out the service's dependants (the first of the 46 of run 1). Blind applied it and held edges pointing at a deleted service from that step; the gate refused it and kept a service the oracle had deleted; the repair added the dependants. Every new offset of the two arms (blind 4, at steps 16, 132, 210, 361; gate 3, at steps 16, 132, 210) comes after a request of that one kind.
+* **How long an offset lasted.** Blind was off the oracle's state in the stretches 16 to 104, 132 to 167, 210 to 359, 361 to 400 (89, 36, 150 and 40 steps; the last was still going at step 400) and exactly right in the rest, 85 steps. This page's estimate, written before any call, was that an offset lasts on the order of fifty to a hundred steps; these lasted between 36 and 150.
+* **The gate does not come back.** It never admitted a corrupted state (0 steps) and was exactly right on 84 of 400. Its third offset began at step 210 and was still open at step 400: it was off the oracle's state on every step from 210 to 400, with the mean distance 5.50 in the last hundred steps (largest 8), and 16 requests could no longer be applied as written to its state (blind: 9). A check that refuses a bad reply keeps the state well formed; it does not make it right.
+* **The repair alone is the framework on this stream.** repair_m6 was exactly right on 400 of 400, as scope_m7 was: the scope filter made no difference here (it removed nothing in run 1 either). That arm sent nothing (all 400 of its steps reuse run 1's replies), so it is a recomputation of run 1's replies and not a second sample.
+* **What limits this reading.** Four new offsets for blind and three for the gate, on one stream, one seed and 400 steps; the arms share replies (the first 15 steps, and every stretch in which an arm's state is the oracle's again), so they are not three independent samples of the model; every offset starts at a request of that one kind; and the comparison is with a host that applies the replies as written or only checks them, **not** with a chat that keeps its history and **not** with an agent that reads its own state back and corrects it (neither is measured). Over 4,000 steps the blind arm was not run.
+
+## What a step with the right state cost
+This section was added after the contrast was read, at the owner's request. It was not on the page before the run, so it is not a pre-registered reading and it cannot change any of the fourteen lines; it is arithmetic on the saved files. Every step of every arm is a call that was really made and billed, in run 1 or in the contrast: a reused reply is a call of run 1, and its own token counts are in the row (the test checks that each of the 86, 85 and 400 reused replies is, text and token counts, a call in the saved-reply file). So each arm is priced as if all 400 of its calls had been billed, at the prices the owner typed in ($0.75 in, $3.75 out, thinking counted as out); in the contrast itself only the live calls were billed ($0.32 for blind and $0.37 for the gate, as in the table above).
+
+| policy, first 400 requests | steps exactly the oracle's | tokens, every call counted | dollars, every call counted | tokens per step with the right state | dollars per step with the right state | times the framework's dollars per step with the right state |
+|---|---|---|---|---|---|---|
+| scope_m7, the framework (run 1's first 400 steps) | 400 | 332,838 | $0.47 | 832 | $0.00117 | 1.0 |
+| blind: the replies applied as written | 85 | 333,040 | $0.45 | 3,918 | $0.00524 | 4.5 |
+| gate: applied only if the gate accepts, otherwise nothing | 84 | 347,263 | $0.48 | 4,134 | $0.00573 | 4.9 |
+| repair_m6: the repair alone, without the scope filter | 400 | 332,838 | $0.47 | 832 | $0.00117 | 1.0 |
+
+* **The same spend.** The framework's 400 calls were 332,838 tokens and $0.47; blind's, 333,040 tokens and $0.45; the gate's, 347,263 tokens and $0.48. The three arms spent within 5 percent of each other in dollars, and in tokens the framework used 202 fewer than blind and 14,425 fewer than the gate. **The spend is about the same; what differs is how many steps ended with the right state.**
+* **What differed is how many steps ended with the right state:** 400 of 400 for the framework, 85 for blind and 84 for the gate. A step with the right state cost $0.00117 (832 tokens) with the framework, $0.00524 (3,918 tokens) with the replies applied as written, **4.5 times as much**, and $0.00573 (4,134 tokens) with the gate, **4.9 times as much**.
+* **How the 4.5 comes about.** It is the ratio of steps with the right state (400 to 85 is 4.71) times the ratio of spend (0.95). It moves with how long a wrong state lasts in the stream: here blind was off the oracle's state for 36 to 150 steps at a time; on a stream whose slips are removed sooner the ratio would be smaller and on one where they stay longer it would be larger (not measured).
+* **What this number leaves out.** Only the calls of the first 400 requests, counted in the service's tokens at the owner's prices. Not energy (the service does not report it; tokens are the stand-in, and nothing here converts them), not what a wrong state costs afterwards (the next actions that build on it), not the cost of an agent that reads its own state back and corrects it, not a chat that keeps its history (neither is measured), and not another model, task or price. The blind and gate arms were not run over 4,000 steps, so there is no figure for the whole run.
+
+## The predictions, one by one
+* **Lines 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12 and 13 came out yes** (rated 85, 99, 93, 90, **30, 40, 45**, 65, 80, 97, 60 and 45 percent). Line 6 was the one I expected to fail first; lines 6, 7 and 8, the three about how often the model slips, all held, and the share of steps equal to the oracle (100 percent) was above the 60 to 99 percent I gave for it (65 percent), so **the model's rate of slips on this job was lower than I assumed**. One run is one sample, and one outcome at about 20 percent does not say that the 20 percent was wrong.
+* **Line 4 (rated 55 percent): NO**, blind apply was corrupted on 55.8 percent of its first 400 steps, under 80. **Line 13 (45 percent): yes.** The guard and instrument lines 1 to 4 all yes (43 percent): did not happen, because of line 4. All fourteen lines yes (under 3 percent): cannot happen now, since line 4 is NO and line 14 is not run.
+* **Overall:** all nine headline lines yes, rated about 20 percent: it happened. "I expect a NOT PASSED" was wrong.
+* **Line 15:** thinking above 150 a step at the default (65 percent): no, 92.5. Tokens in run 1 between 2.8 and 4.0 million (60 percent): yes, 3.66. Projected cost between $2 and $8 (65 percent): yes, the 20-step check projected $3.91 and the arithmetic on the run is $4.95. Mean seconds of a call between 1.0 and 5.0 (65 percent): yes, 2.55. The share of first replies refused between 0.1 and 2.0 percent (60 percent): no, none (0.0). At least 80 percent of the re-asked steps ended readable (75 percent): no step was re-asked, so this cannot be judged. More refused steps in the control than in the main run's first 1,000 (65 percent): the control has not been run. Share exact between 60 and 99 percent (65 percent): no, 100. More than half of the new offsets follow a readable reply (65 percent), and the largest count of slips is among add-edge requests (60 percent): there was no offset, and the replies that differed from the ideal were all in one kind of request (0 of 2,410 add-edge requests), so the second is wrong and the first cannot be judged.
+
+## What this run does and does not show
+* **It shows**, for this model on this job, in one sample: that the host layer's held state stayed equal to the oracle's for 4,000 requests (3.7 million tokens sent) with a prompt that did not grow (1.16 times from the first tenth to the last, following the graph and not the step) and a speed that did not fall (0.94 times); that the one kind of slip the model made, leaving a service's dependants out of a combined request, was completed by a deterministic repair 46 times out of 46; and that over the first 400 steps of the same stream the same replies applied as written left the state exactly right on 85 steps of 400 against 400 of 400 with the repair, and corrupted on 223, while a gate that only refuses was never corrupted and exactly right on 84 of 400; and that, with every call counted at the owner's prices, a step with the right state cost $0.00117 with the repair, 4.5 times as much ($0.00524) applying the replies as written and 4.9 times as much ($0.00573) with the gate, on about the same spend.
+* **It does not show** that the model is bad: it was right on 3,954 of 4,000 replies from a correct state, and the damage in the contrast comes from one slip staying until the stream removes it. It does not show anything about the re-ask or the scope filter (not exercised: no reply was refused, no item was out of scope); that the repair's rule (a deleted service takes its dependants with it) is the right rule for any other job (it is the oracle's rule, and the page fixed it before the run); that a repeat would give the same numbers (replies are sampled; the second seed has not been run); and, as on the page above, anything about a chat that keeps its history, an agent that corrects its own state, a Pro model, another provider, or another task, and nothing about money beyond the tokens counted here (energy; what a wrong state costs afterwards).
+* **What the next measurements decide.** The control (Cell 9) asks what the re-ask bought; since no reply was refused in run 1 the control will find every one of its prompts already in the saved-reply file, cost nothing, and can only show the same. Run 2 (Cell 10) is the replication (line 14). The comparison that is still missing, and that matters most for a claim about savings, is against a chat that keeps its history.
