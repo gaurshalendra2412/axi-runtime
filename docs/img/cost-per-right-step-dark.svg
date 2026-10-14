@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 262" width="600" height="262" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif'>
+<title id="t">What one step with the right state cost</title><desc id="d">First 400 requests. AXI $0.0012 a step with the right state; replies applied as written $0.0052, 4.5 times as much; gate only $0.0057, 4.9 times as much. Every call counted, at $0.75 in and $3.75 out per million tokens.</desc>
+<rect width="600" height="262" rx="12" fill="#1a1a19"/>
+<text x="24" y="34" font-size="17" fill="#f0efec" font-weight="600">What one step with the right state cost</text>
+<text x="24" y="56" font-size="14" fill="#898781">First 400 requests, every call counted</text>
+<text x="24" y="84" font-size="16" fill="#c3c2b7">AXI</text>
+<path d="M196,66 H241.96 Q245.96,66 245.96,70 V86 Q245.96,90 241.96,90 H196 Z" fill="#3987e5"/>
+<text x="255.96" y="84" font-size="16" fill="#f0efec" font-weight="600">$0.0012</text>
+<text x="24" y="132" font-size="16" fill="#c3c2b7">Replies as written</text>
+<path d="M196,114 H415.03 Q419.03,114 419.03,118 V134 Q419.03,138 415.03,138 H196 Z" fill="#d95926"/>
+<text x="429.03" y="132" font-size="16" fill="#f0efec" font-weight="600">$0.0052  ·  4.5×</text>
+<text x="24" y="180" font-size="16" fill="#c3c2b7">Gate only</text>
+<path d="M196,162 H436 Q440,162 440,166 V182 Q440,186 436,186 H196 Z" fill="#199e70"/>
+<text x="450" y="180" font-size="16" fill="#f0efec" font-weight="600">$0.0057  ·  4.9×</text>
+<text x="24" y="224" font-size="13" fill="#898781">$0.75 per million tokens in, $3.75 out (thinking counted as out).</text>
+<text x="24" y="244" font-size="13" fill="#898781">The spend was about the same; what differed was how many steps ended right.</text>
+</svg>

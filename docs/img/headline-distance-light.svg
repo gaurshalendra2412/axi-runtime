@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" width="600" height="420" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif'>
+<title id="t">How far the held state was from the right state, step by step</title><desc id="d">First 400 requests of one stream. AXI: 0 items off at every step. Replies applied as written: off the right state in four stretches from steps 16, 132, 210, 361, at most 5 items off, exactly right on 85 of 400 steps. Gate only: never corrupted but off from step 16 on, at most 8 items off, exactly right on 84 of 400 steps. The model slipped on 7 of the 400 requests; four slips, at steps 16, 132, 210, 361, each started a wrong stretch.</desc>
+<rect width="600" height="420" rx="12" fill="#fcfcfb"/>
+<line x1="36" y1="26" x2="56" y2="26" stroke="#2a78d6" stroke-width="2" stroke-linecap="round"/><text x="63" y="31" font-size="16" fill="#52514e">AXI</text>
+<line x1="150" y1="26" x2="170" y2="26" stroke="#eb6834" stroke-width="2" stroke-linecap="round"/><text x="177" y="31" font-size="16" fill="#52514e">Replies as written</text>
+<line x1="364" y1="26" x2="384" y2="26" stroke="#1baf7a" stroke-width="2" stroke-linecap="round"/><text x="391" y="31" font-size="16" fill="#52514e">Gate only</text>
+<text x="44" y="58" font-size="14" fill="#898781">Items off the right state</text>
+<line x1="44" y1="350" x2="470" y2="350" stroke="#c3c2b7" stroke-width="1"/><text x="36" y="355" font-size="14" fill="#898781" text-anchor="end">0</text>
+<line x1="44" y1="286.5" x2="470" y2="286.5" stroke="#e1e0d9" stroke-width="1"/><text x="36" y="291.5" font-size="14" fill="#898781" text-anchor="end">2</text>
+<line x1="44" y1="223" x2="470" y2="223" stroke="#e1e0d9" stroke-width="1"/><text x="36" y="228" font-size="14" fill="#898781" text-anchor="end">4</text>
+<line x1="44" y1="159.5" x2="470" y2="159.5" stroke="#e1e0d9" stroke-width="1"/><text x="36" y="164.5" font-size="14" fill="#898781" text-anchor="end">6</text>
+<line x1="44" y1="96" x2="470" y2="96" stroke="#e1e0d9" stroke-width="1"/><text x="36" y="101" font-size="14" fill="#898781" text-anchor="end">8</text>
+<text x="44" y="372" font-size="14" fill="#898781" text-anchor="middle">1</text>
+<text x="149.7" y="372" font-size="14" fill="#898781" text-anchor="middle">100</text>
+<text x="256.47" y="372" font-size="14" fill="#898781" text-anchor="middle">200</text>
+<text x="363.23" y="372" font-size="14" fill="#898781" text-anchor="middle">300</text>
+<text x="470" y="372" font-size="14" fill="#898781" text-anchor="middle">400</text>
+<text x="257" y="400" font-size="15" fill="#52514e" text-anchor="middle">Request number</text>
+<line x1="60.02" y1="90" x2="60.02" y2="350" stroke="#e1e0d9" stroke-width="1"/><text x="60.02" y="84" font-size="13" fill="#898781" text-anchor="middle">slip</text>
+<line x1="183.86" y1="90" x2="183.86" y2="350" stroke="#e1e0d9" stroke-width="1"/><text x="183.86" y="84" font-size="13" fill="#898781" text-anchor="middle">slip</text>
+<line x1="267.14" y1="90" x2="267.14" y2="350" stroke="#e1e0d9" stroke-width="1"/><text x="267.14" y="84" font-size="13" fill="#898781" text-anchor="middle">slip</text>
+<line x1="428.36" y1="90" x2="428.36" y2="350" stroke="#e1e0d9" stroke-width="1"/><text x="428.36" y="84" font-size="13" fill="#898781" text-anchor="middle">slip</text>
+<polyline points="44,350 58.95,350 60.02,286.5 153.97,286.5 155.04,350 182.8,350 183.86,254.75 211.62,254.75 212.69,286.5 219.1,286.5 220.17,318.25 221.23,318.25 222.3,350 266.08,350 267.14,318.25 297.04,318.25 298.11,286.5 308.78,286.5 309.85,191.25 311.98,191.25 313.05,223 319.46,223 320.53,286.5 321.59,286.5 322.66,254.75 365.37,254.75 366.44,318.25 426.23,318.25 427.29,350 428.36,286.5 435.83,286.5 436.9,254.75 444.38,254.75 445.44,286.5 470,286.5" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="44,350 58.95,350 60.02,223 121.94,223 123.01,254.75 153.97,254.75 155.04,350 182.8,350 183.86,191.25 211.62,191.25 212.69,223 219.1,223 220.17,286.5 221.23,286.5 222.3,350 266.08,350 267.14,254.75 297.04,254.75 298.11,159.5 319.46,159.5 320.53,223 365.37,223 366.44,286.5 374.98,286.5 376.05,127.75 379.25,127.75 380.32,159.5 408.08,159.5 409.14,191.25 410.21,223 427.29,223 428.36,96 444.38,96 445.44,159.5 458.26,159.5 459.32,191.25 470,191.25" fill="none" stroke="#1baf7a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="44,350 470,350" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="470" cy="350" r="5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/><text x="482" y="355" font-size="16" fill="#0b0b0b">AXI · 0</text>
+<circle cx="470" cy="286.5" r="5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/><text x="482" y="291.5" font-size="16" fill="#0b0b0b">As written · 2</text>
+<circle cx="470" cy="191.25" r="5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/><text x="482" y="196.25" font-size="16" fill="#0b0b0b">Gate only · 5</text>
+</svg>

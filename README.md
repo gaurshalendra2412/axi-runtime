@@ -1,18 +1,36 @@
-# AXI Runtime
+<h1 align="center">AXI Runtime</h1>
 
-**A checking layer between an AI model and the state it edits, so the model's small slips do not pile up.**
+<p align="center"><b>The model was right 98% of the time. Applied as written, only 21% of its steps ended with the right state.<br>With AXI between the model and the state: every one of them.</b></p>
 
-[![CI](https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml/badge.svg)](https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml)
+<p align="center"><sub>First 400 requests of the same stream, three ways of keeping the state. The whole run was 4,000 requests.</sub></p>
 
-Even a very good model slips now and then. What matters is what a slip does to the state afterwards.
+<p align="center"><a href="https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml/badge.svg"></a></p>
 
-AXI keeps the real state **outside** the model. At every step the model is shown the exact state and asked for one change. AXI then checks the change against the rules, completes what the rules can complete, and commits it all or not at all. The next step starts again from the exact state, so a slip does not carry forward.
+<p align="center">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="docs/img/headline-numbers-dark.svg">
+<img alt="Three numbers. 4,000 of 4,000 steps with exactly the right state, in one run on Gemini 3.8 Flash with 3.7 million tokens. A step with the right state cost 4.5 times as much when the replies were applied as written, on the first 400 requests. 46 of 46 slips, where the model left out a service's connections, repaired by a fixed rule." src="docs/img/headline-numbers-light.svg" width="600">
+</picture>
+</p>
 
-The idea, the framework and the architecture are **Rajnish Choubey's**. This repository holds the code, tests and measurements that implement and check them. See [Credits](#credits).
+<p align="center">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="docs/img/headline-distance-dark.svg">
+<img alt="Line chart over the first 400 requests. AXI is at zero items off the right state on every step. Replies applied as written go wrong at steps 16, 132, 210 and 361 and are off the right state on 315 of 400 steps. A gate that only refuses bad replies is never corrupted but is off the right state from step 210 to the end." src="docs/img/headline-distance-light.svg" width="600">
+</picture>
+</p>
+
+**Why a model that is right 98% of the time can leave the state right on only 21% of the steps:** a slip that nothing catches stays in the state, and every later step builds on it. In these 400 requests the model slipped 7 times (393 replies right, 98%). Four of those slips, marked on the chart, each started a stretch in which the state was wrong, and together those stretches covered 315 of the 400 steps. The gate refuses bad replies, so it never held a broken state, but its state was off the right one from step 210 to the end. AXI's line is flat at zero.
 
 ---
 
-## The result that matters most
+## What AXI is
+
+A small runtime between an AI agent and the state it edits. The model proposes one change at a time. AXI checks the change against the rules, completes what the rules can complete, commits it all or not at all, and then shows the model the exact state again. The point is to stop small errors from compounding over long, multi-step agent runs.
+
+The idea, the framework and the architecture are **Rajnish Choubey's**. This repository holds the code, tests and measurements that implement and check them. See [Credits](#credits).
+
+## The run, in plain words
 
 One model (Gemini 3.8 Flash), one job (editing a service graph of 17 to 22 services on average), one run of **4,000 requests in a row**, 3.7 million tokens sent in all.
 
@@ -21,7 +39,16 @@ One model (Gemini 3.8 Flash), one job (editing a service graph of 17 to 22 servi
 * **The same slips, applied as written, did real damage.** On the first 400 requests of the same stream, the replies applied as written left the state exactly right on 85 steps of 400 (21 percent) and corrupted it on 223 (56 percent). Once a slip got in, the state stayed wrong for 36 to 150 steps at a time (the last stretch was still going when the 400 steps ended).
 * **A gate that only refuses bad replies** kept the state well formed (never corrupted) but did not make it right: exactly right on 84 of 400, and off the right state on every step from 210 to 400.
 
-The spend was about the same for all three ways of keeping the state. What differed was how many steps ended with the right state:
+## What it cost
+
+The spend was about the same for all three ways of keeping the state. What differed was how many steps ended with the right state, so what one right step cost differed too:
+
+<p align="center">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="docs/img/cost-per-right-step-dark.svg">
+<img alt="Bar chart of what one step with the right state cost over the first 400 requests: AXI 0.0012 dollars, replies applied as written 0.0052 dollars (4.5 times as much), gate only 0.0057 dollars (4.9 times as much)." src="docs/img/cost-per-right-step-light.svg" width="600">
+</picture>
+</p>
 
 | First 400 requests | Steps with the right state | Spent | Cost of one step with the right state |
 |---|---|---|---|
@@ -49,7 +76,7 @@ Both are on synthetic service graphs, in Colab. The tables and what is still ope
 * **Written before the run.** Each page for a model run fixes the questions, the predictions and the reading rules before any number exists.
 * **Locked, then appended.** The result goes below a line at the end of the page, and the text above the line is not changed. For the 4,000-step page and several others, a test checks this by hash.
 * **A NO is printed as a NO.** The headline run had fourteen reading rules: twelve passed, one read NO and says so on the page, and one was not run.
-* **Pages are recomputed.** For the result pages, a test rebuilds every number from the raw run files and fails if the page and the files disagree.
+* **Pages are recomputed.** For the result pages, a test rebuilds every number from the raw run files and fails if the page and the files disagree. The pictures on this page are drawn from the same files, and a test redraws them and compares.
 * **Tests are tested.** Many are also run against deliberately broken copies of the code ("mutants"); `docs/VERIFIED.md` gives the number caught where this was done.
 
 ---
@@ -74,6 +101,12 @@ cd python
 PYTHONPATH=. python3 tests/test_million_hard_result.py
 ```
 
+**Redraw the pictures** on this page from the saved run files:
+
+```bash
+PYTHONPATH=python python3 python/tools/readme_figures.py docs/img
+```
+
 **Rust crates:** `cargo test --workspace` (this is what the CI badge above runs).
 
 **Re-running the model experiments** needs your own API key and costs real money (the 4,000-step run cost $4.95 at the prices above). The Colab notebooks are in `python/colab/`. Keep the key in Colab's secrets and never put it in the repository.
@@ -87,10 +120,12 @@ PYTHONPATH=. python3 tests/test_million_hard_result.py
 | `crates/` | Rust prototype, early stage. The `axi-ir` crate includes four small modules (coordinate tuples, schema, router, positional encoding). The graph-rewrite check (`axi-dpo`) and the shadow pager are written but not yet included in a crate, and `axi-cache` is a placeholder. The gate and pager that are tested and measured are the Python ones below. |
 | `python/axi/engine/` | The gate, the diagnosis and repair, the scope filter, the strict parser for the change language, the pager, the end-to-end runtime |
 | `python/axi/experiments/` | The experiment code, including the 4,000-step run and the code that rebuilds its result page |
+| `python/tools/` | The code that draws the pictures on this page from the saved run files |
 | `python/tests/` | The test files; most say in their header what they show and what they do not |
 | `python/colab/` | Colab notebooks used for the model runs |
 | `docs/` | Every test page (written before its run) and the honest status table |
 | `docs/results/` | The raw run files: every request and every model reply |
+| `docs/img/` | The pictures on this page |
 
 **A few words used above.** *State:* the graph of services and the edges between them. *Change* (or *delta*): one proposed edit, written in a small strict language. *Gate:* the deterministic check that accepts or refuses a change. *Dangling edge:* an edge left pointing at a service that was deleted.
 
