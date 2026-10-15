@@ -26,11 +26,12 @@ class TorchCache:
     @property
     def n(self) -> int: return len(self.pos)
 
-    def _hf(self):
+    def _hf(self, rows=None):
+        """A fresh Hugging Face cache filled with our rows (all of them, or only the first `rows`)."""
         from transformers import DynamicCache
         c = DynamicCache()
         if self.kv is not None:
-            for i, (k, v) in enumerate(self.kv): c.update(k, v, i)
+            for i, (k, v) in enumerate(self.kv): c.update(k, v, i) if rows is None else c.update(k[:, :, :rows], v[:, :, :rows], i)
         return c
 
     def forward(self, tokens, positions):
@@ -40,6 +41,20 @@ class TorchCache:
         c = out.past_key_values if getattr(out, "past_key_values", None) is not None else c
         self.kv = [_tensors(c, i) for i in range(e.layers)]; self.pos += [int(p) for p in positions]
         return logits[0].float().cpu().numpy()
+
+    def forward_blocks(self, blocks, positions, visible=None):
+        """Read several blocks side by side: each block is read with only the first `visible` rows of the cache (default: all rows; the header) and itself, none sees any other block; then all are appended in
+        order. The new rows are COPIED out (`.clone()`): a slice would keep the whole header-sized tensor alive for every block (hundreds of blocks would fill the GPU)."""
+        t, e = self.e.torch, self.e; v0 = self.n if visible is None else int(visible); new = []
+        for toks, pos in zip(blocks, positions):
+            ids = t.tensor([list(toks)], device=e.device); p = t.tensor([[int(x) for x in pos]], device=e.device); c = self._hf(v0)
+            with t.no_grad(): out = e.model.model(input_ids=ids, position_ids=p, past_key_values=c, use_cache=True)
+            c = out.past_key_values if getattr(out, "past_key_values", None) is not None else c
+            new.append([(a[:, :, v0:].clone(), b[:, :, v0:].clone()) for a, b in (_tensors(c, i) for i in range(e.layers))])
+            del out, c
+        base = self.kv if self.kv is not None else [(None, None)] * e.layers
+        self.kv = [(t.cat(([base[i][0]] if base[i][0] is not None else []) + [b[i][0] for b in new], dim=2), t.cat(([base[i][1]] if base[i][1] is not None else []) + [b[i][1] for b in new], dim=2)) for i in range(e.layers)]
+        self.pos += [int(x) for pos in positions for x in pos]
 
     def select(self, rows):
         rows = list(rows); t = self.e.torch

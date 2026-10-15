@@ -15,7 +15,8 @@ deleted (cut out by the two drop arms: this is the approximation). The cache is 
 (tests/test_kv_drop.py) and the PyTorch/Hugging Face side (`kv_torch.py`) is a thin shell that the notebook checks on the real model first (`preflight`).
 
 Cache protocol (`engine.new_cache()` returns one):  .n tokens held;  .pos position ids of the rows;  .forward(tokens, positions) appends the rows and returns the raw logits of the LAST token
-(numpy, float);  .select(rows) keeps those rows in that order;  .rerotate(new_positions) turns the keys to new position ids;  .nbytes();  .keys(layer) the keys of one layer (numpy, for the
+(numpy, float);  .forward_blocks(blocks, positions, visible=None) reads several blocks SIDE BY SIDE (docs/KV_BLOCK_TEST.md): each block sees the first `visible` rows of the cache (default all) and itself, no other block, then all are appended in order (returns nothing);
+.select(rows) keeps those rows in that order;  .rerotate(new_positions) turns the keys to new position ids;  .nbytes();  .keys(layer) the keys of one layer (numpy, for the
 checks only);  .value_deviation(other, rows) mean relative L2 difference of the values of the first `rows` rows against another cache (how far a patched cache is from a rebuilt one).  Engine: `new_cache()`, `sync()`, `reset_peak()`, `peak_mb()`, `tol` (allowed difference in logits), `tol_keys` (allowed difference in keys)."""
 import json, os, time
 from dataclasses import dataclass
@@ -152,6 +153,11 @@ class Tracked:
 
     def forward(self, tokens, positions):
         self.ids += list(tokens); return self.c.forward(list(tokens), list(positions))
+
+    def forward_blocks(self, blocks, positions, visible=None):
+        blocks = [list(b) for b in blocks]; self.ids += [x for b in blocks for x in b]; self.c.forward_blocks(blocks, [list(p) for p in positions], visible)
+
+    def keys(self, layer): return self.c.keys(layer)
 
     def select(self, rows):
         rows = list(rows); self.ids = [self.ids[i] for i in rows]; self.c.select(rows)
@@ -315,9 +321,67 @@ class KeepArm(_Arm):
         return rec, rep
 
 
+class BlockArm(_StateCacheArm):
+    """INDEPENDENT BLOCKS (docs/KV_BLOCK_TEST.md; the 'block independence at test time, no training' claim): the header is read first; then every block of `group` consecutive items is read on its own, seeing the
+    header and itself and NO other block; the request that follows sees everything. A block sits at the positions it would have in a normal read, so what differs from `fresh` is that a block's rows were computed
+    without the other blocks in view.
+    maintained (group 1): the cache is kept between steps like `drop_gap`: a deleted item's rows are cut, NOTHING is turned (a row's deeper layers were computed at its position, with its distance to the header; turning
+    only the keys would not be a rebuild at the new position), an added item is read as a new block after the last row (a hole in the position numbers, as in `drop_gap`). No block depended on the cut one, so the
+    cache equals one rebuilt from nothing AT THE SAME POSITIONS: `CHECK_EVERY` steps this is measured (`rebuilt_dev_v`, `rebuilt_dev_k`).
+    Otherwise (a coarser group): rebuilt from nothing every step with contiguous positions; this arm is for the accuracy question only, no speed is claimed for it."""
+    CHECK_EVERY = 10
+
+    def __init__(self, *a, group: int = 1, maintained: bool = False, **kw):
+        super().__init__(*a, **kw); assert group >= 1 and (group == 1 or not maintained); self.group, self.maintained = group, maintained
+        self.name = "block" if maintained else f"block{group}"
+
+    def _blocks(self, items, positions=None):
+        """Token lists and position lists of the blocks. `positions`: one position per item token, in order (default: contiguous after the header)."""
+        kit, off, toks, pos, k = self.kit, len(self.kit.first_prefix), [], [], 0
+        for i in range(0, len(items), self.group):
+            b = [x for it in items[i:i + self.group] for x in kit.item(it)]; toks.append(b)
+            if positions is None: pos.append(list(range(off, off + len(b)))); off += len(b)
+            else: pos.append([int(x) for x in positions[k:k + len(b)]]); k += len(b)
+        return toks, pos
+
+    def _build(self, items, positions=None) -> Tracked:
+        c = Tracked(self.engine.new_cache()); h = len(self.kit.first_prefix); c.forward(self.kit.first_prefix, range(h)); toks, pos = self._blocks(items, positions)
+        if toks: c.forward_blocks(toks, pos)
+        return c
+
+    def _first_build(self, items):
+        self.cache = self._build(items); return self.cache.n
+
+    def _update(self, items, change) -> int:
+        if not self.maintained: self.cache = self._build(items); return self.cache.n
+        deleted, added = change; kit, old = self.kit, self.items; dset = set(deleted); keep, off = list(range(len(kit.first_prefix))), len(kit.first_prefix)
+        for j, it in enumerate(old):
+            m = len(kit.item(it))
+            if j not in dset: keep.extend(range(off, off + m))
+            off += m
+        if deleted: self.cache.select(keep)
+        add = [kit.item(it) for it in added]
+        if add:
+            off, pos = self.cache.pos[-1] + 1, []
+            for b in add: pos.append(list(range(off, off + len(b)))); off += len(b)
+            self.cache.forward_blocks(add, pos, visible=len(kit.first_prefix))                      # a new block sees the header only, not the blocks that are already there
+        return sum(len(b) for b in add)
+
+    def _extra(self) -> dict: return dict(gap=int(self.cache.pos[-1] + 1 - self.cache.n)) if self.maintained else {}
+
+    def step(self, t, items, change, instr, ref):
+        rec, rep = super().step(t, items, change, instr, ref)
+        if self.maintained and self.CHECK_EVERY and t % self.CHECK_EVERY == 0:
+            h = len(self.kit.first_prefix); chk = self._build(items, self.cache.pos[h:]); base = chk.n; L = self.engine.layers
+            rel = lambda a, b: float(np.linalg.norm(a - b) / max(float(np.linalg.norm(b)), 1e-300))
+            rec["rebuilt_dev_v"] = self.cache.value_deviation(chk, base); rec["rebuilt_dev_k"] = max(rel(self.cache.keys(i)[:, :base], chk.keys(i)) for i in (0, L - 1)); del chk
+        return rec, rep
+
+
 def make_arms(engine, kit, table, arms: Sequence[str], max_new: int = KV_MAX_NEW, k_cap: int = KV_K_CAP) -> Dict[str, _Arm]:
     made = {"fresh": lambda: FreshArm(engine, kit, table, max_new), "exact": lambda: ExactArm(engine, kit, table, max_new), "drop_compact": lambda: DropArm(engine, kit, table, max_new, compact=True),
-            "drop_gap": lambda: DropArm(engine, kit, table, max_new, compact=False), "keep": lambda: KeepArm(engine, kit, table, max_new, cap=k_cap)}
+            "drop_gap": lambda: DropArm(engine, kit, table, max_new, compact=False), "keep": lambda: KeepArm(engine, kit, table, max_new, cap=k_cap),
+            "block": lambda: BlockArm(engine, kit, table, max_new, group=1, maintained=True), "block16": lambda: BlockArm(engine, kit, table, max_new, group=16)}
     assert list(arms)[0] == "fresh" and all(a in made for a in arms), arms
     return {a: made[a]() for a in arms}
 

@@ -1,0 +1,343 @@
+{
+ "digest": "dd08fd515ff59bff",
+ "pairs": {
+  "hot": {
+   "both_valid": 120000,
+   "commute": 117527,
+   "conflict": 2473,
+   "detectors": {
+    "dpo": {
+     "fn": 0,
+     "fp": 0,
+     "tn": 117527,
+     "tp": 2473
+    },
+    "names": {
+     "fn": 814,
+     "fp": 0,
+     "tn": 117527,
+     "tp": 1659
+    },
+    "pager": {
+     "fn": 669,
+     "fp": 2901,
+     "tn": 114626,
+     "tp": 1804
+    }
+   },
+   "examples": {
+    "dpo": [],
+    "names": [
+     {
+      "a": "DEL[(8,7)->(1,9):dep#1] ADD[(9,9)->(9,6):dep#2]",
+      "b": "DEL[9,9]",
+      "cell": "fn"
+     },
+     {
+      "a": "DEL[0,6] DEL[(0,6)->(7,4):dep#5]",
+      "b": "ADD[(0,6)->(1,5):owns#1]",
+      "cell": "fn"
+     },
+     {
+      "a": "ADD[(4,6)->(3,8):owns#8]",
+      "b": "DEL[3,8] DEL[(9,8)->(3,8):owns#7]",
+      "cell": "fn"
+     }
+    ],
+    "pager": [
+     {
+      "a": "ADD[(1,8)->(1,1):owns#4]",
+      "b": "ADD[(2,3)->(1,1):owns#8]",
+      "cell": "fp"
+     },
+     {
+      "a": "ADD[(6,3)->(4,6):owns#1]",
+      "b": "ADD[(6,2)->(4,6):dep#8]",
+      "cell": "fp"
+     },
+     {
+      "a": "DEL[(1,8)->(6,8):dep#9] ADD[(1,5)->(7,1):dep#8]",
+      "b": "ADD[(6,8)->(1,5):dep#6]",
+      "cell": "fp"
+     }
+    ]
+   },
+   "first_commit_ok": 120000,
+   "misses": {
+    "dpo": {},
+    "names": {
+     "fn +e+n/-e-n": 22,
+     "fn +e+n/-n": 18,
+     "fn +e-e/-e-n": 64,
+     "fn +e-e/-n": 30,
+     "fn +e/-e-n": 393,
+     "fn +e/-n": 287
+    },
+    "pager": {
+     "fn +e-e/-e-n": 86,
+     "fn -e-n/-e-n": 164,
+     "fn -e/-e": 116,
+     "fn -e/-e-n": 251,
+     "fp +e+n/+e-e": 82,
+     "fp +e/+e": 1717,
+     "fp +e/+e+n": 459,
+     "fp +e/+e-e": 562
+    }
+   },
+   "p_hot": 0.5,
+   "pairs": 120000,
+   "why": {
+    "both orders refused": 2473
+   }
+  },
+  "uniform": {
+   "both_valid": 120000,
+   "commute": 117631,
+   "conflict": 2369,
+   "detectors": {
+    "dpo": {
+     "fn": 0,
+     "fp": 0,
+     "tn": 117631,
+     "tp": 2369
+    },
+    "names": {
+     "fn": 1123,
+     "fp": 0,
+     "tn": 117631,
+     "tp": 1246
+    },
+    "pager": {
+     "fn": 651,
+     "fp": 1594,
+     "tn": 116037,
+     "tp": 1718
+    }
+   },
+   "examples": {
+    "dpo": [],
+    "names": [
+     {
+      "a": "ADD[(7,3)->(4,9):dep#4]",
+      "b": "DEL[4,9]",
+      "cell": "fn"
+     },
+     {
+      "a": "DEL[4,1] DEL[(4,1)->(8,2):dep#4] DEL[(5,9)->(4,1):dep#1]",
+      "b": "ADD[(4,1)->(1,1):owns#3]",
+      "cell": "fn"
+     },
+     {
+      "a": "DEL[7,5] DEL[(5,5)->(7,5):dep#5] DEL[(7,5)->(1,9):dep#4] DEL[(7,8)->(7,5):dep#3]",
+      "b": "ADD[(7,5)->(5,4):owns#7]",
+      "cell": "fn"
+     }
+    ],
+    "pager": [
+     {
+      "a": "ADD[6,1:6] ADD[(6,1)->(4,1):dep#8]",
+      "b": "ADD[(4,9)->(4,1):dep#1]",
+      "cell": "fp"
+     },
+     {
+      "a": "ADD[(3,8)->(4,7):dep#6]",
+      "b": "ADD[(0,3)->(3,8):dep#1]",
+      "cell": "fp"
+     },
+     {
+      "a": "ADD[(9,9)->(4,1):dep#3]",
+      "b": "ADD[(4,1)->(1,5):owns#6]",
+      "cell": "fp"
+     }
+    ]
+   },
+   "first_commit_ok": 120000,
+   "misses": {
+    "dpo": {},
+    "names": {
+     "fn +e+n/-e-n": 50,
+     "fn +e+n/-n": 34,
+     "fn +e-e/-e-n": 107,
+     "fn +e-e/-n": 53,
+     "fn +e/-e-n": 546,
+     "fn +e/-n": 333
+    },
+    "pager": {
+     "fn +e-e/-e": 45,
+     "fn +e-e/-e-n": 58,
+     "fn -e-n/-e-n": 161,
+     "fn -e/-e": 76,
+     "fn -e/-e-n": 307,
+     "fp +e/+e": 1028,
+     "fp +e/+e+n": 184,
+     "fp +e/+e-e": 318
+    }
+   },
+   "p_hot": 0.0,
+   "pairs": 120000,
+   "why": {
+    "both orders refused": 2369
+   }
+  }
+ },
+ "quick": false,
+ "rounds": {
+  "hot": {
+   "agents": 16,
+   "p_hot": 0.5,
+   "perms": 10,
+   "rounds": 100,
+   "schedulers": {
+    "blind": {
+     "gate_refusals": 0,
+     "ill_formed": 52,
+     "mean_taken": 1.0,
+     "same_graph": 71
+    },
+    "gated": {
+     "gate_refusals": 0,
+     "ill_formed": 0,
+     "mean_taken": 0.8735624999999999,
+     "same_graph": 17
+    },
+    "merge": {
+     "gate_refusals": 0,
+     "ill_formed": 0,
+     "mean_taken": 0.8725,
+     "same_graph": 100
+    }
+   }
+  },
+  "uniform": {
+   "agents": 16,
+   "p_hot": 0.0,
+   "perms": 10,
+   "rounds": 100,
+   "schedulers": {
+    "blind": {
+     "gate_refusals": 0,
+     "ill_formed": 68,
+     "mean_taken": 1.0,
+     "same_graph": 96
+    },
+    "gated": {
+     "gate_refusals": 0,
+     "ill_formed": 0,
+     "mean_taken": 0.874125,
+     "same_graph": 19
+    },
+    "merge": {
+     "gate_refusals": 0,
+     "ill_formed": 0,
+     "mean_taken": 0.875,
+     "same_graph": 100
+    }
+   }
+  }
+ },
+ "seconds": 76.2,
+ "seed": 41,
+ "sweep": {
+  "160/16": {
+   "agents": 16,
+   "mean_taken": 0.96203125,
+   "rounds": 400,
+   "services": 160
+  },
+  "160/4": {
+   "agents": 4,
+   "mean_taken": 0.99,
+   "rounds": 400,
+   "services": 160
+  },
+  "160/64": {
+   "agents": 64,
+   "mean_taken": 0.87203125,
+   "rounds": 400,
+   "services": 160
+  },
+  "40/16": {
+   "agents": 16,
+   "mean_taken": 0.88125,
+   "rounds": 400,
+   "services": 40
+  },
+  "40/4": {
+   "agents": 4,
+   "mean_taken": 0.975625,
+   "rounds": 400,
+   "services": 40
+  },
+  "40/64": {
+   "agents": 64,
+   "mean_taken": 0.698515625,
+   "rounds": 400,
+   "services": 40
+  },
+  "640/16": {
+   "agents": 16,
+   "mean_taken": 0.99140625,
+   "rounds": 400,
+   "services": 640
+  },
+  "640/4": {
+   "agents": 4,
+   "mean_taken": 0.998125,
+   "rounds": 400,
+   "services": 640
+  },
+  "640/64": {
+   "agents": 64,
+   "mean_taken": 0.961640625,
+   "rounds": 400,
+   "services": 640
+  }
+ },
+ "threads": {
+  "gate": {
+   "accepted": 2065,
+   "accounted": true,
+   "attempts": 2400,
+   "clash": 0,
+   "errors": [],
+   "finished": true,
+   "gate": 335,
+   "gate_after_rule": 0,
+   "replay_ok": true,
+   "rounds": 300,
+   "store": "gate",
+   "threads": 8,
+   "well_formed": true
+  },
+  "lww": {
+   "accepted": 2400,
+   "accounted": true,
+   "attempts": 2400,
+   "clash": 0,
+   "errors": [],
+   "finished": true,
+   "gate": 0,
+   "gate_after_rule": 0,
+   "replay_ok": false,
+   "rounds": 300,
+   "store": "lww",
+   "threads": 8,
+   "well_formed": true
+  },
+  "rule": {
+   "accepted": 2121,
+   "accounted": true,
+   "attempts": 2400,
+   "clash": 279,
+   "errors": [],
+   "finished": true,
+   "gate": 0,
+   "gate_after_rule": 0,
+   "replay_ok": true,
+   "rounds": 300,
+   "store": "rule",
+   "threads": 8,
+   "well_formed": true
+  }
+ }
+}

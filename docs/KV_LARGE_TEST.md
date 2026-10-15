@@ -111,3 +111,52 @@ The same three papers as `KV_DROP_TEST.md`, and I did not search beyond them.
 
 ## How it is run
 `axi_kv_large.ipynb` on Colab (T4): upload `axi-colab-kv-large.zip` (not the zip of the first notebook), connect Google Drive, run the cells top to bottom. The cells: GPU check, upload, install, Drive, load the model, `preflight` on the large prompt (stops if a line fails), a smoke test (one episode of 3 steps, all four arms, which prints seconds per step and a projection for run A), run A, run C, run X (optional). Each cell writes one line per finished episode, so a dropped session continues where it stopped. The result files are JSON; send them back and this page gets a "Result" section without changing anything above this line.
+
+---
+
+# Result (run 15 Oct 2026; everything above this line is unchanged from before the run)
+
+Runs A and C were made on a free Colab T4 on 15 Oct 2026 (Qwen2.5-7B-Instruct, 4-bit, seed 21, 4 episodes of 40 steps, 160 steps per arm; saved as `docs/results/axi_large_a_Qwen2.5-7B_seed21.json` and `axi_large_c_Qwen2.5-7B_seed21.json`). **Run X (the bigger graph) was not made**, so line 16 reads "not run". Every number below is recomputed from the saved rows (not from their summaries) by `python/tests/test_kv_large_result.py`.
+
+**The headline failed.** Four of the five headline lines read yes (5, 7, 8, 13) and line 14 read NO: with the rule stated (run C) the reply of `drop_compact` was identical to `fresh`'s on 115 of 160 steps (71.9 %), not on 95 %. Of the sixteen lines, fourteen read yes (1 to 13 and 15), one reads NO (14) and one is not run (16). I had put the five headline lines together at about 25 %.
+
+## The sixteen lines, against what I wrote before the run
+| # | my probability | read | what the saved rows say |
+|---|---|---|---|
+| 1 | 90 % | yes | `fresh`'s prompt: 3,808 tokens on average over the 160 steps of run A |
+| 2 | 85 % | yes | the pieces equal the tokenizer's own tokens on every step (`canonical` = 1.0) |
+| 3 | 75 % | yes | `fresh` repair_m6 exact: 100 % (160 of 160) |
+| 4 | 75 % | yes | `exact` identical to `fresh`: 100 % |
+| 5 | 60 % | yes | `drop_compact` identical to `fresh`: 100 % (160 of 160) |
+| 6 | 55 % | yes | `drop_gap` identical to `fresh`: 100 % |
+| 7 | 85 % | yes | `drop_compact` repair_m6 exact 100 %, `fresh` 100 % |
+| 8 | 50 % | yes | largest KL along the reply below 0.05 on 100 % of the steps (the largest value in the run: 0.0047) |
+| 9 | 95 % | yes | `drop_compact` read 21,221 tokens, `fresh` 609,270: 3.5 % |
+| 10 | 90 % | yes | `exact` read 224,483: 10.6 times what `drop_compact` read |
+| 11 | 75 % | yes | seconds per step: `drop_compact` 1.50, `fresh` 8.25 (0.18 times) |
+| 12 | 90 % | yes | `drop_compact` 1.50 against `exact` 2.81 |
+| 13 | 50 % | yes | last third of the steps: `drop_compact` identical to `fresh` on 100 % |
+| 14 | 55 % | **NO** | **run C: `drop_compact` identical to `fresh` on 71.9 % (115 of 160)** |
+| 15 | 95 % | yes | stale share of the state rows at the last step: 93.5 % |
+| 16 | 45 % | not run | run X was not made |
+
+## What the two runs show
+**Run A, no rule: the cut-out changed nothing the model wrote.** All three cache arms wrote exactly `fresh`'s reply on 160 of 160 steps, with 93.5 % of the rows in the drop caches stale at the last step. The price of this: `drop_compact` read 3.5 % of the tokens `fresh` read and took 1.5 seconds a step where `fresh` took 8.25. But in run A the reply does not need the state (it is about 11 tokens long and does not list the edges of the deleted service; the repair step adds them). The page called it "the regime where it does not need the state much" and the 100 % says that this is true: my probabilities of 50 % to 60 % on lines 5, 6, 8 and 13 were low for how easy this regime turned out to be, and a faithful cache and an unfaithful one would have looked alike here.
+
+**Run C, rule stated: the replies change on delete steps.** `drop_compact` wrote a different reply from `fresh` on 45 of 160 steps: 34 of the 52 "delete a service with dependents" steps, 11 of the 19 "delete a service without edges" steps, and none of the 89 steps that add something (adds are exact by construction). `drop_gap` differed on 48 steps. The prefix-cache arm `exact`, which does the same arithmetic in another order, differed on 4 steps (2.5 %, all deletes; largest KL 0.011), so rounding in 16-bit numbers alone moves about one reply in forty on this task; the 28 % of `drop_compact` is more than ten times that. The largest KL along a reply was above 0.05 nats on 51 of 160 steps and reached 8.2.
+
+**Whether the changed replies are worse is a different question, and the rows do not settle it.** Even `fresh` cannot do the delete task at this size. On the 52 delete replies with dependents the share of the service's own edges that `fresh` lists is 0.23 (0.42 of the edges that start at the service, 0.04 of those that end at it), it writes 2.85 edges per reply that are not in the graph as written, and 14 of the 52 replies run into the 120-token limit. `drop_compact` is at 0.24 / 0.41 / 0.04 and 2.83. The replies that differ are mostly one wrong list replaced by another. On the repaired exactness (repair_m6) `fresh` is at 82.5 %, `exact` 81.9 %, `drop_compact` 79.4 %, `drop_gap` 80.0 %; on the 160 paired steps `drop_compact` was right where `fresh` was wrong 6 times and wrong where `fresh` was right 11 times (exact sign test p = 0.33): a loss of 3 points that this sample cannot tell from nothing. **A reply that lists an edge that had been deleted earlier and is gone from the graph (a "ghost", the trace one would expect if stale rows carried the deleted item) occurred 0 times in any arm, `fresh` included.**
+
+**Seen afterwards, not pre-registered (read with that caution):** in run C the agreement of `drop_compact` with `fresh` is 84.6 % over the first third of the steps (steps 1 to 13: 8 of 52 differ) and 67.9 % over the last third (steps 27 to 40: 18 of 56 differ); counting only delete steps, 8 of 23 against 18 of 24. Fisher's exact test gives p = 0.046 and p = 0.008, but these were chosen after seeing the table, there are only 4 episodes, and steps within an episode are not independent, so I take it as a reason to test "does it grow with the number of deletes" on its own, not as a finding. Line 13 (run A) cannot show it, because run A never differs.
+
+## What I think this means (my reading, not one of the sixteen lines)
+1. On this model and this task, cutting a deleted item out of the cache with more than nine rows in ten stale is **invisible while the reply does not depend on the deleted item and visible when it does**. It is not a question of the size of the rows' error alone: it is whether the reply is a function of the removed text.
+2. The stale rows do not show up as "ghosts". What changes is which wrong edge list the model writes, in a task where it is wrong most of the time anyway. This weakens the reading "the trace of a deleted item leaks into the reply" and leaves open the reading "a perturbed cache flips a model that is on the edge of its ability".
+3. The cost saving is real and large in tokens (3.5 % of a rebuild, 10.6 times less than a prefix cache) and in time (0.18 times a rebuild), and does not depend on the answer to the quality question.
+4. What the two runs show most clearly is not about the cache: even when the whole prompt is rebuilt, the model does not find the edges that END at a service (recall 0.04). That is the question `LAYOUT_TEST.md` (item 98) asks, and the independent-block question of `KV_BLOCK_TEST.md` (item 99) is asked on the same graph. Neither has been run when this is written.
+
+## What did not come out, and what stays untested
+* Run X (about 8,000 tokens) was not made: line 16 is open, and so is the question of the size at which run A starts to differ.
+* The direction I wrote ("about 65 %: `drop_compact`'s agreement in run A is lower than in run A of `KV_DROP_TEST.md`") cannot be read: that page's test has not been run.
+* 19 of the 160 `fresh` replies in run C ran into the 120-token limit (none in run A); the arms are scored with them as they are.
+* Teacher forcing, one model, one layout (services first), one seed of four episodes, a free T4, my own prefix cache on Hugging Face. Nothing here is about months of operation, other models, or a model trained for block independence.

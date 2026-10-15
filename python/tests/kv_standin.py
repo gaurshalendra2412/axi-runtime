@@ -73,6 +73,16 @@ class TinyCache:
             if e.k < len(e.force): logits[e.force[e.k]] += 100.0
         return logits
 
+    def forward_blocks(self, blocks, positions, visible=None):
+        """Read several blocks side by side (the protocol of kv_drop.py): each block sees the first `visible` rows of the cache (default: all rows) and itself, no other block; then all are appended in order."""
+        e, v0, k0 = self.e, self.n if visible is None else int(visible), self.e.k; new_k, new_v, new_pos = [[] for _ in self.K], [[] for _ in self.V], []
+        for toks, pos in zip(blocks, positions):
+            tmp = TinyCache(e); tmp.K, tmp.V, tmp.pos = [k[:, :v0].copy() for k in self.K], [v[:, :v0].copy() for v in self.V], list(self.pos[:v0]); tmp.forward(toks, pos)
+            for li in range(len(self.K)): new_k[li].append(tmp.K[li][:, v0:]); new_v[li].append(tmp.V[li][:, v0:])
+            new_pos += [int(p) for p in pos]
+        e.k = k0                                                             # tests only: the scripted-reply counter is not moved by reading blocks
+        self.K = [np.concatenate([k] + nk, axis=1) for k, nk in zip(self.K, new_k)]; self.V = [np.concatenate([v] + nv, axis=1) for v, nv in zip(self.V, new_v)]; self.pos += new_pos
+
     def select(self, rows):
         rows = list(rows); self.K = [k[:, rows] for k in self.K]; self.V = [v[:, rows] for v in self.V]; self.pos = [self.pos[i] for i in rows]
 
