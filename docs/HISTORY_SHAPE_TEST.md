@@ -189,3 +189,5 @@ In `python/`: `python -m axi.experiments.histshape --out axi_histshape.json` (ab
 
 ## Reproduce
 In `python/`: `python -m axi.experiments.histshape --out axi_histshape.json` (about sixteen minutes on two CPUs; it needs numpy and scikit-learn). The printed digest should be **c30005542a6567da** whatever the machine; the accuracies may differ in the last digits between machines (the trees use floating point), the 13 lines should not move. `tests/test_histshape_result.py` recomputes every figure of this Result from the saved file, replays the 60 walks against the digest, and, with `AXI_HEAVY=1`, runs seed 1 again and compares it with the file.
+
+**Reproduced on a second machine.** The owner ran the same program on a free Colab CPU on 17 Oct 2026 (12.3 minutes; the file is `docs/results/axi_histshape_colab.json`, sha256 `ffff68c56bcdfe427bceadb122523bf1c361189600750c89fc2a2f198f2e284c`). The digest of the 60 walks was `c30005542a6567da`, the same, and every number of that file equals the one in `axi_histshape.json` down to the last digit; only the time differs (739.3 seconds against 977.1). So the 13 lines above read the same on both machines.

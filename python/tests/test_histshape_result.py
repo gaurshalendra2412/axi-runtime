@@ -18,9 +18,11 @@ HERE = os.path.dirname(__file__)
 ROOT = os.path.join(HERE, "..", "..")
 PAGE = os.path.join(ROOT, "docs", "HISTORY_SHAPE_TEST.md")
 RES = os.path.join(ROOT, "docs", "results", "axi_histshape.json")
+RES_COLAB = os.path.join(ROOT, "docs", "results", "axi_histshape_colab.json")
 RESULT_MARK = "\n\n---\n\n# Result"
 PAGE_SHA256 = "df14475473c1e221543d4806fbda5add7e1150b8cfe211b3ed80cf1f611e13af"
 FILE_SHA256 = "ebfa27391bddc3706fb5c1f7f29586c38e12c989075713d6a135b7bd8e8e1f17"
+COLAB_SHA256 = "ffff68c56bcdfe427bceadb122523bf1c361189600750c89fc2a2f198f2e284c"
 DIGEST = "c30005542a6567da"
 PROBS = [98, 99, 70, 93, 80, 90, 30, 45, 95, 55, 40, 65, 2]
 READ = [True] * 6 + [False, False] + [True] * 4 + [False]
@@ -184,9 +186,11 @@ __T4__
 
 ## Reproduce
 In `python/`: `python -m axi.experiments.histshape --out axi_histshape.json` (about sixteen minutes on two CPUs; it needs numpy and scikit-learn). The printed digest should be **__digest__** whatever the machine; the accuracies may differ in the last digits between machines (the trees use floating point), the 13 lines should not move. `tests/test_histshape_result.py` recomputes every figure of this Result from the saved file, replays the 60 walks against the digest, and, with `AXI_HEAVY=1`, runs seed 1 again and compares it with the file.
+
+**Reproduced on a second machine.** The owner ran the same program on a free Colab CPU on 17 Oct 2026 (12.3 minutes; the file is `docs/results/axi_histshape_colab.json`, sha256 `__colab_sha__`). The digest of the 60 walks was `__digest__`, the same, and every number of that file equals the one in `axi_histshape.json` down to the last digit; only the time differs (739.3 seconds against __secs__). So the 13 lines above read the same on both machines.
 """
     for k, v in f.items(): R = R.replace(f"__{k}__", v)
-    R = R.replace("__sha__", sha).replace("__ROWS__", rows).replace("__T1__", "\n".join(table_views(res))).replace("__T2__", "\n".join(table_mode(res))).replace("__T3__", "\n".join(table_next(res))).replace("__T4__", "\n".join(table_beta(res)))
+    R = R.replace("__colab_sha__", hashlib.sha256(open(RES_COLAB, "rb").read()).hexdigest()).replace("__sha__", sha).replace("__ROWS__", rows).replace("__T1__", "\n".join(table_views(res))).replace("__T2__", "\n".join(table_mode(res))).replace("__T3__", "\n".join(table_next(res))).replace("__T4__", "\n".join(table_beta(res)))
     assert "__" not in R.replace("__init__", ""), [w for w in R.split() if "__" in w][:5]
     return R
 
@@ -256,6 +260,13 @@ def test_the_figures_quoted_in_the_result_are_the_ones_in_the_file():
     assert f"{a('B_betti', 'tour_f1'):.3f}" == "0.698" and f"{a('A_window', 'tour_f1'):.3f}" == "0.940" and f"{a('state', 'mode') * 100:.1f} %" == "36.4 %" and f"{a('majority', 'mode') * 100:.1f} %" == "30.3 %" and f"{a('C_hist', 'mode') * 100:.1f} %" == "56.3 %"
     b1 = lambda m: sum(res["runs"][s]["beta1_mean_by_mode"][m] for s in "123") / 3; assert f"{b1('random'):.2f} {b1('tour'):.2f} {b1('drift'):.2f}" == "3.16 1.41 1.00" and "random 3.16, tour 1.41, drift 1.00" in R
     assert "falls short by 25.4 points on MODE and by 36.7 points on NEXT" in R and "87 % of what the best window reader gets" in R
+
+
+def test_the_owners_colab_run_is_the_same_file_as_mine_but_for_the_time():
+    mine = run(); other = json.load(open(RES_COLAB)); assert hashlib.sha256(open(RES_COLAB, "rb").read()).hexdigest() == COLAB_SHA256
+    assert other["seconds"] == 739.3 and mine["seconds"] == 977.1 and other["digest"] == DIGEST and set(other) == set(mine)
+    assert all(other[k] == mine[k] for k in mine if k != "seconds")                                                                                 # every number, down to the last digit
+    assert "reproduced on a second machine" in _text().lower() and "739.3 seconds against 977.1" in _text()
 
 
 FAST = ["test_the_file_is_the_one_the_page_is_about_and_its_numbers_add_up", "test_the_thirteen_rules_read_as_the_page_says_and_the_headline_is_three_no", "test_the_part_above_the_result_is_what_was_written_before_the_run",

@@ -132,10 +132,11 @@ PYTHONPATH=python python3 python/tools/readme_figures.py docs/img
 ## Start reading here
 
 1. [`docs/MILLION_TOKEN_TEST_HARD.md`](docs/MILLION_TOKEN_TEST_HARD.md): the 4,000-step run.
-2. [`docs/VERIFIED.md`](docs/VERIFIED.md): what is measured, what is only checked by tests, and what is **not** measured.
-3. [`docs/EXPERIMENT_RESULTS.md`](docs/EXPERIMENT_RESULTS.md): the earlier Qwen runs.
-4. [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md): other groups working on neighbouring ideas, and what we cannot claim against them.
-5. [`docs/RFC-001.md`](docs/RFC-001.md): the original design note.
+2. [`docs/WHERE_THIS_STANDS.md`](docs/WHERE_THIS_STANDS.md): one page on latency, drift and cost as measured, what is not shown, and where the tensor-level roadmap stands.
+3. [`docs/VERIFIED.md`](docs/VERIFIED.md): what is measured, what is only checked by tests, and what is **not** measured.
+4. [`docs/EXPERIMENT_RESULTS.md`](docs/EXPERIMENT_RESULTS.md): the earlier Qwen runs.
+5. [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md): other groups working on neighbouring ideas, and what we cannot claim against them.
+6. [`docs/RFC-001.md`](docs/RFC-001.md): the original design note.
 
 ## Status
 

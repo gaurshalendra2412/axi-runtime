@@ -64,3 +64,89 @@ Rotary position embeddings (Su et al., 2021); the length-generalisation problem 
 
 ## How it is run
 In `python/`, one seed at a time (so that the three seeds can run on three Colab tabs or accounts): `python -m axi.experiments.toymodel --seeds 1 --out axi_toymodel_seed1.json`, the same with seeds 2 and 3, then `python -m axi.experiments.toymodel --merge axi_toymodel_seed1.json axi_toymodel_seed2.json axi_toymodel_seed3.json --out axi_toymodel.json`. One seed is five trainings of 4,000 steps; I measured 210 to 280 seconds for 2,000 steps of a single arm while other jobs shared the two CPUs of my workspace, so one seed should take about 40 minutes on two CPUs (an estimate, not a measurement). `--quick` runs a few seconds of a tiny sample, to see that it works, not to read. The notebook `python/colab/axi_toy_model.ipynb` does it from a zip with copy-paste cells. The result files are JSON; send them back and this page gets a "Result" section without changing anything above this line.
+
+---
+
+# Result
+
+*Written after the run, below the locked text; nothing above this line has been changed (its hash is checked by `tests/test_toymodel.py` and again by `tests/test_toymodel_result.py`). The owner ran the three seeds on 17 Oct 2026 on Colab CPUs, one seed per run (notebook `python/colab/axi_toy_model.ipynb`), and the three files were put together with `python -m axi.experiments.toymodel --merge`. The result file is `docs/results/axi_toymodel.json` (sha256 `45114a99cdd5b226173433e41e1fef0fe52ba1f7848c8272859425d3d9f1ce81`). The evaluation graphs were the same in all three runs (digest 7170eee401870825, which is also what my workspace makes). The training of one seed (five arms) took 1,793, 1,785 and 1,824 seconds, about 30 minutes, and a whole run about 32 minutes including the evaluation (5,686.5 seconds for the three together); the page had said "about 40 minutes", an estimate. The versions of Python and numpy on the Colab machines were not recorded. Every figure is the mean over the three seeds unless it says otherwise; where it matters the seeds are shown in the order 1 / 2 / 3, because with three seeds a mean can hide a lot. Differences are taken from the unrounded means, so they can differ by 0.1 from the difference of the rounded figures shown.*
+
+*One thing about the run itself, stated so that nobody has to wonder: the first try of Cell 4 in the seed 1 run failed with `ModuleNotFoundError: No module named 'axi.experiments'`, because Cell 3 (which sets the path to the code) had been lost when the tab reconnected; the owner ran Cell 3 again and then Cell 4. Nothing in any figure depends on it; the notebook now sets the path again at the start of Cell 4.*
+
+## The 14 lines
+
+| # | my probability | what was measured | read |
+|---|---|---|---|
+| 1 | 96 % | 15 trainings (3 seeds, 5 arms) of 4,000 steps, the last cross entropy between 9.3e-06 and 1.8e-02, all finite; all 8 sets scored on all their graphs | yes |
+| 2 | 99 % | the sets hold 400, 400, 300, 200, 200, 400, 400, 200 graphs; services per graph 10, 20, 40, 70, 100, 10, 10, 100 (the sixth set on a grid of 100); mean tokens 22.3 (N10) to 288.5 (N100) | yes |
+| 3 | 30 % | lowest exact accuracy on N10: `A_rope1d` 96.1 % (limit 80.0 %); the others 100.0 %, 99.0 %, 96.9 %, 100.0 % | yes |
+| 4 | 96 % | lowest F1 on N10: `A_rope1d` 0.99 (limit: above 0.5) | yes |
+| 5 | 96 % | `A_rope1d` 0.8 % on N100 against 96.1 % on N10 (it had to be at most 48.0 %) | yes |
+| 6 | 12 % | `B_su2` 2.3 % on N100 against 99.0 % on N10 (it had to be at least 79.2 %) | NO |
+| 7 | 18 % | `B_su2` over `A_rope1d` on N100: +1.5 points (it had to be at least +20.0) | NO |
+| 8 | 35 % | `A_rope2d` 76.8 % on N100 against 100.0 % on N10 (it had to be at least 80.0 %; per seed 61.5 / 89.5 / 79.5) | NO |
+| 9 | 10 % | `B_su2` over `A_rope2d` on N100: -74.5 points (it had to be at least +5.0) | NO |
+| 10 | 88 % | share of the squared weight in the penalised blocks: with the penalty `B_su2` 0.0002 %, `A_rope2d_orth` 0.0000 %; without it `A_rope1d` 52.5 %, `A_rope2d` 49.3 %, `B_su2_free` 47.5 % | yes |
+| 11 | 70 % | `B_su2` 0.0672 against `B_su2_free` 0.0912 (per seed 0.0696, 0.0751, 0.0568 against 0.1498, 0.0776, 0.0463; smaller in 2 seeds of three) | yes |
+| 12 | 25 % | on `pay_shift_N10` `B_su2` 84.3 % against `B_su2_free` 66.0 %: +18.3 points (limit +5.0); per seed -5.5 / +29.5 / +31.0 | yes |
+| 13 | 94 % | `A_rope1d` 11.2 % on `range100_n10` against 96.1 % on N10 (it had to be at most 48.0 %) | yes |
+| 14 | 15 % | on N40 `A_rope2d` 98.2 % (N10 100.0 %), `B_su2` 14.8 % (N10 99.0 %, it had to keep 79.2 %) | NO |
+
+**9 of the 14 lines read yes; lines 6, 7, 8, 9 and 14 read NO. Of the three headline lines, 5 reads yes and 6 and 7 read NO, so the roadmap's claim did not come out in this toy.** The page said in advance what the combination "line 5 yes, line 6 NO" means: *"what the roadmap says about "scale invariance" of the Lie-group turn does not hold for this turn: the failure at 100 comes from the construction (a non-abelian turn depends on absolute cells), and the test cannot tell whether a different SU(2) code would do better."* That is what came out, with the same limit: it is the SU(2) turn as I built it that fails, not every spinor code. I put 10 % on all three headline lines reading yes, so the outcome that came out is the one I put at 90 %. The four lines of the instrument read yes. Of the 14 lines, 12 read on the side I favoured; the two exceptions are lines 3 and 12.
+
+## Where my hand numbers were off
+* **Line 3 (30 %) read yes.** Every arm reached at least 80 % exact on the graphs it was trained on; the lowest is `A_rope1d` at 96.1 % (per seed 92.2 / 97.8 / 98.2). I had expected the arm with the coordinate tables to be still short of 80 % after 4,000 steps; it is not. So lines 5, 7 and 13 compare against a model that did learn the task where it was trained, which is what makes them readable.
+* **Line 12 (25 %) read yes on the mean, but not in every seed.** On `pay_shift_N10` (ten services, payload ids never seen in training) `B_su2` gets 84.3 % and `B_su2_free` 66.0 %, +18.3 points; by seed the difference is -5.5 / +29.5 / +31.0 points, so one seed of three goes the other way, and the free arm alone scores 87.2 / 68.2 / 42.5 (percent, seeds 1 / 2 / 3). The mean is real, but the sign is not stable, and the page had said that a yes here "needs a second seed".
+* **Line 11 (70 %) read yes on the mean, with a seed that goes the other way.** The sensitivity of the first attention layer to the payload is 0.0672 for `B_su2` and 0.0912 for `B_su2_free`; per seed 0.0696, 0.0751, 0.0568 against 0.1498, 0.0776, 0.0463. It is smaller for the penalised arm in seeds 1 and 2 (in seed 2 by a hair) and larger in seed 3. The free arm's value changes threefold from seed to seed (0.0463 to 0.1498).
+* **Line 8 (35 %) read NO, by 3.2 points.** The stronger standard baseline `A_rope2d` keeps 76.8 % at N100 of the 100.0 % it has on N10 (per seed 61.5 / 89.5 / 79.5); the bar was 80.0 %. The spread between the seeds (28 points) is bigger than the miss: with other seeds the line could have read yes.
+* **Lines 6, 7, 9 and 14 (12, 18, 10 and 15 %) read NO as I thought, and not by a little.** `B_su2` keeps 2.3 % at N100 (per seed 1.5 / 4.0 / 1.5), where the bar was 79.2 %; it is 74.5 points behind `A_rope2d`.
+
+## The tables
+**Exact accuracy** (the share of graphs in which every service and edge token is right; mean over the three seeds; the all-zero answer is the row under the header):
+
+| arm | N10 | N20 | N40 | N70 | N100 | range100_n10 | pay_shift_N10 | pay_shift_N100 |
+|---|---|---|---|---|---|---|---|---|
+| all-zero answer | 14.0 % | 14.5 % | 15.3 % | 11.5 % | 15.5 % | 13.5 % | 14.5 % | 13.0 % |
+| `A_rope1d` | 96.1 % | 17.3 % | 4.3 % | 0.8 % | 0.8 % | 11.2 % | 55.2 % | 0.8 % |
+| `A_rope2d` | 100.0 % | 99.6 % | 98.2 % | 90.2 % | 76.8 % | 100.0 % | 90.4 % | 39.0 % |
+| `B_su2` | 99.0 % | 51.5 % | 14.8 % | 5.5 % | 2.3 % | 20.7 % | 84.3 % | 1.2 % |
+| `B_su2_free` | 96.9 % | 42.5 % | 14.9 % | 7.2 % | 2.8 % | 23.4 % | 66.0 % | 1.3 % |
+| `A_rope2d_orth` | 100.0 % | 99.8 % | 98.0 % | 83.2 % | 58.7 % | 100.0 % | 98.8 % | 33.8 % |
+
+**By seed, for the two sets the roadmap's claims turn on** (seeds 1 / 2 / 3, exact accuracy in percent):
+
+| arm | N100 | mean | pay_shift_N10 | mean |
+|---|---|---|---|---|
+| `A_rope1d` | 0.0 / 2.5 / 0.0 | 0.8 % | 47.8 / 57.5 / 60.5 | 55.2 % |
+| `A_rope2d` | 61.5 / 89.5 / 79.5 | 76.8 % | 98.5 / 90.8 / 82.0 | 90.4 % |
+| `B_su2` | 1.5 / 4.0 / 1.5 | 2.3 % | 81.8 / 97.8 / 73.5 | 84.3 % |
+| `B_su2_free` | 1.5 / 2.0 / 5.0 | 2.8 % | 87.2 / 68.2 / 42.5 | 66.0 % |
+| `A_rope2d_orth` | 41.5 / 67.0 / 67.5 | 58.7 % | 99.2 / 100.0 / 97.2 | 98.8 % |
+
+**The penalty and the payload, and how the failure at N100 looks** (off-block share: the share of the squared weight of the query and key matrices that sits in the penalised blocks; payload sensitivity by seed; F1 of the positive tokens at N100; the share of graphs at N100 with a false alarm / with a miss):
+
+| arm | off-block share | payload sensitivity (seeds 1, 2, 3) | mean | F1 at N100 | false alarm / miss at N100 |
+|---|---|---|---|---|---|
+| `A_rope1d` | 52.5 % | 0.0278, 0.0198, 0.0235 | 0.0237 | 0.06 | 96.2 % / 84.2 % |
+| `A_rope2d` | 49.3 % | 0.1564, 0.1328, 0.1321 | 0.1404 | 0.95 | 22.7 % / 0.5 % |
+| `B_su2` | 0.0002 % | 0.0696, 0.0751, 0.0568 | 0.0672 | 0.29 | 96.2 % / 64.8 % |
+| `B_su2_free` | 47.5 % | 0.1498, 0.0776, 0.0463 | 0.0912 | 0.35 | 95.5 % / 58.0 % |
+| `A_rope2d_orth` | 0.0000 % | 0.0999, 0.0509, 0.0532 | 0.0680 | 0.88 | 41.0 % / 1.2 % |
+
+The models have 100,929 parameters (107,329 for `A_rope1d`, which has the two tables).
+
+## What I read from it (derived afterwards; none of this was pre-registered)
+1. **The roadmap's comparison, as I built it, has one half that holds and one that does not.** Arm A fails at N100 (0.8 %; per seed 0.0 / 2.5 / 0.0), as the page said it would, by construction. Arm B fails there too (2.3 %; per seed 1.5 / 4.0 / 1.5), at about the same level as Arm A and far below the stronger baseline that the roadmap does not mention, `A_rope2d`, which keeps 76.8 %. In this toy the only arm that carries a good part of what it learned to 100 services is the one whose position code depends on the offset between two cells (76.8 %, with a wide spread between seeds); the spinor arm as I built it does not.
+2. **Where the SU(2) arm breaks.** It already loses about half at N20 (51.5 % against 99.6 % for `A_rope2d`), is at 14.8 % at N40 (`A_rope2d` 98.2 %) and at 5.5 % at N70 (`A_rope2d` 90.2 %). On `range100_n10`, ten services with coordinates up to 99, it gets 20.7 % while `A_rope2d` gets 100.0 % and `A_rope1d` 11.2 %. So the range of the coordinates alone breaks it, which is what the page said a non-abelian turn would do (the score of two cells depends on where they are, not only on how far apart), and its errors at N100 are of both kinds: 96.2 % of the graphs have a false alarm and 64.8 % a miss, F1 0.29; the errors of `A_rope2d` are almost all false alarms (22.7 % of the graphs, against 0.5 % with a miss; F1 0.95). For `A_rope2d` the range costs nothing (100.0 %), so what it loses at N100 comes from the length of the sequence or from the offsets between far cells (wrapping of its fast angles); I did not test those two apart.
+3. **The penalty does what it is built for, and does not help the size.** It empties the penalised blocks (0.0002 % of the squared weight for `B_su2`, against 47.5 % without it). At N100 `B_su2` is 2.3 % and `B_su2_free` 2.8 %; at N20 51.5 % against 42.5 %; at N40 14.8 % against 14.9 %. Put on the axial rotary embedding, the penalty lowers N100 in all three seeds: from 76.8 % (61.5 / 89.5 / 79.5) to 58.7 % (41.5 / 67.0 / 67.5), 18.2 points on average (per seed -20.0 / -22.5 / -12.0).
+4. **The one place where the penalty looks useful is the unfamiliar payload at the trained size.** On `pay_shift_N10` the penalised axial arm is ahead of the unpenalised one in all three seeds (98.8 % against 90.4 %; per seed +0.8 / +9.3 / +15.3 points), and the penalised SU(2) arm is ahead of its free twin on the mean (+18.3 points) though not in seed 1. On `pay_shift_N100`, where everything is low, the order of the axial pair is on the other side on the mean (33.8 % against 39.0 %) and in two seeds of three. This is a small effect on one set, from three seeds, found by looking; it needs a second look with pre-registered lines before anyone calls it a finding.
+5. **"Structural heads that fire independently of the payload" is not what the numbers show.** The penalised arms do have a smaller sensitivity of the first layer to the payload on the mean (0.0672 for `B_su2` and 0.0680 for `A_rope2d_orth`, against 0.0912 for `B_su2_free` and 0.1404 for `A_rope2d`), but it is not zero, it is not smaller in every seed for SU(2), and the lowest value in the table belongs to the roadmap's Arm A (0.0237), which has no penalty. The measure is the first layer only; the second layer and principal components were not measured.
+
+## What this does and does not show about the roadmap's second test
+* **"Arm A will catastrophically fail."** As built it does (0.8 % at N100), and the page said that this is nearly true by construction. With a relative position code, which the roadmap does not mention, there is no catastrophe (76.8 %).
+* **"Arm B will mathematically succeed because Lie group geodesics are scale-invariant."** This did not hold for the SU(2) turn I built (2.3 % at N100, 51.5 % at N20). It does not show that no spinor or Lie-group code can carry the task: the page said the turn is not translation-equivariant and that the test cannot tell; it also said, from memory and unchecked, that Lie-group rotary codes built to be translation-equivariant exist in the literature. This run says nothing about them.
+* **"Its structural attention heads fire entirely independently of semantic payloads."** Only two narrow proxies were measured: the weights in the penalised blocks go to nearly zero (line 10), and the first attention layer moves less with the payload on the mean (line 11), not to zero and not in every seed.
+* **Not done and worth doing:** a translation-equivariant Lie-group code in place of my SU(2) turn; more seeds (the baseline's N100 score is 61.5 / 89.5 / 79.5 percent in the three seeds); a mix of sizes in training; 10 million parameters; a real graph-editing task; the second attention layer and principal components; separating range from length for the axial arms. None of these is implied by this result, either way.
+
+## Reproduce
+In `python/`, one seed at a time: `python -m axi.experiments.toymodel --seeds 1 --out axi_toymodel_seed1.json`, the same with seeds 2 and 3, then `python -m axi.experiments.toymodel --merge axi_toymodel_seed1.json axi_toymodel_seed2.json axi_toymodel_seed3.json --out axi_toymodel.json`; about 32 minutes per seed on the Colab CPUs. `tests/test_toymodel_result.py` recomputes every figure of this Result from the saved result file.

@@ -110,7 +110,8 @@ def torch_runner(model, tok, device: str = "cuda") -> Tuple[Callable, Callable, 
             with torch.no_grad(): return model.lm_head(post[j:j + 1])[0].float().cpu().numpy()
         return dict(h_pre=pre.float().cpu().numpy(), h_post=post.float().cpu().numpy(), logits=logits)
 
-    def unembed(ids): return model.lm_head.weight[torch.tensor(ids, device=model.lm_head.weight.device)].float().cpu().numpy()
+    def unembed(ids):
+        with torch.no_grad(): return model.lm_head.weight[torch.tensor(ids, device=model.lm_head.weight.device)].detach().float().cpu().numpy()
     runner.hook = hook; return runner, prompt_ids_fn, unembed
 
 
