@@ -1,0 +1,6165 @@
+{
+ "arms": [
+  "blind",
+  "gate",
+  "retry",
+  "repair"
+ ],
+ "cells": {
+  "near/0.0": {
+   "episodes": 20,
+   "proposers": {
+    "exact": {
+     "blind": {
+      "by_event": {
+       "none": [
+        20000,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12071,
+        0
+       ],
+       "add_node": [
+        3756,
+        0
+       ],
+       "delete_edge": [
+        649,
+        0
+       ],
+       "delete_pair": [
+        604,
+        0
+       ],
+       "delete_service": [
+        2920,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12843,
+      "route_possible": 12843,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     },
+     "gate": {
+      "by_event": {
+       "none": [
+        20000,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12071,
+        0
+       ],
+       "add_node": [
+        3756,
+        0
+       ],
+       "delete_edge": [
+        649,
+        0
+       ],
+       "delete_pair": [
+        604,
+        0
+       ],
+       "delete_service": [
+        2920,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12843,
+      "route_possible": 12843,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     },
+     "repair": {
+      "by_event": {
+       "none": [
+        20000,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12071,
+        0
+       ],
+       "add_node": [
+        3756,
+        0
+       ],
+       "delete_edge": [
+        649,
+        0
+       ],
+       "delete_pair": [
+        604,
+        0
+       ],
+       "delete_service": [
+        2920,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12843,
+      "route_possible": 12843,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     },
+     "retry": {
+      "by_event": {
+       "none": [
+        20000,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12071,
+        0
+       ],
+       "add_node": [
+        3756,
+        0
+       ],
+       "delete_edge": [
+        649,
+        0
+       ],
+       "delete_pair": [
+        604,
+        0
+       ],
+       "delete_service": [
+        2920,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12843,
+      "route_possible": 12843,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     }
+    },
+    "net": {
+     "blind": {
+      "by_event": {
+       "none": [
+        20000,
+        9733
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12071,
+        5725
+       ],
+       "add_node": [
+        3756,
+        879
+       ],
+       "delete_edge": [
+        649,
+        196
+       ],
+       "delete_pair": [
+        604,
+        530
+       ],
+       "delete_service": [
+        2920,
+        2403
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 19780,
+      "dist_max": 207,
+      "dist_sum": 1856777,
+      "exact": 191,
+      "fresh": 20,
+      "q_dist": [
+       159980,
+       446469,
+       583182,
+       667146
+      ],
+      "q_exact": [
+       191,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 4260,
+      "route_planned": 12666,
+      "route_possible": 12843,
+      "route_unsafe": 9929,
+      "slip": 9733,
+      "start_exact": 211
+     },
+     "gate": {
+      "by_event": {
+       "none": [
+        20000,
+        10066
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12071,
+        6496
+       ],
+       "add_node": [
+        3756,
+        500
+       ],
+       "delete_edge": [
+        649,
+        125
+       ],
+       "delete_pair": [
+        604,
+        534
+       ],
+       "delete_service": [
+        2920,
+        2411
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 177,
+      "dist_sum": 2166742,
+      "exact": 179,
+      "fresh": 20,
+      "q_dist": [
+       295127,
+       555737,
+       632049,
+       683829
+      ],
+      "q_exact": [
+       179,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 4576,
+      "route_planned": 12266,
+      "route_possible": 12843,
+      "route_unsafe": 10303,
+      "slip": 10066,
+      "start_exact": 199
+     },
+     "repair": {
+      "by_event": {
+       "none": [
+        20000,
+        1972
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12071,
+        1381
+       ],
+       "add_node": [
+        3756,
+        27
+       ],
+       "delete_edge": [
+        649,
+        209
+       ],
+       "delete_pair": [
+        604,
+        331
+       ],
+       "delete_service": [
+        2920,
+        24
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 43,
+      "dist_sum": 122775,
+      "exact": 2159,
+      "fresh": 80,
+      "q_dist": [
+       15461,
+       29174,
+       39274,
+       38866
+      ],
+      "q_exact": [
+       1511,
+       352,
+       128,
+       168
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 1772,
+      "route_planned": 11354,
+      "route_possible": 12843,
+      "route_unsafe": 1073,
+      "slip": 1972,
+      "start_exact": 2179
+     },
+     "retry": {
+      "by_event": {
+       "none": [
+        20000,
+        10066
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12071,
+        6496
+       ],
+       "add_node": [
+        3756,
+        500
+       ],
+       "delete_edge": [
+        649,
+        125
+       ],
+       "delete_pair": [
+        604,
+        534
+       ],
+       "delete_service": [
+        2920,
+        2411
+       ]
+      },
+      "calls": 26375,
+      "corrupted": 0,
+      "dist_max": 177,
+      "dist_sum": 2166742,
+      "exact": 179,
+      "fresh": 20,
+      "q_dist": [
+       295127,
+       555737,
+       632049,
+       683829
+      ],
+      "q_exact": [
+       179,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 4576,
+      "route_planned": 12266,
+      "route_possible": 12843,
+      "route_unsafe": 10303,
+      "slip": 10066,
+      "start_exact": 199
+     }
+    }
+   },
+   "regime": "near",
+   "s": 0.0,
+   "world": {
+    "ended": 0,
+    "event_kinds": {},
+    "events": 0,
+    "oracle_corrupted": 0,
+    "oracle_edges": 470008,
+    "oracle_nodes": 357278,
+    "requests": {
+     "add_edge": 12071,
+     "add_node": 3756,
+     "delete_edge": 649,
+     "delete_pair": 604,
+     "delete_service": 2920
+    },
+    "steps": 20000
+   }
+  },
+  "near/0.05": {
+   "episodes": 20,
+   "proposers": {
+    "exact": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        357,
+        49
+       ],
+       "add_node": [
+        126,
+        32
+       ],
+       "drop_edge": [
+        349,
+        0
+       ],
+       "drop_node": [
+        146,
+        91
+       ],
+       "none": [
+        19022,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12240,
+        95
+       ],
+       "add_node": [
+        3698,
+        32
+       ],
+       "delete_edge": [
+        644,
+        0
+       ],
+       "delete_pair": [
+        582,
+        3
+       ],
+       "delete_service": [
+        2836,
+        42
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 4166,
+      "dist_max": 4,
+      "dist_sum": 12569,
+      "exact": 10450,
+      "fresh": 90,
+      "q_dist": [
+       2115,
+       3875,
+       3284,
+       3295
+      ],
+      "q_exact": [
+       3317,
+       2240,
+       2319,
+       2574
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 13097,
+      "route_possible": 13006,
+      "route_unsafe": 230,
+      "slip": 172,
+      "start_exact": 10462
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        357,
+        45
+       ],
+       "add_node": [
+        126,
+        0
+       ],
+       "drop_edge": [
+        349,
+        45
+       ],
+       "drop_node": [
+        146,
+        1
+       ],
+       "none": [
+        19022,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12240,
+        0
+       ],
+       "add_node": [
+        3698,
+        0
+       ],
+       "delete_edge": [
+        644,
+        0
+       ],
+       "delete_pair": [
+        582,
+        6
+       ],
+       "delete_service": [
+        2836,
+        85
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 16,
+      "dist_sum": 34507,
+      "exact": 10961,
+      "fresh": 45,
+      "q_dist": [
+       4970,
+       10333,
+       10338,
+       8866
+      ],
+      "q_exact": [
+       4055,
+       2349,
+       2445,
+       2112
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 13261,
+      "route_possible": 13006,
+      "route_unsafe": 692,
+      "slip": 91,
+      "start_exact": 10973
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        357,
+        0
+       ],
+       "add_node": [
+        126,
+        0
+       ],
+       "drop_edge": [
+        349,
+        0
+       ],
+       "drop_node": [
+        146,
+        0
+       ],
+       "none": [
+        19022,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12240,
+        0
+       ],
+       "add_node": [
+        3698,
+        0
+       ],
+       "delete_edge": [
+        644,
+        0
+       ],
+       "delete_pair": [
+        582,
+        0
+       ],
+       "delete_service": [
+        2836,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 13006,
+      "route_possible": 13006,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        357,
+        0
+       ],
+       "add_node": [
+        126,
+        0
+       ],
+       "drop_edge": [
+        349,
+        0
+       ],
+       "drop_node": [
+        146,
+        0
+       ],
+       "none": [
+        19022,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12240,
+        0
+       ],
+       "add_node": [
+        3698,
+        0
+       ],
+       "delete_edge": [
+        644,
+        0
+       ],
+       "delete_pair": [
+        582,
+        0
+       ],
+       "delete_service": [
+        2836,
+        0
+       ]
+      },
+      "calls": 20251,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 13006,
+      "route_possible": 13006,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     }
+    },
+    "net": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        357,
+        175
+       ],
+       "add_node": [
+        126,
+        73
+       ],
+       "drop_edge": [
+        349,
+        186
+       ],
+       "drop_node": [
+        146,
+        50
+       ],
+       "none": [
+        19022,
+        9419
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12240,
+        6046
+       ],
+       "add_node": [
+        3698,
+        843
+       ],
+       "delete_edge": [
+        644,
+        191
+       ],
+       "delete_pair": [
+        582,
+        503
+       ],
+       "delete_service": [
+        2836,
+        2320
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 19818,
+      "dist_max": 195,
+      "dist_sum": 1691385,
+      "exact": 168,
+      "fresh": 20,
+      "q_dist": [
+       158560,
+       417312,
+       520740,
+       594773
+      ],
+      "q_exact": [
+       168,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 4001,
+      "route_planned": 12952,
+      "route_possible": 13006,
+      "route_unsafe": 10045,
+      "slip": 9903,
+      "start_exact": 188
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        357,
+        180
+       ],
+       "add_node": [
+        126,
+        46
+       ],
+       "drop_edge": [
+        349,
+        175
+       ],
+       "drop_node": [
+        146,
+        4
+       ],
+       "none": [
+        19022,
+        9618
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12240,
+        6572
+       ],
+       "add_node": [
+        3698,
+        422
+       ],
+       "delete_edge": [
+        644,
+        147
+       ],
+       "delete_pair": [
+        582,
+        512
+       ],
+       "delete_service": [
+        2836,
+        2370
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 167,
+      "dist_sum": 2010709,
+      "exact": 144,
+      "fresh": 20,
+      "q_dist": [
+       282111,
+       527071,
+       576344,
+       625183
+      ],
+      "q_exact": [
+       144,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 4199,
+      "route_planned": 12790,
+      "route_possible": 13006,
+      "route_unsafe": 10678,
+      "slip": 10023,
+      "start_exact": 164
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        357,
+        33
+       ],
+       "add_node": [
+        126,
+        8
+       ],
+       "drop_edge": [
+        349,
+        38
+       ],
+       "drop_node": [
+        146,
+        2
+       ],
+       "none": [
+        19022,
+        2120
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12240,
+        1590
+       ],
+       "add_node": [
+        3698,
+        33
+       ],
+       "delete_edge": [
+        644,
+        253
+       ],
+       "delete_pair": [
+        582,
+        290
+       ],
+       "delete_service": [
+        2836,
+        35
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 32,
+      "dist_sum": 134961,
+      "exact": 1670,
+      "fresh": 66,
+      "q_dist": [
+       17635,
+       36587,
+       38666,
+       42073
+      ],
+      "q_exact": [
+       1215,
+       166,
+       195,
+       94
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 1723,
+      "route_planned": 11653,
+      "route_possible": 13006,
+      "route_unsafe": 1345,
+      "slip": 2201,
+      "start_exact": 1690
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        357,
+        179
+       ],
+       "add_node": [
+        126,
+        46
+       ],
+       "drop_edge": [
+        349,
+        173
+       ],
+       "drop_node": [
+        146,
+        4
+       ],
+       "none": [
+        19022,
+        9598
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12240,
+        6549
+       ],
+       "add_node": [
+        3698,
+        427
+       ],
+       "delete_edge": [
+        644,
+        146
+       ],
+       "delete_pair": [
+        582,
+        511
+       ],
+       "delete_service": [
+        2836,
+        2367
+       ]
+      },
+      "calls": 26233,
+      "corrupted": 0,
+      "dist_max": 167,
+      "dist_sum": 2012546,
+      "exact": 144,
+      "fresh": 20,
+      "q_dist": [
+       282233,
+       527796,
+       576399,
+       626118
+      ],
+      "q_exact": [
+       144,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 4226,
+      "route_planned": 12730,
+      "route_possible": 13006,
+      "route_unsafe": 10618,
+      "slip": 10000,
+      "start_exact": 164
+     }
+    }
+   },
+   "regime": "near",
+   "s": 0.05,
+   "world": {
+    "ended": 0,
+    "event_kinds": {
+     "add_edge": 357,
+     "add_node": 126,
+     "drop_edge": 349,
+     "drop_node": 146
+    },
+    "events": 978,
+    "oracle_corrupted": 0,
+    "oracle_edges": 489337,
+    "oracle_nodes": 371224,
+    "requests": {
+     "add_edge": 12240,
+     "add_node": 3698,
+     "delete_edge": 644,
+     "delete_pair": 582,
+     "delete_service": 2836
+    },
+    "steps": 20000
+   }
+  },
+  "near/0.1": {
+   "episodes": 20,
+   "proposers": {
+    "exact": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        627,
+        75
+       ],
+       "add_node": [
+        250,
+        43
+       ],
+       "drop_edge": [
+        708,
+        0
+       ],
+       "drop_node": [
+        278,
+        160
+       ],
+       "none": [
+        18137,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12261,
+        165
+       ],
+       "add_node": [
+        3698,
+        43
+       ],
+       "delete_edge": [
+        631,
+        0
+       ],
+       "delete_pair": [
+        656,
+        11
+       ],
+       "delete_service": [
+        2754,
+        59
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 6272,
+      "dist_max": 5,
+      "dist_sum": 19353,
+      "exact": 7354,
+      "fresh": 114,
+      "q_dist": [
+       4240,
+       5741,
+       5727,
+       3645
+      ],
+      "q_exact": [
+       2050,
+       1404,
+       1490,
+       2410
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12574,
+      "route_possible": 12318,
+      "route_unsafe": 496,
+      "slip": 278,
+      "start_exact": 7364
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        627,
+        69
+       ],
+       "add_node": [
+        250,
+        0
+       ],
+       "drop_edge": [
+        708,
+        71
+       ],
+       "drop_node": [
+        278,
+        11
+       ],
+       "none": [
+        18137,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12261,
+        0
+       ],
+       "add_node": [
+        3698,
+        0
+       ],
+       "delete_edge": [
+        631,
+        0
+       ],
+       "delete_pair": [
+        656,
+        29
+       ],
+       "delete_service": [
+        2754,
+        122
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 25,
+      "dist_sum": 50410,
+      "exact": 7571,
+      "fresh": 55,
+      "q_dist": [
+       6853,
+       15425,
+       14169,
+       13963
+      ],
+      "q_exact": [
+       3272,
+       1422,
+       1361,
+       1516
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12725,
+      "route_possible": 12318,
+      "route_unsafe": 985,
+      "slip": 151,
+      "start_exact": 7585
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        627,
+        0
+       ],
+       "add_node": [
+        250,
+        0
+       ],
+       "drop_edge": [
+        708,
+        0
+       ],
+       "drop_node": [
+        278,
+        0
+       ],
+       "none": [
+        18137,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12261,
+        0
+       ],
+       "add_node": [
+        3698,
+        0
+       ],
+       "delete_edge": [
+        631,
+        0
+       ],
+       "delete_pair": [
+        656,
+        0
+       ],
+       "delete_service": [
+        2754,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12318,
+      "route_possible": 12318,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        627,
+        0
+       ],
+       "add_node": [
+        250,
+        0
+       ],
+       "drop_edge": [
+        708,
+        0
+       ],
+       "drop_node": [
+        278,
+        0
+       ],
+       "none": [
+        18137,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12261,
+        0
+       ],
+       "add_node": [
+        3698,
+        0
+       ],
+       "delete_edge": [
+        631,
+        0
+       ],
+       "delete_pair": [
+        656,
+        0
+       ],
+       "delete_service": [
+        2754,
+        0
+       ]
+      },
+      "calls": 20419,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12318,
+      "route_possible": 12318,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     }
+    },
+    "net": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        627,
+        319
+       ],
+       "add_node": [
+        250,
+        141
+       ],
+       "drop_edge": [
+        708,
+        335
+       ],
+       "drop_node": [
+        278,
+        91
+       ],
+       "none": [
+        18137,
+        9125
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12261,
+        6229
+       ],
+       "add_node": [
+        3698,
+        726
+       ],
+       "delete_edge": [
+        631,
+        190
+       ],
+       "delete_pair": [
+        656,
+        583
+       ],
+       "delete_service": [
+        2754,
+        2283
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 19806,
+      "dist_max": 155,
+      "dist_sum": 1531774,
+      "exact": 173,
+      "fresh": 21,
+      "q_dist": [
+       146370,
+       388538,
+       471734,
+       525132
+      ],
+      "q_exact": [
+       173,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 3511,
+      "route_planned": 13302,
+      "route_possible": 12318,
+      "route_unsafe": 10479,
+      "slip": 10011,
+      "start_exact": 193
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        627,
+        299
+       ],
+       "add_node": [
+        250,
+        116
+       ],
+       "drop_edge": [
+        708,
+        356
+       ],
+       "drop_node": [
+        278,
+        16
+       ],
+       "none": [
+        18137,
+        9242
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12261,
+        6599
+       ],
+       "add_node": [
+        3698,
+        370
+       ],
+       "delete_edge": [
+        631,
+        160
+       ],
+       "delete_pair": [
+        656,
+        604
+       ],
+       "delete_service": [
+        2754,
+        2296
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 171,
+      "dist_sum": 1907139,
+      "exact": 162,
+      "fresh": 20,
+      "q_dist": [
+       263523,
+       507116,
+       554449,
+       582051
+      ],
+      "q_exact": [
+       162,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 3809,
+      "route_planned": 12818,
+      "route_possible": 12318,
+      "route_unsafe": 10740,
+      "slip": 10029,
+      "start_exact": 182
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        627,
+        60
+       ],
+       "add_node": [
+        250,
+        21
+       ],
+       "drop_edge": [
+        708,
+        60
+       ],
+       "drop_node": [
+        278,
+        3
+       ],
+       "none": [
+        18137,
+        1828
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12261,
+        1369
+       ],
+       "add_node": [
+        3698,
+        18
+       ],
+       "delete_edge": [
+        631,
+        242
+       ],
+       "delete_pair": [
+        656,
+        322
+       ],
+       "delete_service": [
+        2754,
+        21
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 29,
+      "dist_sum": 116413,
+      "exact": 2347,
+      "fresh": 79,
+      "q_dist": [
+       11049,
+       29137,
+       34267,
+       41960
+      ],
+      "q_exact": [
+       1782,
+       366,
+       96,
+       103
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 1626,
+      "route_planned": 11059,
+      "route_possible": 12318,
+      "route_unsafe": 1355,
+      "slip": 1972,
+      "start_exact": 2365
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        627,
+        296
+       ],
+       "add_node": [
+        250,
+        119
+       ],
+       "drop_edge": [
+        708,
+        357
+       ],
+       "drop_node": [
+        278,
+        15
+       ],
+       "none": [
+        18137,
+        9357
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12261,
+        6715
+       ],
+       "add_node": [
+        3698,
+        360
+       ],
+       "delete_edge": [
+        631,
+        157
+       ],
+       "delete_pair": [
+        656,
+        608
+       ],
+       "delete_service": [
+        2754,
+        2304
+       ]
+      },
+      "calls": 26488,
+      "corrupted": 0,
+      "dist_max": 171,
+      "dist_sum": 1900788,
+      "exact": 162,
+      "fresh": 20,
+      "q_dist": [
+       263229,
+       504788,
+       552127,
+       580644
+      ],
+      "q_exact": [
+       162,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 3682,
+      "route_planned": 12989,
+      "route_possible": 12318,
+      "route_unsafe": 10890,
+      "slip": 10144,
+      "start_exact": 182
+     }
+    }
+   },
+   "regime": "near",
+   "s": 0.1,
+   "world": {
+    "ended": 0,
+    "event_kinds": {
+     "add_edge": 627,
+     "add_node": 250,
+     "drop_edge": 708,
+     "drop_node": 278
+    },
+    "events": 1863,
+    "oracle_corrupted": 0,
+    "oracle_edges": 441865,
+    "oracle_nodes": 373261,
+    "requests": {
+     "add_edge": 12261,
+     "add_node": 3698,
+     "delete_edge": 631,
+     "delete_pair": 656,
+     "delete_service": 2754
+    },
+    "steps": 20000
+   }
+  },
+  "near/0.2": {
+   "episodes": 20,
+   "proposers": {
+    "exact": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        1329,
+        209
+       ],
+       "add_node": [
+        515,
+        94
+       ],
+       "drop_edge": [
+        1398,
+        0
+       ],
+       "drop_node": [
+        623,
+        389
+       ],
+       "none": [
+        16135,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12225,
+        398
+       ],
+       "add_node": [
+        3751,
+        94
+       ],
+       "delete_edge": [
+        646,
+        0
+       ],
+       "delete_pair": [
+        676,
+        17
+       ],
+       "delete_service": [
+        2702,
+        183
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 11853,
+      "dist_max": 9,
+      "dist_sum": 43661,
+      "exact": 2725,
+      "fresh": 96,
+      "q_dist": [
+       7074,
+       12410,
+       11947,
+       12230
+      ],
+      "q_exact": [
+       1278,
+       426,
+       590,
+       431
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 11877,
+      "route_possible": 11253,
+      "route_unsafe": 1182,
+      "slip": 692,
+      "start_exact": 2744
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        1329,
+        199
+       ],
+       "add_node": [
+        515,
+        0
+       ],
+       "drop_edge": [
+        1398,
+        172
+       ],
+       "drop_node": [
+        623,
+        14
+       ],
+       "none": [
+        16135,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12225,
+        0
+       ],
+       "add_node": [
+        3751,
+        0
+       ],
+       "delete_edge": [
+        646,
+        0
+       ],
+       "delete_pair": [
+        676,
+        57
+       ],
+       "delete_service": [
+        2702,
+        328
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 36,
+      "dist_sum": 132416,
+      "exact": 1806,
+      "fresh": 39,
+      "q_dist": [
+       20841,
+       34970,
+       39898,
+       36707
+      ],
+      "q_exact": [
+       1073,
+       380,
+       176,
+       177
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12576,
+      "route_possible": 11253,
+      "route_unsafe": 2743,
+      "slip": 385,
+      "start_exact": 1826
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        1329,
+        0
+       ],
+       "add_node": [
+        515,
+        0
+       ],
+       "drop_edge": [
+        1398,
+        0
+       ],
+       "drop_node": [
+        623,
+        0
+       ],
+       "none": [
+        16135,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12225,
+        0
+       ],
+       "add_node": [
+        3751,
+        0
+       ],
+       "delete_edge": [
+        646,
+        0
+       ],
+       "delete_pair": [
+        676,
+        0
+       ],
+       "delete_service": [
+        2702,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 11253,
+      "route_possible": 11253,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        1329,
+        0
+       ],
+       "add_node": [
+        515,
+        0
+       ],
+       "drop_edge": [
+        1398,
+        0
+       ],
+       "drop_node": [
+        623,
+        0
+       ],
+       "none": [
+        16135,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12225,
+        0
+       ],
+       "add_node": [
+        3751,
+        0
+       ],
+       "delete_edge": [
+        646,
+        0
+       ],
+       "delete_pair": [
+        676,
+        0
+       ],
+       "delete_service": [
+        2702,
+        0
+       ]
+      },
+      "calls": 21024,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 11253,
+      "route_possible": 11253,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     }
+    },
+    "net": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        1329,
+        660
+       ],
+       "add_node": [
+        515,
+        300
+       ],
+       "drop_edge": [
+        1398,
+        678
+       ],
+       "drop_node": [
+        623,
+        223
+       ],
+       "none": [
+        16135,
+        7571
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12225,
+        5753
+       ],
+       "add_node": [
+        3751,
+        567
+       ],
+       "delete_edge": [
+        646,
+        197
+       ],
+       "delete_pair": [
+        676,
+        626
+       ],
+       "delete_service": [
+        2702,
+        2289
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 19875,
+      "dist_max": 124,
+      "dist_sum": 1184194,
+      "exact": 108,
+      "fresh": 21,
+      "q_dist": [
+       131780,
+       313219,
+       368023,
+       371172
+      ],
+      "q_exact": [
+       108,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 2296,
+      "route_planned": 14358,
+      "route_possible": 11253,
+      "route_unsafe": 11071,
+      "slip": 9432,
+      "start_exact": 128
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        1329,
+        619
+       ],
+       "add_node": [
+        515,
+        233
+       ],
+       "drop_edge": [
+        1398,
+        645
+       ],
+       "drop_node": [
+        623,
+        18
+       ],
+       "none": [
+        16135,
+        7530
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12225,
+        5711
+       ],
+       "add_node": [
+        3751,
+        367
+       ],
+       "delete_edge": [
+        646,
+        184
+       ],
+       "delete_pair": [
+        676,
+        608
+       ],
+       "delete_service": [
+        2702,
+        2175
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 139,
+      "dist_sum": 1554518,
+      "exact": 118,
+      "fresh": 20,
+      "q_dist": [
+       231405,
+       418067,
+       451545,
+       453501
+      ],
+      "q_exact": [
+       118,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 3204,
+      "route_planned": 12806,
+      "route_possible": 11253,
+      "route_unsafe": 10385,
+      "slip": 9045,
+      "start_exact": 138
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        1329,
+        133
+       ],
+       "add_node": [
+        515,
+        41
+       ],
+       "drop_edge": [
+        1398,
+        118
+       ],
+       "drop_node": [
+        623,
+        2
+       ],
+       "none": [
+        16135,
+        1509
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12225,
+        1231
+       ],
+       "add_node": [
+        3751,
+        30
+       ],
+       "delete_edge": [
+        646,
+        208
+       ],
+       "delete_pair": [
+        676,
+        316
+       ],
+       "delete_service": [
+        2702,
+        18
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 23,
+      "dist_sum": 94657,
+      "exact": 2637,
+      "fresh": 91,
+      "q_dist": [
+       14278,
+       23874,
+       27454,
+       29051
+      ],
+      "q_exact": [
+       1752,
+       321,
+       380,
+       184
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 1431,
+      "route_planned": 10271,
+      "route_possible": 11253,
+      "route_unsafe": 1235,
+      "slip": 1803,
+      "start_exact": 2657
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        1329,
+        626
+       ],
+       "add_node": [
+        515,
+        232
+       ],
+       "drop_edge": [
+        1398,
+        636
+       ],
+       "drop_node": [
+        623,
+        17
+       ],
+       "none": [
+        16135,
+        7530
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12225,
+        5707
+       ],
+       "add_node": [
+        3751,
+        370
+       ],
+       "delete_edge": [
+        646,
+        183
+       ],
+       "delete_pair": [
+        676,
+        609
+       ],
+       "delete_service": [
+        2702,
+        2172
+       ]
+      },
+      "calls": 26279,
+      "corrupted": 0,
+      "dist_max": 139,
+      "dist_sum": 1558936,
+      "exact": 151,
+      "fresh": 20,
+      "q_dist": [
+       228854,
+       418391,
+       454214,
+       457477
+      ],
+      "q_exact": [
+       151,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 3221,
+      "route_planned": 12789,
+      "route_possible": 11253,
+      "route_unsafe": 10341,
+      "slip": 9041,
+      "start_exact": 171
+     }
+    }
+   },
+   "regime": "near",
+   "s": 0.2,
+   "world": {
+    "ended": 0,
+    "event_kinds": {
+     "add_edge": 1329,
+     "add_node": 515,
+     "drop_edge": 1398,
+     "drop_node": 623
+    },
+    "events": 3865,
+    "oracle_corrupted": 0,
+    "oracle_edges": 398767,
+    "oracle_nodes": 373828,
+    "requests": {
+     "add_edge": 12225,
+     "add_node": 3751,
+     "delete_edge": 646,
+     "delete_pair": 676,
+     "delete_service": 2702
+    },
+    "steps": 20000
+   }
+  },
+  "near/0.4": {
+   "episodes": 20,
+   "proposers": {
+    "exact": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        2880,
+        435
+       ],
+       "add_node": [
+        1069,
+        186
+       ],
+       "drop_edge": [
+        2802,
+        0
+       ],
+       "drop_node": [
+        1133,
+        715
+       ],
+       "none": [
+        12116,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12484,
+        740
+       ],
+       "add_node": [
+        3635,
+        186
+       ],
+       "delete_edge": [
+        610,
+        0
+       ],
+       "delete_pair": [
+        624,
+        33
+       ],
+       "delete_service": [
+        2647,
+        377
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 16429,
+      "dist_max": 12,
+      "dist_sum": 79555,
+      "exact": 698,
+      "fresh": 47,
+      "q_dist": [
+       12901,
+       22728,
+       22825,
+       21101
+      ],
+      "q_exact": [
+       514,
+       91,
+       55,
+       38
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 11307,
+      "route_possible": 10092,
+      "route_unsafe": 2103,
+      "slip": 1336,
+      "start_exact": 717
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        2880,
+        408
+       ],
+       "add_node": [
+        1069,
+        0
+       ],
+       "drop_edge": [
+        2802,
+        316
+       ],
+       "drop_node": [
+        1133,
+        26
+       ],
+       "none": [
+        12116,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12484,
+        0
+       ],
+       "add_node": [
+        3635,
+        0
+       ],
+       "delete_edge": [
+        610,
+        0
+       ],
+       "delete_pair": [
+        624,
+        101
+       ],
+       "delete_service": [
+        2647,
+        649
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 44,
+      "dist_sum": 240359,
+      "exact": 627,
+      "fresh": 23,
+      "q_dist": [
+       39342,
+       63714,
+       70255,
+       67048
+      ],
+      "q_exact": [
+       623,
+       4,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12882,
+      "route_possible": 10092,
+      "route_unsafe": 5015,
+      "slip": 750,
+      "start_exact": 647
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        2880,
+        0
+       ],
+       "add_node": [
+        1069,
+        0
+       ],
+       "drop_edge": [
+        2802,
+        0
+       ],
+       "drop_node": [
+        1133,
+        0
+       ],
+       "none": [
+        12116,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12484,
+        0
+       ],
+       "add_node": [
+        3635,
+        0
+       ],
+       "delete_edge": [
+        610,
+        0
+       ],
+       "delete_pair": [
+        624,
+        0
+       ],
+       "delete_service": [
+        2647,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 10092,
+      "route_possible": 10092,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        2880,
+        0
+       ],
+       "add_node": [
+        1069,
+        0
+       ],
+       "drop_edge": [
+        2802,
+        0
+       ],
+       "drop_node": [
+        1133,
+        0
+       ],
+       "none": [
+        12116,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12484,
+        0
+       ],
+       "add_node": [
+        3635,
+        0
+       ],
+       "delete_edge": [
+        610,
+        0
+       ],
+       "delete_pair": [
+        624,
+        0
+       ],
+       "delete_service": [
+        2647,
+        0
+       ]
+      },
+      "calls": 21910,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 10092,
+      "route_possible": 10092,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     }
+    },
+    "net": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        2880,
+        1327
+       ],
+       "add_node": [
+        1069,
+        614
+       ],
+       "drop_edge": [
+        2802,
+        1287
+       ],
+       "drop_node": [
+        1133,
+        441
+       ],
+       "none": [
+        12116,
+        5481
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12484,
+        5523
+       ],
+       "add_node": [
+        3635,
+        563
+       ],
+       "delete_edge": [
+        610,
+        234
+       ],
+       "delete_pair": [
+        624,
+        577
+       ],
+       "delete_service": [
+        2647,
+        2253
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 19861,
+      "dist_max": 101,
+      "dist_sum": 973461,
+      "exact": 96,
+      "fresh": 21,
+      "q_dist": [
+       117268,
+       263723,
+       290930,
+       301540
+      ],
+      "q_exact": [
+       96,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 1625,
+      "route_planned": 14855,
+      "route_possible": 10092,
+      "route_unsafe": 11761,
+      "slip": 9150,
+      "start_exact": 116
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        2880,
+        1356
+       ],
+       "add_node": [
+        1069,
+        462
+       ],
+       "drop_edge": [
+        2802,
+        1363
+       ],
+       "drop_node": [
+        1133,
+        41
+       ],
+       "none": [
+        12116,
+        5665
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12484,
+        5690
+       ],
+       "add_node": [
+        3635,
+        229
+       ],
+       "delete_edge": [
+        610,
+        204
+       ],
+       "delete_pair": [
+        624,
+        567
+       ],
+       "delete_service": [
+        2647,
+        2197
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 129,
+      "dist_sum": 1317014,
+      "exact": 170,
+      "fresh": 20,
+      "q_dist": [
+       192764,
+       357148,
+       382158,
+       384944
+      ],
+      "q_exact": [
+       170,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 2258,
+      "route_planned": 13455,
+      "route_possible": 10092,
+      "route_unsafe": 10930,
+      "slip": 8887,
+      "start_exact": 190
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        2880,
+        225
+       ],
+       "add_node": [
+        1069,
+        86
+       ],
+       "drop_edge": [
+        2802,
+        238
+       ],
+       "drop_node": [
+        1133,
+        5
+       ],
+       "none": [
+        12116,
+        1132
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12484,
+        1111
+       ],
+       "add_node": [
+        3635,
+        9
+       ],
+       "delete_edge": [
+        610,
+        238
+       ],
+       "delete_pair": [
+        624,
+        319
+       ],
+       "delete_service": [
+        2647,
+        9
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 22,
+      "dist_sum": 69328,
+      "exact": 3263,
+      "fresh": 120,
+      "q_dist": [
+       7975,
+       20525,
+       18483,
+       22345
+      ],
+      "q_exact": [
+       2035,
+       392,
+       484,
+       352
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 1053,
+      "route_planned": 9553,
+      "route_possible": 10092,
+      "route_unsafe": 1228,
+      "slip": 1686,
+      "start_exact": 3280
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        2880,
+        1336
+       ],
+       "add_node": [
+        1069,
+        457
+       ],
+       "drop_edge": [
+        2802,
+        1361
+       ],
+       "drop_node": [
+        1133,
+        41
+       ],
+       "none": [
+        12116,
+        5632
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12484,
+        5625
+       ],
+       "add_node": [
+        3635,
+        232
+       ],
+       "delete_edge": [
+        610,
+        205
+       ],
+       "delete_pair": [
+        624,
+        569
+       ],
+       "delete_service": [
+        2647,
+        2196
+       ]
+      },
+      "calls": 26067,
+      "corrupted": 0,
+      "dist_max": 129,
+      "dist_sum": 1318347,
+      "exact": 170,
+      "fresh": 20,
+      "q_dist": [
+       192553,
+       356140,
+       382146,
+       387508
+      ],
+      "q_exact": [
+       170,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 2206,
+      "route_planned": 13568,
+      "route_possible": 10092,
+      "route_unsafe": 10998,
+      "slip": 8827,
+      "start_exact": 190
+     }
+    }
+   },
+   "regime": "near",
+   "s": 0.4,
+   "world": {
+    "ended": 0,
+    "event_kinds": {
+     "add_edge": 2880,
+     "add_node": 1069,
+     "drop_edge": 2802,
+     "drop_node": 1133
+    },
+    "events": 7884,
+    "oracle_corrupted": 0,
+    "oracle_edges": 364926,
+    "oracle_nodes": 386065,
+    "requests": {
+     "add_edge": 12484,
+     "add_node": 3635,
+     "delete_edge": 610,
+     "delete_pair": 624,
+     "delete_service": 2647
+    },
+    "steps": 20000
+   }
+  },
+  "uniform/0.0": {
+   "episodes": 20,
+   "proposers": {
+    "exact": {
+     "blind": {
+      "by_event": {
+       "none": [
+        20000,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12102,
+        0
+       ],
+       "add_node": [
+        3766,
+        0
+       ],
+       "delete_edge": [
+        633,
+        0
+       ],
+       "delete_pair": [
+        613,
+        0
+       ],
+       "delete_service": [
+        2886,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 13118,
+      "route_possible": 13118,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     },
+     "gate": {
+      "by_event": {
+       "none": [
+        20000,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12102,
+        0
+       ],
+       "add_node": [
+        3766,
+        0
+       ],
+       "delete_edge": [
+        633,
+        0
+       ],
+       "delete_pair": [
+        613,
+        0
+       ],
+       "delete_service": [
+        2886,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 13118,
+      "route_possible": 13118,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     },
+     "repair": {
+      "by_event": {
+       "none": [
+        20000,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12102,
+        0
+       ],
+       "add_node": [
+        3766,
+        0
+       ],
+       "delete_edge": [
+        633,
+        0
+       ],
+       "delete_pair": [
+        613,
+        0
+       ],
+       "delete_service": [
+        2886,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 13118,
+      "route_possible": 13118,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     },
+     "retry": {
+      "by_event": {
+       "none": [
+        20000,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12102,
+        0
+       ],
+       "add_node": [
+        3766,
+        0
+       ],
+       "delete_edge": [
+        633,
+        0
+       ],
+       "delete_pair": [
+        613,
+        0
+       ],
+       "delete_service": [
+        2886,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 13118,
+      "route_possible": 13118,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     }
+    },
+    "net": {
+     "blind": {
+      "by_event": {
+       "none": [
+        20000,
+        10091
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12102,
+        5908
+       ],
+       "add_node": [
+        3766,
+        1125
+       ],
+       "delete_edge": [
+        633,
+        178
+       ],
+       "delete_pair": [
+        613,
+        542
+       ],
+       "delete_service": [
+        2886,
+        2338
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 19800,
+      "dist_max": 185,
+      "dist_sum": 1951527,
+      "exact": 174,
+      "fresh": 20,
+      "q_dist": [
+       164392,
+       463548,
+       615593,
+       707994
+      ],
+      "q_exact": [
+       174,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 4446,
+      "route_planned": 12490,
+      "route_possible": 13118,
+      "route_unsafe": 9452,
+      "slip": 10091,
+      "start_exact": 194
+     },
+     "gate": {
+      "by_event": {
+       "none": [
+        20000,
+        10071
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12102,
+        6624
+       ],
+       "add_node": [
+        3766,
+        469
+       ],
+       "delete_edge": [
+        633,
+        121
+       ],
+       "delete_pair": [
+        613,
+        530
+       ],
+       "delete_service": [
+        2886,
+        2327
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 178,
+      "dist_sum": 2137712,
+      "exact": 168,
+      "fresh": 20,
+      "q_dist": [
+       294098,
+       544141,
+       621482,
+       677991
+      ],
+      "q_exact": [
+       168,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 4693,
+      "route_planned": 12219,
+      "route_possible": 13118,
+      "route_unsafe": 10110,
+      "slip": 10071,
+      "start_exact": 188
+     },
+     "repair": {
+      "by_event": {
+       "none": [
+        20000,
+        2168
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12102,
+        1574
+       ],
+       "add_node": [
+        3766,
+        37
+       ],
+       "delete_edge": [
+        633,
+        215
+       ],
+       "delete_pair": [
+        613,
+        314
+       ],
+       "delete_service": [
+        2886,
+        28
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 35,
+      "dist_sum": 139119,
+      "exact": 2310,
+      "fresh": 74,
+      "q_dist": [
+       15424,
+       39099,
+       41066,
+       43530
+      ],
+      "q_exact": [
+       1698,
+       254,
+       253,
+       105
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 1910,
+      "route_planned": 11547,
+      "route_possible": 13118,
+      "route_unsafe": 1218,
+      "slip": 2168,
+      "start_exact": 2330
+     },
+     "retry": {
+      "by_event": {
+       "none": [
+        20000,
+        10071
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12102,
+        6624
+       ],
+       "add_node": [
+        3766,
+        469
+       ],
+       "delete_edge": [
+        633,
+        121
+       ],
+       "delete_pair": [
+        613,
+        530
+       ],
+       "delete_service": [
+        2886,
+        2327
+       ]
+      },
+      "calls": 26129,
+      "corrupted": 0,
+      "dist_max": 178,
+      "dist_sum": 2137712,
+      "exact": 168,
+      "fresh": 20,
+      "q_dist": [
+       294098,
+       544141,
+       621482,
+       677991
+      ],
+      "q_exact": [
+       168,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 4693,
+      "route_planned": 12219,
+      "route_possible": 13118,
+      "route_unsafe": 10110,
+      "slip": 10071,
+      "start_exact": 188
+     }
+    }
+   },
+   "regime": "uniform",
+   "s": 0.0,
+   "world": {
+    "ended": 0,
+    "event_kinds": {},
+    "events": 0,
+    "oracle_corrupted": 0,
+    "oracle_edges": 481656,
+    "oracle_nodes": 362489,
+    "requests": {
+     "add_edge": 12102,
+     "add_node": 3766,
+     "delete_edge": 633,
+     "delete_pair": 613,
+     "delete_service": 2886
+    },
+    "steps": 20000
+   }
+  },
+  "uniform/0.05": {
+   "episodes": 20,
+   "proposers": {
+    "exact": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        338,
+        5
+       ],
+       "add_node": [
+        134,
+        5
+       ],
+       "drop_edge": [
+        391,
+        0
+       ],
+       "drop_node": [
+        159,
+        8
+       ],
+       "none": [
+        18978,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12139,
+        8
+       ],
+       "add_node": [
+        3738,
+        5
+       ],
+       "delete_edge": [
+        654,
+        0
+       ],
+       "delete_pair": [
+        584,
+        1
+       ],
+       "delete_service": [
+        2885,
+        4
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 461,
+      "dist_max": 2,
+      "dist_sum": 1047,
+      "exact": 18976,
+      "fresh": 17,
+      "q_dist": [
+       325,
+       258,
+       243,
+       221
+      ],
+      "q_exact": [
+       4698,
+       4742,
+       4757,
+       4779
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12810,
+      "route_possible": 12804,
+      "route_unsafe": 29,
+      "slip": 18,
+      "start_exact": 18976
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        338,
+        5
+       ],
+       "add_node": [
+        134,
+        0
+       ],
+       "drop_edge": [
+        391,
+        8
+       ],
+       "drop_node": [
+        159,
+        3
+       ],
+       "none": [
+        18978,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12139,
+        0
+       ],
+       "add_node": [
+        3738,
+        0
+       ],
+       "delete_edge": [
+        654,
+        0
+       ],
+       "delete_pair": [
+        584,
+        6
+       ],
+       "delete_service": [
+        2885,
+        10
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 9,
+      "dist_sum": 5263,
+      "exact": 17946,
+      "fresh": 14,
+      "q_dist": [
+       528,
+       1522,
+       1689,
+       1524
+      ],
+      "q_exact": [
+       4802,
+       4300,
+       4471,
+       4373
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12863,
+      "route_possible": 12804,
+      "route_unsafe": 163,
+      "slip": 16,
+      "start_exact": 17947
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        338,
+        0
+       ],
+       "add_node": [
+        134,
+        0
+       ],
+       "drop_edge": [
+        391,
+        0
+       ],
+       "drop_node": [
+        159,
+        0
+       ],
+       "none": [
+        18978,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12139,
+        0
+       ],
+       "add_node": [
+        3738,
+        0
+       ],
+       "delete_edge": [
+        654,
+        0
+       ],
+       "delete_pair": [
+        584,
+        0
+       ],
+       "delete_service": [
+        2885,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12804,
+      "route_possible": 12804,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        338,
+        0
+       ],
+       "add_node": [
+        134,
+        0
+       ],
+       "drop_edge": [
+        391,
+        0
+       ],
+       "drop_node": [
+        159,
+        0
+       ],
+       "none": [
+        18978,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12139,
+        0
+       ],
+       "add_node": [
+        3738,
+        0
+       ],
+       "delete_edge": [
+        654,
+        0
+       ],
+       "delete_pair": [
+        584,
+        0
+       ],
+       "delete_service": [
+        2885,
+        0
+       ]
+      },
+      "calls": 20035,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12804,
+      "route_possible": 12804,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     }
+    },
+    "net": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        338,
+        161
+       ],
+       "add_node": [
+        134,
+        70
+       ],
+       "drop_edge": [
+        391,
+        190
+       ],
+       "drop_node": [
+        159,
+        77
+       ],
+       "none": [
+        18978,
+        9455
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12139,
+        6066
+       ],
+       "add_node": [
+        3738,
+        811
+       ],
+       "delete_edge": [
+        654,
+        190
+       ],
+       "delete_pair": [
+        584,
+        510
+       ],
+       "delete_service": [
+        2885,
+        2376
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 19824,
+      "dist_max": 170,
+      "dist_sum": 1689218,
+      "exact": 122,
+      "fresh": 21,
+      "q_dist": [
+       155446,
+       419325,
+       527621,
+       586826
+      ],
+      "q_exact": [
+       122,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 4124,
+      "route_planned": 12625,
+      "route_possible": 12804,
+      "route_unsafe": 9948,
+      "slip": 9953,
+      "start_exact": 142
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        338,
+        179
+       ],
+       "add_node": [
+        134,
+        62
+       ],
+       "drop_edge": [
+        391,
+        209
+       ],
+       "drop_node": [
+        159,
+        62
+       ],
+       "none": [
+        18978,
+        9520
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12139,
+        6526
+       ],
+       "add_node": [
+        3738,
+        436
+       ],
+       "delete_edge": [
+        654,
+        151
+       ],
+       "delete_pair": [
+        584,
+        520
+       ],
+       "delete_service": [
+        2885,
+        2399
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 163,
+      "dist_sum": 2023941,
+      "exact": 106,
+      "fresh": 20,
+      "q_dist": [
+       286117,
+       538520,
+       590340,
+       608964
+      ],
+      "q_exact": [
+       106,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 4250,
+      "route_planned": 12716,
+      "route_possible": 12804,
+      "route_unsafe": 10674,
+      "slip": 10032,
+      "start_exact": 126
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        338,
+        47
+       ],
+       "add_node": [
+        134,
+        8
+       ],
+       "drop_edge": [
+        391,
+        54
+       ],
+       "drop_node": [
+        159,
+        15
+       ],
+       "none": [
+        18978,
+        2060
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12139,
+        1575
+       ],
+       "add_node": [
+        3738,
+        28
+       ],
+       "delete_edge": [
+        654,
+        235
+       ],
+       "delete_pair": [
+        584,
+        314
+       ],
+       "delete_service": [
+        2885,
+        32
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 33,
+      "dist_sum": 136517,
+      "exact": 2209,
+      "fresh": 73,
+      "q_dist": [
+       16373,
+       35399,
+       41931,
+       42814
+      ],
+      "q_exact": [
+       1595,
+       273,
+       210,
+       131
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 1827,
+      "route_planned": 11323,
+      "route_possible": 12804,
+      "route_unsafe": 1319,
+      "slip": 2184,
+      "start_exact": 2229
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        338,
+        178
+       ],
+       "add_node": [
+        134,
+        64
+       ],
+       "drop_edge": [
+        391,
+        206
+       ],
+       "drop_node": [
+        159,
+        61
+       ],
+       "none": [
+        18978,
+        9564
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12139,
+        6576
+       ],
+       "add_node": [
+        3738,
+        426
+       ],
+       "delete_edge": [
+        654,
+        148
+       ],
+       "delete_pair": [
+        584,
+        520
+       ],
+       "delete_service": [
+        2885,
+        2403
+       ]
+      },
+      "calls": 26220,
+      "corrupted": 0,
+      "dist_max": 168,
+      "dist_sum": 2025309,
+      "exact": 108,
+      "fresh": 20,
+      "q_dist": [
+       286009,
+       538038,
+       591013,
+       610249
+      ],
+      "q_exact": [
+       108,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 4190,
+      "route_planned": 12793,
+      "route_possible": 12804,
+      "route_unsafe": 10744,
+      "slip": 10073,
+      "start_exact": 128
+     }
+    }
+   },
+   "regime": "uniform",
+   "s": 0.05,
+   "world": {
+    "ended": 0,
+    "event_kinds": {
+     "add_edge": 338,
+     "add_node": 134,
+     "drop_edge": 391,
+     "drop_node": 159
+    },
+    "events": 1022,
+    "oracle_corrupted": 0,
+    "oracle_edges": 489647,
+    "oracle_nodes": 378399,
+    "requests": {
+     "add_edge": 12139,
+     "add_node": 3738,
+     "delete_edge": 654,
+     "delete_pair": 584,
+     "delete_service": 2885
+    },
+    "steps": 20000
+   }
+  },
+  "uniform/0.1": {
+   "episodes": 20,
+   "proposers": {
+    "exact": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        667,
+        19
+       ],
+       "add_node": [
+        237,
+        5
+       ],
+       "drop_edge": [
+        673,
+        0
+       ],
+       "drop_node": [
+        288,
+        22
+       ],
+       "none": [
+        18135,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12099,
+        26
+       ],
+       "add_node": [
+        3772,
+        5
+       ],
+       "delete_edge": [
+        639,
+        0
+       ],
+       "delete_pair": [
+        664,
+        4
+       ],
+       "delete_service": [
+        2826,
+        11
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 765,
+      "dist_max": 2,
+      "dist_sum": 2039,
+      "exact": 18011,
+      "fresh": 42,
+      "q_dist": [
+       593,
+       879,
+       548,
+       19
+      ],
+      "q_exact": [
+       4412,
+       4121,
+       4497,
+       4981
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12110,
+      "route_possible": 12097,
+      "route_unsafe": 42,
+      "slip": 46,
+      "start_exact": 18011
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        667,
+        15
+       ],
+       "add_node": [
+        237,
+        0
+       ],
+       "drop_edge": [
+        673,
+        20
+       ],
+       "drop_node": [
+        288,
+        5
+       ],
+       "none": [
+        18135,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12099,
+        0
+       ],
+       "add_node": [
+        3772,
+        0
+       ],
+       "delete_edge": [
+        639,
+        0
+       ],
+       "delete_pair": [
+        664,
+        11
+       ],
+       "delete_service": [
+        2826,
+        29
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 11,
+      "dist_sum": 11401,
+      "exact": 14965,
+      "fresh": 36,
+      "q_dist": [
+       2635,
+       3843,
+       2801,
+       2122
+      ],
+      "q_exact": [
+       4139,
+       3124,
+       3681,
+       4021
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12193,
+      "route_possible": 12097,
+      "route_unsafe": 218,
+      "slip": 40,
+      "start_exact": 14971
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        667,
+        0
+       ],
+       "add_node": [
+        237,
+        0
+       ],
+       "drop_edge": [
+        673,
+        0
+       ],
+       "drop_node": [
+        288,
+        0
+       ],
+       "none": [
+        18135,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12099,
+        0
+       ],
+       "add_node": [
+        3772,
+        0
+       ],
+       "delete_edge": [
+        639,
+        0
+       ],
+       "delete_pair": [
+        664,
+        0
+       ],
+       "delete_service": [
+        2826,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12097,
+      "route_possible": 12097,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        667,
+        0
+       ],
+       "add_node": [
+        237,
+        0
+       ],
+       "drop_edge": [
+        673,
+        0
+       ],
+       "drop_node": [
+        288,
+        0
+       ],
+       "none": [
+        18135,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12099,
+        0
+       ],
+       "add_node": [
+        3772,
+        0
+       ],
+       "delete_edge": [
+        639,
+        0
+       ],
+       "delete_pair": [
+        664,
+        0
+       ],
+       "delete_service": [
+        2826,
+        0
+       ]
+      },
+      "calls": 20080,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12097,
+      "route_possible": 12097,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     }
+    },
+    "net": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        667,
+        324
+       ],
+       "add_node": [
+        237,
+        107
+       ],
+       "drop_edge": [
+        673,
+        337
+       ],
+       "drop_node": [
+        288,
+        147
+       ],
+       "none": [
+        18135,
+        8998
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12099,
+        5973
+       ],
+       "add_node": [
+        3772,
+        723
+       ],
+       "delete_edge": [
+        639,
+        203
+       ],
+       "delete_pair": [
+        664,
+        608
+       ],
+       "delete_service": [
+        2826,
+        2406
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 19742,
+      "dist_max": 162,
+      "dist_sum": 1485484,
+      "exact": 170,
+      "fresh": 20,
+      "q_dist": [
+       141138,
+       356308,
+       469234,
+       518804
+      ],
+      "q_exact": [
+       170,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 3166,
+      "route_planned": 13720,
+      "route_possible": 12097,
+      "route_unsafe": 10524,
+      "slip": 9913,
+      "start_exact": 190
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        667,
+        325
+       ],
+       "add_node": [
+        237,
+        114
+       ],
+       "drop_edge": [
+        673,
+        338
+       ],
+       "drop_node": [
+        288,
+        128
+       ],
+       "none": [
+        18135,
+        9154
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12099,
+        6533
+       ],
+       "add_node": [
+        3772,
+        384
+       ],
+       "delete_edge": [
+        639,
+        172
+       ],
+       "delete_pair": [
+        664,
+        594
+       ],
+       "delete_service": [
+        2826,
+        2376
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 155,
+      "dist_sum": 1826740,
+      "exact": 145,
+      "fresh": 20,
+      "q_dist": [
+       269850,
+       474137,
+       529698,
+       553055
+      ],
+      "q_exact": [
+       145,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 3553,
+      "route_planned": 12932,
+      "route_possible": 12097,
+      "route_unsafe": 10699,
+      "slip": 10059,
+      "start_exact": 165
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        667,
+        60
+       ],
+       "add_node": [
+        237,
+        22
+       ],
+       "drop_edge": [
+        673,
+        66
+       ],
+       "drop_node": [
+        288,
+        25
+       ],
+       "none": [
+        18135,
+        1725
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12099,
+        1256
+       ],
+       "add_node": [
+        3772,
+        20
+       ],
+       "delete_edge": [
+        639,
+        255
+       ],
+       "delete_pair": [
+        664,
+        347
+       ],
+       "delete_service": [
+        2826,
+        20
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 31,
+      "dist_sum": 107039,
+      "exact": 2487,
+      "fresh": 98,
+      "q_dist": [
+       11389,
+       24129,
+       33768,
+       37753
+      ],
+      "q_exact": [
+       1481,
+       517,
+       287,
+       202
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 1474,
+      "route_planned": 11043,
+      "route_possible": 12097,
+      "route_unsafe": 1219,
+      "slip": 1898,
+      "start_exact": 2507
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        667,
+        322
+       ],
+       "add_node": [
+        237,
+        111
+       ],
+       "drop_edge": [
+        673,
+        333
+       ],
+       "drop_node": [
+        288,
+        135
+       ],
+       "none": [
+        18135,
+        9159
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12099,
+        6535
+       ],
+       "add_node": [
+        3772,
+        379
+       ],
+       "delete_edge": [
+        639,
+        167
+       ],
+       "delete_pair": [
+        664,
+        598
+       ],
+       "delete_service": [
+        2826,
+        2381
+       ]
+      },
+      "calls": 26237,
+      "corrupted": 0,
+      "dist_max": 155,
+      "dist_sum": 1820645,
+      "exact": 145,
+      "fresh": 20,
+      "q_dist": [
+       268480,
+       473471,
+       526979,
+       551715
+      ],
+      "q_exact": [
+       145,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 3561,
+      "route_planned": 12930,
+      "route_possible": 12097,
+      "route_unsafe": 10705,
+      "slip": 10060,
+      "start_exact": 165
+     }
+    }
+   },
+   "regime": "uniform",
+   "s": 0.1,
+   "world": {
+    "ended": 0,
+    "event_kinds": {
+     "add_edge": 667,
+     "add_node": 237,
+     "drop_edge": 673,
+     "drop_node": 288
+    },
+    "events": 1865,
+    "oracle_corrupted": 0,
+    "oracle_edges": 420566,
+    "oracle_nodes": 357197,
+    "requests": {
+     "add_edge": 12099,
+     "add_node": 3772,
+     "delete_edge": 639,
+     "delete_pair": 664,
+     "delete_service": 2826
+    },
+    "steps": 20000
+   }
+  },
+  "uniform/0.2": {
+   "episodes": 20,
+   "proposers": {
+    "exact": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        1439,
+        33
+       ],
+       "add_node": [
+        503,
+        11
+       ],
+       "drop_edge": [
+        1359,
+        0
+       ],
+       "drop_node": [
+        579,
+        43
+       ],
+       "none": [
+        16120,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12323,
+        45
+       ],
+       "add_node": [
+        3670,
+        11
+       ],
+       "delete_edge": [
+        638,
+        0
+       ],
+       "delete_pair": [
+        605,
+        4
+       ],
+       "delete_service": [
+        2764,
+        27
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 1961,
+      "dist_max": 2,
+      "dist_sum": 4102,
+      "exact": 16044,
+      "fresh": 71,
+      "q_dist": [
+       1088,
+       1303,
+       956,
+       755
+      ],
+      "q_exact": [
+       3948,
+       3741,
+       4074,
+       4281
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 11999,
+      "route_possible": 11958,
+      "route_unsafe": 97,
+      "slip": 87,
+      "start_exact": 16045
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        1439,
+        31
+       ],
+       "add_node": [
+        503,
+        0
+       ],
+       "drop_edge": [
+        1359,
+        31
+       ],
+       "drop_node": [
+        579,
+        21
+       ],
+       "none": [
+        16120,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12323,
+        0
+       ],
+       "add_node": [
+        3670,
+        0
+       ],
+       "delete_edge": [
+        638,
+        0
+       ],
+       "delete_pair": [
+        605,
+        16
+       ],
+       "delete_service": [
+        2764,
+        67
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 14,
+      "dist_sum": 25577,
+      "exact": 12040,
+      "fresh": 51,
+      "q_dist": [
+       4444,
+       6683,
+       7796,
+       6654
+      ],
+      "q_exact": [
+       3371,
+       3038,
+       2617,
+       3014
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 12262,
+      "route_possible": 11958,
+      "route_unsafe": 717,
+      "slip": 83,
+      "start_exact": 12045
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        1439,
+        0
+       ],
+       "add_node": [
+        503,
+        0
+       ],
+       "drop_edge": [
+        1359,
+        0
+       ],
+       "drop_node": [
+        579,
+        0
+       ],
+       "none": [
+        16120,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12323,
+        0
+       ],
+       "add_node": [
+        3670,
+        0
+       ],
+       "delete_edge": [
+        638,
+        0
+       ],
+       "delete_pair": [
+        605,
+        0
+       ],
+       "delete_service": [
+        2764,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 11958,
+      "route_possible": 11958,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        1439,
+        0
+       ],
+       "add_node": [
+        503,
+        0
+       ],
+       "drop_edge": [
+        1359,
+        0
+       ],
+       "drop_node": [
+        579,
+        0
+       ],
+       "none": [
+        16120,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12323,
+        0
+       ],
+       "add_node": [
+        3670,
+        0
+       ],
+       "delete_edge": [
+        638,
+        0
+       ],
+       "delete_pair": [
+        605,
+        0
+       ],
+       "delete_service": [
+        2764,
+        0
+       ]
+      },
+      "calls": 20145,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 11958,
+      "route_possible": 11958,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     }
+    },
+    "net": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        1439,
+        697
+       ],
+       "add_node": [
+        503,
+        241
+       ],
+       "drop_edge": [
+        1359,
+        668
+       ],
+       "drop_node": [
+        579,
+        277
+       ],
+       "none": [
+        16120,
+        7821
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12323,
+        6017
+       ],
+       "add_node": [
+        3670,
+        544
+       ],
+       "delete_edge": [
+        638,
+        220
+       ],
+       "delete_pair": [
+        605,
+        550
+       ],
+       "delete_service": [
+        2764,
+        2373
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 19790,
+      "dist_max": 118,
+      "dist_sum": 1248414,
+      "exact": 188,
+      "fresh": 20,
+      "q_dist": [
+       144938,
+       335116,
+       386040,
+       382320
+      ],
+      "q_exact": [
+       188,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 2881,
+      "route_planned": 13782,
+      "route_possible": 11958,
+      "route_unsafe": 10720,
+      "slip": 9704,
+      "start_exact": 208
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        1439,
+        710
+       ],
+       "add_node": [
+        503,
+        213
+       ],
+       "drop_edge": [
+        1359,
+        666
+       ],
+       "drop_node": [
+        579,
+        238
+       ],
+       "none": [
+        16120,
+        7797
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12323,
+        6161
+       ],
+       "add_node": [
+        3670,
+        398
+       ],
+       "delete_edge": [
+        638,
+        196
+       ],
+       "delete_pair": [
+        605,
+        544
+       ],
+       "delete_service": [
+        2764,
+        2325
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 144,
+      "dist_sum": 1651271,
+      "exact": 188,
+      "fresh": 20,
+      "q_dist": [
+       259105,
+       443686,
+       471827,
+       476653
+      ],
+      "q_exact": [
+       188,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 3219,
+      "route_planned": 13156,
+      "route_possible": 11958,
+      "route_unsafe": 10757,
+      "slip": 9624,
+      "start_exact": 208
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        1439,
+        150
+       ],
+       "add_node": [
+        503,
+        40
+       ],
+       "drop_edge": [
+        1359,
+        144
+       ],
+       "drop_node": [
+        579,
+        51
+       ],
+       "none": [
+        16120,
+        1681
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12323,
+        1439
+       ],
+       "add_node": [
+        3670,
+        22
+       ],
+       "delete_edge": [
+        638,
+        262
+       ],
+       "delete_pair": [
+        605,
+        321
+       ],
+       "delete_service": [
+        2764,
+        22
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 25,
+      "dist_sum": 105500,
+      "exact": 2162,
+      "fresh": 89,
+      "q_dist": [
+       15250,
+       25513,
+       28034,
+       36703
+      ],
+      "q_exact": [
+       1269,
+       426,
+       272,
+       195
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 1426,
+      "route_planned": 10963,
+      "route_possible": 11958,
+      "route_unsafe": 1414,
+      "slip": 2066,
+      "start_exact": 2181
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        1439,
+        703
+       ],
+       "add_node": [
+        503,
+        212
+       ],
+       "drop_edge": [
+        1359,
+        656
+       ],
+       "drop_node": [
+        579,
+        237
+       ],
+       "none": [
+        16120,
+        7747
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12323,
+        6094
+       ],
+       "add_node": [
+        3670,
+        407
+       ],
+       "delete_edge": [
+        638,
+        196
+       ],
+       "delete_pair": [
+        605,
+        541
+       ],
+       "delete_service": [
+        2764,
+        2317
+       ]
+      },
+      "calls": 26205,
+      "corrupted": 0,
+      "dist_max": 144,
+      "dist_sum": 1652194,
+      "exact": 188,
+      "fresh": 20,
+      "q_dist": [
+       259058,
+       444216,
+       471417,
+       477503
+      ],
+      "q_exact": [
+       188,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 3288,
+      "route_planned": 13050,
+      "route_possible": 11958,
+      "route_unsafe": 10666,
+      "slip": 9555,
+      "start_exact": 208
+     }
+    }
+   },
+   "regime": "uniform",
+   "s": 0.2,
+   "world": {
+    "ended": 0,
+    "event_kinds": {
+     "add_edge": 1439,
+     "add_node": 503,
+     "drop_edge": 1359,
+     "drop_node": 579
+    },
+    "events": 3880,
+    "oracle_corrupted": 0,
+    "oracle_edges": 429347,
+    "oracle_nodes": 373864,
+    "requests": {
+     "add_edge": 12323,
+     "add_node": 3670,
+     "delete_edge": 638,
+     "delete_pair": 605,
+     "delete_service": 2764
+    },
+    "steps": 20000
+   }
+  },
+  "uniform/0.4": {
+   "episodes": 20,
+   "proposers": {
+    "exact": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        2834,
+        76
+       ],
+       "add_node": [
+        992,
+        16
+       ],
+       "drop_edge": [
+        2831,
+        0
+       ],
+       "drop_node": [
+        1142,
+        74
+       ],
+       "none": [
+        12201,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12394,
+        83
+       ],
+       "add_node": [
+        3636,
+        16
+       ],
+       "delete_edge": [
+        715,
+        0
+       ],
+       "delete_pair": [
+        641,
+        17
+       ],
+       "delete_service": [
+        2614,
+        50
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 3272,
+      "dist_max": 3,
+      "dist_sum": 8001,
+      "exact": 13347,
+      "fresh": 110,
+      "q_dist": [
+       1749,
+       2162,
+       2234,
+       1856
+      ],
+      "q_exact": [
+       3555,
+       3110,
+       3237,
+       3445
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 10986,
+      "route_possible": 10859,
+      "route_unsafe": 223,
+      "slip": 166,
+      "start_exact": 13353
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        2834,
+        67
+       ],
+       "add_node": [
+        992,
+        0
+       ],
+       "drop_edge": [
+        2831,
+        85
+       ],
+       "drop_node": [
+        1142,
+        29
+       ],
+       "none": [
+        12201,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12394,
+        0
+       ],
+       "add_node": [
+        3636,
+        0
+       ],
+       "delete_edge": [
+        715,
+        0
+       ],
+       "delete_pair": [
+        641,
+        42
+       ],
+       "delete_service": [
+        2614,
+        139
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 20,
+      "dist_sum": 51178,
+      "exact": 6321,
+      "fresh": 68,
+      "q_dist": [
+       10947,
+       12724,
+       13106,
+       14401
+      ],
+      "q_exact": [
+       2220,
+       1271,
+       1647,
+       1183
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 11453,
+      "route_possible": 10859,
+      "route_unsafe": 1170,
+      "slip": 181,
+      "start_exact": 6337
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        2834,
+        0
+       ],
+       "add_node": [
+        992,
+        0
+       ],
+       "drop_edge": [
+        2831,
+        0
+       ],
+       "drop_node": [
+        1142,
+        0
+       ],
+       "none": [
+        12201,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12394,
+        0
+       ],
+       "add_node": [
+        3636,
+        0
+       ],
+       "delete_edge": [
+        715,
+        0
+       ],
+       "delete_pair": [
+        641,
+        0
+       ],
+       "delete_service": [
+        2614,
+        0
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 10859,
+      "route_possible": 10859,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        2834,
+        0
+       ],
+       "add_node": [
+        992,
+        0
+       ],
+       "drop_edge": [
+        2831,
+        0
+       ],
+       "drop_node": [
+        1142,
+        0
+       ],
+       "none": [
+        12201,
+        0
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12394,
+        0
+       ],
+       "add_node": [
+        3636,
+        0
+       ],
+       "delete_edge": [
+        715,
+        0
+       ],
+       "delete_pair": [
+        641,
+        0
+       ],
+       "delete_service": [
+        2614,
+        0
+       ]
+      },
+      "calls": 20305,
+      "corrupted": 0,
+      "dist_max": 0,
+      "dist_sum": 0,
+      "exact": 20000,
+      "fresh": 0,
+      "q_dist": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "q_exact": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 0,
+      "route_planned": 10859,
+      "route_possible": 10859,
+      "route_unsafe": 0,
+      "slip": 0,
+      "start_exact": 20000
+     }
+    },
+    "net": {
+     "blind": {
+      "by_event": {
+       "add_edge": [
+        2834,
+        1282
+       ],
+       "add_node": [
+        992,
+        402
+       ],
+       "drop_edge": [
+        2831,
+        1252
+       ],
+       "drop_node": [
+        1142,
+        530
+       ],
+       "none": [
+        12201,
+        5513
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12394,
+        5417
+       ],
+       "add_node": [
+        3636,
+        389
+       ],
+       "delete_edge": [
+        715,
+        304
+       ],
+       "delete_pair": [
+        641,
+        588
+       ],
+       "delete_service": [
+        2614,
+        2281
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 19707,
+      "dist_max": 87,
+      "dist_sum": 886659,
+      "exact": 187,
+      "fresh": 22,
+      "q_dist": [
+       116258,
+       247691,
+       249225,
+       273485
+      ],
+      "q_exact": [
+       187,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 1841,
+      "route_planned": 14481,
+      "route_possible": 10859,
+      "route_unsafe": 10978,
+      "slip": 8979,
+      "start_exact": 207
+     },
+     "gate": {
+      "by_event": {
+       "add_edge": [
+        2834,
+        1342
+       ],
+       "add_node": [
+        992,
+        401
+       ],
+       "drop_edge": [
+        2831,
+        1329
+       ],
+       "drop_node": [
+        1142,
+        493
+       ],
+       "none": [
+        12201,
+        5683
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12394,
+        5840
+       ],
+       "add_node": [
+        3636,
+        259
+       ],
+       "delete_edge": [
+        715,
+        286
+       ],
+       "delete_pair": [
+        641,
+        599
+       ],
+       "delete_service": [
+        2614,
+        2264
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 118,
+      "dist_sum": 1349374,
+      "exact": 167,
+      "fresh": 21,
+      "q_dist": [
+       211481,
+       368321,
+       367636,
+       401936
+      ],
+      "q_exact": [
+       167,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 2429,
+      "route_planned": 13549,
+      "route_possible": 10859,
+      "route_unsafe": 10863,
+      "slip": 9248,
+      "start_exact": 187
+     },
+     "repair": {
+      "by_event": {
+       "add_edge": [
+        2834,
+        252
+       ],
+       "add_node": [
+        992,
+        70
+       ],
+       "drop_edge": [
+        2831,
+        256
+       ],
+       "drop_node": [
+        1142,
+        111
+       ],
+       "none": [
+        12201,
+        1135
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12394,
+        1188
+       ],
+       "add_node": [
+        3636,
+        5
+       ],
+       "delete_edge": [
+        715,
+        303
+       ],
+       "delete_pair": [
+        641,
+        317
+       ],
+       "delete_service": [
+        2614,
+        11
+       ]
+      },
+      "calls": 20000,
+      "corrupted": 0,
+      "dist_max": 25,
+      "dist_sum": 75890,
+      "exact": 2892,
+      "fresh": 108,
+      "q_dist": [
+       11947,
+       25150,
+       19009,
+       19784
+      ],
+      "q_exact": [
+       1768,
+       244,
+       449,
+       431
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 1116,
+      "route_planned": 10241,
+      "route_possible": 10859,
+      "route_unsafe": 1317,
+      "slip": 1824,
+      "start_exact": 2907
+     },
+     "retry": {
+      "by_event": {
+       "add_edge": [
+        2834,
+        1325
+       ],
+       "add_node": [
+        992,
+        398
+       ],
+       "drop_edge": [
+        2831,
+        1304
+       ],
+       "drop_node": [
+        1142,
+        476
+       ],
+       "none": [
+        12201,
+        5609
+       ]
+      },
+      "by_kind": {
+       "add_edge": [
+        12394,
+        5706
+       ],
+       "add_node": [
+        3636,
+        273
+       ],
+       "delete_edge": [
+        715,
+        285
+       ],
+       "delete_pair": [
+        641,
+        599
+       ],
+       "delete_service": [
+        2614,
+        2249
+       ]
+      },
+      "calls": 25917,
+      "corrupted": 0,
+      "dist_max": 118,
+      "dist_sum": 1343552,
+      "exact": 167,
+      "fresh": 21,
+      "q_dist": [
+       210996,
+       368199,
+       367455,
+       396902
+      ],
+      "q_exact": [
+       167,
+       0,
+       0,
+       0
+      ],
+      "q_steps": [
+       5000,
+       5000,
+       5000,
+       5000
+      ],
+      "route_missed": 2520,
+      "route_planned": 13411,
+      "route_possible": 10859,
+      "route_unsafe": 10731,
+      "slip": 9112,
+      "start_exact": 187
+     }
+    }
+   },
+   "regime": "uniform",
+   "s": 0.4,
+   "world": {
+    "ended": 0,
+    "event_kinds": {
+     "add_edge": 2834,
+     "add_node": 992,
+     "drop_edge": 2831,
+     "drop_node": 1142
+    },
+    "events": 7799,
+    "oracle_corrupted": 0,
+    "oracle_edges": 380409,
+    "oracle_nodes": 383558,
+    "requests": {
+     "add_edge": 12394,
+     "add_node": 3636,
+     "delete_edge": 715,
+     "delete_pair": 641,
+     "delete_service": 2614
+    },
+    "steps": 20000
+   }
+  }
+ },
+ "digest": "0011b2ff1ab98427",
+ "episodes": 20,
+ "noise": [
+  0.0,
+  0.05,
+  0.1,
+  0.2,
+  0.4
+ ],
+ "proposers": [
+  "exact",
+  "net"
+ ],
+ "quick": false,
+ "regimes": [
+  "uniform",
+  "near"
+ ],
+ "seconds": 329.6,
+ "seed": 20261101,
+ "steps": 1000
+}

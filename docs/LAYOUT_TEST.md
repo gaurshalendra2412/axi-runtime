@@ -85,3 +85,70 @@ That the position of information in a long prompt changes whether a model uses i
 
 ## How it is run
 `axi_tensor_tests.ipynb` on Colab (T4): upload `axi-colab-tensor.zip`, connect Google Drive, run the cells top to bottom: GPU check, upload, install, Drive, load the model, the checks (stops if one fails), a smoke test with a projection, then Cell 8 (this test). Each finished problem is saved to Google Drive, so a dropped session continues where it stopped. The result file is JSON; send it back and this page gets a "Result" section without changing anything above this line.
+
+---
+
+# Result (run 15 Oct 2026; everything above this line is unchanged from before the run)
+
+*The run was made on a free Colab T4 on 15 Oct 2026 (Qwen2.5-7B-Instruct, 4-bit, seed 31, 50 problems read under 5 conditions = 250 reads, 37.6 minutes, `axi_tensor_tests.ipynb` Cell 8). The saved file is `docs/results/axi_layout_Qwen2.5-7B_seed31.json`. Every number below is recomputed from the saved rows, and every reply is scored again from its text, by `python/tests/test_kv_layout_result.py` (test 111). The block test (Cells 9 and 10) was not run.*
+
+**The headline failed, on all three of its lines.** Lines 5, 7 and 8 all read NO. Of the thirteen lines, seven read yes (1, 2, 3, 4, 6, 12, 13) and six read NO (5, 7, 8, 9, 10, 11). I had put the three headline lines together at about 27 % and my single number was 35 %.
+
+## The thirteen lines, against what I wrote before the run
+| # | my probability | read | what the saved rows say |
+|---|---|---|---|
+| 1 | 85 % | yes | the prompt of `sorted` held 2,336 tokens on average (2,335.6) |
+| 2 | 85 % | yes | the pieces equal the tokenizer's own tokens on all 250 probes (`canonical` = 1.0 in every condition) |
+| 3 | 99 % | yes | 42 delete problems and 8 control problems in every condition |
+| 4 | 85 % | yes | `sorted` recall 0.333 (between 0.15 and 0.90) |
+| 5 | 65 % | **NO** | `shuffled` recall 0.329 against 0.333: lower by 0.004 (the line needed 0.10) |
+| 6 | 92 % | yes | `sorted`: edges that START at the service 0.534, edges that END at it 0.103: a gap of 0.431 (Run C of the large test: 0.42 and 0.04) |
+| 7 | 75 % | **NO** | `adjacency` recall 0.373 against 0.333: higher by 0.040 (the line needed 0.15) |
+| 8 | 55 % | **NO** | `adjacency` exactly right as written on 4 of 42 replies (9.5 %), `sorted` on 9 of 42 (21.4 %): **11.9 points worse**, not 15 better |
+| 9 | 35 % | **NO** | `grouped` recall 0.302 against 0.333: lower by 0.032 (the line needed +0.05) |
+| 10 | 70 % | **NO** | `rot90` recall 0.440 against 0.333: higher by 0.107, outside the 0.10 band by 0.007 |
+| 11 | 60 % | **NO** | `adjacency` invents 2.71 edges per reply, `sorted` 1.64: **65 % more**, not 30 % fewer |
+| 12 | 80 % | yes | control: 8 of 8 add replies exactly right in every condition |
+| 13 | 95 % | yes | `shuffled` wrote a different text from `sorted` on 37 of 42 delete problems (88 %) |
+
+## The table the notebook printed (42 delete problems per condition; the repair-step and cut-off columns are measures the page named and no rule uses)
+| condition | exact as written | exact with the repair step | cut off at 120 tokens | recall | recall, edges that start at the service | ... that end at it | invented per reply | prompt tokens | seconds per read |
+|---|---|---|---|---|---|---|---|---|---|
+| `sorted` | 9 (21.4 %) | 33 (78.6 %) | 5 (12 %) | 0.333 | 0.534 | 0.103 | 1.64 | 2,336 | 7.5 |
+| `shuffled` | 2 (4.8 %) | 19 (45.2 %) | 21 (50 %) | 0.329 | 0.529 | 0.098 | 2.81 | 2,336 | 8.8 |
+| `grouped` | 8 (19.0 %) | 41 (97.6 %) | 0 (0 %) | 0.302 | 0.552 | 0.034 | 1.45 | 2,336 | 6.6 |
+| `adjacency` | 4 (9.5 %) | 35 (83.3 %) | 7 (17 %) | 0.373 | 0.379 | 0.391 | 2.71 | 3,921 | 13.7 |
+| `rot90` | 8 (19.0 %) | 26 (61.9 %) | 11 (26 %) | 0.440 | 0.695 | 0.103 | 2.07 | 2,336 | 8.5 |
+
+Problem by problem against `sorted` (better / worse, exact two-sided sign test, as printed): exact as written, `shuffled` 1 / 8 (p = 0.04), `grouped` 2 / 3 (p = 1.0), `adjacency` 3 / 8 (p = 0.23), `rot90` 3 / 4 (p = 1.0); with the repair step, `shuffled` 3 / 17 (p = 0.003), `grouped` 8 / 0 (p = 0.008), `adjacency` 6 / 4 (p = 0.75), `rot90` 5 / 12 (p = 0.14). "Exact with the repair step" is `repair_m6` (`diagnostics.ground_and_complete`, the repository's own repair: it keeps the edge deletions that are true, cuts those that are not in the graph, and adds the deletions the reply left out when it deletes a service). The recall start and end columns are taken over the 29 problems of the 42 that have edges of that kind.
+
+## Where my numbers were off
+* **Line 5 (65 %).** I expected the loss from scrambling the list to show in the recall. It does not: 0.329 against 0.333, and the edges that start at the service are found as often in a random order (0.529) as in the sorted one (0.534). The model does not use the fact that they sit next to each other. This was the alternative I named on the page ("the model may also find them by matching `(r,c)->` anywhere").
+* **Lines 7, 8 and 11.** I gave 75 % to the doubled list finding clearly more edges, and it does not (+0.04); the exact replies fell instead of rising, and it invents more edges, not fewer. I had said the doubled list "might confuse it". It did, in a way I did not foresee (the arrow, below).
+* **Line 6, second number.** I wrote that the smaller graph "might lift the second number": 0.10 here against 0.04 at Run C's size. The gap is still 0.43.
+* **Line 9 (35 %), line 10 (70 %).** Both NO, both by small margins (0.032 and 0.007).
+* **What I did not expect at all:** how much of what looks like a miss is the right edge written with its arrow turned around, and how much the cut-off at 120 tokens depends on the order (50 % of the `shuffled` replies, 0 % of the `grouped` ones).
+
+## What the pre-registered rules say, in the words I wrote before the run
+Lines 5 NO and 6 yes: *"the model is order-insensitive in the large and direction-sensitive in the small."* Line 7 NO: *"the layout is not the lever for this model at this size, and the premise of the text (that order is what hurts) is not supported here."* Line 10 NO: *"a quarter turn changes what the model finds, so a host that turns the problem into a fixed frame ... would be worth testing as a model-side fix, and one frame is not eight."* I keep the first two as written. For the third, see below: the data cannot tell the shift from chance (p = 0.42).
+
+## What I read from the rows afterwards (NOT pre-registered; each of these is a look at a table I had already seen, so read them as reasons to test again, not as findings)
+1. **Scrambling the order does not lose edges; it makes the reply not end.** `shuffled`: 21 of 42 replies run into the limit (`sorted` 5, `grouped` 0), 2.81 invented edges per reply against 1.64, 2 replies exactly right as written against 9, 19 with the repair step against 33 (3 better, 17 worse). Of these, the repair figure survives a correction for the eight sign tests printed above (p = 0.003 x 8 = 0.02).
+2. **`grouped` (each service followed by the edges that start at it) is the layout whose replies end and stay inside the service.** None of its 42 replies ran on, it names 1 real edge that is not the service's against 24 for `sorted` (11 for `shuffled`, 36 for `rot90`, 0 for `adjacency`), and with the repair step 41 of 42 are exactly right, against 33 (8 better, 0 worse, p = 0.008, which does NOT survive a correction for eight tests: 0.06). Its recall is no higher (0.302). I take it as a candidate to test with a new seed and more problems, not as a result. Four of its eight gains are replies of `sorted` that ran into the limit; the other four are replies that ended but named edges that are not the service's.
+3. **With the repair step the outcome follows the reply's ending and what it deletes by mistake, not the length of its edge list.** None of the 44 replies that failed to parse was repaired to the right state, and almost every reply that did parse was: 33 of 37 for `sorted`, 41 of 42 for `grouped`, 35 of 35 for `adjacency`, 19 of 21 for `shuffled`, 26 of 31 for `rot90`. **Each of the 12 replies that parsed and were still wrong after the repair had deleted at least one real edge that belongs to another service** (the repair keeps what is true, so it cannot tell that the edge is not the service's): 4, 2, 1, 0 and 5 of them in the five conditions. The model finds about a third of the service's edges (0.30 to 0.44 in every condition) and the host's repair turns that into 62 to 98 % of deletes exactly right in four of the five orders (45 % when the order is scrambled). That is the split of work the repository is built on (the model proposes, the host closes the boundary), measured here on a delete the model gets right only one time in five as written.
+4. **A good part of the "misses" is the arrow.** Counting an edge as found when the reply writes it with the same relation and weight but the arrow turned around: 13 of the 101 edges that hang on the 42 services in `sorted` were written that way (12 of the 53 edges that start at the service, 1 of the 48 that end at it), 1 in `shuffled`, 14 in `grouped`, **22 in `adjacency`** (16 and 6), 8 in `rot90`. Found in either direction the shares are 0.475, 0.366, 0.455, **0.604** and 0.505 (pooled over the 101 edges). So in `sorted` the edges that end at the service are not written backwards (1 of 48); they are not written at all (4 of 48 as written), which is the Run C observation, here again. In `adjacency` the model finds more neighbours (paired against `sorted`, direction ignored: +0.151, 95 % interval -0.03 to +0.33, 19 problems better and 8 worse, p = 0.052) and writes the arrow of the edges that start at the service backwards 16 times in 53.
+5. **`adjacency` does what I hoped for the edges that end at the service and loses what it gained on the others.** Recall of the edges that end at the service: 0.391 against 0.103 (+0.287, 95 % interval +0.09 to +0.48, 14 problems better and 2 worse, p = 0.004). Recall of those that start at it: 0.379 against 0.534 (-0.155, interval -0.39 to +0.07, 5 better and 10 worse). The sum is line 7's +0.04. It costs 1.68 times the tokens (3,921 against 2,336), 1.8 times the time per read (13.7 s against 7.5 s) and 10.1 GB of GPU memory against 7.3 GB, and the page said that its added sentence ("write it once") could account for part of the change: I did not run `sorted` with the sentence.
+6. **`rot90` is higher by 0.107 and the data cannot tell that from chance:** 95 % interval -0.01 to +0.23, 9 problems better and 5 worse, p = 0.42. By the rule it reads NO, by 0.007. It does not say anything about rotation in general (one frame of eight; 42 problems).
+
+## What this shows and does not show
+* **Shows (this model, 70 services and 120 edges, 42 delete problems, greedy decoding, the rule stated):** the order the same facts are written in does not change how many of a service's own edges the model finds (0.30 to 0.37 in four of the five conditions, 0.44 in the quarter-turned one, a gap the data cannot tell from chance); the usual layout is not distinguishably worse than the alternatives on that measure; scrambling it makes the replies run on and invent more; and the edges that end at the service stay unfound in the usual layout (4 of 48 written) as in Run C.
+* **Does not show:** that `grouped` is better (post hoc, p = 0.06 after correction); anything about rotation; anything about bigger graphs, other models, sampling or other tasks; anything about the position codes of the shared text (they need training and were not tested); whether the added sentence or the order is what changed `adjacency`; whether the arrow errors are the cause of the low recall or a symptom (a prompt that states the direction was not run).
+* **What it does to the text's premise:** the premise (the same graph in another order is another problem for the model) does not hold for how many true edges are found, and, as a look afterwards, does hold for how the reply ends and for the number of invented edges.
+
+## What to do next (not run)
+* A pre-registered replication of `grouped` against `sorted` on a new seed with about 100 delete problems: the line to write first is "fewer replies cut off and more exactly right with the repair step", with the thresholds set from this table.
+* The direction: a request that states which way the arrows run, tested on `sorted` and `adjacency`, and the same with the sentence added to `sorted`.
+* The block test (`KV_BLOCK_TEST.md`, Cells 9 and 10) is still waiting; this result does not change what it can show. *(Added 16 Oct 2026: the sentence above is as it stood on 15 Oct. The block test has since been run twice, B1 and B2; the headline of its first page failed. See the Result of `KV_BLOCK_TEST.md`.)*
+
+## Reproduce
+`python/tests/test_kv_layout_result.py` (no GPU, a few seconds) re-reads the saved file, scores all 250 replies again from their text with `kv_layout.reply_metrics` and `kv_drop.score_reply`'s own functions, recomputes the thirteen lines and every figure above, and checks that the part of this page above the Result line is byte for byte the text written before the run (sha256 `c9c3cd72018428d55338b2f350b3605a4fc50a7091319badbbbe439ed2f142cc`). The test was itself checked with 89 deliberate changes (to the saved file, to this page and to the scoring code): 88 are caught by it; the one that is not (the order of the DEL items in the ideal reply, which no score reads) is caught by `test_kv_layout.py`.
