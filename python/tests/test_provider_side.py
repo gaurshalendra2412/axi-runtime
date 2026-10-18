@@ -434,13 +434,33 @@ def test_the_notebook_installs_loads_checks_runs_the_planned_cells_in_order_and_
     for src in code: ast.parse("\n".join(l for l in src.splitlines() if not l.lstrip().startswith("!")))
     for needle in ("git clone -q --depth 1 https://github.com/gaurshalendra2412/axi-runtime", "pip -q install vllm", "P.VLLMEngine()", "eng.warm_up()", "STOP:", "cached tokens", "P.run_cell(eng, arm, 3, steps=3)", "P.save_cell", "store.persist",
                    "P.merge_files", "P.verdict_provider", "P.print_cells", "files.download", "open_store", "docs/PROVIDER_SIDE_TEST.md", "Do not paste any keys"): assert needle in text, needle
-    assert "!pip -q install vllm" in [x.strip() for x in code] and text.count("Do not paste any keys") >= 2 and 'P.merge_files(paths, store.path("axi_provider_side.json"))' in text
+    assert "!pip -q install vllm==0.31.0" in [x.strip() for x in code] and "!pip -q install vllm" not in [x.strip() for x in code] and text.count("Do not paste any keys") >= 2 and 'P.merge_files(paths, store.path("axi_provider_side.json"))' in text      # update 57: the version of the first run (cells of two versions are not merged)
     ran = []; ns = dict(go=lambda arm, K: ran.append((arm, K)))
     for src in code:
         if re.fullmatch(r"(for arm in \(.*\): go\(arm, \d+\)|go\(\"KR\", 32\))\s*", src.strip()): exec(src, ns)
     assert ran == P.cells_planned(), ran
     assert nb["metadata"]["accelerator"] == "GPU" and nb["nbformat"] == 4 and cells[0]["cell_type"] == "markdown"
     head = "".join(cells[0]["source"]); assert "T4" in head and "80,000 tokens" in head and "Qwen2.5-7B-Instruct" in head and "AWQ" in head
+    assert "27 minutes" in head and "82 minutes" in head and "three hours or more" in head and "0.31.0" in head and "update 57 commands" in text and "update 56 commands" not in text      # the times measured on the first run
+
+
+def test_the_notebook_fixes_the_output_stream_before_the_engine_starts_and_the_fix_does_what_it_says():
+    nb = _nb(); cells = nb["cells"]; srcs = ["".join(c["source"]) for c in cells]
+    fix = [i for i, s in enumerate(srcs) if cells[i]["cell_type"] == "code" and "fileno" in s]; assert len(fix) == 1, fix
+    load = [i for i, s in enumerate(srcs) if cells[i]["cell_type"] == "code" and "P.VLLMEngine()" in s]; assert len(load) == 1 and fix[0] < load[0]           # before the engine is started
+    assert "fileno" in srcs[fix[0] - 1] and "Cell 4b" in srcs[fix[0] - 1]
+    class NoFile(io.TextIOBase):                                         # what a Colab cell's output looks like to a library that asks for a file number
+        def write(self, s): return len(s)
+        def fileno(self): raise io.UnsupportedOperation("fileno")
+    class HasFile(io.TextIOBase):
+        def write(self, s): return len(s)
+        def fileno(self): return 77
+    saved = sys.stdout, sys.stderr
+    try:
+        sys.stdout, sys.stderr = NoFile(), HasFile()
+        exec(srcs[fix[0]], {})
+        assert sys.stdout.fileno() == 1 and sys.stderr.fileno() == 77, (sys.stdout.fileno(), sys.stderr.fileno())     # the missing number is given, a real one is left alone
+    finally: sys.stdout, sys.stderr = saved
 
 
 def test_the_notebook_runs_end_to_end_on_the_stand_in_with_the_cell_runner_it_ships():
@@ -516,10 +536,14 @@ def test_the_saved_runs_the_page_quotes_say_what_it_says():
     ex = lambda rows: sum(x["exact"] for r in rows for x in r["policies"]["repair_m6"]) / sum(len(r["policies"]["repair_m6"]) for r in rows); assert round(ex(s) * 100, 1) == 99.4 and ex(h) == 1.0
 
 
-def test_the_front_pages_point_to_the_test_and_say_it_has_not_been_run():
+def test_the_front_pages_point_to_the_test_and_its_result_and_say_the_run_was_partial_and_makes_no_speed_claim():
     root = os.path.join(HERE, "..", ".."); cm = open(os.path.join(root, "docs", "RAJNISH_CONCEPT_MAP.md")).read(); ve = open(os.path.join(root, "docs", "VERIFIED.md")).read()
-    assert "PROVIDER_SIDE_TEST.md" in cm and "PROVIDER_SIDE_TEST.md" in ve and "NOT run" in ve[ve.index("PROVIDER_SIDE_TEST.md") - 200: ve.index("PROVIDER_SIDE_TEST.md") + 900]
-    assert "Next free: row 169, item 107, test 123" in cm
+    assert "PROVIDER_SIDE_TEST.md" in cm and "PROVIDER_SIDE_TEST.md" in ve
+    row = next(l for l in ve.splitlines() if "(`PROVIDER_SIDE_TEST.md`" in l); item = cm[cm.index("106. **What does the GPU spend"): cm.index("\n107. **")]
+    for text in (row, item):
+        assert "Run in part" in text and "NOT run" not in text and "8 of 13 lines yes" in text.replace("8 of the 13 lines read yes", "8 of 13 lines yes") and "no claim that exact-state is faster" in text.replace("makes no claim that exact-state is faster", "no claim that exact-state is faster")
+        assert ("test 123" in text or "and 123 (7" in text) and "1,160" in text and "69.2" in text and "97.3" in text and "5.149" in text and "0.617" in text and "KC` at 64 jobs" in text
+    assert "Next free: row 169, item 108, test 125" in cm and "tests 122 and 123 check the provider-side test and its result, item 106" in cm
 
 
 if __name__ == "__main__":
