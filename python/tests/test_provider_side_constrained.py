@@ -538,13 +538,15 @@ def test_the_safety_cell_says_ok_on_a_working_engine_and_stop_for_each_thing_tha
 
 
 # ---------------------------------------------------------------- 10 the front pages
-def test_the_front_pages_point_to_the_new_test_and_say_it_has_not_been_run():
+def test_the_front_pages_point_to_the_tests_and_say_what_the_run_found():
     cm = open(os.path.join(ROOT, "docs", "RAJNISH_CONCEPT_MAP.md")).read(); ve = open(os.path.join(ROOT, "docs", "VERIFIED.md")).read()
     assert "PROVIDER_SIDE_CONSTRAINED_TEST.md" in cm and "PROVIDER_SIDE_CONSTRAINED_TEST.md" in ve
-    item = cm[cm.index("107. **"): cm.index("Next free: row")]; row = ve[ve.index("PROVIDER_SIDE_CONSTRAINED_TEST.md") - 300: ve.index("PROVIDER_SIDE_CONSTRAINED_TEST.md") + 3000]
+    item = cm[cm.index("107. **"): cm.index("108. **")]; row = ve[ve.index("PROVIDER_SIDE_CONSTRAINED_TEST.md") - 300: ve.index("PROVIDER_SIDE_CONSTRAINED_TEST.md") + 4000]
     for text in (item, row):
-        assert "Built and pre-registered, NOT run" in text and "test 124" in text.replace("Tests 124", "test 124") and PAGE_SHA256[:16] in text.replace(PAGE_SHA256, PAGE_SHA256[:16]) and ("88.3" in text or "88 to 96" in text) and "17 reading lines" in text.replace("17 lines", "17 reading lines")
-    assert "Next free: row 169, item 108, test 125, question 120" in cm and "test 124 checks the constrained provider-side test, item 107" in cm
+        assert "Run (18 and 19 Oct" in text and "NOT run" not in text and "test 124" in text.replace("Tests 124", "test 124") and "test 125" in text and PAGE_SHA256[:16] in text.replace(PAGE_SHA256, PAGE_SHA256[:16])
+        assert "14 of 17 lines" in text.replace("14 of the 17 lines read yes", "14 of 17 lines yes").replace("14 of 17 lines yes", "14 of 17 lines") and ("lines 2, 5 and 6" in text or "line 2 reads NO" in text) and "neither the plain time ratios nor the exact-steps-per-hour figures are claimed" in text.replace("neither the time ratios nor", "neither the plain time ratios nor")
+        assert "20,878" in text and "28,748" in text and "32,896" in text and "5,923" in text and "727" in text and "667" in text and "88.3" in text and "97.2" in text
+    assert "Next free: row 169, item 109, test 127, question 120" in cm and "test 124 checks the constrained provider-side test and test 125 its Result, item 107" in cm
 
 
 if __name__ == "__main__":
