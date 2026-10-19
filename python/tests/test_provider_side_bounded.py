@@ -434,7 +434,7 @@ def test_the_dry_run_prints_the_stand_in_table_and_says_it_is_not_a_result():
 
 # ---------------------------------------------------------------- 8 the locked page
 PAGE = os.path.join(ROOT, "docs", "PROVIDER_SIDE_BOUNDED_TEST.md")
-RESULT_MARK = "\n\n---\n\n# Result"
+RESULT_MARK = "\n\n# Result"                                                                                          # the Result starts below the line that ends the locked text
 PAGE_SHA256 = "888358daf88abd0e11be3f368b67ab30c375fc116ce7445018158f77dbec2083"
 PROBS = [98, 90, 85, 85, 88, 82, 72, 75, 92, 95, 95, 4, 3]
 
@@ -629,31 +629,31 @@ def test_the_safety_cell_says_ok_on_a_working_engine_and_stop_for_each_thing_tha
 
 
 # ---------------------------------------------------------------- 10 the front pages
-def test_the_front_pages_point_to_the_tests_and_say_what_the_page_expects():
+def test_the_front_pages_point_to_the_tests_and_say_what_the_page_expects_and_what_the_run_found():
     cm = open(os.path.join(ROOT, "docs", "RAJNISH_CONCEPT_MAP.md")).read(); ve = open(os.path.join(ROOT, "docs", "VERIFIED.md")).read()
     assert "PROVIDER_SIDE_BOUNDED_TEST.md" in cm and "PROVIDER_SIDE_BOUNDED_TEST.md" in ve
-    item = cm[cm.index("108. **"): cm.index("Next free: row")]; k = ve.index("PROVIDER_SIDE_BOUNDED_TEST.md"); row = ve[k - 300: k + 4500]
+    item = cm[cm.index("108. **"): cm.index("109. **")]; k = ve.index("PROVIDER_SIDE_BOUNDED_TEST.md"); row = ve[k - 300: ve.index("Provider-side serving test, fourth run")]
     for text in (item, row):
         assert PAGE_SHA256[:16] in text.replace(PAGE_SHA256, PAGE_SHA256[:16]) and "test 126" in text.replace("**test 126**", "test 126") and "16 characters" in text and "13 reading lines" in text
-        assert "not run yet" in text.lower() or "not yet run" in text.lower()
+        assert ("RUN (19 Oct 2026)" in text or "Run (19 Oct 2026" in text) and "not run yet" not in text.lower() and "@@" not in text
         assert "exact steps per GPU hour" in text and "capacity" in text and "line 2" in text
         for n in ("20,878", "29,400", "33,300", "5,923", "727", "667", "88.3, 94.6", "97.2"): assert n in text, n
-    assert "Next free: row 169, item 109, test 127, question 120" in cm and "test 126 checks the capped re-run of the exact-state cells, item 108" in cm
+    assert "Next free: row 170, item 110, test 129, question 121" in cm and "test 126 checks the capped re-run of the exact-state cells and test 127 its Result, item 108" in cm
     assert "undeniable proof" in item and "49 GPUs" in item and "not accepted" in item and PAGE_SHA256 in item and PAGE_SHA256[:16] + "…" in row
     for n in ("(19 Oct)", "to clear line 2 of item 107", "\"4,900%\"", "(job 3 at step 16, job 4 at step 18, job 19 at step 12 and so on)", "a 7B 4-bit model, an 80,000-token cache and 30-step jobs", "(97.2 % exact against 100.0 %)",
-              "**This test can clear line 2 and nothing else. Status: written and checked, not run yet.**", "= **test 126** (23 tests:", "6,231 replies, of which 2 (one reply, in two cells) are outside the new language", "same 30 prompts",
+              "**This test could clear line 2 and nothing else. Status: RUN (19 Oct 2026); the Result is on the page.**", "= **test 126** (23 tests:", "6,231 replies, of which 2 (one reply, in two cells) are outside the new language", "same 30 prompts",
               "3,513 steps", "(about ten minutes of GPU)", "(1 h 19 min and 2 h 52 min)", "(0 of 3,513 comparable steps changed where the first run's reply was inside the language)", "(lines 7 and 8 check the speed)", "13 reading lines",
               "exact steps per GPU hour at 8 and 64 jobs", "and never a multiple of capacity, a count of GPUs saved, dollars or \"proven\"", "(78 %)", "88.3, 94.6 and 97.2 percent", "(4 and 3 %)", "20,878, 29,400 and 33,300 against 5,923, 727 and 667",
-              "lines 2 and 3 both yes about 80 %", "(about 25 to 30 minutes)", "cells `S` at 8, 32 and 64 jobs and `KC` at 8 jobs", "a name of 1 to 16 characters", "lines 12 and 13 (equal exactness within 5 points, 98 percent)",
+              "lines 2 and 3 both yes about 80 %", "cells `S` at 8, 32 and 64 jobs and `KC` at 8 jobs", "a name of 1 to 16 characters", "lines 12 and 13 (equal exactness within 5 points, 98 percent)",
               "\"49 GPUs with 1 GPU\"", "49.3 is a ratio of exact steps per GPU hour", "constrained decoding was already on in item 107", "\"49 GPUs\", dollars and \"proven\" were never measured", "the kept chat at 32 and 64 jobs under the capped expression",
               "after the Result of item 107", "about 3.5, 40 and 50 times", "(hash-locked; sha256 ", "the setup was one free T4", "the kept chat at 32 and 64 jobs (1 h 19 min and 2 h 52 min)", "Mutation check of the test: 478 deliberate changes", "396 caught", "the 82 that survived were read by hand",
               "capped at 16 characters, to clear line 2 of item 107", "as Update 60 ... run those exact-state cells again to clear Line 2", "edits neither: both sha256 are pinned", "the 13 lines at their edges on the second run's own cells", "so job 19 stays wrong from step 12 and the only reply"):
         assert n in item, n
-    for n in ("(`PROVIDER_SIDE_BOUNDED_TEST.md`, `experiments/provider_side_bounded.py`, `colab/axi_provider_side_bounded.ipynb`)", "13 reading lines", "(about 25 to 30 minutes on a free T4)", "a name of 1 to 16 characters", "`S` at 8, 32 and 64 jobs and `KC` at 8 jobs run again",
+    for n in ("(`PROVIDER_SIDE_BOUNDED_TEST.md`, `experiments/provider_side_bounded.py`, `colab/axi_provider_side_bounded.ipynb`)", "13 reading lines", "a name of 1 to 16 characters", "`S` at 8, 32 and 64 jobs and `KC` at 8 jobs run again",
               "the kept chat at 32 and 64 jobs read from the second run's file", "2 of its 6,231 replies are outside the new language (one reply, job 19 step 12, in two cells)", "of the 3,360 steps of the four cells, only that reply (two copies of it) should differ",
               "3,513 steps, 0 changed where the earlier reply was inside the language", "line 2 yes (90 %)", "(88.3, 94.6, 97.2 percent)", "lines 12 and 13 (equal exactness, 98 percent) NO again", "about 20,878, 29,400 and 33,300 against 5,923, 727 and 667 for the kept chat",
-              "the locked page (test 126, 23 tests)", "Written and checked, not run yet.", "never a multiple of capacity, a count of GPUs saved, dollars or \"proven\"",
-              "the exact-state cells again with the length of a name capped at 16 characters, to clear line 2 of the second run", "locked before the run (sha256 " + PAGE_SHA256[:16] + "… of the locked text)", "so job 19 stays where it was and, of the", "the kept chat at 32 and 64 jobs under the capped expression", "mutation check: 478 deliberate changes, 396 caught, the 82 survivors read by hand"):
+              "the locked page (test 126, 23 tests)", "**Run (19 Oct 2026, Colab, Tesla T4, vLLM 0.31.0, one session, all four cells).**", "never a multiple of capacity, a count of GPUs saved, dollars or \"proven\"",
+              "the exact-state cells again with the length of a name capped at 16 characters, to clear line 2 of the second run", "locked before the run (sha256 " + PAGE_SHA256[:16] + "… of the locked text)", "so job 19 stays where it was and, of the", "the kept chat at 32 and 64 jobs under the capped expression", "mutation check of test 126: 478 deliberate changes, 396 caught, the 82 survivors read by hand"):
         assert n in row, n
 
 

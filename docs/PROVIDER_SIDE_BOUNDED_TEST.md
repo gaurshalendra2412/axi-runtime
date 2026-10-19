@@ -99,3 +99,136 @@ Dollars; other GPUs (the absolute seconds are a free T4's); other models, engine
 Open `python/colab/axi_provider_side_bounded.ipynb` in Colab with a T4 and run the cells one at a time: it installs vLLM 0.31.0, connects Drive, fixes the output stream, loads the model with the capped constraint, runs the safety cell (3 jobs of 3 steps in each arm, then the probe), then the four cells in order. Each finished cell is written as `axi_provider_b_<arm>_K<k>.json` and copied to Drive. If Colab stops, reconnect, run the first cells again and the cell you were in: finished cells are skipped and a running one continues from its checkpoint. The last cell puts the four cells together, reads the second run's file from the repository, prints the table and the 13 lines, and offers the files for download. The Result goes below the line at the end of this page, and a result test will recompute every number in it from the saved files.
 
 ---
+
+# Result
+
+*Written after the run, below the locked text; nothing above this line has been changed (its hash is checked by `tests/test_provider_side_bounded.py` and again by `tests/test_provider_side_bounded_result.py`). The run was made by the owner on Colab on 19 Oct 2026 with `python/colab/axi_provider_side_bounded.ipynb`: vLLM 0.31.0, GPU Tesla T4, Python 3.13.15, `Qwen/Qwen2.5-7B-Instruct-AWQ`, the cache fixed at 80,000 tokens with the engine's block override (capacity source "override"), 30-step jobs, seed 20261017, every reply of both arms constrained by the capped expression of this page (sha256 `6f4e5a993f26ccd4…`). **All four planned cells ran, in one session and without a resume:** `S` at K = 8, 32 and 64 and `KC` at K = 8. The owner ran the safety cell before them and the four cells after it; what the safety cell printed is not in the saved file, and nothing below rests on it (the probe asks about the same step that line 5 reads in the two cells that hold job 19, step 12 of job 19). The file is `docs/results/axi_provider_bounded.json` (sha256 `1f12a846b1325f9fed4e5df2cc755b3a7fd996266cb590311230f7cf418f2733`): the merged file that the notebook's last cell wrote with `provider_side_bounded.merge_files` and the owner sent. It holds the four cells; the four separate cell files were not sent. It records the sha256 of the module that merged it, `7427a686d151c4294809aebaa9664d0b5fa420854817eb79e910372c3f57b6bc`, which is the module in the repository, those of `provider_side.py` and `provider_side_constrained.py` (both pinned), and the second run's file it was compared with (`axi_provider_constrained.json`, `7f54c3dd37fd4dcf…`). The GPU seconds of the four cells add up to 527.9, which is 8.8 minutes, 217.4 of them in `S` at K = 64. Every figure below is computed from the step records and the round records of the two files by `tests/test_provider_side_bounded_result.py`.*
+
+**What the page expected, and what came out.** The page named the shape "Lines 2 and 3 yes, lines 9 to 11 yes, lines 12 and 13 NO (the shape I expect)" as "the clean run for the claim", and put exactly that pattern (lines 12 and 13 NO, every other line yes) at about 30 %. **That is what came out: 11 of the 13 lines read yes, lines 12 and 13 read NO, and no line is "not run".** The two NO are the two I put at 4 and 3 %; the cap could not move them, since it does not make job 19 right. The headline (lines 9 and 11) reads yes on both, and so does line 10 between them. Lines 2 and 3 both read yes (the page: about 80 %), and so do the three lines I trusted least among the yes (line 7 at 72 %, line 8 at 75 %, line 6 at 82 %).
+
+**Three things about the run that the page did not foresee or guessed differently.**
+* **The new session was slower than the second run's in every cell.** Seconds per step were +7.7 %, +4.0 %, +5.0 % and +6.4 % against the second run's in `S` at 8 jobs, `KC` at 8, `S` at 32 and `S` at 64, and the round took longer than the same round of the second run in 30, 30, 29 and 29 of the 30 rounds. The page said a session would move things and put the line at 30 %; this one moved them by 4 to 8 %, in all four cells in the same direction. That is why the exact steps per GPU hour here are 7.2 %, 6.9 % and 7.2 % below the page's estimate for "the same speed" (20,878, 29,407, 33,318).
+* **The wall seconds of the 32- and 64-job cells are not below the second run's (side prediction (c), 45 %); they are above, by 5.6 and 13.1 seconds.** The round that held job 19's step 12 took 4.56 and 8.11 seconds, 1.56 and 1.01 less than in the second run (6.13 and 9.13), while the other 29 rounds took 6.7 and 7.2 % more: the cap shortened that round, and the session's speed hid it in the total. How much of the 1.56 and 1.01 seconds is the cap and how much is noise in one round this run cannot separate.
+* **One reply differs from the second run's in a field the page did not compare, and not in its text:** `S` at 64 jobs, job 3, step 16, `ADD[(4,4)->(4,4):value#6]` is the same text with 16 new tokens where the second run's cell at 64 jobs recorded 17 (its cells at 8 and 32 jobs recorded 16 and 16; now all three record 16). Nothing else of that step differs (prompt, cached count, parsed, admitted, exact, distance), no reading line reads that field, and I do not know why the count was 17 once.
+
+## The 13 lines
+
+| # | my probability | what was measured | read |
+|---|---|---|---|
+| 1 | 98 % | the engine reported the cached tokens of every request: 3,360 steps in the 4 cells that ran | yes |
+| 2 | 90 % | parsed: `S` 100.0 % (K = 8), 100.0 % (32), 100.0 % (64), `KC` 100.0 % (K = 8) (limit 99.5 %, met); replies that used all 96 new tokens: none in the four cells, the longest reply has 31 tokens (limit: none, met) | yes |
+| 3 | 85 % | `S` cells against the second run's, step by step: 3,120 replies compared, 3,118 the same text; the 2 that differ are job 19, step 12, in the 32-job and in the 64-job cell (allowed); every job took the same number of steps | yes |
+| 4 | 85 % | `KC` at K = 8: 240 of 240 replies the same text as the second run's, and 240 of 240 steps exact (100.0 %) | yes |
+| 5 | 88 % | job 19, step 12 (the 32-job and the 64-job cell, the same reply): `ADD[(3,0)->(3,0):4tworowsdown4col#4]`, accepted by the strict parser, refused by the gate, 21 new tokens (limit: fewer than 96; the second run's reply used 96) | yes |
+| 6 | 82 % | exact steps of `S`: 212 of 240 (88.3 %), 908 of 960 (94.6 %), 1,867 of 1,920 (97.2 %); the second run's: 212, 908, 1,867; largest difference in the share 0.0 points (limit 0.5) | yes |
+| 7 | 72 % | `S` seconds per step 0.164, 0.124, 0.113 against the second run's 0.152, 0.118, 0.106: +7.7 %, +5.0 %, +6.4 % (limit 30 % either way) | yes |
+| 8 | 75 % | `KC` at K = 8: 0.632 seconds per step against the second run's 0.608: +4.0 % (limit 30 % either way) | yes |
+| 9 | 92 % | `S` 19,379 exact steps per GPU hour (88.3 % exact), `KC` 5,694 (100.0 %), both in this run: 3.40 times (limit 2) | yes |
+| 10 | 95 % | `S` 27,390 exact steps per GPU hour (94.6 % exact), `KC` 727 (100.0 %), the second run's cell: 37.7 times (limit 10) | yes |
+| 11 | 95 % | `S` 30,914 exact steps per GPU hour (97.2 % exact), `KC` 667 (100.0 %), the second run's cell: 46.3 times (limit 10) | yes |
+| 12 | 4 % | `S` against `KC`: K = 8 88.3 % against 100.0 %, 11.7 points short; K = 32 94.6 % against 100.0 %, 5.4 points short; K = 64 97.2 % against 100.0 %, 2.8 points short (limit 5; met at K = 64 only) | NO |
+| 13 | 3 % | `S` exact steps: 88.3 % (K = 8), 94.6 % (32), 97.2 % (64): none reaches 98 % | NO |
+
+**11 of 13 lines read yes, lines 12 and 13 read NO, and no line is "not run".** The pattern "lines 12 and 13 NO, every other line yes" is the one the page called the most likely (about 30 %), and it is the one that came out. Lines 12 and 13 are the two NO that the page put at 4 and 3 %, so they are not surprises: `S` holds 88.3 %, 94.6 % and 97.2 % of the right state at 8, 32 and 64 jobs, the kept chat 100.0 %, and the cap never touched that.
+
+## What the page's rule lets this Result claim
+The page's rule, applied line by line to what was read:
+* **Lines 2 and 3 read yes**, so the exact-steps-per-hour lines (9 to 11) are claimed as read, with the exactness of both arms written next to every figure.
+* **Lines 7 and 8 read yes**, so the point ratios of lines 10 and 11 may be quoted as numbers: 37.7 at 32 jobs and 46.3 at 64 jobs, each with the two sessions named (the exact-state cells are from the session of 19 Oct; the kept chat's cells at 32 and 64 jobs are the second run's, from another Colab session) and the exactness of both arms beside it. At 8 jobs both arms were measured in this session: 3.40.
+* **Line 12 reads NO**, so the plain time ratios (seconds per step of the kept chat over seconds per step of exact-state) are **not** claimed as ratios at equal exactness. They are in the table below, with the exactness of both arms beside them, because nothing is to be hidden.
+* **Never**, as the page says: a multiple of capacity, a count of GPUs saved, dollars or a percentage of cost, "proven", a statement about any provider, or a multiple of speed without the exactness beside it.
+
+**The sentence the page allows, with this run's numbers.** On one Tesla T4 (Colab), with vLLM 0.31.0, `Qwen/Qwen2.5-7B-Instruct-AWQ`, a cache of 80,000 tokens, 30-step jobs and every reply constrained by one regular expression, exact-state did 19,379, 27,390 and 30,914 exact steps per GPU hour at 8, 32 and 64 jobs, holding the right state after 88.3 %, 94.6 % and 97.2 % of its steps, against 5,694 (8 jobs, the same session), 727 and 667 (32 and 64 jobs, measured in the second run, another Colab session) for a kept chat that held it after 100.0 % of its steps. The ratios of those figures are 3.40, 37.7 and 46.3.
+
+**On the number 49.3.** In the Result of the second run, 49.3 was the ratio at 64 jobs, and that Result withheld it because line 2 read NO. The same ratio under the capped expression, in a new session, is **46.3** (30,914 against 667); it is 6.0 % lower than 49.3 because the new session was slower for exact-state and the kept chat's figure is the second run's. It is a ratio of exact steps per GPU hour, with exact-state exact on 97.2 % of its steps and the kept chat on 100.0 %. **It is not a capacity.** The test sends K jobs in lockstep and counts exact steps per hour; it never looks for the number of jobs a GPU can hold, it measured no GPU other than one free T4, and it says nothing about how many GPUs anything would take. The same goes for 37.7 at 32 jobs.
+
+## Where my expectation was off, and where it was right
+* **Line 2 (90 %): the cap held.** Every one of the 3,360 replies was accepted by the strict parser, none used the 96 new tokens, and the longest has 31 tokens (in `S` at 32 and 64 jobs; the longest in `S` at 8 jobs and in `KC` is 16). The one reply that used all 96 in the second run is now 21 tokens.
+* **Line 3 (85 %): the replies are the second run's.** Of the 3,120 replies of the three `S` cells, 3,118 are the same text as the second run's at the same job and step, and the 2 that are not are job 19, step 12, in the 32- and the 64-job cell, the one step the page named. Apart from that step, nothing in these cells differs in text, prompt size, cached count, whether the reply parsed or was admitted, or whether it left the held state exact; at that step the text, the token count and "parsed" differ (admitted, exact and distance do not), and the one other difference is the token count of one reply (first section). **The engine's cache counts were identical in a second session: 0 of the 3,360 steps have another cached-token count than the second run's.**
+* **Line 4 (85 %) and the argument for not running the kept chat at 32 and 64 jobs again.** `KC` at 8 jobs gave the same 240 replies as the second run's and was 100.0 % exact again. The page's argument was that a reply the narrower grammar still allows is not changed by it. In this run it held on every step where it applies: of the 3,360 replies the second run wrote at these jobs and steps, 3,358 are inside the capped language, and all 3,358 were written again as the same text, in a new session. That is one more case in which the argument held; it does not show what the kept chat would do at 32 and 64 jobs, which was not run.
+* **Line 5 (88 %) and side prediction (a) (88 %): the capped reply is as the page said.** Job 19, step 12 is now `ADD[(3,0)->(3,0):4tworowsdown4col#4]`: the first 16 characters of the looping name, `4tworowsdown4col`, and then `#4`, 21 tokens (the page: fewer than 40). It begins `ADD[(3,0)->(3,0):` and ends with `]`. The oracle writes `ADD[3,0:4]` there. The gate refuses it (replayed here against the state the job held: "well-formedness: edge ((3, 0), (3, 0), '4tworowsdown4col') endpoint missing"), so the state does not move. **Job 19 stayed where it was, as the page said it would:** it holds the right state after 11 of its 30 steps (steps 1 to 11) and after none of the others, the exact flags of every step are the second run's, the replies of steps 13 to 30 are the second run's, and so are their prompts.
+* **Line 6 (82 %): the exact steps are the second run's, to the digit** (212, 908 and 1,867), and so are the six jobs that missed and the steps at which they first missed (table below). The cap cleared line 2 and nothing else, as the page said.
+* **Lines 7 and 8 (72 and 75 %) read yes, by a wide margin:** +7.7 %, +5.0 %, +6.4 % and +4.0 % against a limit of 30. What I did not know before the run, the spread of this Colab's T4 from one session to the next, is one observation now: 4.0 to 7.7 %, every cell slower.
+* **Lines 9 to 11 (92, 95, 95 %) read yes.** The ratios came out 3.40, 37.7 and 46.3 where the page's estimate for the second run's speed was 3.5, 40.4 and 49.9: -2.8 %, -6.8 % and -7.2 %. The page said it was "not a prediction of the figures" and that the ratios I expect are "the second run's, plus or minus the session"; they are.
+* **Lines 12 and 13 (4 and 3 %) read NO, as expected:** the gap to the kept chat is 11.7, 5.4 and 2.8 points at 8, 32 and 64 jobs (limit 5, met at 64 jobs only), and none of the three `S` cells reaches 98 %.
+* **The side predictions, read afterwards as descriptions.** (a) true, above (88 %). (b) The only replies that differ from the second run's in text, among the 3,360 steps of the four cells, are the two copies of job 19, step 12 (78 %): true; by token count there is one more, the 64-job cell's job 3, step 16 (first section). (c) The wall seconds of the 32- and 64-job cells below the second run's (45 %): **NO**, above by 5.6 and 13.1 seconds, because the session was slower; the round that held the loop was shorter by 1.56 and 1.01 seconds. (d) The whole run takes 25 to 30 minutes, 10 of them GPU time in the cells (70 %): the cells took 8.8 minutes of engine time; the length of the whole run (installs, the model load, the safety cell) is not in the files and was not timed, so the 25 to 30 cannot be read.
+
+## The tables
+**Every cell** (the seconds are the wall seconds around the engine's call, summed over the rounds of the cell; "computed" is the prompt tokens the engine did not take from its cache; "cached, 2nd half" is the cached share over the steps from the 16th on; the two prompt columns are the mean prompt of the first 7 and of the last 7 steps of the jobs; "longest reply" is the most new tokens any reply used; "exact" is the share of steps after which the held state equalled the oracle's; engine vLLM 0.31.0 on a Tesla T4, no cell resumed):
+
+| arm | K | steps | seconds | s / step | prompt tokens | computed | cached | cached, 2nd half | prompt, first 7 | prompt, last 7 | longest prompt | longest reply | exact |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `S` | 8 | 240 | 39.4 | 0.164 | 89,589 | 29,477 | 67 % | 70 % | 394 | 332 | 516 | 16 | 88.3 % |
+| `KC` | 8 | 240 | 151.7 | 0.632 | 831,529 | 47,145 | 94 % | 97 % | 1,053 | 5,644 | 7,154 | 16 | 100.0 % |
+| `S` | 32 | 960 | 119.3 | 0.124 | 345,237 | 109,733 | 68 % | 71 % | 387 | 334 | 516 | 31 | 94.6 % |
+| `S` | 64 | 1,920 | 217.4 | 0.113 | 670,785 | 208,657 | 69 % | 72 % | 383 | 325 | 516 | 31 | 97.2 % |
+
+**Exact steps per GPU hour** (3,600 times the exact steps over the wall seconds of the cell; the last two columns are the second run's figure for the same cell and the change):
+
+| arm | K | exact steps | seconds | exact steps per hour | exact | second run: per hour | change |
+|---|---|---|---|---|---|---|---|
+| `S` | 8 | 212 | 39.4 | 19,379 | 88.3 % | 20,878 | -7.2 % |
+| `KC` | 8 | 240 | 151.7 | 5,694 | 100.0 % | 5,923 | -3.9 % |
+| `S` | 32 | 908 | 119.3 | 27,390 | 94.6 % | 28,748 | -4.7 % |
+| `S` | 64 | 1,867 | 217.4 | 30,914 | 97.2 % | 32,896 | -6.0 % |
+
+The kept chat at 32 and 64 jobs is not in this run's table because it was not run: its cells are the second run's (727 and 667 exact steps per hour, 100.0 % exact, 4,730.9 and 10,330.5 seconds; the 64-job cell was carried over three Colab sessions).
+
+**The ratios, with the exactness of both arms beside them** (exact steps per hour of `S` over those of `KC`; "page's estimate" is the estimate for the second run's speed that the page gave; the last column is the time per step of `KC` over that of `S`, **not** an equal-exactness ratio, because line 12 reads NO):
+
+| K | exact steps per hour, `S` over `KC` | page's estimate | exact, `S` | exact, `KC` | where the `KC` figure is from | time per step, `KC` over `S` (not an equal-exactness ratio) |
+|---|---|---|---|---|---|---|
+| 8 | 3.40 | 3.5 | 88.3 % | 100.0 % | this run (same session) | 3.85 |
+| 32 | 37.65 | 40.4 | 94.6 % | 100.0 % | the second run (another Colab session) | 39.81 |
+| 64 | 46.32 | 49.9 | 97.2 % | 100.0 % | the second run (another Colab session) | 47.64 |
+
+**This run against the second run, step by step** ("same text" counts the replies that are the same text at the same job and step; the cached counts are the sum over the cell and whether every step has the same count as the second run's; "rounds slower" is the number of the 30 rounds that took longer than the same round of the second run):
+
+| arm | K | steps compared | same text | different | s / step | second run | change | rounds slower | seconds | second run | prompt and cached tokens | against the second run |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `S` | 8 | 240 | 240 | 0 | 0.1641 | 0.1523 | +7.7 % | 30 of 30 | 39.4 | 36.6 | 89,589 and 60,112 | the same |
+| `KC` | 8 | 240 | 240 | 0 | 0.6323 | 0.6078 | +4.0 % | 30 of 30 | 151.7 | 145.9 | 831,529 and 784,384 | the same |
+| `S` | 32 | 960 | 959 | 1 | 0.1243 | 0.1184 | +5.0 % | 29 of 30 | 119.3 | 113.7 | 345,237 and 235,504 | the same |
+| `S` | 64 | 1,920 | 1,919 | 1 | 0.1132 | 0.1064 | +6.4 % | 29 of 30 | 217.4 | 204.3 | 670,785 and 462,128 | the same |
+
+**The round that held job 19's step 12** (round 12; seconds of rounds 11 / 12 / 13 in this run and in the second run; "other rounds" is the change in the seconds of the other 29 rounds):
+
+| K | this run | second run | round 12, change in seconds | other rounds | new tokens in round 12 |
+|---|---|---|---|---|---|
+| 32 | 4.06 / 4.56 / 3.60 | 3.79 / 6.13 / 3.37 | -1.56 | +6.7 % | 364 against 439 |
+| 64 | 7.27 / 8.11 / 6.81 | 6.77 / 9.13 / 6.32 | -1.01 | +7.2 % | 728 against 803 |
+
+**Where the exactness went** (counted from the step records; "jobs exact to the end" are jobs whose held state equalled the oracle's after every step; "refused" are replies the strict parser refused; "96 tokens" are replies that used the whole limit; "came back" are jobs whose state differed at some step and equalled the oracle's again later; "corrupted" counts states that were not well formed. Job numbers start at 0):
+
+| arm | K | jobs exact to the end | refused | 96 tokens | jobs that missed | jobs that came back | corrupted |
+|---|---|---|---|---|---|---|---|
+| `S` | 8 | 6 of 8 (second run 6) | 0 (second run 0) | 0 (second run 0) | 3, 4 | none | 0 |
+| `KC` | 8 | 8 of 8 (second run 8) | 0 (second run 0) | 0 (second run 0) | none | none | 0 |
+| `S` | 32 | 27 of 32 (second run 27) | 0 (second run 1) | 0 (second run 1) | 3, 4, 17, 19, 20 | 17 | 0 |
+| `S` | 64 | 58 of 64 (second run 58) | 0 (second run 1) | 0 (second run 1) | 3, 4, 17, 19, 20, 62 | 17, 62 | 0 |
+
+**The six jobs of `S` that missed, and what they answered at their first miss** (steps count from 1; the oracle's reply is what `oracle_script` writes at that step for a job that is exact up to it; the replies are the same at every K in which the job is run):
+
+| job | step | kind of step | the engine answered | the oracle wrote | against the second run |
+|---|---|---|---|---|---|
+| 3 | 16 | `add_node` | `ADD[(4,4)->(4,4):value#6]` | `ADD[4,4:6]` | the same text |
+| 4 | 18 | `add_node` | `ADD[1,0:6]` | `ADD[0,0:3]` | the same text |
+| 17 | 20 | `add_edge` | `DEL[(2,3)->(0,4):dep#6] ADD[(0,4)->(2,3):dep#4]` | `ADD[(0,4)->(2,3):dep#4]` | the same text |
+| 19 | 12 | `add_node` | `ADD[(3,0)->(3,0):4tworowsdown4col#4]` | `ADD[3,0:4]` | the second run wrote the loop (cut at 96 tokens); now a closed reply |
+| 20 | 30 | `add_edge` | `ADD[(1,5)->(2,1):dep#3]` | `ADD[(1,1)->(2,1):dep#3]` | the same text |
+| 62 | 12 | `add_edge` | `DEL[(1,1)->(1,0):owns#5] ADD[(1,1)->(1,0):dep#9]` | `ADD[(1,1)->(1,0):dep#9]` | the same text |
+
+## What I read from it (derived afterwards; none of this was pre-registered)
+1. **A second session moved the speed of this setup by 4 to 8 percent, in the same direction in every cell, and the figures follow it.** Every cell was slower (`S` at 8 jobs +7.7 %, `KC` +4.0 %), and nearly every round of every cell: 118 of the 120 rounds of the four cells took longer than the same round of the second run. The exact steps and the cached counts are the same as the second run's, so the whole difference between its exact steps per hour and these (-7.2 %, -4.7 %, -6.0 % for `S`, -3.9 % for `KC` at 8 jobs) is in the seconds.
+2. **The ratio at 8 jobs, with both arms in one session, is 3.40; in the second run it was 3.52** (-3.4 %). That is the one place where this run can say how much the ratio moves between two sessions: by a few percent, not by a factor. At 32 and 64 jobs the ratio mixes two sessions (exact-state from this one, the kept chat from the second run's). **An inference, not tested:** the new session was slower for both arms at 8 jobs, so a kept chat run in this session at 32 or 64 jobs would probably have been somewhat slower than the second run's, which would make these two ratios a little higher, not lower; this run does not show it.
+3. **Exactness is where it was.** The capped expression changed the format of one reply and nothing of what the model got wrong: the same six jobs missed at the same steps, with the same replies (table above), and the exact shares are 88.3 %, 94.6 % and 97.2 %. Refused replies of `S` (refused by the strict parser) are 0, 0 and 0 at 8, 32 and 64 jobs (the second run: 0, 1 and 1); the reply that the parser refused is now a reply the parser reads and the gate refuses. The count stays conservative against `S`: a job that is wrong from step 12 on counts as nothing for the rest of its 30 steps.
+4. **What the cap saved in time is between about 1 and 2 seconds in a cell, and no closer than that can be read.** The round of the loop took 4.56 and 8.11 seconds in this run, 1.56 and 1.01 less than in the second run. The other 29 rounds took 6.7 and 7.2 % more in this session; if the second run's loop round is slowed the same way it would have taken 6.54 and 9.79 seconds, and the cap saved 1.97 and 1.67 (the page expected about 2.5, from the second run alone). That scaling assumes the loop round was slowed by the session like the others, which this run cannot check, and the noise of one round's seconds was not measured.
+
+## What this does and does not show
+* **Shows, on one Tesla T4, one 7B model with 4-bit AWQ weights, vLLM 0.31.0, a cache of 80,000 tokens, 30-step jobs and every reply constrained by one regular expression with a name of at most 16 characters:** line 2 now reads yes, so the exact-steps-per-hour figures of this run are claimed as read; exact-state did 19,379, 27,390 and 30,914 exact steps per GPU hour at 8, 32 and 64 jobs (exact on 88.3 %, 94.6 % and 97.2 % of its steps) against 5,694, 727 and 667 for the kept chat (exact on 100.0 %); the kept chat's figures at 32 and 64 jobs are the second run's.
+* **Does not show that exact-state is as exact as the kept chat** (lines 12 and 13 NO), and so no ratio of times is claimed as a ratio at equal exactness. It does not show the kept chat at 32 and 64 jobs under the capped expression (not run), a capacity in jobs per GPU, another GPU (the seconds are a free T4's, and a data-centre GPU is much faster; the ratios, not the seconds, are what might carry over, which this test does not show), another model, engine or cache size, dollars, **energy (never measured; only time)**, retries (this test sends one request a step and never asks again; a refused reply costs a retry in a real system, for either arm), traffic that is not a round of K jobs, a cache that moves rows to CPU memory or disk, jobs longer than 30 steps, or any statement about a provider. It says nothing about the tensor-level roadmap.
+* **What may be reported now.** The sentence above, with its numbers, its setup and the exactness of both arms in it; the ratios as ratios of exact steps per GPU hour, naming the two sessions where the kept chat is the second run's; lines 12 and 13 as NO, in the same breath, as findings about this setup. **What stays out:** a multiple of capacity, a number of GPUs, dollars, "proven", and a ratio of times as if both arms were equally exact.
+* **Not done and worth doing, in this order:** (1) the kept chat at 32 and 64 jobs run again in one session with the exact-state cells, so that every ratio compares one session (1 h 19 min and about 3 hours of GPU; it would also test the argument that the cap does not change the kept chat); (2) retries counted, so that a refused reply costs what it costs; (3) the same cells on another GPU; (4) the GPU's power read next to the seconds.
+
+## Reproduce
+In Colab, `python/colab/axi_provider_side_bounded.ipynb` with a T4; about 9 minutes of engine time for the four cells, plus the installs and the model load. Nothing needs the GPU after that: `provider_side_bounded.merge_files` puts cell files together on any machine. `tests/test_provider_side_bounded_result.py` recomputes every figure of this Result from the saved file and the second run's, replays every job from the text of its replies, checks that the merged file is what `merge_cells` makes of its cells, and that the page is the locked text followed by this Result.
