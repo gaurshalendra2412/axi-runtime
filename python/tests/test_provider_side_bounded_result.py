@@ -637,7 +637,7 @@ FRONT_ROW = [   # the row of VERIFIED.md for the third run
     "The Result: every figure recomputed from the saved file and the second run's, every one of the 3,360 step records replayed from its reply text, the 13 lines by the code and by hand, job 19 replayed through the gate, the prose pinned word for word, these two front pages pinned (test 127, 10 tests); mutation check of test 127, run on its first nine tests: 1,132 deliberate changes, all caught.",
     "Not shown: that the cap makes exact-state as exact as the kept chat (lines 12 and 13 NO), the kept chat at 32 and 64 jobs under the capped expression (not run; the second run's cells), a capacity in jobs per GPU, any number of GPUs, dollars, energy, other GPUs, models or engines.",
 ]
-FRONT_NEXT = 'Next free: row 170, item 111, test 130, question 121'
+FRONT_NEXT = 'Next free: row 170, item 112, test 132, question 121'
 
 
 def test_the_front_pages_say_what_the_run_found_and_point_to_this_test():
@@ -645,7 +645,7 @@ def test_the_front_pages_say_what_the_run_found_and_point_to_this_test():
     item = cm[cm.index("108. **"): cm.index("109. **")]; k = ve.index("Provider-side serving test, third run"); row = ve[k: ve.index("\n", k)]
     for s in FRONT_ITEM: assert s in item, s[:100]
     for s in FRONT_ROW: assert s in row, s[:100]
-    assert FRONT_NEXT in cm and "test 126 checks the capped re-run of the exact-state cells and test 127 its Result, item 108; test 128 checks the retry test and test 129 its Result, item 109)" in cm
+    assert FRONT_NEXT in cm and "test 126 checks the capped re-run of the exact-state cells and test 127 its Result, item 108; test 128 checks the retry test and test 129 its Result, item 109; test 130" in cm
     R = _result(); assert "11 of 13 lines read yes" in R and "46.3" in item and "46.3" in row and "49.3 is not the number" in item and "the second run's 49.3 is replaced by 46.3" in row
     for text in (item, row): assert "@@" not in text and "not run yet" not in text.lower() and "capacity" in text
 

@@ -625,7 +625,7 @@ def test_the_result_claims_what_the_pages_rule_allows_and_nothing_more():
 def test_the_front_pages_say_what_the_run_found_and_item_110_says_that_it_is_an_idea_that_was_not_run():
     res = run(); c = cells(res); S = {k: st(v) for k, v in c.items()}; t3 = {k: st(third_cell(k)) for k in (8, 32, 64)}
     cm = open(os.path.join(ROOT, "docs", "RAJNISH_CONCEPT_MAP.md")).read(); ve = open(os.path.join(ROOT, "docs", "VERIFIED.md")).read()
-    item = cm[cm.index("109. **"): cm.index("110. **")]; item110 = cm[cm.index("110. **"): cm.index("Next free: row")]
+    item = cm[cm.index("109. **"): cm.index("110. **")]; item110 = cm[cm.index("110. **"): cm.index("111. **")]
     k = ve.index("Provider-side serving test, fourth run"); row = ve[k: ve.index("\n", k)]
     assert cm.index("109. **") < cm.index("110. **") < cm.index("Next free: row") and "\n110. **" not in item110 and "PROVIDER_SIDE_RETRY_TEST.md" in row and "test 129" in row and "test 129** (10 tests" in item
     reqs = retried(res); outs = [outcome(r) for r in reqs]; cnt = {o: outs.count(o) for o in OUTCOMES}
