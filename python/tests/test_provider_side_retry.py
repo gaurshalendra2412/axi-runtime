@@ -657,30 +657,30 @@ def test_the_table_and_the_lines_are_printed_in_the_format_the_notebook_shows():
 # ---------------------------------------------------------------- 11 the front pages
 FRONT_ITEM = ("109. **The serving side a fourth time, with one retry when the repair cannot fix a refused reply (19 Oct)**", "\"without changing the core of the framework\"", "replies with that stray weight were 84 of the 1,599 delete replies of the first run (no grammar) and 0 of 2,191 and 0 of 1,183 in the second and third",
               "the 99.4 % belongs to the older long-horizon test (state mode, a different setup)", "48 belong to four jobs (3, 4, 19 and 20) whose reply the gate refused and the repair of `repair_m6` could not fix", "the 507 deletes of a service with edges that the gate refuses are all completed by the repair (491 end exact, 16 are in jobs already behind)",
-              "rows 26 and 42, `agent_loop.py` mode M3", "Status: NOT RUN yet; this is the page, the code, the checks and the notebook of Update 62.**", "hash-locked; sha256 " + PAGE_SHA256 + " of the text above the Result", "and edits none of them: their sha256 are pinned in the test, so the core of the framework is unchanged",
+              "rows 26 and 42, `agent_loop.py` mode M3", "Status: RUN (the owner's Colab run, five cells in one session; the file reached the repository work on 20 Oct 2026); the Result is on the page.**", "hash-locked; sha256 " + PAGE_SHA256 + " of the text above the Result", "and edits none of them: their sha256 are pinned in the test, so the core of the framework is unchanged",
               "= **test 128** (23 tests:", "the 12 lines at their edges on a good run built from the third run's own replies", "`structured_imperative` feedback, for example `OBSTRUCTION ident_node node=(1,0) Reply with only the corrected delta.`", "a second refusal is accepted; the second round is paid for in the cell's seconds",
               "`R8`, `R32` and `R64` (jobs 0 to 7, 0 to 31 and 0 to 63, retry on) and the pair `H0`/`H1` on jobs 64 to 127, which no earlier run has seen", "the rule fires on 5, 12 and 12 steps (2.1, 1.25 and 0.6 %), only in jobs 3, 4, 19 and 20", "240 of 240, 956 of 960 and 1,915 of 1,920 (100.0, 99.6 and 99.7 %)",
               "I do not know whether a 7B model uses a terse feedback", "lines 2, 3 and 4 all yes about 75 %; lines 9 and 11 both yes about 30 %; the pattern lines 8 and 11 NO and the rest yes about 12 %; all 12 yes about 6 %", "never a multiple of capacity, a count of GPUs saved, dollars, \"100 percent\" or \"proven\"",
               "a TPU is another engine build and would be a different test")
-FRONT_ROW = ("**NOT RUN yet (Update 62: the page, the code, the checks and the notebook only).**", "74243e1ab623ec5c… of the locked text", "Nothing here measures the retry.", "48 of the 53 lost steps belong to four jobs (3, 4, 19 and 20)", "never on the 507 deletes the repair completes",
+FRONT_ROW = ("**Run (the owner's Colab run, five cells in one session, Tesla T4, vLLM 0.31.0; the file reached the repository work on 20 Oct 2026).**", "74243e1ab623ec5c… of the locked text", "**The headline reads NO:**", "48 of the 53 lost steps belong to four jobs (3, 4, 19 and 20)", "never on the 507 deletes the repair completes",
              "84 of 1,599 delete replies in the first run (no grammar) and 0 in the second and third", "The files it imports are pinned by sha256 in the test, so the core is unchanged.", "the ceiling at 64 jobs is 1,915 of 1,920 (99.7 %) against 1,867 (97.2 %)", "(test 128, 23 tests)")
-FRONT_NEXT = "Next free: row 170, item 110, test 129, question 121"
+FRONT_NEXT = "Next free: row 170, item 111, test 130, question 121"
 
 
-def test_the_front_pages_point_to_the_test_and_say_that_it_is_not_run_and_what_the_page_expects_and_what_it_does_not_show():
+def test_the_front_pages_point_to_the_test_and_say_what_the_page_expects_and_what_it_does_not_show():
     cm = open(os.path.join(ROOT, "docs", "RAJNISH_CONCEPT_MAP.md")).read(); ve = open(os.path.join(ROOT, "docs", "VERIFIED.md")).read()
     assert "PROVIDER_SIDE_RETRY_TEST.md" in cm and "PROVIDER_SIDE_RETRY_TEST.md" in ve
-    item = cm[cm.index("109. **"): cm.index("Next free: row")]; k = ve.index("Provider-side serving test, fourth run"); row = ve[k: ve.index("\n", k)]
+    item = cm[cm.index("109. **"): cm.index("110. **")]; k = ve.index("Provider-side serving test, fourth run"); row = ve[k: ve.index("\n", k)]
     assert item.count("\n109. **") == 0 and "\n110. **" not in item
     for s in FRONT_ITEM: assert s in item, s[:100]
     for s in FRONT_ROW: assert s in row, s[:100]
     for text in (item, row):
-        assert "@@" not in text and "mutation check of" in text.lower() and "483 deliberate changes" in text and "467 caught" in text and "16 " in text and "capacity" in text and "NOT RUN yet" in text and "Result" in text
+        assert "@@" not in text and "mutation check of" in text.lower() and "483 deliberate changes" in text and "467 caught" in text and "16 " in text and "capacity" in text and "NOT RUN yet" not in text and "Result" in text
         assert "proven" in text and "dollars" in text and "energy" in text
-    assert FRONT_NEXT in cm and "test 128 checks the retry test, item 109)" in cm and "test 126 checks the capped re-run of the exact-state cells and test 127 its Result, item 108; test 128" in cm
+    assert FRONT_NEXT in cm and "test 128 checks the retry test and test 129 its Result, item 109)" in cm and "test 126 checks the capped re-run of the exact-state cells and test 127 its Result, item 108; test 128" in cm
     assert cm.index("108. **") < cm.index("109. **") < cm.index("Next free: row") and ve.index("Provider-side serving test, third run") < k
     for name in ("test_provider_side.py", "test_provider_side_constrained.py", "test_provider_side_bounded.py", "test_provider_side_bounded_result.py"):
-        t = open(os.path.join(HERE, name)).read(); assert "row 169, item 109, test 128" not in t and "row 170, item 110, test 129" in t, name
+        t = open(os.path.join(HERE, name)).read(); assert "row 170, item 110, test 129" not in t and "row 170, item 111, test 130" in t, name
 
 
 if __name__ == "__main__":

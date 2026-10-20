@@ -114,3 +114,158 @@ More than one retry (a budget sweep is not run); another feedback wording (one v
 Open `python/colab/axi_provider_side_retry.ipynb` in Colab with a T4 and run the cells one at a time: it installs vLLM 0.31.0, connects Drive, fixes the output stream, loads the model with the capped constraint, runs the safety cell (3 jobs of 3 steps, then the probe), then the five cells in order. Each finished cell is written as `axi_provider_r_<label>.json` and copied to Drive; a cell that was cut off is run again from its start (the longest takes about 4 minutes). The last cell puts the five cells together, reads the third run's file from the repository, prints the table and the 12 lines, and offers the files for download. The Result goes below the line at the end of this page, and a result test will recompute every number in it from the saved files.
 
 ---
+
+# Result
+
+*Written after the run, below the locked text; nothing above this line has been changed (its hash is checked by `tests/test_provider_side_retry.py` and again by `tests/test_provider_side_retry_result.py`). The run was made by the owner on Colab with `python/colab/axi_provider_side_retry.ipynb`; the file reached me on 20 Oct 2026 and holds no date of its own. It records: vLLM 0.31.0, GPU Tesla T4, Python 3.13.15, `Qwen/Qwen2.5-7B-Instruct-AWQ`, the cache fixed at 80,000 tokens with the engine's block override (capacity source "override"), 30-step jobs, seed 20261017, every reply constrained by the capped expression of the third run (sha256 `6f4e5a993f26ccd4…`), the policy `repair_m6`, and one retry with the `structured_imperative` feedback. **All five planned cells ran** (`R8`, `R32`, `R64`, `H0`, `H1`); each holds its 30 first rounds in order. The file is `docs/results/axi_provider_retry.json` (sha256 `390f7464a54352764e21203f9546bd17fc4714b09cbb0aec9390963e5d94b116`): the merged file that the notebook's last cell wrote with `provider_side_retry.merge_files`. It records the sha256 of that module (`9cd1398b912c187d…`, the module in the repository), those of the seven files the test imports (all as pinned on the page), and the third run's file it was compared with (`axi_provider_bounded.json`, `1f12a846b1325f9f…`). The seconds around the engine's calls of the five cells add up to 818.3, which is 13.6 minutes, 435.4 of them in the pair. What the safety cell and the probe printed is not in the saved file, and nothing below rests on it. Every figure below is computed from the saved file by `tests/test_provider_side_retry_result.py`.*
+
+**What the page expected, and what came out.** The page put lines 2, 3 and 4 all yes at about 75 %, and they read yes, as do lines 1 and 5: the run is the run the page describes. About the retry itself it said that it did not know whether a 7B model uses a terse feedback, and it wrote down in advance what each outcome would mean. The nearest of those is "*Line 6 NO:* the model does not use the feedback (or uses it to repeat itself)", and what the page says to do then stands: "the next thing to try is a different feedback, which would be a different test written first". **8 of the 12 lines read yes; lines 6, 8, 9 and 11 read NO, and no line is "not run".** The headline (lines 9 and 11) reads NO on both: on the 64 jobs that no earlier run had seen, 98.1 % of the steps are exact with the retry and 98.1 % without it, and the exact steps per GPU hour are 30,951 with it against 31,359 without it. Line 8 was expected NO (35 %). Line 6 reads NO only because of `R8` (212 of 240 steps exact in the third run and in `R8`); at 32 and 64 jobs it is higher (927 against 908 steps and 1,889 against 1,867), and that gain is job 19 (19 steps) at both, plus 3 steps of job 3 at 64 jobs (steps 28 to 30), which are exact for another reason (below).
+
+## The 12 lines
+
+| # | my probability | what was measured | read |
+|---|---|---|---|
+| 1 | 98 % | the engine reported the cached tokens of every request: 6,989 requests in the 5 cells, 29 of them second requests | yes |
+| 2 | 92 % | replies accepted by the strict parser: 6,989 of 6,989 (first and second), 100.0 % (limit 99.5 %, met); replies that used all 96 new tokens: none (the longest has 31 tokens) | yes |
+| 3 | 85 % | first replies against the third run's `S` cell (`R8`, `R32`, `R64`) and `H1` against `H0`, job by job, up to each job's first retried step: all the same text (3,120 steps in the three cells and 1,920 in the pair compared; the jobs that asked again are 3, 4, 19 and 20 in the three cells and 101 and 122 in `H1`) | yes |
+| 4 | 93 % | 29 second requests, every one for a first reply that parsed, was refused by the gate and could not be repaired; `H0` made none | yes |
+| 5 | 90 % | retried steps over steps: `R8` 7 of 240 (2.9 %), `R32` 9 of 960 (0.9 %), `R64` 8 of 1,920 (0.4 %), `H1` 5 of 1,920 (0.3 %) (limit 3 %, met) | yes |
+| 6 | 85 % | exact steps with the retry against the third run's `S`: K = 8 212 of 240 (88.3 %) against 212 (88.3 %), K = 32 927 of 960 (96.6 %) against 908 (94.6 %), K = 64 1,889 of 1,920 (98.4 %) against 1,867 (97.2 %) (limit: higher in each; equal at K = 8) | NO |
+| 7 | 75 % | `R64`: 1,889 of 1,920 steps exact, 98.4 % (limit 98 %, met) | yes |
+| 8 | 35 % | `R64`: 98.4 % (limit 99 %, not met; the most it could be was 99.7 %) | NO |
+| 9 | 55 % | jobs 64 to 127: `H1` 1,884 of 1,920 exact (98.1 %), `H0` 1,884 (98.1 %): +0.0 points (limit +1.0) | NO |
+| 10 | 88 % | `H1` 0.1141 seconds per step, `H0` 0.1126: 1.013 times (limit 1.10, met) | yes |
+| 11 | 40 % | `H1` 30,951 exact steps per GPU hour, `H0` 31,359: -1.3 % (limit: higher) | NO |
+| 12 | 70 % | the 64 jobs of the pair: 64 hold the right state after as many steps with the retry as without, 0 after more, 0 after fewer | yes |
+
+**8 of 12 lines read yes, lines 6, 8, 9 and 11 read NO, and no line is "not run".** The page did not name this exact pattern; its nearest entry is the one for line 6 (above). The four NO stood at 85 % (line 6), 55 % (line 9), 40 % (line 11) and 35 % (line 8) on the page.
+
+## What the page's rule lets this Result claim
+The page's rule, applied line by line to what was read:
+* **Lines 2, 3 and 4 read yes**, so the figures of the cells are claimed as read.
+* **Line 9 reads NO and line 12 reads yes.** The page allows the claim that the retry raises the exactness only from the jobs that no earlier run had seen (lines 9 and 12). It did not raise it there (98.1 % with the retry, 98.1 % without), and no job was made worse by it. **This Result does not claim that the retry raises the exactness.**
+* **Lines 6 to 8 are about the jobs the slips were read on** (jobs 0 to 63), and say what the retry does to them: it put right one of the four slips that were read (job 19, step 12) and none of the other three, and the exact share at 64 jobs is 98.4 % against 97.2 % in the third run (another Colab session, same replies up to each job's first retried step).
+* **Never**, as the page says: a multiple of capacity, a count of GPUs saved, dollars or a percentage of cost, "100 percent" for the arm, "proven", a statement about any provider, or a statement about more than one retry.
+
+**The sentence the page allows, with this run's numbers.** On the 64 jobs that no earlier run had seen (jobs 64 to 127), on one Tesla T4 (Colab), with vLLM 0.31.0, `Qwen/Qwen2.5-7B-Instruct-AWQ`, a cache of 80,000 tokens, 30-step jobs and every reply constrained by one regular expression, one retry with the framework's one-line feedback left the exactness at 98.1 % where it was 98.1 % without it (1,884 and 1,884 of 1,920 steps), the seconds per step at 0.114 against 0.113, and the exact steps per GPU hour at 30,951 against 31,359 (both in the same session). The retry asked 5 times and put none of them right. On jobs 0 to 63, where the four slips had been read, it put right 1 of the four (job 19) and the exact share at 64 jobs is 98.4 % against 97.2 % in the third run.
+
+## What the 29 second requests did
+A second request is the first request, the first reply as the assistant's turn, and the framework's feedback as the user's turn (for example, in `R8`, job 3, step 16: `OBSTRUCTION malformed edge=((4, 4), (4, 4), 'value') Reply with only the corrected delta.`). 29 second requests were made in the four cells with the retry, 26 second rounds (jobs asking in the same step share a round), costing 12.03 seconds in all. Every second reply was accepted by the strict parser.
+
+| cell | steps asked again | second rounds | their seconds | per round | share of the cell's seconds | same reply | other reply, refused again | other reply, admitted and wrong | put right | exact after the step |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `R8` | 7 | 6 | 2.40 | 0.40 | 6.2 % | 6 | 0 | 1 | 0 | 0 |
+| `R32` | 9 | 8 | 3.56 | 0.45 | 2.9 % | 6 | 1 | 1 | 1 | 1 |
+| `R64` | 8 | 7 | 3.10 | 0.44 | 1.4 % | 6 | 0 | 1 | 1 | 2 |
+| `H1` | 5 | 5 | 2.97 | 0.59 | 1.4 % | 3 | 2 | 0 | 0 | 0 |
+| all | 29 | 26 | 12.03 | 0.46 | | 21 | 3 | 3 | 2 | 3 |
+
+* **17 of the 29 were asked after the job had already slipped, and in 14 of those the first reply was, letter for letter, the oracle's own reply.** Each of these 14 replies is legal in the oracle's state at its step and was refused in the state the job held, which an earlier slip had left different from the oracle's: they are job 3 at step 28 and job 4 at steps 19, 24 and 28 (in `R8`, `R32` and `R64`) and job 101 at steps 7 and 27 (in `H1`). 12 of the 14 came back as the same reply; 2 came back changed to another reply that was refused as well (`R32`, job 4, step 19: `dep#7` to `dep#0`; `H1`, job 101, step 7: `ADD` to `DEL`). **The rule cannot tell these from a real slip:** it knows that the gate refused a reply that parsed, and nothing about whether the reply is what the request asked.
+* **The other 15 first replies were not the oracle's:** 2 were put right (job 19, step 12, in `R32` and `R64`: `ADD[(3,0)->(3,0):4tworowsdown4col#4]` became `ADD[3,0:4]`, the oracle's reply); 9 came back as the same reply; 3 came back as `DEL[1,0]`, which the gate admits and which is wrong (job 4, step 18, in `R8`, `R32` and `R64`: the feedback said that the node (1,0) already exists, and the model deleted it); 1 came back changed and refused again (`H1`, job 122, step 22: `ADD` to `DEL`).
+* **The "exact after the step" column counts steps, not repairs.** In `R64` it is 2 and the replies put right are 1: the other step is job 3, step 28, where the same refused reply `DEL[4,4]` came back and the job is exact anyway, because the node (4,4) that the oracle deletes there was never added in that job (its add at step 16 was refused), so the refusal leaves the same graph as the oracle's.
+* **`R8` asked 7 times where the page's replay of the third run gave 5.** The extra two are job 4, steps 19 and 24: after step 18 was answered with the admitted `DEL[1,0]`, job 4 stood in another wrong state than in the third run, and its later replies were refused at other steps (the rule fired at steps 18, 19, 24 and 28 instead of 18 and 28).
+* **Time.** A second round took 0.40, 0.45, 0.44 and 0.59 seconds on average in `R8`, `R32`, `R64` and `H1` (0.46 over all), and the rounds of the retry were 6.2 %, 2.9 %, 1.4 % and 1.4 % of the seconds of their cells. In the pair, `H1` took 219.1 seconds against 216.3 for `H0` (+1.3 %), and the retry bought no exact step there, so the exact steps per hour fell by 1.3 %.
+
+The 29 second requests, one row each ("why the gate refused it" is the first word of the gate's reason; "first reply was the oracle's own" means that it is, letter for letter, what the oracle writes at that step):
+
+| cell | job | step | first reply | why the gate refused it | second reply | what came back | exact after |
+|---|---|---|---|---|---|---|---|
+| `R8` | 3 | 16 | `ADD[(4,4)->(4,4):value#6]` | well-formedness | `ADD[(4,4)->(4,4):value#6]` | same | no |
+| `R8` | 3 | 17 | `DEL[(1,4)->(1,1):dep#2]` | match | `DEL[(1,4)->(1,1):dep#2]` | same | no |
+| `R8` | 3 | 28 | `DEL[4,4]` | match | `DEL[4,4]` | same (first reply was the oracle's own) | no |
+| `R8` | 4 | 18 | `ADD[1,0:6]` | identification | `DEL[1,0]` | admitted, wrong | no |
+| `R8` | 4 | 19 | `ADD[(1,2)->(1,0):dep#7]` | well-formedness | `ADD[(1,2)->(1,0):dep#7]` | same (first reply was the oracle's own) | no |
+| `R8` | 4 | 24 | `ADD[(1,0)->(4,5):dep#7]` | well-formedness | `ADD[(1,0)->(4,5):dep#7]` | same (first reply was the oracle's own) | no |
+| `R8` | 4 | 28 | `ADD[(3,4)->(0,0):dep#5]` | well-formedness | `ADD[(3,4)->(0,0):dep#5]` | same (first reply was the oracle's own) | no |
+| `R32` | 3 | 16 | `ADD[(4,4)->(4,4):value#6]` | well-formedness | `ADD[(4,4)->(4,4):value#6]` | same | no |
+| `R32` | 3 | 17 | `DEL[(1,4)->(1,1):dep#2]` | match | `DEL[(1,4)->(1,1):dep#2]` | same | no |
+| `R32` | 3 | 28 | `DEL[4,4]` | match | `DEL[4,4]` | same (first reply was the oracle's own) | no |
+| `R32` | 4 | 18 | `ADD[1,0:6]` | identification | `DEL[1,0]` | admitted, wrong | no |
+| `R32` | 4 | 19 | `ADD[(1,2)->(1,0):dep#7]` | well-formedness | `ADD[(1,2)->(1,0):dep#0]` | refused again (first reply was the oracle's own) | no |
+| `R32` | 4 | 24 | `ADD[(1,0)->(4,5):dep#7]` | well-formedness | `ADD[(1,0)->(4,5):dep#7]` | same (first reply was the oracle's own) | no |
+| `R32` | 4 | 28 | `ADD[(3,4)->(0,0):dep#5]` | well-formedness | `ADD[(3,4)->(0,0):dep#5]` | same (first reply was the oracle's own) | no |
+| `R32` | 19 | 12 | `ADD[(3,0)->(3,0):4tworowsdown4col#4]` | well-formedness | `ADD[3,0:4]` | put right | yes |
+| `R32` | 20 | 30 | `ADD[(1,5)->(2,1):dep#3]` | identification | `ADD[(1,5)->(2,1):dep#3]` | same | no |
+| `R64` | 3 | 16 | `ADD[(4,4)->(4,4):value#6]` | well-formedness | `ADD[(4,4)->(4,4):value#6]` | same | no |
+| `R64` | 3 | 28 | `DEL[4,4]` | match | `DEL[4,4]` | same (first reply was the oracle's own) | yes |
+| `R64` | 4 | 18 | `ADD[1,0:6]` | identification | `DEL[1,0]` | admitted, wrong | no |
+| `R64` | 4 | 19 | `ADD[(1,2)->(1,0):dep#7]` | well-formedness | `ADD[(1,2)->(1,0):dep#7]` | same (first reply was the oracle's own) | no |
+| `R64` | 4 | 24 | `ADD[(1,0)->(4,5):dep#7]` | well-formedness | `ADD[(1,0)->(4,5):dep#7]` | same (first reply was the oracle's own) | no |
+| `R64` | 4 | 28 | `ADD[(3,4)->(0,0):dep#5]` | well-formedness | `ADD[(3,4)->(0,0):dep#5]` | same (first reply was the oracle's own) | no |
+| `R64` | 19 | 12 | `ADD[(3,0)->(3,0):4tworowsdown4col#4]` | well-formedness | `ADD[3,0:4]` | put right | yes |
+| `R64` | 20 | 30 | `ADD[(1,5)->(2,1):dep#3]` | identification | `ADD[(1,5)->(2,1):dep#3]` | same | no |
+| `H1` | 101 | 4 | `ADD[(3,4)->(3,4):2alue#2]` | well-formedness | `ADD[(3,4)->(3,4):2alue#2]` | same | no |
+| `H1` | 101 | 7 | `ADD[(3,2)->(3,4):dep#2]` | well-formedness | `DEL[(3,2)->(3,4):dep#2]` | refused again (first reply was the oracle's own) | no |
+| `H1` | 101 | 13 | `DEL[(1,1)->(3,4):dep#5] ADD[(1,1)->(3,4):dep#5]` | match | `DEL[(1,1)->(3,4):dep#5] ADD[(1,1)->(3,4):dep#5]` | same | no |
+| `H1` | 101 | 27 | `ADD[(3,4)->(1,3):dep#6]` | well-formedness | `ADD[(3,4)->(1,3):dep#6]` | same (first reply was the oracle's own) | no |
+| `H1` | 122 | 22 | `ADD[(0,0)->(2,0):dep#3]` | well-formedness | `DEL[(0,0)->(2,0):dep#3]` | refused again | no |
+
+## The eight first slips
+Over the 128 jobs (jobs 0 to 63 in `R64`, jobs 64 to 127 in `H1`), **8 jobs ever slip**, and the misses of such a job after its first slip happen in a state that is no longer the oracle's (the exact-state arm keeps the state it holds, so a step that was not done stays not done); they are read here as the consequence of the first slip and not as new slips. Job 101 lost 27 of its 30 steps from one slip at step 4. The first slip of each job, with the request, what the oracle writes and what the model wrote:
+
+| job | step | the request | the oracle writes | the model's first reply | kind | the gate | the retry |
+|---|---|---|---|---|---|---|---|
+| 3 | 16 | Add a service at (4,4) with value 6. | `ADD[4,4:6]` | `ADD[(4,4)->(4,4):value#6]` | shape | well-formedness, refused | the same reply again |
+| 4 | 18 | Add a service at (0,0) with value 3. | `ADD[0,0:3]` | `ADD[1,0:6]` | number | identification, refused | answered with `DEL[1,0]`, admitted and wrong |
+| 17 | 20 | Add a dependency edge from (0,4) to (2,3) with relation dep and weight 4. | `ADD[(0,4)->(2,3):dep#4]` | `DEL[(2,3)->(0,4):dep#6] ADD[(0,4)->(2,3):dep#4]` | extra delete | admitted | not asked: the gate admitted the reply |
+| 19 | 12 | Add a service at (3,0) with value 4. | `ADD[3,0:4]` | `ADD[(3,0)->(3,0):4tworowsdown4col#4]` | shape | well-formedness, refused | put right |
+| 20 | 30 | Add a dependency edge from (1,1) to (2,1) with relation dep and weight 3. | `ADD[(1,1)->(2,1):dep#3]` | `ADD[(1,5)->(2,1):dep#3]` | number | identification, refused | the same reply again |
+| 62 | 12 | Add a dependency edge from (1,1) to (1,0) with relation dep and weight 9. | `ADD[(1,1)->(1,0):dep#9]` | `DEL[(1,1)->(1,0):owns#5] ADD[(1,1)->(1,0):dep#9]` | extra delete | admitted | not asked: the gate admitted the reply |
+| 101 | 4 | Add a service at (3,4) with value 2. | `ADD[3,4:2]` | `ADD[(3,4)->(3,4):2alue#2]` | shape | well-formedness, refused | the same reply again |
+| 122 | 22 | Add a dependency edge from (0,0) to (2,2) with relation dep and weight 3. | `ADD[(0,0)->(2,2):dep#3]` | `ADD[(0,0)->(2,0):dep#3]` | number | well-formedness, refused | answered with `DEL[(0,0)->(2,0):dep#3]`, refused again |
+
+They are three kinds. **A service added as an edge from the service to itself** (jobs 3, 19, 101): the request asks for a service, and the model writes the edge form from that service to itself with a made-up name (`value`, `4tworowsdown4col`, `2alue`) and the value after the `#`; the oracle writes `ADD[x,y:v]`. **A wrong number** (jobs 4, 20, 122): the model copies a coordinate or a value wrongly (in job 4 it wrote the node that the state already holds). **A legal extra** (jobs 17, 62): the model adds the right edge and also deletes another edge between the same two services; the reply is legal, so the gate admits it and the rule never fires. Of the six first slips that the gate refused (jobs 3, 4, 19, 20, 101, 122), the retry put right one (job 19). It could not reach the two that the gate admitted. **What the framework's other checks see of these eight:** its scope filter (`scope.py`: a change is in scope if the coordinates it touches are written in the request) flags the wrong coordinate in jobs 4, 20, 122 and nothing in the other five (in the shape slips both ends of the edge are the named service, and in the two legal extras the deleted edge is between two named services). The serving loop did not use the scope filter, and the feedback of the retry did not carry its reason; this is what it would have seen, not a claim about what it would have done.
+
+Where the steps were lost (steps after which the held state was not the oracle's):
+
+| cell | job | steps not exact | first step not exact |
+|---|---|---|---|
+| `R64` | 3 | 12 | 16 |
+| `R64` | 4 | 13 | 18 |
+| `R64` | 17 | 4 | 20 |
+| `R64` | 20 | 1 | 30 |
+| `R64` | 62 | 1 | 12 |
+| `H1` | 101 | 27 | 4 |
+| `H1` | 122 | 9 | 22 |
+
+| K | exact steps, third run | with the retry | change | jobs that missed, third run | with the retry |
+|---|---|---|---|---|---|
+| 8 | 212 (88.3 %) | 212 (88.3 %) | +0 | 3 (15), 4 (13) | 3 (15), 4 (13) |
+| 32 | 908 (94.6 %) | 927 (96.6 %) | +19 | 3 (15), 4 (13), 17 (4), 19 (19), 20 (1) | 3 (15), 4 (13), 17 (4), 20 (1) |
+| 64 | 1867 (97.2 %) | 1889 (98.4 %) | +22 | 3 (15), 4 (13), 17 (4), 19 (19), 20 (1), 62 (1) | 3 (12), 4 (13), 17 (4), 20 (1), 62 (1) |
+
+At 64 jobs the retry cut the lost steps from 53 to 31: job 19 from 19 to 0, job 3 from 15 to 12, the others unchanged. The pair lost 36 steps in both cells, in the same two jobs (101 and 122), and the 64 of its 64 jobs hold the right state after the same number of steps with and without the retry.
+
+## Every cell
+
+| cell | jobs | retry | steps | seconds | s / step | exact steps | exact | jobs exact to the end | exact steps per hour |
+|---|---|---|---|---|---|---|---|---|---|
+| `R8` | 0 to 7 | on | 240 | 38.5 | 0.160 | 212 | 88.3 % | 6 of 8 | 19,846 |
+| `R32` | 0 to 31 | on | 960 | 121.2 | 0.126 | 927 | 96.6 % | 28 of 32 | 27,537 |
+| `R64` | 0 to 63 | on | 1,920 | 223.3 | 0.116 | 1,889 | 98.4 % | 59 of 64 | 30,459 |
+| `H0` | 64 to 127 | off | 1,920 | 216.3 | 0.113 | 1,884 | 98.1 % | 62 of 64 | 31,359 |
+| `H1` | 64 to 127 | on | 1,920 | 219.1 | 0.114 | 1,884 | 98.1 % | 62 of 64 | 30,951 |
+
+The third run's cells were in another Colab session and the page says a cell of this run is not compared with them for time; the seconds above are for reading each cell and the pair `H0`/`H1`, which ran in one session.
+
+## Where my expectation was off, and where it was right
+* **Lines 1 to 5 (98, 92, 85, 93 and 90 %): the run is the run the page describes.** 6,989 requests, every one with its cached count; 6,989 replies, every one accepted by the strict parser, none at 96 new tokens (the longest has 31); the first replies are the third run's up to each job's first retried step, and `H1`'s are `H0`'s; the 29 second requests were all made where the rule says and `H0` made none; the retry asked on at most 2.9 % of the steps of a cell (`R8`, just under the limit of 3 %). On the replies of `H0` the rule would fire at exactly the 5 steps where `H1` asked.
+* **Line 6 (85 %) reads NO,** at 8 jobs only (equal), and the model did not use the feedback in the way the page hoped: of the 29 second requests 21 came back as the same reply, and 2 were put right, both the same step of the same job. The page put line 6 at 85 %, so this is the surprise of the run; it also said that it did not know whether this 7B model would use the feedback.
+* **Line 7 (75 %) reads yes and line 8 (35 %) NO:** 98.4 % at 64 jobs against a ceiling of 99.7 %; the 31 steps still lost are jobs 3, 4, 17, 20 and 62.
+* **Line 9 (55 %) and line 11 (40 %) read NO.** The page expected about six slips in 64 new jobs, four of them of the refused kind, and a retry that fixes two thirds of them. There were two slips (jobs 101 and 122), both of the refused kind, the retry was asked 5 times for them and put none right. With nothing gained, the cost of the second rounds is all there is: -1.3 % in exact steps per hour.
+* **Line 10 (88 %) reads yes,** 1.013 times; **line 12 (70 %) reads yes,** with no job worse (and none better).
+* **The side predictions, read afterwards as descriptions.** (a) the number of second requests in `R64` is between 4 and 12 (85 %): true, 8. (b) the second reply of job 19, step 12 is `ADD[3,0:4]` (55 %): true. (c) every second reply parses (97 %): true, 29 of 29. (d) at least 60 of the 64 jobs of `R64` hold the right state at every step (60 %): **false,** 59 (the third run: 58). (e) a second round takes 0.4 to 2.0 seconds on average (80 %): true, 0.46 over the 26 second rounds (0.40 to 0.59 by cell). (f) `H0` is between 90 and 99 percent exact (80 %): true, 98.1 %. (g) the five cells take 12 to 25 minutes in all, loading excluded (70 %): true by the saved seconds (13.6 minutes around the engine's calls); the time the cells took in Colab, with the prompts built and the files written, is not in the file.
+
+## On the text pasted after the run
+On 20 Oct the owner pasted a text (author unknown) that reads this run's file. Its sentences, quoted, checked against the files:
+* "pushing you up to 97.2%", and the run before it "hovering around 69%–78%": **the retry did not do that.** 97.2 % is the exact share of `S` at 64 jobs in the second and in the third run, which had no retry. The first run (no grammar) had 76.2 %, 78.2 % and 69.2 % at 8, 32 and 64 jobs; the grammar of the second run took it to 88.3 %, 94.6 % and 97.2 %. With the retry it is 88.3 %, 96.6 % and 98.4 %, and on the 64 new jobs 98.1 % with it and 98.1 % without.
+* "5.4 times more correct, usable state transitions per hour": **that divides two different sizes:** 30,914 (`S` at 64 jobs) over 5,694 (`KC` at 8 jobs) is 5.43. The ratios at the same number of jobs are the third run's: 3.40 at 8 jobs (one session) and 37.7 and 46.3 at 32 and 64 jobs (the kept chat from the second run, another session), each with the exactness of both arms beside it. Neither a "540% increase in hardware capacity", nor "pack 8× more agents onto a single server", nor dollars were measured.
+* Its section on "Lines 12 and 13": those are lines of the third page (13 lines). This page has 12 lines, and the NO are 6, 8, 9 and 11.
+* "Seed 20261017000, Step 16": seed 20261017000 is job 0, which is exact at every step in every cell. The step described is job 3 (seed 20261017003), step 16.
+* "the ultimate, empirical proof that the AI industry must adopt" a tensor-level architecture: **nothing in this run can show that.** A 7B model that repeats a reply after a one-line feedback says that this feedback did not help this model on these slips; a different wording, a stronger model or a check of the reply against the request are not ruled out by it, and the tensor-level roadmap is neither tested nor touched.
+
+## What this finds, in plain words
+No step of the 6,960 left the held graph malformed (0 corrupted), and the exactness is 98.4 % at 64 jobs and 98.1 % on jobs nobody had read. What is left is a small number of first slips in a few jobs (8 of 128), of three kinds. **One retry with the framework's one-line feedback put right one of the six that the gate refused (job 19) and none of the other cases,** and it cost 1.4 % of the seconds of its cell in the pair. Most of the second requests were not about a slip at all: 17 of the 29 came after the job had slipped, and 14 of those were asked about a reply that was the oracle's own, which the rule cannot tell from a slip. On this model, on these slips, that feedback is not enough to move the headline. It does not say what a different feedback, a stronger model or more than one retry would do, and it says nothing against the gate, the repair or the loop as designed.
+
+## What this does not show
+More than one retry (a budget sweep is not run); another feedback wording (this was one, `structured_imperative`; the framework has three others); another model, GPU, engine or cache size; dollars; a capacity in jobs per GPU; energy; the kept chat with a retry (not run); retries in a real server, where they would be mixed with other traffic; the scope filter's reason carried in the feedback (the filter flags 3 of the 8 first slips, above; it was not used here); that the retry fixes slips of kinds not seen here; replies in ordinary words; jobs longer than 30 steps. The third run's ratios (37.7 and 46.3) were not re-measured here. It says nothing about the tensor-level roadmap.
