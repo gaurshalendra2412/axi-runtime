@@ -109,3 +109,111 @@ Requests in the words of a user (the sentences are the ones listed above, writte
 Open `python/colab/axi_provider_side_free.ipynb` in Colab with a T4 and run the cells one at a time: it gets the code from GitHub, installs vLLM 0.31.0, connects Drive, fixes the output stream, runs the **pre-flight check**, loads the model with the per-request constraint, runs the safety cell, then the three cells in order. Each finished cell is written as `axi_provider_f_<label>.json` and copied to Drive; a cell that was cut off is run again from its start (the longest takes about 13 minutes). The last cell puts the cells together, prints the table, the split by pool and by what the host read, the first misses and the 16 lines, and offers the files for download. The Result goes below the line at the end of this page, in a later update with a test of its own.
 
 ---
+
+
+# Result
+
+*Written after the run, below the locked text; nothing above this line has been changed (its hash is checked by `tests/test_provider_side_free.py` and again by `tests/test_provider_side_free_result.py`). The run was made by the owner on Colab on 21 Oct 2026 with `python/colab/axi_provider_side_free.ipynb`: 19,200 steps in three cells, 50.4 minutes of generation, vLLM 0.31.0, `Qwen/Qwen2.5-7B-Instruct-AWQ`, Tesla T4, a cache of 80,000 tokens. The merged file is `docs/results/axi_provider_free.json` (sha256 `4ec1ce81239b4b18...`). The architecture is Rajnish's; the cells, the code and every measurement are the owner's, with an AI assistant as a tool.*
+
+**What the page expected, and what came out.** **Line 2 reads NO**, so by the page's rule no claim is made until the cause is found; the cause is found below (four replies of the capped expression that ran to the token limit) and the figures are reported as read, with that NO beside them. Lines 3, 4, 5 and 6 read yes. Of the 16 lines **9 read yes and 7 read NO** (2, 8, 9, 11, 12, 13 and 14); no line is "not run". **Both headline lines read NO:** the model alone did not read the names well enough (line 8, 60 %), and the host reading what it can did not bring the state to 99 percent (line 11, 55 %). The page put both yes at about 40 %.
+
+**In one paragraph.** With the request given as coordinates plus the list of names, the exact state was held on 6,400 of 6,400 steps. With the request in ordinary words and the model left to read the name, it was held on 39.8 %; with the host reader reading the sentences it can read, 61.5 %. The host reader was never wrong (5,380 requests read right, 0 wrong, 1,020 not read) and none of the 1,536 steps it read before a job's first slip was a slip. The slips come from the model's own lookups of a name on edge requests, and from the requests the host did not read; a slip stays in the held state until a later request removes the wrong item, so the shares over 100 steps are much lower than the rate of new mistakes. The serving numbers (seconds per step, tokens per step) did not move with the words or with the reader; the names list in the prompt has a cost in tokens that the sixth run did not have.
+
+## The 16 lines
+
+| # | my probability | what was measured | read |
+|---|---|---|---|
+| 1 | 99 % | cached tokens reported on all 19,200 requests (5,523,456 of 8,394,619 prompt tokens served from the cache) | yes |
+| 2 | 92 % | 19,196 of 19,200 replies accepted by the strict parser (99.98 %); **4 replies used all 96 new tokens** (3 in `W0`, 1 in `WN`, none in `C0`) and are outside the language of their own request | NO |
+| 3 | 99 % | all 12,800 sentences of `W0` and `WN` name the services of the oracle's request in its order, with its numbers, and the second pool names exactly one service more (checked by plain search, not by the reader) | yes |
+| 4 | 99 % | the recorded sha256 of every cell equals the one recomputed from its jobs and the reader; `WN` has 775 expressions; the oracle's reply is inside the expression of all 19,200 requests | yes |
+| 5 | 96 % | all 192 jobs of the three cells ran 100 steps | yes |
+| 6 | 99 % | the reader, run again on the recorded sentences, gives the recorded outcome at all 6,400 requests: right 5,380, wrong 0, not read 1,020 | yes |
+| 7 | 65 % | `C0` 100.0 % (6,400 of 6,400 steps) against 97.6 % for the sixth run's `L0` (6,244 of 6,400) | yes |
+| 8 | 60 % | `W0` 39.8 % (2,546 of 6,400 steps; 0 of 64 jobs exact to the end) | NO |
+| 9 | 65 % | `W0` is 60.2 points below `C0` | NO |
+| 10 | 90 % | `WN` 61.5 % against `W0` 39.8 % | yes |
+| 11 | 55 % | `WN` 61.5 % (3,936 of 6,400 steps; 2 of 64 jobs exact to the end) | NO |
+| 12 | 50 % | 63.0 % of the 5,380 steps whose request the host read right | NO |
+| 13 | 65 % | 53.7 % of the 1,020 steps whose request the host did not read | NO |
+| 14 | 55 % | `W0`: second pool 36.5 % of 1,548 steps, first pool 40.8 % of 4,852; the difference is 4.3 points | NO |
+| 15 | 88 % | `WN` 0.157 s per step, `W0` 0.155: +1.3 % | yes |
+| 16 | 75 % | `WN` 14,059 exact steps per GPU hour, `W0` 9,215 | yes |
+
+Lines 7, 10, 15 and 16 are the ones that read yes among the claim lines (the names list does not hurt the exact share; the host's reading does not hurt; the 775 expressions cost no seconds; `WN` does more exact steps per hour than `W0` because it holds the state on more steps, at the same speed). Line 14 reads NO by 1.3 points more than the three the page allowed.
+
+## The cells
+
+| cell | request given as | steps | exact steps | jobs exact to the end | seconds per step | computed prompt tokens per step | prompt tokens per step | exact steps per GPU hour |
+|---|---|---|---|---|---|---|---|---|
+| `C0` | coordinates + names list | 6,400 | 100.0 % | 64 of 64 | 0.160 | 156.2 | 442.7 | 22,513 |
+| `W0` | words, capped expression | 6,400 | 39.8 % | 0 of 64 | 0.155 | 144.1 | 433.1 | 9,215 |
+| `WN` | words, expression built by the host reader | 6,400 | 61.5 % | 2 of 64 | 0.157 | 148.4 | 435.8 | 14,059 |
+
+Exact share and exact steps per hour count every step after a slip as a miss, because the held state stays wrong; they are the page's measures and they are used as written. The next table separates the new mistakes.
+
+## The serving numbers, as a company that runs the model counts them
+
+The page's measures for a company that runs a model are seconds per step, computed prompt tokens per step and exact steps per GPU hour. Energy was not measured. The sixth run's cells were run in another Colab session, so the comparison with them is in the table but the size of any difference cannot be separated from the session.
+
+| | seconds per step | computed prompt tokens per step | prompt tokens per step | exact steps per GPU hour |
+|---|---|---|---|---|
+| sixth run `L0` (capped, coordinates only) | 0.100 | 94.6 | 331.0 | 35,113 |
+| sixth run `LN` (named, coordinates only) | 0.101 | 94.9 | 331.2 | 35,764 |
+| this run `C0` (coordinates + names list) | 0.160 | 156.2 | 442.7 | 22,513 |
+| this run `W0` | 0.155 | 144.1 | 433.1 | 9,215 |
+| this run `WN` | 0.157 | 148.4 | 435.8 | 14,059 |
+
+* **Speed.** `WN` ran +1.3 % against `W0` with 775 different expressions in one run; building an expression for each request cost no seconds that this run can see (line 15).
+* **Tokens.** The names list and the longer sentences put 112 more tokens in each prompt than the sixth run's `L0` (34 %), and 62 more computed prompt tokens per step (65 %), at 0.160 s per step against 0.100. That is a cost of putting the names in the prompt, in another session; it is not a cost of the grammar.
+* **Exact steps per hour.** `C0` 22,513 against 35,113 for `L0` and 35,764 for `LN`: the same exact share as `LN`, fewer steps per hour because each step is slower and heavier.
+* **Drift.** There was none with the request given as coordinates (`C0`). With the model reading the name, the drift is the first slip below, and it is a matter of reading a sentence, which the serving side does not do when the request arrives as coordinates.
+
+## What the page's rule lets this Result claim
+
+Lines 3, 4, 5 and 6 read yes. Line 2 reads NO: 4 of 19,200 replies used all 96 new tokens and were refused by the strict parser (the replies below). The cause is the capped expression, which allows an item list of any length: in these four replies the model kept appending `ADD[...]` and `DEL[...]` items until the token limit. They are `W0` job 193 step 81, `W0` job 205 step 95, `W0` job 243 step 63 and `WN` job 222 step 70, the last on a request the host did not read (edge: not two services), so it was under the capped expression too. `C0`, where the request is given as coordinates, has none in 6,400. The figures are therefore claimed as read for this setup (one model, one GPU, one run, 64 jobs, the sentences of the page), with the NO of line 2 beside them. The names are the table's (given, not learned); the host reader reads a sentence only where one service is named for a delete, two for an edge, or an added service with its coordinates, and refuses the rest, and the sentences are those of the page and not requests in the words of a user.
+
+## Where the first slips are
+
+The first inexact step of a job is the clean measure, because until then the state was exact. `W0`: 64 of 64 jobs slipped, median step 11, in the three thirds of the job 60 / 3 / 1. `WN`: 62 of 64 jobs slipped, median step 16, thirds 43 / 13 / 6. The table counts, for each kind of request, the first slips and the steps that were run exact up to and including the first slip.
+
+| cell | request kind | pool | host read | first slips | steps run before the first slip | rate |
+|---|---|---|---|---|---|---|
+| `W0` | add_edge | first | - | 29 | 205 | 14.1 % |
+| `W0` | add_edge | second | - | 24 | 68 | 35.3 % |
+| `W0` | add_node | first | - | 0 | 207 | 0.0 % |
+| `W0` | add_node | second | - | 2 | 68 | 2.9 % |
+| `W0` | delete | first | - | 4 | 225 | 1.8 % |
+| `W0` | delete | second | - | 5 | 93 | 5.4 % |
+| `WN` | add_edge | first | right | 0 | 435 | 0.0 % |
+| `WN` | add_edge | second | miss | 53 | 140 | 37.9 % |
+| `WN` | add_node | first | right | 0 | 478 | 0.0 % |
+| `WN` | add_node | second | right | 0 | 149 | 0.0 % |
+| `WN` | delete | first | right | 0 | 474 | 0.0 % |
+| `WN` | delete | second | miss | 9 | 184 | 4.9 % |
+
+* The model's weak point is the edge: 29 of 205 (14.1 %) in the first pool and 24 of 68 (35.3 %) in the second. A delete is 4 of 225 (1.8 %) and 5 of 93 (5.4 %); a new service 0 of 207 (0.0 %) and 2 of 68 (2.9 %). The usual slip is a wrong pair of coordinates or the two ends swapped.
+* In `WN` **none of the 1536 steps whose request the host read right was a first slip**; every first slip is on a request the host did not read (53 of 140 (37.9 %) for edges, 9 of 184 (4.9 %) for deletes). So the host's reading is safe where it reads, and the loss is the 1,020 requests it refuses. The page's line 12 reads NO (63.0 %) only because later steps of a job that slipped on an unread request stay wrong.
+* In the second pool, 10 of the 28 first slips of `W0` carry the coordinates of the extra service the sentence mentions; the other 18 do not (prediction (c) did not come out).
+* Aliases (prediction (f)): in `W0`, first slips at 12 of 66 edge and delete requests that use an alias, against 50 of 525 that do not (18.2 % against 9.5 %). The numbers are small; read it as "the aliases were not read better than the names" and nothing more.
+
+## The predictions written beside the lines, read afterwards
+
+| written first | probability | measured | came out |
+|---|---|---|---|
+| (a) `W0` holds the right state on between 90 and 98 percent of its 6,400 steps | 70 % | 39.8 % | NO |
+| (b) more than half of the first slips of `W0` are on edge requests | 60 % | 53 of 64 | yes |
+| (c) in the second pool the wrong lookups take the second service named in the sentence | 60 % | 10 of 28 second-pool first slips carry the extra service's coordinates; the other 18 do not | NO |
+| (d) the seconds per step of `WN` are within 5 percent of those of `W0` | 80 % | +1.3 % | yes |
+| (e) the three cells take 30 to 45 minutes in all, loading excluded | 65 % | 50.4 minutes | NO |
+| (f) whether the aliases are read as well as the names (not a line) | - | in `W0`, first slips at 12 of 66 edge and delete requests that use an alias, against 50 of 525 that do not: 18.2 % against 9.5 % | read below |
+
+## What this means, and what it does not
+
+The serving side did what it was built for where the request arrives as coordinates: with the names list and no more, the exact state was held at every step. The new question was the front of the pipeline, a sentence in ordinary words, and for the 7B model on this T4 the answer is that it is not good enough by itself (39.8 %), and that a fixed host reader that refuses what it cannot read helps (61.5 %) without being wrong once, but stops at the requests it refuses. The finding is a limit of this model and this reader, not a failure of the serving numbers.
+
+## What this does not show
+The words of a real user (the sentences are the ones on the page, written by me, in two pools); names the host did not give; another language; tasks of more than 100 steps; real company tasks; another model, size, GPU, engine or cache size (a bigger model is the next test, with its own page); a retry on top of a grammar; a reader that handles the second pool; energy; dollars; a capacity in jobs per GPU; hallucination in free text. Nothing here is proven.
+
+## What comes next
+A test on a bigger model on a GPU of the L4 class or a v6e-1 TPU, with its own page locked first, measuring drift, seconds per step, latency per request and tokens (and energy where the hardware reports it), written from the side of a company that runs the model. The cost in compute units is told before anything is run.
