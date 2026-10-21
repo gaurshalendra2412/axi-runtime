@@ -59,7 +59,7 @@ FILES = {"first run, no grammar": "axi_provider_side.json", "second run, uncappe
 
 
 def test_the_five_saved_runs_have_the_same_setup_o_is_what_the_earlier_pages_count_and_the_files_are_those_the_page_names():
-    assert Q.FILES == list(FILES.items()) and [os.path.basename(p) for p in sorted(os.listdir(RES)) if p.startswith("axi_provider_") and p.endswith(".json")] == sorted(FILES.values())
+    assert Q.FILES == list(FILES.items()) and [os.path.basename(p) for p in sorted(os.listdir(RES)) if p.startswith("axi_provider_") and p.endswith(".json")] == sorted(list(FILES.values()) + ["axi_provider_long.json"])   # the sixth run's file (jobs of 100 steps) is in the folder and not in the table of the five runs
     rows = Q.all_rows(); assert list(rows) == list(FILES)
     seen = set()
     for title, name in FILES.items():

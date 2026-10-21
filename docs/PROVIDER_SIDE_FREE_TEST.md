@@ -1,0 +1,111 @@
+# Test 20: the serving side a seventh time, requests in ordinary words (written BEFORE the run, 21 Oct 2026)
+
+This page fixes the question, the design, the measures, the predictions and the reading rules before the run has been made. Code: `python/axi/experiments/provider_side_free.py` (it imports `provider_side_long.py`, `provider_side_typed.py` and the files they import, `engine/grounding.py` and `word_tasks.py`, and it edits none of them); instrument checks `python/tests/test_provider_side_free.py`; notebook `python/colab/axi_provider_side_free.ipynb`. Concept-map item 113. It follows `PROVIDER_SIDE_LONG_TEST.md` (item 112) and the Result at the end of that page. The architecture is Rajnish's; the cells, the code and every measurement are the owner's, with an AI assistant as a tool.
+
+## Why this test
+1. **The sixth run found what it could not show.** On jobs 192 to 255, `LN` (the grammar that names the coordinates) held the right state on 6,400 of 6,400 steps and `L0` (the capped expression) on 6,244 (97.6 %). In `LN` the host reads the request, builds the expression from the coordinates in it, and the model writes only the numbers (and, in a delete, the node alone). The sixth run says the state holds when the host owns the coordinates; it does not say what happens when the request does not carry them in a form the host can read.
+2. **`L0` is already a partial answer.** In `L0` the model chose the coordinates itself from the sentence and was right on 97.6 % of the steps. But the sentence was one of three fixed shapes with the coordinates written out ("Delete the service at (2,1)."). A person writes "Remove the billing service." This test changes only that: every service has a name, and the request says the name.
+3. **The framework already has a way to read a name** (`engine/grounding.py`, item 87, hash-locked and never run on a model): the host keeps a table of service names and aliases, and a name written as whole words is bound to its service; a phrase that fits two services is ambiguous and applies nothing. It is not language understanding and says so. This test uses it unchanged, and asks two separate questions with it: can the **model** read a name and write the coordinates, and what does a **host reader** add.
+
+## What changes and what does not
+**Does not change:** the model (`Qwen/Qwen2.5-7B-Instruct-AWQ`), the engine (vLLM 0.31.0), the GPU assumed (a Colab T4), the cache fixed at **80,000 tokens**, `max_model_len` 8,192, greedy decoding, at most 96 new tokens, prefix caching on, the seeds (job e has seed 20261017 x 1000 + e), the exact state shown at every step, the policy `repair_m6`, no retry, the lockstep rounds, the measures, the capped expression of the third run (sha256 `6f4e5a993f26ccd471bff13422fa622b7820858a91e05d43c2bccfbe6b864245`), the pinned files. **The jobs are the sixth run's: 192 to 255, 100 steps each**, with the same graphs, the same kinds of request, the same oracle replies. Only the sentence changes, so each cell can be put next to the sixth run's `L0` and `LN` job by job.
+**Changes:**
+* **Every service has a name.** The host's table lists a name (and for some an alias) for every service of the oracle's graph at every step; a service keeps its name while it exists, a new service takes the next unused name of a shuffled pool (the 22 names and the 7 aliases of `word_tasks.py`, edited by nothing). The table is the oracle's graph's, never the held state's.
+* **The prompt shows the names** in a line "Names: billing = (2,1); email (also mailer) = (1,1); ..." after the state, and the system message gets the two lines of the words test about names (`NOTE` in the code). The same two additions are in all three cells.
+* **Three cells**, in this order, on jobs 192 to 255 (64 jobs, 100 steps), no retry, about 35 minutes of GPU:
+
+| cell | request | expression | what it asks |
+|---|---|---|---|
+| `C0` | with coordinates, as in the sixth run | capped | the control: do the two added lines alone change anything? Read against the sixth run's `L0` (6,244 of 6,400) |
+| `W0` | in words | capped | **can the model read a name and write the coordinates?** Read against `C0` |
+| `WN` | in words | the host reads the sentence (`read_request`) and the expression names what it read; where the host reads nothing, the capped expression | **what does a host reader add?** Read against `W0` (same prompts, only the expression differs) |
+
+* **The wordings.** Each request is written from the oracle's coordinate request with a sentence chosen by a seed from two pools (`wording`), written once and not changed after the reader had run on them (see "What the reader did on the wordings" below). A name is replaced by its alias in one mention of five where the service has one. Directions are always "from A to B". The first pool (three quarters of the requests) has one service in the sentence for a delete, two for an edge and none for an added service (which keeps its coordinates and takes a new name, as in the words test). The second pool (one quarter) mentions one more service in the sentence, as a person does ("the billing service stays").
+  * delete, first pool:
+  * `Remove the {n} service.`
+  * `Decommission the {n} service.`
+  * `Please retire the {n} service.`
+  * `Take the {n} service out.`
+  * `Drop {n} from the graph.`
+  * `We no longer need the {n} service, so delete it.`
+  * delete, second pool (`m` is another service of the table):
+  * `Remove the {n} service; the {m} service stays.`
+  * `The {m} service is fine, but retire the {n} service.`
+  * added service, first pool (`x` is the new name):
+  * `Add a new service called {x} at ({r},{c}) with value {v}.`
+  * `Create a service named {x} at ({r},{c}), value {v}.`
+  * `Bring up {x} at ({r},{c}) with value {v}.`
+  * `New service {x}: place it at ({r},{c}) with value {v}.`
+  * added service, second pool:
+  * `Add {x} at ({r},{c}) with value {v}; it will sit next to the {m} service.`
+  * edge, first pool:
+  * `Add a dependency edge from the {a} service to the {b} service with relation {rel} and weight {w}.`
+  * `Connect the {a} service to the {b} service: relation {rel}, weight {w}.`
+  * `Link {a} to {b} using relation {rel} and weight {w}.`
+  * `Please add an edge from {a} to {b}. Relation {rel}, weight {w}.`
+  * `Wire {a} -> {b} (relation {rel}, weight {w}).`
+  * edge, second pool:
+  * `Add a dependency edge from the {a} service to the {b} service with relation {rel} and weight {w}; the {m} service is not involved.`
+  * `The {m} service is unaffected, but connect {a} to {b} with relation {rel} and weight {w}.`
+* **The host reader (`read_request`) is small and refuses what is not clear.** It finds the names and aliases of the table in the sentence with `grounding.ground` (whole words, longest first; a phrase that fits two services is ambiguous), and takes the kind from the numbers the sentence carries: `relation` and `weight` for an edge (the first service named is the source, the second the target), one coordinate pair and `value` for an added service, none of the three for a delete. A sentence that names two or more services where one is wanted, a name that fits several, a kind it cannot tell, or a service not in the table is **not read**: the expression of that request is the capped one, so that nothing is refused and the model must read it as in `W0`. It never guesses, and it is not language understanding: "Remove the billing service; the auth service stays" names two services and it does not decide which one is meant.
+* **What the reader did on the wordings (computed without a model, before this page was locked).** On the 6,400 requests of the 64 jobs (2,158 added services, 2,059 edges, 2,183 deletes) it read **5,380 right, 0 wrong and 1,020 not at all**. All 1,020 are second-pool sentences that name a second service (546 deletes, 474 edges); every added service is read (the coordinates carry it) and every first-pool sentence is read. The second pool is 1,548 requests (24.2 %), so the share not read is the share of my second pool that names a second service, not a rate of anything in the world: the numbers say that the reader is safe (it never read a request wrong here) and brittle (it does not read a sentence that mentions a second service), and nothing more. One defect was found and fixed in this first run of the reader over the wordings, before anything else was done with them: it looked for "relation" and "weight" in lower case and one first-pool edge sentence begins "Relation"; the reader now ignores case. No wording was changed.
+* **A pre-flight check that can fail** runs before the engine is loaded: that the jobs are 192 to 255 with 100 steps, that the sixth run's file is the one named here, that the imported files (including `grounding.py` and `word_tasks.py`) are the pinned ones, that the expressions have the sha256 below, that the oracle's reply is inside the expression of every one of the 19,200 requests of the three cells, that the reader reads the 6,400 requests as stated above, that every sentence says what the oracle's request says (by a plain search, not by the reader), that the first request of each cell is built, and that the GPU is a T4 with less than 500 MiB in use. A RED line stops the notebook.
+
+## What I read before writing this page
+* **The sixth run's file** (`axi_provider_long.json`, sha256 `a0ad579961d006e9...`): `L0` 6,244 of 6,400 steps exact; its 14 first slips are all replies outside the named language; `LN` 6,400 of 6,400; 0.100 and 0.101 seconds per step.
+* **The words test (item 87)** was built and checked on stand-in models and never run on a model; `grounding.py` says it over-refuses a paraphrase outside its stop list. Here the stop list is not tuned to the wordings, and the reader's refusals are measured, not hidden.
+* **The fingerprints** (sha256 of the sorted set of expressions of a cell, recomputed from its jobs and the reader): `C0` and `W0` are the capped expression `6f4e5a99...`; `WN` `f8854dd780c79290e1807ce655770de597068290c1ab2f4f534aa36a34056c60` (775 different expressions: 774 named ones and the capped one, for the requests the host did not read).
+
+## Predictions (mine, written first)
+Each line carries my probability that it reads "yes". They are the reading rules below, in the same order. A line that comes out "NO" is a finding, not an error. Lines 1 to 6 are checks that the run is the run I describe (lines 3, 4 and 6 are also checked before the run, so they stand at 99 %); lines 7 to 16 are about what the model does.
+
+1. [instrument] the engine reported how many prompt tokens were served from its cache, for every request of every cell that was run (99 %)
+2. [instrument] the constraint held: of all the replies of all the cells that were run at least 99.5 percent were accepted by the strict parser, none used all 96 new tokens, and every reply is in the language of its own request (92 %)
+3. [guard] the requests in words say what the oracle's request says: in every sentence of W0 and WN the name (or an alias) of each service the oracle's request is about is written, in the order of the oracle's request, the numbers are the oracle's, and a sentence of the second pool names exactly one service more (checked by plain search, not by the reader) (99 %)
+4. [guard] the cells used the expressions this test defines: each cell's recorded set of expressions has the sha256 recomputed from its jobs and the reader, and the oracle's own reply is inside the expression of every request (99 %)
+5. [guard] every job of every cell ran all 100 steps; none ended early (96 %)
+6. [guard] what the reader read, as recorded in WN, is what the reader gives on the same sentences when it is run again: the same outcome (right, wrong, miss) for every one of the 6,400 requests, and not one request read wrong (99 %)
+7. [claim] the lines that tell the model the names do not hurt: the exact share of C0 is at most one point below that of the sixth run's L0 on the same 64 jobs (6,244 of 6,400) (65 %)
+8. [claim] the model reads the names: the exact share of W0 over 100 steps is at least 95 percent (60 %)
+9. [claim] the words cost little: the exact share of W0 is at most three points below that of C0 (65 %)
+10. [claim] the host's reading does not hurt: the exact share of WN is at least that of W0 (90 %)
+11. [claim] with the host reading what it can, the exact share of WN over 100 steps is at least 99 percent (55 %)
+12. [claim] on the steps whose request the host read (right), the exact share of WN is at least 99.5 percent (50 %)
+13. [claim] on the steps whose request the host did not read (miss, the model reads it as in W0), the exact share of WN is at least 95 percent (65 %)
+14. [claim] the second pool of wordings (another service mentioned in the sentence) does not confuse the model more than three points: in W0 the exact share on the steps of that pool is at least that on the steps of the first pool minus three points (55 %)
+15. [claim] the seconds per step of WN are at most 15 percent above those of W0 (both in this session) (88 %)
+16. [claim] the exact steps per GPU hour of WN are higher than those of W0 (both in this session) (75 %)
+
+**Headline** (lines 8 and 11): can the 7B model read a name and write the coordinates by itself, and does a host that reads what it can bring the state to at least 99 percent. Lines 2 to 6 all yes: about **85 %**. Lines 8 and 11 both yes: about **40 %**. All 16 yes: about **3 %**.
+
+Why I think so. *Line 7 (65 %):* the added lines change the prompt but not the task; the sixth run's `L0` had 156 inexact steps of 6,400, and one point is 64 steps. *Line 8 (60 %):* for a delete the model has to look a name up in a list and copy the pair, for an edge it does so twice; a 7B model does this well but not always, and a wrong lookup stays in the state. *Line 9 (65 %):* if line 8 is yes this is likely. *Line 10 (90 %):* the host's reading only narrows the model on requests it read right, and it read none wrong. *Line 11 (55 %):* 84 percent of the requests are read by the host and cannot be misread; the other 16 percent are deletes and edges that mention a second service, where the model may take the wrong one; a slip persists. *Line 12 (50 %):* the steps whose request was read are exact unless an earlier unread request left a slip in the state. *Line 13 (65 %):* these are the hard sentences. *Line 14 (55 %):* the second pool is a distractor by design. *Line 15 (88 %):* the sixth run's 835 expressions cost +0.6 %; this one has 775. *Line 16 (75 %):* it follows from line 10 and the same speed.
+
+**Also written down, not lines (read afterwards as descriptions).** (a) `W0` holds the right state on 90 to 98 percent of its 6,400 steps: 70 %. (b) More than half of the first slips of `W0` are on edge requests: 60 %. (c) In the second pool the model's wrong lookups take the second service named in the sentence rather than a service not in the sentence: 60 %. (d) The seconds per step of `WN` are within 5 percent of those of `W0`: 80 %. (e) The three cells take 30 to 45 minutes in all, loading excluded: 65 %. (f) The thing I do not know and would like to: whether the aliases (one mention in five for 7 of the 22 names) are read as well as the names.
+
+What each outcome would mean, written now so that I do not read it afterwards to suit the numbers.
+* *Lines 2 to 6 yes, lines 8 and 11 yes:* on the sixth run's 64 jobs, with the requests written with names in the sentences of this page, the 7B model read the names itself on at least 95 percent of the steps and the host's reading brought the state to at least 99 percent. The sentence is the shares, the seconds per step and the exact steps per GPU hour, with the setup beside them, and **in the same sentence that the second pool of wordings was refused by the host and read by the model**.
+* *Line 8 NO:* the model did not read the names well enough by itself. Read the first misses of `W0` (printed): which kind, which lookup. That is the finding, and it is the case where a host reader or a bigger model has something to add.
+* *Line 8 yes, line 9 NO:* the model reads names well but not as well as it reads coordinates; read by how many points, and in which kind.
+* *Line 10 NO:* the host's reading hurt: read the steps where it read and the model's reply differs from the oracle's. It must not happen with a reader that read none wrong; if it does, the cause is in the interplay with the persisting slips.
+* *Line 11 NO with line 10 yes:* the host reader helps but not to 99 percent in this setup; read the unread requests (line 13).
+* *Line 13 NO:* the model reads the second pool badly where the host does not read. This is the case a better reader (or a bigger model) is for.
+* *Line 14 NO:* a mentioned second service confuses the model by more than three points; read which of the two it chose.
+* *Line 7 NO:* the added lines alone changed the exact share by more than a point; then `W0` against `C0` is the comparison and not `W0` against the sixth run's `L0`.
+* *Lines 15 or 16 NO:* the 775 expressions cost seconds; read the rounds with new expressions.
+* *Line 3 NO:* a sentence does not say what the oracle's request says: a mistake in the wordings, read first. *Line 6 NO:* the reader read differently in the run than offline, or read a request wrong: read first. *Line 4 NO:* a cell used other expressions than the ones this test defines. *Line 2 NO:* the constraint did not hold in some request. *Line 1 NO, the pre-flight RED, or the safety cell says STOP:* nothing is run or read.
+* *A cell that did not run:* its lines read "not run", never NO.
+
+## Reading rules (fixed now; the printout prints exactly these)
+The 16 lines above are the reading rules; `provider_side_free.verdict_free` computes them from this run's cells. Line 1 uses every request of every cell; line 2 every reply (the share the strict parser accepted, the replies that used all 96 new tokens, and the replies that fully match the expression carried by their own request); line 3 checks, for every sentence of `W0` and `WN`, by a plain search of the table's names and aliases and of the numbers (not by the reader), that the sentence names the services of the oracle's request in its order, carries the oracle's numbers, and names exactly one more service in the second pool and none in the first; line 4 recomputes the sha256 of each cell's set of expressions from its jobs and the reader and checks that the oracle's reply is inside the expression of every request; line 5 that every job of every cell ran all 100 steps; line 6 that the reader, run again on the recorded sentences, gives the recorded outcome (right, wrong, miss) for every request and none wrong. Lines 7 to 16 compare shares of exact steps ("the held state equals the oracle's after the step"): line 7 `C0` against 6,244/6,400 minus one point; line 8 `W0` at least 95 percent; line 9 `W0` at least `C0` minus three points; line 10 `WN` at least `W0`; line 11 `WN` at least 99 percent; line 12 `WN` on the steps whose request the host read right, at least 99.5 percent; line 13 `WN` on the steps whose request the host did not read, at least 95 percent; line 14 `W0` on second-pool steps at least that on first-pool steps minus three points; line 15 `WN` seconds per step at most 1.15 times `W0`'s; line 16 `WN` exact steps per GPU hour above `W0`'s.
+
+**The rule that decides what the Result may claim.** Lines 2, 3, 4, 5 and 6 all read yes: the figures of the cells are claimed as read. What the model does with names is claimed from lines 7, 8, 9 and 14, what the host reader adds from lines 10 to 13, a statement about time or cost only from lines 15 and 16 (cells of one session). Line 2, 3, 4, 5 or 6 reads NO: no claim is made from this run until the cause is found.
+
+**How the result will be worded.** On the sixth run's 64 jobs, with the requests written in the sentences of this page, on one Tesla T4, one 7B model and the engine written next to the figures: the exact share over 100 steps for the three cells, the seconds per step, the exact steps per GPU hour, the share by pool and by what the host read; and in the same sentence that the names are the table's (given, not learned), that the host reader reads a sentence only where one service is named for a delete, two for an edge, or an added service with its coordinates, and refuses the rest, and that the sentences are those of this page and not requests in the words of any user. Never a multiple of capacity, never a count of GPUs saved, never dollars or a percentage of cost, never "100 percent" for a grammar, never "proven" (one model, one GPU, one run, 64 jobs), never a statement about any provider, never a statement about requests in the words of a user, never a statement about a model that was not run. A "NO" on a claim line is a finding about this setup and goes into the article as such.
+
+## What this does not show
+Requests in the words of a user (the sentences are the ones listed above, written by me, in two pools); names the host did not give (the table is given, not learned; a paraphrase such as "the thing that charges cards" is outside it); a language other than English; tasks of more than 100 steps, let alone days; real company tasks; another model, size, GPU, engine or cache size (a bigger model is the next test, with its own page); a kept chat; a retry on top of a grammar; dollars; a capacity in jobs per GPU; energy; hallucination in free text. Nothing here is proven.
+
+## How it is run
+Open `python/colab/axi_provider_side_free.ipynb` in Colab with a T4 and run the cells one at a time: it gets the code from GitHub, installs vLLM 0.31.0, connects Drive, fixes the output stream, runs the **pre-flight check**, loads the model with the per-request constraint, runs the safety cell, then the three cells in order. Each finished cell is written as `axi_provider_f_<label>.json` and copied to Drive; a cell that was cut off is run again from its start (the longest takes about 13 minutes). The last cell puts the cells together, prints the table, the split by pool and by what the host read, the first misses and the 16 lines, and offers the files for download. The Result goes below the line at the end of this page, in a later update with a test of its own.
+
+---

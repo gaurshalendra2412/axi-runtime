@@ -106,3 +106,107 @@ Requests in free words (the host reads the sentence the job was built from); tas
 Open `python/colab/axi_provider_side_long.ipynb` in Colab with a T4 and run the cells one at a time: it gets the code from GitHub, installs vLLM 0.31.0, connects Drive, fixes the output stream, runs the **pre-flight check**, loads the model with the per-request constraint, runs the safety cell, then the four cells in order. Each finished cell is written as `axi_provider_l_<label>.json` and copied to Drive; a cell that was cut off is run again from its start (the longest takes about 13 minutes). The last cell puts the four cells together, prints the table, the windows, the first misses, the 17 lines and Q = O / M per cell, and offers the files for download. The Result goes below the line at the end of this page, and a result test will recompute every number in it from the saved files.
 
 ---
+
+
+# Result
+
+*Written after the run, below the locked text; nothing above this line has been changed (its hash is checked by `tests/test_provider_side_long.py` and again by `tests/test_provider_side_long_result.py`). The run was made by the owner on Colab on 21 Oct 2026 with `python/colab/axi_provider_side_long.ipynb`: 14,004 steps in four cells, 27.2 minutes of generation, vLLM 0.31.0, `Qwen/Qwen2.5-7B-Instruct-AWQ`, Tesla T4, a cache of 80,000 tokens. The merged file is `docs/results/axi_provider_long.json` (sha256 `a0ad579961d006e9...`). The architecture is Rajnish's; the cells, the code and every measurement are the owner's, with an AI assistant as a tool.*
+
+**What the page expected, and what came out.** Lines 2, 3, 4 and 5 all read yes (the page put them at about 65 % together), so the run is the run the page describes and the figures are claimed as read. **16 of the 17 lines read yes; line 11 reads NO, and no line is "not run".** The two headline lines read yes: the repeat on new jobs (line 8, 68 %) and the named grammar over 100 steps (line 9, 50 %), and so does line 10 (40 %), which the page had put with line 14 as the pair it least expected together. Both headline lines yes stood at about 45 % on the page, all three lines at about 35 %.
+
+## The 17 lines
+
+| # | my probability | what was measured | read |
+|---|---|---|---|
+| 1 | 98 % | cached tokens reported on all 14,004 requests (4,859,280 of 6,214,056 prompt tokens served from the cache) | yes |
+| 2 | 92 % | 14,004 of 14,004 replies accepted by the strict parser; longest reply 82 of 96 new tokens; 0 outside the language of their own request | yes |
+| 3 | 78 % | `LN` and `L0` write the same text at 6,384 of 6,400 steps; the other 16 are the `L0` replies outside the named language (below), and the `LN` reply there is inside it | yes |
+| 4 | 97 % | the recorded sha256 of every cell equals the one recomputed from its jobs; `LN` has 835 expressions; the oracle's reply is inside the expression of all 14,004 requests | yes |
+| 5 | 96 % | all 136 jobs of `L0`, `LN` and `L8` ran 100 steps | yes |
+| 6 | 92 % | mean prompt 346 tokens in steps 1 to 25 and 339 in steps 76 to 100 (ratio 0.98) | yes |
+| 7 | 92 % | 0 corrupted steps in 14,004 | yes |
+| 8 | 68 % | `LN` steps 1 to 30: 1,920 of 1,920 exact (100.0 %) | yes |
+| 9 | 50 % | `LN` all steps: 6,400 of 6,400 exact (100.0 %); 64 of 64 jobs exact to the end | yes |
+| 10 | 40 % | `LN` steps 67 to 100: 2,176 of 2,176 exact (100.0 %) | yes |
+| 11 | 80 % | `LN` 100.0 % against `L0` 97.6 %: 2.4 points, the line asks for 3 | NO |
+| 12 | 90 % | `L0` 95.5 % over steps 67 to 100 against 98.5 % over steps 1 to 33 | yes |
+| 13 | 93 % | all 8 jobs of `LC` stopped for the 7,600-token rule, at steps 28, 64, 53, 42, 59, 45, 54, 59 | yes |
+| 14 | 80 % | `LC` 100.0 % on 404 steps, `L8` 100.0 % on 800 | yes |
+| 15 | 92 % | `LC` 6,342 exact steps per GPU hour, `L8` 24,001 | yes |
+| 16 | 88 % | `LN` 0.1007 s per step, `L0` 0.1000 (+0.6 %) | yes |
+| 17 | 90 % | `LN` 35,764 exact steps per GPU hour, `L0` 35,113 | yes |
+
+**Line 11 is the finding I did not expect, and I say so.** The page put it at 80 % because it counted a slip as staying until a later request removes the wrong item and took the fifth run's rate: about 15 of 64 capped jobs would slip and `L0` would hold the right state on about 87 % of the steps. The first half came out as written: 14 of 64 jobs of `L0` slipped. The second half did not: `L0` held the right state on 97.6 % of its steps, 156 inexact steps of 6,400, because most slips ended soon. The 15 runs of inexact steps lasted 1 to 60 steps (median 6); only job 195 kept its slip to the end of the job (60 steps). The page said that with `L0` near 98 percent, 100 steps might not yet be long enough to see the problem in this setup, and that a NO on line 12 would say so. Line 12 reads yes (95.5 % over steps 67 to 100 against 98.5 % over steps 1 to 33), so the control does lose ground as the job goes on, by 3 points and not by twelve; with 14 jobs that slipped, that is a measured size of the loss in this setup and not a rate for other tasks.
+
+## The cells
+
+| cell | jobs | steps | exact | steps 1 to 30 | steps 67 to 100 | jobs exact to the end | seconds | s per step | exact steps per GPU hour | per 1,000 tokens |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `L0` | 64 | 6,400 | 97.6 % | 98.6 % | 95.5 % | 50 | 640 | 0.100 | 35,113 | 9.3 |
+| `LN` | 64 | 6,400 | 100.0 % | 100.0 % | 100.0 % | 64 | 644 | 0.101 | 35,764 | 9.5 |
+| `L8` | 8 | 800 | 100.0 % | 100.0 % | 100.0 % | 8 | 120 | 0.150 | 24,001 | 8.6 |
+| `LC` | 8 | 404 | 100.0 % | 100.0 % | - | 8 | 229 | 0.568 | 6,342 | 6.5 |
+
+`L0` and `LN` are the same 6,400 requests on the same 64 jobs in one session, which is what lines 16 and 17 compare; `L8` and `LC` are the same 8 jobs. The computed prompt tokens per step are 95 (`L0`), 95 (`LN`), 105 (`L8`) and 143 (`LC`).
+
+## What the page's rule lets this Result claim
+The page's rule, applied line by line to what was read:
+* **Lines 2, 3, 4 and 5 read yes**, so the figures of the cells are claimed as read.
+* **Line 8 reads yes.** On steps 1 to 30 of the 64 new jobs `LN` is exact at all 1,920 steps. The page's condition for saying so is in the same sentence: the host wrote the coordinates of the request into the reply, and what the model wrote is the number (below, "What the model writes in `LN`").
+* **Lines 9 and 10 read yes, line 11 reads NO and line 12 reads yes.** Over 100 steps `LN` is exact at all 6,400 steps and `L0` at 97.6 %; the gap of 2.4 points is below the three that the line asked for.
+* **Lines 13, 14 and 15 read yes.** The kept chat stopped before step 100 in every job and held the state as exactly as the exact-state arm on the steps it ran (404 steps, 100.0 %), and did fewer exact steps per GPU hour.
+* **Lines 16 and 17 are from cells of one session**, so a statement about time is allowed, between `L0` and `LN` and between `L8` and `LC` and not against any other run.
+* **Never**, as the page says: a multiple of capacity, a count of GPUs saved, dollars or a percentage of cost, "100 percent" for a grammar, "proven", a statement about any provider, about requests in free words, about a chat with a summary or a window, or about a model that was not run.
+
+**The sentence the page allows, with this run's numbers.** On jobs 192 to 255, which no earlier run had seen, with the requests read by the host from their sentence, on one Tesla T4 (Colab), with vLLM 0.31.0, `Qwen/Qwen2.5-7B-Instruct-AWQ`, a cache of 80,000 tokens and jobs of 100 steps: the capped expression left the exact share at 97.6 % (6,244 of 6,400 steps; 95.5 % over steps 67 to 100) at 0.100 seconds per step, 35,113 exact steps per GPU hour and 9.3 per 1,000 tokens. The grammar that names the coordinates of the request had all 6,400 steps exact, 64 of 64 jobs exact to the end, at 0.101 seconds per step, 35,764 exact steps per GPU hour and 9.5 per 1,000 tokens, **and in the same sentence: in that grammar the host writes the coordinates of the request into the reply, the model writes the value of an added service or the weight of an added edge, and in every one of the 2,183 delete replies it wrote the node alone, the edges being completed by the framework's repair.** The kept chat stopped at its context after 28, 64, 53, 42, 59, 45, 54, 59 steps (jobs 192 to 199) and held the state on all 404 steps it ran at 6,342 exact steps per GPU hour where the exact-state arm had 24,001 on the same 8 jobs. One run, 64 jobs.
+
+## The jobs that slipped
+14 of 64 jobs of `L0` had an inexact step (194, 195, 199, 215, 219, 221, 222, 224, 225, 232, 233, 234, 243, 246); `LN` had none. Every one of the 14 first slips is a reply outside the named language of its own request; the 16 replies of `L0` outside it are in these 14 jobs (12 of an `add_edge` request, 2 of a `delete_dep`, 1 of a `delete_leaf`, 1 of an `add_node`; the whole run has 2,059 `add_edge` requests). One of them (job 225, step 12) left the state exact. The first slip, what it was, how long the slip lasted and what `LN` wrote at the same step:
+
+| job | first slip at step | request | inexact steps in all | runs | `L0` replies outside the named language at steps | the `LN` reply at the first slip |
+|---|---|---|---|---|---|---|
+| 194 | 17 | add_edge | 14 | 14 | 17 | the oracle's text |
+| 195 | 41 | add_edge | 60 | 60 | 41 | the oracle's text |
+| 199 | 92 | delete_dep | 9 | 9 | 92 | a shorter delete, completed by the framework |
+| 215 | 74 | add_edge | 4 | 4 | 74 | the oracle's text |
+| 219 | 66 | add_edge | 1 | 1 | 66 | the oracle's text |
+| 221 | 21 | add_edge | 10 | 2, 8 | 21, 26 | the oracle's text |
+| 222 | 74 | delete_leaf | 27 | 27 | 74 | the oracle's text |
+| 224 | 100 | add_edge | 1 | 1 | 100 | the oracle's text |
+| 225 | 92 | add_edge | 7 | 7 | 12, 92 | the oracle's text |
+| 232 | 93 | add_node | 8 | 8 | 93 | the oracle's text |
+| 233 | 31 | add_edge | 1 | 1 | 31 | the oracle's text |
+| 234 | 83 | add_edge | 4 | 4 | 83 | the oracle's text |
+| 243 | 17 | delete_dep | 6 | 6 | 17 | a shorter delete, completed by the framework |
+| 246 | 89 | add_edge | 4 | 4 | 89 | the oracle's text |
+
+By the thirds of the job the first slips fall 4 / 2 / 8: more in the last third than in the first. The page expected the opposite (side prediction (b) below), and with 14 jobs this is a count, not a trend.
+
+## What the model writes in `LN`
+Same as in the fifth run, the host writes the coordinates of the request into the reply and the model writes the numbers. In `LN` the 4,217 add replies carry a value or a weight; of the 1,488 `delete_dep` replies 1,488 are the node alone (0 carry an edge item), and of the 695 `delete_leaf` replies 695 are the node alone; the edges of a deleted service are completed by the framework's repair, which this test does not change. The 100-step result for `LN` is therefore a result for the part of the reply that the model still writes, and it says nothing about a model that has to read the coordinates from a request in free words.
+
+## The kept chat
+| job | 192 | 193 | 194 | 195 | 196 | 197 | 198 | 199 |
+|---|---|---|---|---|---|---|---|---|
+| steps run | 28 | 64 | 53 | 42 | 59 | 45 | 54 | 59 |
+| prompt of the last step | 7,512 | 7,498 | 7,586 | 7,516 | 7,501 | 7,489 | 7,589 | 7,477 |
+
+All 8 stopped for the context (the next prompt would have passed 7,600 tokens); the prompt of the kept chat went from 2,531 tokens on average in steps 1 to 25 to 7,589 at the longest, where the exact-state prompt stays near 371. The kept chat computes more prompt tokens per step (143 against 105) and takes longer per step (0.568 s against 0.150), so it does fewer exact steps per hour; it is exact on all the steps it runs, and it cannot run the job to the end in this setup.
+
+## The predictions written beside the lines, read afterwards
+
+| written first | probability | measured | came out |
+|---|---|---|---|
+| (a) `L0` holds the right state on between 82 and 95 percent of its 6,400 steps | 70 % | 97.6 % | NO |
+| (b) the first slips of `L0` fall in steps 1 to 33 for more jobs than in steps 67 to 100 | 70 % | 4 / 2 / 8 in the three thirds | NO |
+| (c) the eight kept-chat jobs stop between steps 20 and 60 | 80 % | stops at 28 to 64; 7 of 8 inside | NO |
+| (d) the computed prompt tokens per step of `LN` are within 5 percent of those of `L0` | 85 % | 94.9 and 94.6 | yes |
+| (e) the four cells take 30 to 45 minutes in all, loading excluded | 70 % | 27.2 minutes | NO |
+
+(f) *whether the model slips more often at step 80 than at step 8 when the grammar names the coordinates* cannot be read: `LN` has no slip, so the run does not say.
+
+## What this does not show
+Requests in free words (the host reads the sentence the job was built from, and the reply is built from what it read); tasks of more than 100 steps, let alone days; real company tasks; another model, size, GPU, engine or cache size; a kept chat with a summary or a sliding window (only the plain kept chat is run, and it stops at the context of this setup); a kept chat at 64 jobs; a retry on top of a grammar; dollars; a capacity in jobs per GPU; energy; hallucination in free text. Nothing here is proven.
+
+## What comes next
+Two things the page left out on purpose, each as its own update with its own page locked first: a reader for requests in free words (the host's copying of coordinates is the open question this result leaves), and the two controls that were missing (the target line at the top only, a plain restatement of the request).

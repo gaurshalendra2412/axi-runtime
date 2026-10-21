@@ -107,6 +107,8 @@ def test_the_exact_state_session_is_the_fifth_runs_with_100_steps_and_the_kept_c
 def test_the_64_jobs_were_used_by_no_saved_run_have_100_steps_start_with_their_30_step_job_and_the_oracle_is_inside_every_expression():
     used = set()
     for f in sorted(glob.glob(os.path.join(RES, "axi_provider_*.json"))):
+        if os.path.basename(f) == "axi_provider_long.json":                                      # this test's own run (added with its Result): it used exactly these jobs and no other
+            assert {s["seed"] - SEED * 1000 for c in json.load(open(f))["cells"] for s in c["sessions"]} == set(range(192, 200)) | set(range(192, 256)); continue
         d = json.load(open(f))
         if not isinstance(d, dict) or "cells" not in d: continue
         for c in d["cells"]:
@@ -755,37 +757,37 @@ def test_the_safety_cell_says_ok_on_a_working_engine_and_stop_for_each_thing_tha
 
 # ---------------------------------------------------------------- 8 the front pages
 FRONT_ITEM = ("112. **The serving side a sixth time: jobs of 100 steps, the first long ones; the exact state with and without the grammar that names the coordinates, and a kept chat under the same grammar (20 Oct)**",
-              "**Status: built and checked here, no run yet; the page `PROVIDER_SIDE_LONG_TEST.md` was hash-locked before any run (sha256 " + PAGE_SHA256[:16] + "... of the text above the line at its end; there is no Result yet).**",
-              "the Result will be a later update with a test of its own (134)", "four cells, no retry anywhere, on jobs 192 to 255, which no saved run has used (read from the saved files)", "each job 100 steps long (its first 30 requests are the 30-step job's, checked for all 64)",
+              "**Status: built and checked here, then run once on Colab (see Run, at the end of this item); the page `PROVIDER_SIDE_LONG_TEST.md` was hash-locked before any run (sha256 " + PAGE_SHA256[:16] + "... of the text above the line at its end), and its Result is below that line.**",
+              "the Result was written as a later update with a test of its own (134)", "four cells, no retry anywhere, on jobs 192 to 255, which no saved run has used (read from the saved files)", "each job 100 steps long (its first 30 requests are the 30-step job's, checked for all 64)",
               "`KeptChat` adds the grammar and decides nothing", "the headline is lines 8 and 9", "both yes about 45 %; lines 2 to 5 all yes about 65 %; all 17 yes under 3 %", "the oracle inside all 14,400 requests",
               "`F0` slipped on 5 of 64 jobs within 30 steps (first slips at steps 2, 9, 14, 2 and 11, 87 steps off)", "(the rule of three: below 0.08 % a step)", "about 15 of 64 capped jobs would slip within 100 steps and `L0` would hold the right state on about 87 % of the steps",
               "its eight jobs stop between steps 24 and 56 on the 7,600-token rule", "**What it cannot do:** it promises no 100 %", "the host still reads the request from its sentence (a request in free words is another test)", "stops because the context of this setup is 8,192 tokens",
               "**Deferred, not built:** a reader for requests in free words (to be tested on its own first)", "**Credit:** the architecture is Rajnish's; the cells, the code and every measurement are the owner's, with an AI assistant as a tool", "a cell that was not run reading \"not run\"",
-              "the pre-flight check with each check made to read NO", "**Not shown:** anything about a real engine or about what a model writes over 100 steps (nothing has been run)", "nothing here is proven")
-FRONT_ROW = ("Provider-side serving test, sixth run: jobs of 100 steps (`PROVIDER_SIDE_LONG_TEST.md`, `experiments/provider_side_long.py`, `colab/axi_provider_side_long.ipynb`) |", "**Built and checked here; not run yet.**", "(sha256 " + PAGE_SHA256[:16] + "... of the locked text)",
-             "Every serving run so far had jobs of 30 steps.", "The headline is lines 8 and 9", "(both yes about 45 % on the page). Nothing is claimed yet.", "never a multiple of capacity, a count of GPUs saved, dollars, \"100 percent\" or \"proven\"", "**No route in this design promises 100 %.**",
-             "(three persistent capped slips cost 257 steps there)", "the 64 new jobs against every saved file (192 to 255 are in none)", "Not shown: anything about a real engine or what a model writes over 100 steps (nothing has been run)", "a retry on top of a grammar")
-FRONT_NEXT = "Next free: row 170, item 113, test 134, question 121"
+              "the pre-flight check with each check made to read NO", "**Not shown:** anything about another engine or GPU, or about what a model writes beyond 100 steps (this is the one run there is)", "nothing here is proven")
+FRONT_ROW = ("Provider-side serving test, sixth run: jobs of 100 steps (`PROVIDER_SIDE_LONG_TEST.md`, `experiments/provider_side_long.py`, `colab/axi_provider_side_long.ipynb`) |", "**Built and checked here; run once on Colab; the Result is on the page.**", "(sha256 " + PAGE_SHA256[:16] + "... of the locked text)",
+             "Every serving run so far had jobs of 30 steps.", "The headline is lines 8 and 9", "(both yes about 45 % on the page). What the Result claims is in the run text at the end of this row.", "never a multiple of capacity, a count of GPUs saved, dollars, \"100 percent\" or \"proven\"", "**No route in this design promises 100 %.**",
+             "(three persistent capped slips cost 257 steps there)", "the 64 new jobs against every saved file (192 to 255 are in none)", "Not shown: anything about what a model writes beyond 100 steps (this is the one run there is)", "a retry on top of a grammar")
+FRONT_NEXT = "Next free: row 170, item 114, test 136, question 121"
 
 
 def test_the_front_pages_say_that_the_test_is_built_and_not_run_what_it_expects_and_what_it_does_not_show():
     cm = open(os.path.join(ROOT, "docs", "RAJNISH_CONCEPT_MAP.md")).read(); ve = open(os.path.join(ROOT, "docs", "VERIFIED.md")).read(); n_tests = sum(1 for n, f in globals().items() if n.startswith("test_") and callable(f))
     assert "PROVIDER_SIDE_LONG_TEST.md" in cm and "PROVIDER_SIDE_LONG_TEST.md" in ve
-    item = cm[cm.index("112. **"): cm.index("Rows 142, 143 and 148 to 151")]; k = ve.index("Provider-side serving test, sixth run"); row = ve[k: ve.index("\n", k)]
+    item = cm[cm.index("112. **"): cm.index("113. **")]; k = ve.index("Provider-side serving test, sixth run"); row = ve[k: ve.index("\n", k)]
     for s in FRONT_ITEM: assert s in item, s[:100]
     for s in FRONT_ROW: assert s in row, s[:100]
     for text in (item, row):
         assert MUTATION_SENTENCE in text and "380" in text and "317" in text and "63 survived" in text
-        assert "@@" not in text and f"(test 133, {n_tests} tests)" in text and "mutation check of test 133: " in text and "capacity" in text and "Result" in text and "RUN (" not in text and "Status: RUN" not in text
+        assert "@@" not in text and f"(test 133, {n_tests} tests)" in text and "mutation check of test 133: " in text and "capacity" in text and "Result" in text and "RUN (" not in text and "Status: RUN" not in text and "no run yet" not in text and "not run yet" not in text and "nothing has been run" not in text
         assert "proven" in text and "dollars" in text and "energy" in text and "100" in text
-    assert "\n113. **" not in cm and "\n112. **" in cm and cm.count("112. **") == 1
-    assert FRONT_NEXT in cm and "test 133 checks the 100-step serving test, item 112)" in cm and cm.count("Next free:") == 1
+    assert "\n114. **" not in cm and "\n113. **" in cm and "\n112. **" in cm and cm.count("112. **") == 1
+    assert FRONT_NEXT in cm and "test 133 checks the 100-step serving test, item 112, and test 134 its Result" in cm and cm.count("Next free:") == 1
     assert cm.index("111. **") < cm.index("112. **") < cm.index("Next free: row") and ve.index("Provider-side serving test, fifth run") < k < ve.index("\n", k)
     for name in ("test_provider_side.py", "test_provider_side_constrained.py", "test_provider_side_bounded.py", "test_provider_side_bounded_result.py"):
-        t = open(os.path.join(HERE, name)).read(); assert "row 170, item 112, test 133" not in t and "row 170, item 113, test 134" in t, name
+        t = open(os.path.join(HERE, name)).read(); assert "row 170, item 112, test 133" not in t and "row 170, item 114, test 136" in t, name
     for name in ("test_provider_side_retry.py", "test_provider_side_typed.py", "test_provider_side_typed_result.py"):                      # these three name the old counter in the assertion that moves it
-        assert "row 170, item 113, test 134, question 121" in open(os.path.join(HERE, name)).read(), name
-    assert 'FRONT_NEXT = "Next free: row 170, item 113, test 134, question 121"' in open(os.path.join(HERE, "test_provider_side_retry.py")).read()
+        assert "row 170, item 114, test 136, question 121" in open(os.path.join(HERE, name)).read(), name
+    assert 'FRONT_NEXT = "Next free: row 170, item 114, test 136, question 121"' in open(os.path.join(HERE, "test_provider_side_retry.py")).read()
 
 
 MUTATION_SENTENCE = "mutation check of test 133: run twice on the final code. Run 1 (380 small changes to the code, the page, the notebook and the tests) was caught 266 times and survived 114; the real gaps among those were closed with new tests. Run 2 (380 new changes, another seed) was caught 317 times and 63 survived. The 63 were grouped by kind, not each traced: numbers one step off an edge, `and` turned to `or` where both sides are true throughout, one changed word in the locked page or the notebook (the page's sha256 is the lock for those), and display-only text. "
@@ -797,12 +799,14 @@ ROW_NUMBERS = "100 17 30 192 255 100 64 8 8 9 100 1 30 99 100 45 100 100 256 64 
 
 def _front_numbers(text):
     a = text.index("mutation check of test 133:"); b = text.index("Not shown:"); text = text[:a] + text[b:]
+    for marker in ("**Run (21 Oct 2026):**", "**Run:**"):                                                                          # the run text is read by tests/test_provider_side_long_result.py, which pins its numbers
+        if marker in text: text = text[:text.index(marker)]
     return " ".join(re.findall(r"\d[\d,.]*\d|\d", re.sub(r"`[^`]*`", "", re.sub(r"sha256 [0-9a-f]{16}\.\.\.", "", re.sub(r"\(test 133, \d+ tests\)", "", text)))))
 
 
 def test_every_number_of_the_two_front_pages_outside_the_code_spans_and_the_mutation_sentence_is_the_one_that_was_written():
     cm = open(os.path.join(ROOT, "docs", "RAJNISH_CONCEPT_MAP.md")).read(); ve = open(os.path.join(ROOT, "docs", "VERIFIED.md")).read()
-    item = cm[cm.index("112. **"): cm.index("Rows 142, 143 and 148 to 151")]; k = ve.index("Provider-side serving test, sixth run"); row = ve[k: ve.index("\n", k)]
+    item = cm[cm.index("112. **"): cm.index("113. **")]; k = ve.index("Provider-side serving test, sixth run"); row = ve[k: ve.index("\n", k)]
     assert _front_numbers(item) == ITEM_NUMBERS and _front_numbers(row) == ROW_NUMBERS
 
 
