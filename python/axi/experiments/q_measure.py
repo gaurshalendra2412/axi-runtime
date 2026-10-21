@@ -15,7 +15,8 @@ from typing import Dict, List, Optional, Tuple
 
 RESULTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "docs", "results")
 FILES: List[Tuple[str, str]] = [("first run, no grammar", "axi_provider_side.json"), ("second run, uncapped grammar", "axi_provider_constrained.json"),
-                                ("third run, capped grammar", "axi_provider_bounded.json"), ("fourth run, one retry", "axi_provider_retry.json")]
+                                ("third run, capped grammar", "axi_provider_bounded.json"), ("fourth run, one retry", "axi_provider_retry.json"),
+                                ("fifth run, typed requests", "axi_provider_typed.json")]
 
 
 def cell_id(c: dict) -> str:

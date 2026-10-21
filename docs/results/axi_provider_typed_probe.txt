@@ -1,0 +1,78 @@
+step 1: prompt   423  cached 0  new   9  'ADD[1,4:7]'
+step 2: prompt   452  cached 192  new  16  'ADD[(2,2)->(0,1):dep#3]'
+step 3: prompt   465  cached 192  new  16  'ADD[(0,3)->(1,4):dep#5]'
+
+job 3, step 16 (add_node): Add a service at (4,4) with value 6.
+   the earlier reply was 'ADD[(4,4)->(4,4):value#6]' (inside the kind language: False, inside the named language: False); the oracle wrote 'ADD[4,4:6]'
+   old        'ADD[(4,4)->(4,4):value#6]'
+   kind       'ADD[4,4:6]'   = the oracle
+   named      'ADD[4,4:6]'   = the oracle
+   kind+top   'ADD[4,4:6]'   = the oracle
+   kind+tail  'ADD[4,4:6]'   = the oracle
+   parity     'ADD[(4,4)->(4,4):value#6]'
+   the parity turn was: 'PARITY request TARGET (4,4) ADD NODE value 6; reply (4,4)->(4,4) ADD EDGE value weight 6. Reply with only the corrected delta.'
+job 4, step 18 (add_node): Add a service at (0,0) with value 3.
+   the earlier reply was 'ADD[1,0:6]' (inside the kind language: True, inside the named language: False); the oracle wrote 'ADD[0,0:3]'
+   old        'ADD[1,0:6]'
+   kind       'ADD[1,0:6]'
+   named      'ADD[0,0:3]'   = the oracle
+   kind+top   'ADD[0,0:3]'   = the oracle
+   kind+tail  'ADD[0,0:3]'   = the oracle
+   parity     'ADD[0,0:3] ADD[1,0:6]'
+   the parity turn was: 'PARITY request TARGET (0,0) ADD NODE value 3; reply (1,0) ADD NODE value 6. Reply with only the corrected delta.'
+job 17, step 20 (add_edge): Add a dependency edge from (0,4) to (2,3) with relation dep and weight 4.
+   the earlier reply was 'DEL[(2,3)->(0,4):dep#6] ADD[(0,4)->(2,3):dep#4]' (inside the kind language: False, inside the named language: False); the oracle wrote 'ADD[(0,4)->(2,3):dep#4]'
+   old        'DEL[(2,3)->(0,4):dep#6] ADD[(0,4)->(2,3):dep#4]'
+   kind       'ADD[(0,4)->(2,3):dep#4]'   = the oracle
+   named      'ADD[(0,4)->(2,3):dep#4]'   = the oracle
+   kind+top   'ADD[(0,4)->(2,3):dep#4]'   = the oracle
+   kind+tail  'ADD[(0,4)->(2,3):dep#4]'   = the oracle
+   parity     'DEL[(2,3)->(0,4):dep#6] ADD[(0,4)->(2,3):dep#4]'
+   the parity turn was: 'PARITY request TARGET (0,4)->(2,3) ADD EDGE dep weight 4; reply (2,3)->(0,4) DELETE EDGE dep. Reply with only the corrected delta.'
+job 19, step 12 (add_node): Add a service at (3,0) with value 4.
+   the earlier reply was 'ADD[(3,0)->(3,0):4tworowsdown4col#4]' (inside the kind language: False, inside the named language: False); the oracle wrote 'ADD[3,0:4]'
+   old        'ADD[(3,0)->(3,0):4tworowsdown4col#4]'
+   kind       'ADD[3,0:4]'   = the oracle
+   named      'ADD[3,0:4]'   = the oracle
+   kind+top   'ADD[3,0:4]'   = the oracle
+   kind+tail  'ADD[3,0:4]'   = the oracle
+   parity     'ADD[(3,0)->(3,0):4tworowsdown4col#4]'
+   the parity turn was: 'PARITY request TARGET (3,0) ADD NODE value 4; reply (3,0)->(3,0) ADD EDGE 4tworowsdown4col weight 4. Reply with only the corrected delta.'
+job 20, step 30 (add_edge): Add a dependency edge from (1,1) to (2,1) with relation dep and weight 3.
+   the earlier reply was 'ADD[(1,5)->(2,1):dep#3]' (inside the kind language: True, inside the named language: False); the oracle wrote 'ADD[(1,1)->(2,1):dep#3]'
+   old        'ADD[(1,5)->(2,1):dep#3]'
+   kind       'ADD[(1,5)->(2,1):dep#3]'
+   named      'ADD[(1,1)->(2,1):dep#3]'   = the oracle
+   kind+top   'ADD[(1,1)->(2,1):dep#3]'   = the oracle
+   kind+tail  'ADD[(1,1)->(2,1):dep#3]'   = the oracle
+   parity     'ADD[(1,1)->(2,1):dep#3]'   = the oracle
+   the parity turn was: 'PARITY request TARGET (1,1)->(2,1) ADD EDGE dep weight 3; reply (1,5)->(2,1) ADD EDGE dep weight 3. Reply with only the corrected delta.'
+job 62, step 12 (add_edge): Add a dependency edge from (1,1) to (1,0) with relation dep and weight 9.
+   the earlier reply was 'DEL[(1,1)->(1,0):owns#5] ADD[(1,1)->(1,0):dep#9]' (inside the kind language: False, inside the named language: False); the oracle wrote 'ADD[(1,1)->(1,0):dep#9]'
+   old        'DEL[(1,1)->(1,0):owns#5] ADD[(1,1)->(1,0):dep#9]'
+   kind       'ADD[(1,1)->(1,0):dep#9]'   = the oracle
+   named      'ADD[(1,1)->(1,0):dep#9]'   = the oracle
+   kind+top   'ADD[(1,1)->(1,0):dep#9]'   = the oracle
+   kind+tail  'ADD[(1,1)->(1,0):dep#9]'   = the oracle
+   parity     'DEL[(1,1)->(1,0):owns#5] ADD[(1,1)->(1,0):dep#9]'
+   the parity turn was: 'PARITY request TARGET (1,1)->(1,0) ADD EDGE dep weight 9; reply (1,1)->(1,0) DELETE EDGE owns. Reply with only the corrected delta.'
+job 101, step 4 (add_node): Add a service at (3,4) with value 2.
+   the earlier reply was 'ADD[(3,4)->(3,4):2alue#2]' (inside the kind language: False, inside the named language: False); the oracle wrote 'ADD[3,4:2]'
+   old        'ADD[3,4:2]'   = the oracle
+   kind       'ADD[3,4:2]'   = the oracle
+   named      'ADD[3,4:2]'   = the oracle
+   kind+top   'ADD[3,4:2]'   = the oracle
+   kind+tail  'ADD[3,4:2]'   = the oracle
+   parity     'ADD[3,4:2] ADD[(3,4)->(3,4):2alue#2]'
+   the parity turn was: 'PARITY request TARGET (3,4) ADD NODE value 2; reply (3,4)->(3,4) ADD EDGE 2alue weight 2. Reply with only the corrected delta.'
+job 122, step 22 (add_edge): Add a dependency edge from (0,0) to (2,2) with relation dep and weight 3.
+   the earlier reply was 'ADD[(0,0)->(2,0):dep#3]' (inside the kind language: True, inside the named language: False); the oracle wrote 'ADD[(0,0)->(2,2):dep#3]'
+   old        'ADD[(0,0)->(2,0):dep#3]'
+   kind       'ADD[(0,0)->(2,0):dep#3]'
+   named      'ADD[(0,0)->(2,2):dep#3]'   = the oracle
+   kind+top   'ADD[(0,0)->(2,2):dep#3]'   = the oracle
+   kind+tail  'ADD[(0,0)->(2,2):dep#3]'   = the oracle
+   parity     'DEL[(0,0)->(2,2):dep#8] ADD[(0,0)->(2,2):dep#3]'
+   the parity turn was: 'PARITY request TARGET (0,0)->(2,2) ADD EDGE dep weight 3; reply (0,0)->(2,0) ADD EDGE dep weight 3. Reply with only the corrected delta.'
+
+OK: cached counts are reported, every reply is well formed and inside the expression of its request, and the probe's replies end. You can go on.

@@ -805,31 +805,31 @@ def test_the_safety_cell_says_ok_on_a_working_engine_and_stop_for_each_thing_tha
 
 
 # ---------------------------------------------------------------- 11 the front pages
-FRONT_ITEM = ("111. **The serving side a fifth time: the grammar of the reply chosen by the type of the request, the anchor line of item 110 as two extra cells, and Q = O / M from the saved files (20 Oct)**", "**Status: BUILT, NOT RUN. The page `PROVIDER_SIDE_TYPED_TEST.md` is hash-locked before any run (sha256 " + PAGE_SHA256[:16] + "... of the text above the Result)",
-              "Nothing about the result is known.**", "Seven cells of 64 jobs, arm `S`, no retry anywhere", "all on jobs 128 to 191, which no earlier run has seen; `SK` and `SN` on jobs 0 to 63", "the headline is lines 6 and 17", "all 17 yes under 1 %",
+FRONT_ITEM = ("111. **The serving side a fifth time: the grammar of the reply chosen by the type of the request, the anchor line of item 110 as two extra cells, and Q = O / M from the saved files (20 Oct)**", "**Status: RUN (the owner's Colab run, seven cells in one session; the file reached the repository work on 20 Oct 2026); the Result is on the page `PROVIDER_SIDE_TYPED_TEST.md`, which was hash-locked before the run (sha256 " + PAGE_SHA256[:16] + "... of the text above the Result)",
+              "Seven cells of 64 jobs, arm `S`, no retry anywhere", "all on jobs 128 to 191, which no earlier run has seen; `SK` and `SN` on jobs 0 to 63", "the headline is lines 6 and 17", "all 17 yes under 1 %",
               "of the eight first misses in jobs 0 to 127 five have a shape the kind grammar removes (jobs 3, 17, 19, 62, 101; 66 steps) and three have the right shape and a wrong number (jobs 4, 20, 122; 23 steps)", "(17,280 requests)", "in `SK` 1,860 steps are compared and jobs 4 and 20 must slip again at steps 18 and 30, in `SN` 1,848 are compared",
               "the ceilings are 99.3 % and 100.0 % against 97.2 %", "no step of the 5,040 saved steps of the four cells without a retry at which the job held the right state afterwards", "about 181 computed tokens a step against 109",
               "no weight between a second and a token is invented, no floor of M is claimed", "**What it cannot do:** it promises no 100 %", "nothing is trained", "`simulate_eval_suite` in one blueprint draws random numbers and prints them as accuracies", "a \"5.4 times\" figure divides the 64-job exact-state cell by the 8-job kept-chat cell",
               "no deleted service of the 192 scripts has more than 3 connections", "**Credit:**", "(test 130, 26 tests)", "(test 131, 7 tests)", "nothing here is proven")
-FRONT_ROW = ("**Built, NOT RUN (20 Oct 2026).**", "(sha256 " + PAGE_SHA256[:16] + "... of the locked text); no result exists", "line 15 (the anchor at the top costs at most 30 % more seconds) NO", "never a multiple of capacity, a count of GPUs saved, dollars, \"100 percent\" or \"proven\"",
-             "(1,860 and 1,848 steps compared)", "no false alarm on 5,040 saved steps", "compared with its page character by character (test 131, 7 tests)", "(test 130, 26 tests)", "Not shown: a result of any kind")
-FRONT_NEXT = "Next free: row 170, item 112, test 132, question 121"
+FRONT_ROW = ("**Run (the owner's Colab run, seven cells in one session, Tesla T4, vLLM 0.31.0; the file reached the repository work on 20 Oct 2026).**", "(sha256 " + PAGE_SHA256[:16] + "... of the locked text)", "never a multiple of capacity, a count of GPUs saved, dollars, \"100 percent\" or \"proven\"",
+             "(1,860 and 1,848 steps compared)", "no false alarm on 5,040 saved steps", "compared with its page character by character (test 131, 7 tests)", "(test 130, 26 tests)", "Not shown: that a grammar raises the exactness on new jobs (the kind grammar did not)")
+FRONT_NEXT = "Next free: row 170, item 113, test 134, question 121"
 
 
 def test_the_front_pages_point_to_the_test_and_say_what_the_page_expects_and_what_it_does_not_show():
     cm = open(os.path.join(ROOT, "docs", "RAJNISH_CONCEPT_MAP.md")).read(); ve = open(os.path.join(ROOT, "docs", "VERIFIED.md")).read()
     assert "PROVIDER_SIDE_TYPED_TEST.md" in cm and "PROVIDER_SIDE_TYPED_TEST.md" in ve
-    item = cm[cm.index("111. **"): cm.index("Rows 142, 143 and 148 to 151")]; k = ve.index("Provider-side serving test, fifth run"); row = ve[k: ve.index("\n", k)]
+    item = cm[cm.index("111. **"): cm.index("112. **")]; k = ve.index("Provider-side serving test, fifth run"); row = ve[k: ve.index("\n", k)]
     for s in FRONT_ITEM: assert s in item, s[:100]
     for s in FRONT_ROW: assert s in row, s[:100]
     for text in (item, row):
-        assert "@@" not in text and "mutation check of test 130: " in text and "mutation check of test 131: " in text and "capacity" in text and "NOT RUN" in text and "deliberate changes" in text
+        assert "@@" not in text and "mutation check of test 130: " in text and "mutation check of test 131: " in text and "capacity" in text and "NOT RUN" not in text and "deliberate changes" in text
         assert "proven" in text and "dollars" in text and "energy" in text
-    assert FRONT_NEXT in cm and "test 130 checks the typed-requests test and test 131 the Q = O / M module, item 111)" in cm
+    assert FRONT_NEXT in cm and "test 130 checks the typed-requests test, test 131 the Q = O / M module and test 132 the Result of the typed-requests test, item 111; test 133 checks the 100-step serving test, item 112)" in cm
     assert cm.index("110. **") < cm.index("111. **") < cm.index("Next free: row") and ve.index("Provider-side serving test, fourth run") < k
     for name in ("test_provider_side.py", "test_provider_side_constrained.py", "test_provider_side_bounded.py", "test_provider_side_bounded_result.py"):
-        t = open(os.path.join(HERE, name)).read(); assert "row 170, item 111, test 130" not in t and "row 170, item 112, test 132" in t, name
-    assert 'FRONT_NEXT = "Next free: row 170, item 112, test 132, question 121"' in open(os.path.join(HERE, "test_provider_side_retry.py")).read()
+        t = open(os.path.join(HERE, name)).read(); assert "row 170, item 112, test 133" not in t and "row 170, item 113, test 134" in t, name
+    assert 'FRONT_NEXT = "Next free: row 170, item 113, test 134, question 121"' in open(os.path.join(HERE, "test_provider_side_retry.py")).read()
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 """Engineering support for docs/Q_FROM_SAVED_FILES.md (concept-map item 111): Q = O / M computed from the result files already saved, no GPU and no model.
   1. the arithmetic of one cell, on a made-up cell whose answer is known by hand (O, seconds, tokens, the two Q's, what happens without cached counts, without exact steps, without seconds);
-  2. the four saved runs: the same set-up in all four, O equal to what the earlier pages count, the table character by character as it stands on the page;
+  2. the five saved runs: the same set-up in all five, O equal to what the earlier pages count, the table character by character as it stands on the page;
   3. what the page says the table shows (kept chat against exact state), recomputed;
   4. the page's rules: two Q's and never one mixed number, no floor of M, no capacity multiple, dollars or energy.
 What it does NOT show: a floor of M, a price, anything about a cell that was not run."""
@@ -14,7 +14,7 @@ HERE = os.path.dirname(__file__)
 ROOT = os.path.join(HERE, "..", "..")
 RES = os.path.join(ROOT, "docs", "results")
 PAGE = os.path.join(ROOT, "docs", "Q_FROM_SAVED_FILES.md")
-PAGE_SHA256 = "edadd34541c93c63e5f8ed078f40c5c7b2c960e27468d873764da5097b5f2ad4"
+PAGE_SHA256 = "24567000d5c193c4d2284b896b8b31d307e65bd55077611e6b4bfa02ff121e9b"
 
 
 def raises(fn, exc=Exception):
@@ -54,10 +54,11 @@ def test_one_cell_by_hand_the_exact_steps_the_seconds_the_tokens_and_the_two_rat
     odd = Q.q_row(fake_cell(rounds=[dict(prompt_tokens=100, cached_tokens=100, new_tokens=0)])); assert odd["m_tokens"] == 0 and odd["exact_per_1000_tokens"] is None
 
 
-FILES = {"first run, no grammar": "axi_provider_side.json", "second run, uncapped grammar": "axi_provider_constrained.json", "third run, capped grammar": "axi_provider_bounded.json", "fourth run, one retry": "axi_provider_retry.json"}
+FILES = {"first run, no grammar": "axi_provider_side.json", "second run, uncapped grammar": "axi_provider_constrained.json", "third run, capped grammar": "axi_provider_bounded.json", "fourth run, one retry": "axi_provider_retry.json",
+         "fifth run, typed requests": "axi_provider_typed.json"}
 
 
-def test_the_four_saved_runs_have_the_same_setup_o_is_what_the_earlier_pages_count_and_the_files_are_those_the_page_names():
+def test_the_five_saved_runs_have_the_same_setup_o_is_what_the_earlier_pages_count_and_the_files_are_those_the_page_names():
     assert Q.FILES == list(FILES.items()) and [os.path.basename(p) for p in sorted(os.listdir(RES)) if p.startswith("axi_provider_") and p.endswith(".json")] == sorted(FILES.values())
     rows = Q.all_rows(); assert list(rows) == list(FILES)
     seen = set()
@@ -73,11 +74,18 @@ def test_the_four_saved_runs_have_the_same_setup_o_is_what_the_earlier_pages_cou
             assert r["m_tokens"] is not None and r["m_tokens"] > 0 and r["computed_prompt_tokens"] + r["new_tokens"] == r["m_tokens"]
             assert abs(r["exact_per_hour"] - 3600 * r["exact_steps"] / r["wall_seconds"]) < 1e-9 and abs(r["exact_per_1000_tokens"] - 1000 * r["exact_steps"] / r["m_tokens"]) < 1e-9
             assert abs(r["seconds_per_exact_step"] * r["exact_steps"] - r["wall_seconds"]) < 1e-6 and abs(r["tokens_per_exact_step"] * r["exact_steps"] - r["m_tokens"]) < 1e-6
-    # figures quoted by the earlier pages and by the third and fourth runs' results
+    # figures quoted by the earlier pages and by the third, fourth and fifth runs' results
     by = {t: {r["cell"]: r for r in rs} for t, rs in rows.items()}; third = by["third run, capped grammar"]; fourth = by["fourth run, one retry"]
     assert (third["S64"]["exact_steps"], round(third["S64"]["wall_seconds"], 1), round(third["S64"]["exact_per_hour"]), third["S64"]["m_tokens"]) == (1867, 217.4, 30914, 228935) and round(third["KC8"]["exact_per_hour"]) == 5694
     assert (fourth["H0"]["exact_steps"], round(fourth["H0"]["exact_per_hour"]), fourth["H1"]["exact_steps"], round(fourth["H1"]["exact_per_hour"])) == (1884, 31359, 1884, 30951) and round(fourth["H0"]["exact_per_1000_tokens"], 1) == 8.3
     assert [round(100 * third[k]["exact_share"], 1) for k in ("S8", "S32", "S64", "KC8")] == [88.3, 94.6, 97.2, 100.0]
+    fifth = by["fifth run, typed requests"]; assert list(fifth) == ["F0", "FK", "FKA", "FKT", "FN", "SK", "SN"]
+    assert [(fifth[k]["exact_steps"], round(fifth[k]["wall_seconds"], 1), round(fifth[k]["exact_per_hour"]), fifth[k]["m_tokens"], round(fifth[k]["exact_per_1000_tokens"], 1)) for k in fifth] == [
+        (1833, 224.2, 29437, 228379, 8.0), (1835, 223.5, 29560, 228374, 8.0), (1920, 342.3, 20191, 356091, 5.4), (1839, 244.8, 27048, 249814, 7.4), (1920, 223.8, 30882, 228793, 8.4), (1906, 224.8, 30529, 230036, 8.3), (1920, 224.8, 30747, 230050, 8.3)]
+    same = [fifth[k] for k in ("F0", "FK", "FN", "SK", "SN")]                                                       # the five cells that did the same work: the page's sentence about them
+    assert (round(min(r["wall_seconds"] for r in same), 1), round(max(r["wall_seconds"] for r in same), 1), min(r["m_tokens"] for r in same), max(r["m_tokens"] for r in same)) == (223.5, 224.8, 228374, 230050)
+    assert (round(min(r["exact_per_hour"] for r in same)), round(max(r["exact_per_hour"] for r in same)), min(r["exact_steps"] for r in same), max(r["exact_steps"] for r in same)) == (29437, 30882, 1833, 1920)
+    assert fifth["FKA"]["exact_per_hour"] < fifth["FKT"]["exact_per_hour"] < min(r["exact_per_hour"] for r in same) and fifth["FKA"]["m_tokens"] > fifth["FKT"]["m_tokens"] > max(r["m_tokens"] for r in same) and fifth["FKA"]["wall_seconds"] > fifth["FKT"]["wall_seconds"] > max(r["wall_seconds"] for r in same)
     # an unreadable or missing file is skipped, not guessed
     with tempfile.TemporaryDirectory() as d:
         json.dump(json.load(open(os.path.join(RES, "axi_provider_retry.json"))), open(os.path.join(d, "axi_provider_retry.json"), "w")); got = Q.all_rows(d)
@@ -86,12 +94,13 @@ def test_the_four_saved_runs_have_the_same_setup_o_is_what_the_earlier_pages_cou
 
 def test_the_table_on_the_page_is_the_tables_output_character_by_character_and_has_exactly_two_ratios():
     page = open(PAGE).read(); table = Q.render_table(Q.all_rows()).rstrip("\n")
-    assert table in page and page.count("| cell | steps | exact steps O | exact share | wall seconds | exact steps per GPU hour | tokens computed + written | exact steps per 1,000 tokens |") == 4
+    assert table in page and page.count("| cell | steps | exact steps O | exact share | wall seconds | exact steps per GPU hour | tokens computed + written | exact steps per 1,000 tokens |") == 5
     for line in table.splitlines():
         if line.startswith("| ") and not line.startswith("| cell"): assert line in page
     lines = [l for l in table.splitlines() if l.startswith("| ") and not l.startswith("| cell")]
-    assert len(lines) == 6 + 6 + 4 + 5 and "| S64 | 1,920 | 1,867 | 97.2 % | 217.4 | 30,914 | 228,935 | 8.2 |" in lines and "| KC8 | 240 | 240 | 100.0 % | 151.7 | 5,694 | 49,655 | 4.8 |" in lines
+    assert len(lines) == 6 + 6 + 4 + 5 + 7 and "| S64 | 1,920 | 1,867 | 97.2 % | 217.4 | 30,914 | 228,935 | 8.2 |" in lines and "| KC8 | 240 | 240 | 100.0 % | 151.7 | 5,694 | 49,655 | 4.8 |" in lines
     assert "| H0 | 1,920 | 1,884 | 98.1 % | 216.3 | 31,359 | 225,703 | 8.3 |" in lines and "| KN8 | 240 | 240 | 100.0 % | 1646.3 | 525 | 793,719 | 0.3 |" in lines and "| KC64 | 1,915 | 1,915 | 100.0 % | 10330.5 | 667 | 5,174,334 | 0.4 |" in lines
+    assert "| FKA | 1,920 | 1,920 | 100.0 % | 342.3 | 20,191 | 356,091 | 5.4 |" in lines and "| FN | 1,920 | 1,920 | 100.0 % | 223.8 | 30,882 | 228,793 | 8.4 |" in lines and "| F0 | 1,920 | 1,833 | 95.5 % | 224.2 | 29,437 | 228,379 | 8.0 |" in lines
     for l in lines: assert len(l.split("|")) == 10                                                                    # eight columns: no ninth, mixed number
     # a cell without cached counts shows "-", never a guess
     rows = {"x": [Q.q_row(fake_cell(rounds=[dict(prompt_tokens=300, cached_tokens=None, new_tokens=20)]))]}
@@ -134,10 +143,14 @@ def test_the_page_states_its_definitions_and_its_limits_and_none_of_the_words_it
                    "*exact steps per GPU hour* = 3,600 x O / wall seconds, and *exact steps per 1,000 tokens* = 1,000 x O / M in tokens", "They are never added or averaged into one number", "no weight has been measured, so none is invented",
                    "N exact steps per GPU hour against M, at these exactness levels, on this setup", "The exactness is always stated with the Q", "Compare like with like.", "A figure that divides a 64-job `S` cell by an 8-job `KC` cell mixes two things",
                    "**No floor of M is shown.**", "\"Q grows without limit\" is not a statement this page supports.", "**No capacity multiple, no count of GPUs, no dollars, no energy.**", "Energy was never measured", "**Not a claim about any provider**",
-                   "Those summaries are second-hand (they are not Sir's own articles)", "python -m axi.experiments.q_measure", "`KN` keeps it with the cache emptied before every round (what a plain engine pays)", "Qwen/Qwen2.5-7B-Instruct-AWQ", "vLLM 0.31.0", "a Tesla T4, a cache of 80,000 tokens (a block override), 30-step jobs from seed 20261017, the policy `repair_m6`"):
+                   "Those summaries are second-hand (they are not Sir's own articles)", "python -m axi.experiments.q_measure", "`KN` keeps it with the cache emptied before every round (what a plain engine pays)", "Qwen/Qwen2.5-7B-Instruct-AWQ", "vLLM 0.31.0", "a Tesla T4, a cache of 80,000 tokens (a block override), 30-step jobs from seed 20261017, the policy `repair_m6`",
+                   "**What the fifth-run block shows.**", "so what separates their exact steps per GPU hour (29,437 to 30,882) is the number of exact steps (1,833 to 1,920), not the time", "(`F0`, `FK`, `FN`, `SK`, `SN`: 223.5 to 224.8 seconds, 228,374 to 230,050 tokens computed and written)",
+                   "`FKA` (the line at the top and the end) has all 1,920 steps exact, 20,191 exact steps per GPU hour and 5.4 per 1,000 tokens, against 1,835 exact, 29,560 and 8.0 for `FK`", "`FKT` (the line at the end only) has 1,839 exact, 27,048 and 7.4",
+                   "A cell with fewer exact steps per hour can be the more exact one, and the exactness is read beside the Q.", "test 132 checks that the Result's block and the one above are the same text", "All five runs record the same one:", "the fourth run and the fifth run were separate Colab sessions"):
         assert needle in page, needle
     low = page.lower()
-    for bad in ("100 percent", "proven", "saves", "saved gpus", "x faster", "times faster", "5.4", "multi-million", "per dollar", "$"): assert bad not in low, bad
+    for bad in ("100 percent", "proven", "saves", "saved gpus", "x faster", "times faster", "multi-million", "per dollar", "$"): assert bad not in low, bad
+    assert "5.4 times" not in low
     assert page.count("×") == 0 and "capacity" in low and low.count("dollars") == 1 and low.count("energy") == 2
     # a last check that the page does not contain a single mixed Q: no column or sentence defines one number from seconds and tokens together
     assert "M = time + lambda x tokens" in page and low.count("lambda") == 1

@@ -123,3 +123,191 @@ Requests in free words (the host reads the sentence the job was built from); a g
 Open `python/colab/axi_provider_side_typed.ipynb` in Colab with a T4 and run the cells one at a time: it installs vLLM 0.31.0, connects Drive, fixes the output stream, loads the model with the per-request constraint, runs the safety cell (3 jobs of 3 steps with the heaviest variant, then the probe), then the seven cells in order. Each finished cell is written as `axi_provider_t_<label>.json` and copied to Drive; a cell that was cut off is run again from its start (the longest takes about 4 minutes). The last cell puts the seven cells together, reads the third run's file from the repository, prints the table, the first misses, the 17 lines and Q = O / M per cell, and offers the files for download. The Result goes below the line at the end of this page, and a result test will recompute every number in it from the saved files.
 
 ---
+
+# Result
+
+*Written after the run, below the locked text; nothing above this line has been changed (its hash is checked by `tests/test_provider_side_typed.py` and again by `tests/test_provider_side_typed_result.py`). The run was made by the owner on Colab with `python/colab/axi_provider_side_typed.ipynb`; the file reached me on 20 Oct 2026 and holds no date of its own. It records: vLLM 0.31.0, GPU Tesla T4, Python 3.13.15, `Qwen/Qwen2.5-7B-Instruct-AWQ`, the cache fixed at 80,000 tokens with the engine's block override (capacity source "override"), 30-step jobs, seed 20261017, one regular expression per request (the base expression of the third run is sha256 `6f4e5a993f26ccd4…`), the policy `repair_m6`, and no retry in any cell. **All seven planned cells ran** (`F0`, `FK`, `FKA`, `FKT`, `FN`, `SK`, `SN`); each holds its 30 rounds in order. The file is `docs/results/axi_provider_typed.json` (sha256 `6bb4ca481441182b2d055248dd75339992e9f8377b9f4b759dc1281f5b17866f`): the merged file that the notebook's last cell wrote with `provider_side_typed.merge_files`. It records the sha256 of that module (`c5f05d5840374fb7…`, the module in the repository), those of the eight files the test imports (all as pinned on the page), and the third run's file it was compared with (`axi_provider_bounded.json`, `1f12a846b1325f9f…`). The seconds around the engine's calls of the seven cells add up to 1,708.1, which is 28.5 minutes. **What the safety cell and the probe printed is not in the saved file, and no table or figure below rests on it; the printout of the probe reached me later and is read in its own section, "The probe (Cell 6), read afterwards".** Every figure below is computed from the saved file by `tests/test_provider_side_typed_result.py`.*
+
+**What the page expected, and what came out.** The page put lines 2, 3 and 4 all yes at about 70 %, and they read yes, as do lines 1 and 5: the run is the run the page describes. **15 of the 17 lines read yes; lines 6 and 15 read NO, and no line is "not run".** The pattern the page called most likely (lines 1 to 5, 7, 13 and 14 yes, line 15 NO, the rest open: about 25 %) is what came out; the headline is not what it called most likely: lines 6 and 17 read NO and yes, where "both yes" stood at about 35 %. On the 64 jobs that no earlier run had seen (jobs 128 to 191) the grammar by kind is 95.6 % exact against 95.5 % for the capped one (1,835 and 1,833 of 1,920 steps), +0.1 points where line 6 asked for +1.0, and its exact steps per GPU hour are 29,560 against 29,437 (+0.4 %), which is the size of the spread between the five cells that did the same amount of work (223.5 to 224.8 seconds, 0.6 %). **Line 17 reads yes by the page's rule and this Result does not read it as a gain.** Two other cells reached all 1,920 steps exact on those jobs: the grammar that names the coordinates (`FN`, 0.117 seconds per step, the same as `F0`) and the target line at the top and at the end of the message (`FKA`, +53.2 % seconds per step). The page's reading of "line 5 yes, line 6 NO" was "too few slips of the removable kind among the new jobs to see one point, or the forced replies were wrong"; it is the first: the kind grammar forced one reply in `FK` (job 150, step 9) and that reply is the oracle's own.
+
+## The 17 lines
+
+| # | my probability | what was measured | read |
+|---|---|---|---|
+| 1 | 98 % | the engine reported the cached tokens of every request: 13,440 requests in the 7 cells | yes |
+| 2 | 90 % | replies accepted by the strict parser: 13,440 of 13,440, 100.0 % (limit 99.5 %, met); replies that used all 96 new tokens: none (the longest has 31 tokens); replies inside the language of their own request: 13,440 of 13,440 | yes |
+| 3 | 80 % | `FK` and `FN` against `F0`, `SK` and `SN` against the third run's `S` cell at 64 jobs, job by job, up to each job's first step whose base reply is outside the new language: all the same text, and the reply at that step inside it (1,899 steps for `FK`, 1,808 steps for `FN`, 1,860 steps for `SK`, 1,848 steps for `SN`; the jobs forced: `FK` 150; `FN` 136, 150, 172, 175, 178; `SK` 3, 17, 19, 62; `SN` 3, 4, 17, 19, 20, 62) | yes |
+| 4 | 97 % | each cell's recorded set of expressions has the sha256 recomputed from its jobs (capped `6f4e5a99…`, kind `69152ac9…`, named `12cfe62c…` on jobs 0 to 63 and `c1732477…` on jobs 128 to 191), and the oracle's own reply is inside the expression of all 13,440 requests | yes |
+| 5 | 93 % | `FK` 1,835 of 1,920 steps exact (95.6 %), `F0` 1,833 (95.5 %): not below | yes |
+| 6 | 38 % | `FK` against `F0`: +0.1 points (limit +1.0, not met) | NO |
+| 7 | 85 % | the 64 jobs: 63 hold the right state after as many steps with `FK` as with `F0`, 1 after more (job 150), 0 after fewer | yes |
+| 8 | 60 % | `SK` 1,906 of 1,920 exact (99.3 %) (limit 99 %, met; the most it could be was 99.3 %; the third run: 97.2 %) | yes |
+| 9 | 45 % | `SN` 1,920 of 1,920 exact (100.0 %) (limit 99.5 %, met; the ceiling) | yes |
+| 10 | 70 % | `FN` 1,920 of 1,920 exact (100.0 %) (limit 99.5 %, met) | yes |
+| 11 | 50 % | `FKA` 1,920 exact (100.0 %), `FK` 1,835 (95.6 %): not below (4 jobs better, 0 worse) | yes |
+| 12 | 50 % | `FKT` 1,839 exact (95.8 %), `FK` 1,835 (95.6 %): not below (2 jobs better, 2 worse) | yes |
+| 13 | 80 % | `FK` 0.1164 seconds per step, `F0` 0.1168: 0.997 times (limit 1.05, met) | yes |
+| 14 | 70 % | `FN` 0.1166, `F0` 0.1168: 0.998 times (limit 1.15, met) | yes |
+| 15 | 15 % | `FKA` 0.1783, `FK` 0.1164: 1.532 times (limit 1.30, not met) | NO |
+| 16 | 85 % | `FKT` 0.1275, `FK` 0.1164: 1.095 times (limit 1.20, met) | yes |
+| 17 | 62 % | `FK` 29,560 exact steps per GPU hour, `F0` 29,437: +0.4 % (limit: higher) | yes |
+
+**15 of 17 lines read yes, lines 6 and 15 read NO, and no line is "not run".** The two NO stood at 38 % (line 6) and 15 % (line 15) on the page, so both were the side I expected. The probabilities of lines 9, 11 and 12 (45, 50 and 50 %) were near a coin and they read yes. Scored against what happened, the 17 probabilities have a Brier score of 0.094 (always writing 50 % scores 0.250; lower is better); that is a description of 17 lines written by one person and not a measure of anything.
+
+## What the page's rule lets this Result claim
+The page's rule, applied line by line to what was read:
+* **Lines 2, 3 and 4 read yes**, so the figures of the cells are claimed as read.
+* **Line 5 reads yes and line 6 reads NO.** The page allows the claim that a grammar raises the exactness only from the fresh jobs (lines 5 to 7 and 10 to 12). The kind grammar did not raise it there (95.6 % against 95.5 %; one job better, none worse). **This Result does not claim that the grammar by kind raises the exactness.**
+* **Line 10 reads yes.** `FN` is exact at all 1,920 steps of the fresh jobs. The page's condition for saying so is in the same sentence: the host wrote the coordinates of the request into the reply, and what the model wrote is the number (below, "What the model still writes").
+* **Lines 11 and 12 read yes.** `FKA` is exact at all 1,920 steps, and no job is worse than with `FK` (4 jobs better); `FKT` is +4 steps from `FK` (2 jobs better and 2 worse), which is not a claim. The anchor at the top and the end costs +53.2 % seconds per step (line 15 NO).
+* **Lines 8 and 9 are about the jobs the slips were read on** (jobs 0 to 63) and say what the replay rule said they would: the grammar can only change a reply that is outside it (below, "The seen jobs").
+* **Lines 13 to 17 are from cells of one session.** The seconds of the cells of this run are compared with each other and never with the third run's.
+* **Never**, as the page says: a multiple of capacity, a count of GPUs saved, dollars or a percentage of cost, "100 percent" for a grammar, "proven", a statement about any provider, a statement about requests in free words, or about a model that was not run.
+
+**The sentence the page allows, with this run's numbers.** On jobs 128 to 191, which no earlier run had seen, with the requests read by the host from their sentence, on one Tesla T4 (Colab), with vLLM 0.31.0, `Qwen/Qwen2.5-7B-Instruct-AWQ`, a cache of 80,000 tokens and 30-step jobs: the reply restricted to the kind of the request left the exactness at 95.6 % where the capped expression gave 95.5 % (1,835 and 1,833 of 1,920 steps; no gain that one run of 64 jobs can show), at 0.116 and 0.117 seconds per step, 29,560 and 29,437 exact steps per GPU hour and 8.0 and 8.0 per 1,000 tokens. The grammar that also names the coordinates of the request had all 1,920 steps exact at 0.117 seconds per step, 30,882 exact steps per GPU hour and 8.4 per 1,000 tokens, **and in the same sentence: in that grammar the host writes the coordinates of the request into the reply, the model writes the value of an added service or the weight of an added edge, and in every one of the 681 delete replies it wrote the node alone, the edges being completed by the framework's repair.** The target line at the top and the end of the message with the kind grammar had all 1,920 steps exact at 0.178 seconds per step (20,191 exact steps per GPU hour, 5.4 per 1,000 tokens). One run, 64 jobs.
+
+## The jobs that missed
+On the fresh jobs 5 jobs of 64 missed somewhere in `F0` (jobs 136, 150, 172, 175, 178), 4 in `FK`, 3 in `FKT` and none in `FKA` and `FN`. The first miss of each, with what each cell did at the job ("lost" is the steps of the job after which the held state was not the oracle's; the exact-state arm keeps the state it holds, so a step that was not done stays not done):
+
+| job | step | the request | the oracle writes | `F0` | `FK` | `FKA` | `FKT` | `FN` |
+|---|---|---|---|---|---|---|---|---|
+| 136 | 2 | Delete the service at (1,0). | `DEL[1,0]` | step 2: `DEL[0,1]` (19 lost) | step 2: `DEL[0,1]` (19 lost) | exact to the end | step 2: `DEL[0,0]` (29 lost) | exact to the end |
+| 150 | 9 | Add a dependency edge from (0,0) to (0,1) with relation dep and weight 4. | `ADD[(0,0)->(0,1):dep#4]` | step 9: `DEL[(0,1)->(0,0):owns#1] ADD[(0,0)->(0,1):dep#4]` (2 lost) | exact to the end | exact to the end | exact to the end | exact to the end |
+| 154 | 5 | Delete the service at (1,3). | `DEL[1,3] DEL[(0,0)->(1,3):owns#1] DEL[(1,3)->(0,3):dep#1]` | exact to the end | exact to the end | exact to the end | step 5: `DEL[0,3]` (23 lost) | exact to the end |
+| 172 | 14 | Delete the service at (2,4). | `DEL[2,4] DEL[(1,0)->(2,4):dep#6]` | step 14: `DEL[(2,4)->(1,0):dep#6]` (17 lost) | step 14: `DEL[(2,4)->(1,0):dep#6]` (17 lost) | exact to the end | exact to the end | exact to the end |
+| 175 | 2 | Delete the service at (1,1). | `DEL[1,1] DEL[(0,3)->(1,1):owns#1]` | step 2: `DEL[0,1]` (29 lost) | step 2: `DEL[0,1]` (29 lost) | exact to the end | step 2: `DEL[0,1]` (29 lost) | exact to the end |
+| 178 | 11 | Delete the service at (2,4). | `DEL[2,4] DEL[(2,4)->(0,0):dep#8]` | step 11: `DEL[(2,4)->(0,0):dep#8]` (20 lost) | step 11: `DEL[(2,4)->(0,0):dep#8]` (20 lost) | exact to the end | exact to the end | exact to the end |
+
+**4 of the 5 first misses of `F0` are replies to a Delete request.** The eight first misses in the 128 jobs that the earlier runs read (the page's table) were all replies to an Add request. In `F0`: job 136 and job 175 wrote `DEL[0,1]` for the service (1,0) and for (1,1) (the wrong service), jobs 172 and 178 wrote an edge of the service and not the service (the node is missing, and in job 172 the edge is also written in the other direction), and job 150 wrote an extra delete in front of the right add, the kind of slip of jobs 17 and 62 on the page. **Four of the five replies are inside the kind language** (a delete may name any service, and the grammar by kind does not look at which), so the grammar by kind could change only job 150, and it did: the forced reply is the oracle's own and the job is exact to the end (2 steps). The wrong services in the four different wrong-node replies of the five cells (job 136 `DEL[0,0]` for (1,0), job 136 `DEL[0,1]` for (1,0), job 154 `DEL[0,3]` for (1,3), job 175 `DEL[0,1]` for (1,1)) all have a 0 where the request has a 1 as the first coordinate; four replies are too few to say why. The gate refused the replies of jobs 136, 172 and 175 and admitted those of jobs 150 (a legal extra delete) and 178 (an edge deleted and the service left); no cell here asks again. The grammar that names the service (`FN`) removes all five, as it must, since the service is written by the host; the target line (`FKA`) removed the four that the kind grammar leaves, and nothing was written by the host there.
+
+`FKT`, the target line at the end only, is the same prompt as `FK` plus 11.2 computed tokens a step. It put right jobs 172 and 178, left 136 and 175 and made 136 worse (29 lost against 19) and added a new miss, job 154. A prompt is a different draw of the model's replies, and with so few misses this is what such a draw looks like; it is not a claim about the tail line.
+
+**On `FKA` against `FK`: four jobs changed from missing to exact and none changed the other way** (jobs 136, 172, 175, 178). Under chance alone (each of the jobs that missed in either cell equally likely to be in either) four to none has a one-sided chance of about 6 in 100 (the hypergeometric count for 0 of 64 against 4 of 64). That is too few jobs to call it settled and not nothing, and it came from one run.
+
+## What the model still writes
+The page said that in the grammar that names the coordinates "the model's share is the number of a node, the weight of an edge, and the list of edges of a delete". The saved replies say more. In `FN`, **all 1,239 add replies and all 180 replies to a delete of a service without connections are, letter for letter, what the oracle writes (1,419 of 1,419), and all 501 replies to a delete of a service with connections are `DEL[x,y]` alone** (501 node-only, 501 of them exact): the gate does not admit a delete that leaves edges without their service, and the framework's repair (`repair_m6`, which completes the dangling edges; unchanged) puts them in, so the held state is the oracle's. In no cell did the model write the edge list of a delete: the only delete replies with an edge item in the seven cells are the two edge-only replies of `F0` and of `FK` that are the first misses of jobs 172 and 178 (the service itself is missing from them), and the same node-alone reply is what the other cells wrote, right or wrong, at every other delete of a service with connections. So what the model wrote that mattered in `FN` is the value of an added service (649 replies) and the weight of an added edge (590 replies), and all of them were right. **The all-exact result of `FN` is therefore the host writing the coordinates and the model writing 1,239 numbers right; it is not the model reading the request.** Per cell:
+
+| cell | add replies | equal to the oracle's | deletes of a leaf | equal | deletes of a service with connections | the node alone | of them exact | with an edge item |
+|---|---|---|---|---|---|---|---|---|
+| `F0` | 1,239 | 1,238 | 180 | 179 | 501 | 499 | 482 | 2 |
+| `FK` | 1,239 | 1,239 | 180 | 179 | 501 | 499 | 482 | 2 |
+| `FKA` | 1,239 | 1,239 | 180 | 180 | 501 | 501 | 501 | 0 |
+| `FKT` | 1,239 | 1,239 | 180 | 179 | 501 | 501 | 484 | 0 |
+| `FN` | 1,239 | 1,239 | 180 | 180 | 501 | 501 | 501 | 0 |
+| `SK` | 1,241 | 1,239 | 171 | 171 | 508 | 508 | 506 | 0 |
+| `SN` | 1,241 | 1,241 | 171 | 171 | 508 | 508 | 508 | 0 |
+
+## The seen jobs
+With greedy decoding a grammar cannot change a reply that is already inside it, so the page could say before the run what `SK` and `SN` must write. It came out as said: in `SK` the replies are the third run's up to each job's first reply outside the kind language (1,860 steps compared; forced at jobs 3, 17, 19, 62), and in `SN` up to the first reply outside the named language (1,848 steps; forced at jobs 3, 4, 17, 19, 20, 62). Every forced step gives a job that is exact to the end of its 30 steps (the table), so `SK` has 1,906 exact steps, which is the ceiling the page computed (jobs 4 and 20 lose 14), and jobs 4 and 20 slip again at steps 18 and 30 with the text of the third run (`ADD[1,0:6]`, `ADD[(1,5)->(2,1):dep#3]`), as the replay rule says they must: their replies are inside the kind language. `SN` is exact at all 1,920 steps. The same rule holds on the fresh jobs: `FK` and `FN` write `F0`'s replies until `F0`'s first reply outside their language (1,899 and 1,808 steps compared).
+
+| pair | steps compared | jobs forced (job, step) | what the third run or `F0` wrote there | what the new cell wrote | the oracle's reply | exact to the end |
+|---|---|---|---|---|---|---|
+| `FK` | 1,899 | 150, 9 | `DEL[(0,1)->(0,0):owns#1] ADD[(0,0)->(0,1):dep#4]` | `ADD[(0,0)->(0,1):dep#4]` | the same | yes |
+| `FN` | 1,808 | 136, 2 | `DEL[0,1]` | `DEL[1,0]` | the same | yes |
+| `FN` | 1,808 | 150, 9 | `DEL[(0,1)->(0,0):owns#1] ADD[(0,0)->(0,1):dep#4]` | `ADD[(0,0)->(0,1):dep#4]` | the same | yes |
+| `FN` | 1,808 | 172, 14 | `DEL[(2,4)->(1,0):dep#6]` | `DEL[2,4]` | `DEL[2,4] DEL[(1,0)->(2,4):dep#6]` | yes |
+| `FN` | 1,808 | 175, 2 | `DEL[0,1]` | `DEL[1,1]` | `DEL[1,1] DEL[(0,3)->(1,1):owns#1]` | yes |
+| `FN` | 1,808 | 178, 11 | `DEL[(2,4)->(0,0):dep#8]` | `DEL[2,4]` | `DEL[2,4] DEL[(2,4)->(0,0):dep#8]` | yes |
+| `SK` | 1,860 | 3, 16 | `ADD[(4,4)->(4,4):value#6]` | `ADD[4,4:6]` | the same | yes |
+| `SK` | 1,860 | 17, 20 | `DEL[(2,3)->(0,4):dep#6] ADD[(0,4)->(2,3):dep#4]` | `ADD[(0,4)->(2,3):dep#4]` | the same | yes |
+| `SK` | 1,860 | 19, 12 | `ADD[(3,0)->(3,0):4tworowsdown4col#4]` | `ADD[3,0:4]` | the same | yes |
+| `SK` | 1,860 | 62, 12 | `DEL[(1,1)->(1,0):owns#5] ADD[(1,1)->(1,0):dep#9]` | `ADD[(1,1)->(1,0):dep#9]` | the same | yes |
+| `SN` | 1,848 | 3, 16 | `ADD[(4,4)->(4,4):value#6]` | `ADD[4,4:6]` | the same | yes |
+| `SN` | 1,848 | 4, 18 | `ADD[1,0:6]` | `ADD[0,0:3]` | the same | yes |
+| `SN` | 1,848 | 17, 20 | `DEL[(2,3)->(0,4):dep#6] ADD[(0,4)->(2,3):dep#4]` | `ADD[(0,4)->(2,3):dep#4]` | the same | yes |
+| `SN` | 1,848 | 19, 12 | `ADD[(3,0)->(3,0):4tworowsdown4col#4]` | `ADD[3,0:4]` | the same | yes |
+| `SN` | 1,848 | 20, 30 | `ADD[(1,5)->(2,1):dep#3]` | `ADD[(1,1)->(2,1):dep#3]` | the same | yes |
+| `SN` | 1,848 | 62, 12 | `DEL[(1,1)->(1,0):owns#5] ADD[(1,1)->(1,0):dep#9]` | `ADD[(1,1)->(1,0):dep#9]` | the same | yes |
+
+## The parity check on jobs it was built to fit and on jobs it was not
+The page's check (does the first item of the reply say what the request says, and does an add reply have exactly one item) was built on the eight first misses of the jobs 0 to 127. It is used nowhere in this run to decide a step. On the 13,440 steps of the seven cells it flags 14 steps; **every one of them is the first miss of its job, none is a step after which the job held the right state, and every first miss of every cell is flagged.** That includes the five fresh `F0` misses, which it had not seen when it was written. It does not mean that the check would be right in another setting: it reads the reply against the sentence the host read, a reply that is wrong in a way the sentence does not name (a value, a weight) would not be flagged, and none occurred here.
+
+| cell | steps | steps flagged | of them exact | first misses (jobs) | first misses flagged |
+|---|---|---|---|---|---|
+| `F0` | 1,920 | 5 | 0 | 5 | 5 of 5 |
+| `FK` | 1,920 | 4 | 0 | 4 | 4 of 4 |
+| `FKA` | 1,920 | 0 | 0 | 0 | 0 of 0 |
+| `FKT` | 1,920 | 3 | 0 | 3 | 3 of 3 |
+| `FN` | 1,920 | 0 | 0 | 0 | 0 of 0 |
+| `SK` | 1,920 | 2 | 0 | 2 | 2 of 2 |
+| `SN` | 1,920 | 0 | 0 | 0 | 0 of 0 |
+| all | 13,440 | 14 | 0 | 14 | 14 of 14 |
+
+## Seconds and tokens
+The five cells that did the same work took 223.5 to 224.8 seconds (`F0`, `FK`, `FN`, `SK`, `SN`): the grammar by kind and the grammar that names the coordinates cost nothing that shows in the seconds, and the 427 expressions that `FN` carries on the fresh jobs (new ones in 30 of its 30 rounds) are inside that spread; its first round took 12.47 seconds against 11.86 for `F0`. The target line is what costs: at the top and the end it moves every prompt after the first step away from the cache beyond the system prompt (53.2 % of the prompt tokens served from the cache against 69.0 %), the engine computed 175.0 prompt tokens a step against 108.5 (1.61 times; the page estimated about 181 against 109), and the seconds per step rose by 53 %, inside the 30 to 60 % the page expected. At the end only, it is 119.7 tokens a step (1.10 times) and 9.5 % more seconds per step. For the steps it bought, `FKA` has 85 more exact steps than `FK` (+4.6 %) for 118.9 more seconds, so its exact steps per GPU hour are -31.7 % against `FK` and its exact steps per 1,000 tokens 5.4 against 8.0: more exact steps, fewer per hour, on this measure.
+
+| cell | s / step | against | prompt tokens per step | cached | computed per step | written per step | tokens computed + written | exact steps per 1,000 tokens |
+|---|---|---|---|---|---|---|---|---|
+| `F0` | 0.1168 | - | 350.0 | 69.0 % | 108.5 | 10.46 | 228,379 | 8.0 |
+| `FK` | 0.1164 | `F0`: 0.997 times | 350.0 | 69.0 % | 108.5 | 10.45 | 228,374 | 8.0 |
+| `FKA` | 0.1783 | `FK`: 1.532 times | 374.3 | 53.2 % | 175.0 | 10.44 | 356,091 | 5.4 |
+| `FKT` | 0.1275 | `FK`: 1.095 times | 360.7 | 66.8 % | 119.7 | 10.44 | 249,814 | 7.4 |
+| `FN` | 0.1166 | `F0`: 0.998 times | 349.7 | 68.9 % | 108.7 | 10.44 | 228,793 | 8.4 |
+| `SK` | 0.1171 | - | 349.6 | 68.7 % | 109.3 | 10.53 | 230,036 | 8.3 |
+| `SN` | 0.1171 | - | 349.7 | 68.7 % | 109.3 | 10.53 | 230,050 | 8.3 |
+
+## Every cell
+
+| cell | jobs | prompt | grammar | steps | seconds | s / step | exact steps | exact | jobs exact to the end | exact steps per hour | expressions |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| `F0` | 128 to 191 | old | capped | 1,920 | 224.2 | 0.1168 | 1,833 | 95.5 % | 59 of 64 | 29,437 | 1 |
+| `FK` | 128 to 191 | old | kind | 1,920 | 223.5 | 0.1164 | 1,835 | 95.6 % | 60 of 64 | 29,560 | 3 |
+| `FKA` | 128 to 191 | anchor | kind | 1,920 | 342.3 | 0.1783 | 1,920 | 100.0 % | 64 of 64 | 20,191 | 3 |
+| `FKT` | 128 to 191 | tail | kind | 1,920 | 244.8 | 0.1275 | 1,839 | 95.8 % | 61 of 64 | 27,048 | 3 |
+| `FN` | 128 to 191 | old | named | 1,920 | 223.8 | 0.1166 | 1,920 | 100.0 % | 64 of 64 | 30,882 | 427 |
+| `SK` | 0 to 63 | old | kind | 1,920 | 224.8 | 0.1171 | 1,906 | 99.3 % | 62 of 64 | 30,529 | 3 |
+| `SN` | 0 to 63 | old | named | 1,920 | 224.8 | 0.1171 | 1,920 | 100.0 % | 64 of 64 | 30,747 | 436 |
+
+Q = O / M of this run, as `q_measure.py` computes it from the saved file (the same block is on `Q_FROM_SAVED_FILES.md`; the two numbers are never mixed into one):
+
+**fifth run, typed requests**
+
+| cell | steps | exact steps O | exact share | wall seconds | exact steps per GPU hour | tokens computed + written | exact steps per 1,000 tokens |
+|---|---|---|---|---|---|---|---|
+| F0 | 1,920 | 1,833 | 95.5 % | 224.2 | 29,437 | 228,379 | 8.0 |
+| FK | 1,920 | 1,835 | 95.6 % | 223.5 | 29,560 | 228,374 | 8.0 |
+| FKA | 1,920 | 1,920 | 100.0 % | 342.3 | 20,191 | 356,091 | 5.4 |
+| FKT | 1,920 | 1,839 | 95.8 % | 244.8 | 27,048 | 249,814 | 7.4 |
+| FN | 1,920 | 1,920 | 100.0 % | 223.8 | 30,882 | 228,793 | 8.4 |
+| SK | 1,920 | 1,906 | 99.3 % | 224.8 | 30,529 | 230,036 | 8.3 |
+| SN | 1,920 | 1,920 | 100.0 % | 224.8 | 30,747 | 230,050 | 8.3 |
+
+The third run's cells were in another Colab session and the page says a cell of this run is not compared with them for time; the seconds above are for reading each cell and the pairs of this run, which ran in one session.
+
+## The probe (Cell 6), read afterwards
+
+*Added on 20 Oct 2026, in the evening, after the Result above was published: the owner sent the printout of Cell 6. It is saved as `docs/results/axi_provider_typed_probe.txt` (sha256 `b7ff0352161c4f086dd5effb4e6eb4b38581ae7242dcb6ae41bcbc26a1e77fc7`; a plain text file, not part of the merged result file) and this test reads it line by line against the saved runs. The page called the probe a description and never a step of the loop: for each of the 8 steps where an earlier run had a first miss, the prompt of that step is rebuilt with the oracle's own replies before it and asked once under each variant, and once more under the capped expression with the earlier wrong reply as the assistant's turn and a `PARITY` user turn that says what the request names and what the reply named.*
+
+| job | step | request | the earlier reply | `old` | `kind` | `named` | `kind+top` | `kind+tail` | parity turn |
+|---|---|---|---|---|---|---|---|---|---|
+| 3 | 16 | add_node | `ADD[(4,4)->(4,4):value#6]` | the earlier reply again | the oracle's reply | the oracle's reply | the oracle's reply | the oracle's reply | the earlier reply again |
+| 4 | 18 | add_node | `ADD[1,0:6]` | the earlier reply again | the earlier reply again | the oracle's reply | the oracle's reply | the oracle's reply | the oracle's reply, then the earlier reply |
+| 17 | 20 | add_edge | `DEL[(2,3)->(0,4):dep#6] ADD[(0,4)->(2,3):dep#4]` | the earlier reply again | the oracle's reply | the oracle's reply | the oracle's reply | the oracle's reply | the earlier reply again |
+| 19 | 12 | add_node | `ADD[(3,0)->(3,0):4tworowsdown4col#4]` | the earlier reply again | the oracle's reply | the oracle's reply | the oracle's reply | the oracle's reply | the earlier reply again |
+| 20 | 30 | add_edge | `ADD[(1,5)->(2,1):dep#3]` | the earlier reply again | the earlier reply again | the oracle's reply | the oracle's reply | the oracle's reply | the oracle's reply |
+| 62 | 12 | add_edge | `DEL[(1,1)->(1,0):owns#5] ADD[(1,1)->(1,0):dep#9]` | the earlier reply again | the oracle's reply | the oracle's reply | the oracle's reply | the oracle's reply | the earlier reply again |
+| 101 | 4 | add_node | `ADD[(3,4)->(3,4):2alue#2]` | the oracle's reply | the oracle's reply | the oracle's reply | the oracle's reply | the oracle's reply | the oracle's reply, then the earlier reply |
+| 122 | 22 | add_edge | `ADD[(0,0)->(2,0):dep#3]` | the earlier reply again | the earlier reply again | the oracle's reply | the oracle's reply | the oracle's reply | `DEL[(0,0)->(2,2):dep#8] ADD[(0,0)->(2,2):dep#3]` |
+
+**It agrees with the saved runs.** On all 8 steps the request, the oracle's reply, the earlier reply, whether that reply is inside the `kind` and the `named` language and the parity turn are what the saved files and the module give, and all 48 replies are inside the expression of their own variant. The three smoke steps show prompts of 423, 452 and 465 tokens of which 0, 192 and 192 came from the cache: the first 192 tokens are the system prompt, as the page expected.
+
+* **`old`, the capped expression with the old prompt:** the earlier reply again at 7 of the 8 steps. At job 101 it wrote the oracle's reply this time, so that step says nothing about the other variants; the printout does not say why and I did not test it.
+* **`kind`:** the oracle's reply at 5 of the 5 steps whose earlier reply was outside the kind language (jobs 3, 17, 19, 62, 101) and at 0 of the 3 number slips (jobs 4, 20, 122), where it wrote the earlier reply again. That is what the replay rule and the page said this grammar can do and cannot do.
+* **`named`, `kind+top` and `kind+tail`:** the oracle's reply at all 8 steps. In `kind+top` and `kind+tail` the host writes nothing of the reply (the grammar only fixes its shape); the target line is in the prompt and the model wrote the right number at the 3 number slips. All 8 steps are Adds. In the run, the line at the end only (`FKT`) gave 95.8 % against 95.6 % for `FK` on the fresh jobs: its 3 first misses were all Deletes (delete_leaf, delete_dep, delete_dep), which this probe does not ask.
+* **The parity turn:** the oracle's reply alone at 1 of the 8 steps (job 20); the oracle's reply followed by the earlier reply at 2 (jobs 4, 101); the earlier reply again at 4; at job 122 the right coordinates with a `DEL` in front of them. Told what it had written, the model rarely replaced the reply. This is 8 steps, and no step of the loop uses it.
+
+## Where my expectation was off, and where it was right
+* **Lines 1 to 4 (98, 90, 80 and 97 %): the run is the run the page describes.** 13,440 requests, every one with its cached count; every reply accepted by the strict parser, none at 96 new tokens (the longest has 31) and every reply inside the language of its own request, so the engine did apply a different expression to each request of one call; the four pairs replay as the rule says; the expressions are the ones the page defines.
+* **Line 6 (38 %) reads NO,** as the larger share of my probability said. I expected about 1.7 slips of the removable kind in 64 jobs; there was one (job 150). The surprise is not the line but the kind of slip: I read the eight first misses of the earlier jobs, all Adds, and designed the grammar for them, and four of the five misses of the new jobs are Deletes that name the wrong service or leave the service out.
+* **Lines 9 and 10 (45 and 70 %) read yes and say little.** `SN` at its ceiling is the host writing the coordinates in the six jobs where the third run's reply was outside the language, and `FN` is the same on new jobs; what they add is that the model wrote 1,239 numbers right in `FN` and 1,241 in `SN`.
+* **Lines 11 and 12 (50 % each) read yes.** The anchor is the one cell on the fresh jobs where nothing was written by the host and all 1,920 steps are exact. I do not call it settled (one run, 64 jobs, a different prompt is a different draw, and `FKT` shows that a draw can move in both directions).
+* **Line 15 (15 %) reads NO,** as expected: 1.532 times, limit 1.30. **Line 16 (85 %) reads yes:** 1.095 times.
+* **Line 17 (62 %) reads yes by 0.4 %,** which is 2 more exact steps and 0.7 fewer seconds, the size of the spread between the cells that did the same work.
+* **The side predictions, read afterwards as descriptions.** (a) in `SK`, jobs 4 and 20 miss again at steps 18 and 30 with the earlier text (88 %): true. (g) `F0` is between 96.5 and 99.0 percent exact (75 %): **false,** 95.5 %; the capped expression gave 97.2 % on jobs 0 to 63 in the third run and 98.1 % on jobs 64 to 127 in the fourth, so three sets of 64 jobs give three different figures. (h) the computed prompt tokens per step of `FKA` are at least 50 percent above those of `FK` (80 %): true, 1.61 times; those of `FKT` between 5 and 20 percent above (80 %): true, 1.10 times. (i) the seven cells take 20 to 40 minutes in all, loading excluded (70 %): true by the saved seconds (28.5 minutes around the engine's calls); the time with the prompts built and the files written is not in the file. (b) with the capped expression and the old prompt the probe writes the earlier slip again at 7 or more of the 8 steps (88 %): true, 7 of 8. (c) the `kind` variant writes the oracle's reply at 4 or more of the 5 steps whose earlier reply is outside the kind language (65 %): true, 5 of 5. (d) the `named` variant writes the oracle's reply at 6 or more of the 8 steps (70 %): true, and at all 8 (35 %): true. (e) the anchor at the top writes the oracle's reply at least once for the three number slips (40 %): true, for 3 of the 3. (f) the parity turn gets the oracle's reply for job 4 (40 %): **false** (it wrote the oracle's reply and then the earlier one); for at least one of jobs 4, 20 and 122 (55 %): true, job 20. **Of the twelve statements the page made as side predictions, 10 read true and 2 false.**
+* **A correction to the page.** It said that the edge list of a delete is still the model's in `FN`. In the replies the model never wrote one (above); the repair did.
+
+## What this finds, in plain words
+No step of the 13,440 left the held graph malformed (0 corrupted), and every reply was inside the language of its own request. On jobs nobody had read, the capped expression gave 95.5 % exact and the grammar by kind 95.6 %: **it did not raise the exactness, because four of the five jobs that slipped slipped on a Delete (two named the wrong service, two wrote an edge and left the service out), which the kind grammar still lets the model write.** Two cells reached all 1,920 steps exact on those jobs, and they are not the same kind of thing. **The grammar that names the coordinates did it at no cost in seconds (0.117 per step, 30,882 exact steps per GPU hour against 29,437), but by the host writing the coordinates it had read from the request sentence; the model wrote the value or the weight and, in the deletes, the node alone.** That says what a host that reads the request can hand to the engine; it does not say that the model reads requests. **The target line at the top and the end did it with the grammar by kind only and the model choosing the node, at +53.2 % seconds per step and 20,191 exact steps per GPU hour,** four jobs changed from missing to exact and none the other way; the same line at the end only did not (`FKT`, 95.8 %). The probe printed afterwards points the same way on 8 steps that earlier runs missed: the grammar by kind wrote the oracle's reply at 5 of the 5 shape slips and at 0 of the 3 number slips, and naming the coordinates, or the target line at the top or at the end, wrote it at all 8. The parity check named every first miss of the run and no other step. What is left to find out is whether a short anchor can be made cheap (it costs the cache), whether it holds on more jobs than 64, and what happens with requests in free words, where the host cannot read the coordinates.
+
+## What this does not show
+That the model reads requests (in the grammar that names the coordinates the host writes them); that the target line raises the exactness in general (one run, 64 new jobs, one model); anything about a placement of the line other than the two run; what the probe means for the loop (eight steps, one reply under each variant, descriptions the page said would never decide a step); a retry on top of a grammar (no cell has one); requests in free words; the kept chat with a grammar (not run); another model, GPU, engine or cache size; dollars; a capacity in jobs per GPU; a count of GPUs; energy (never measured); a lower bound of the cost per exact step; jobs longer than 30 steps; a real server's mixed traffic. The third run's cells were not re-measured here. It says nothing about the tensor-level roadmap.
