@@ -637,7 +637,7 @@ FRONT_ROW = [   # the row of VERIFIED.md for the third run
     "The Result: every figure recomputed from the saved file and the second run's, every one of the 3,360 step records replayed from its reply text, the 13 lines by the code and by hand, job 19 replayed through the gate, the prose pinned word for word, these two front pages pinned (test 127, 10 tests); mutation check of test 127, run on its first nine tests: 1,132 deliberate changes, all caught.",
     "Not shown: that the cap makes exact-state as exact as the kept chat (lines 12 and 13 NO), the kept chat at 32 and 64 jobs under the capped expression (not run; the second run's cells), a capacity in jobs per GPU, any number of GPUs, dollars, energy, other GPUs, models or engines.",
 ]
-FRONT_NEXT = 'Next free: row 171, item 116, test 141, question 121'
+FRONT_NEXT = 'Next free: row 171, item 117, test 143, question 121'
 
 
 def test_the_front_pages_say_what_the_run_found_and_point_to_this_test():
