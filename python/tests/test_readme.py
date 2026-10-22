@@ -139,10 +139,10 @@ def check_words(text):
                  "The assistant is a tool here: it is not an author and it owns nothing in this work",
                  "They are his to accept or reject",
                  "**What this does not show.**", "one sampled run on one model and one job", "the model was never told it",
-                 "We did not measure a chat that keeps its history, an agent that reads its state back and corrects itself, or energy",
+                 "We did not measure an agent that reads its state back and corrects itself, or energy (a chat that keeps its history is measured in the section below)",
                  "not a product", "the Rust crates are a partly wired sketch"]:
         assert must in text, ("missing", must)
-    for h in ["## What AXI is", "## The run, in plain words", "## What it cost", "## How the tests are done", "## Run it yourself", "## What is where", "## Start reading here", "## Status", "## Credits"]:
+    for h in ["## What AXI is", "## The run, in plain words", "## What it cost", "## The long session, with and without AXI (22 Oct 2026)", "## How the tests are done", "## Run it yourself", "## What is where", "## Start reading here", "## Status", "## Credits"]:
         assert h in text, ("missing section", h)
 
 

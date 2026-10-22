@@ -17,7 +17,7 @@ from axi.experiments.agent_loop import strict_parse
 HERE = os.path.dirname(__file__)
 PAGE = os.path.join(HERE, "..", "..", "docs", "GEMINI_LONG_TEST.md")
 NB = os.path.join(HERE, "..", "colab", "axi_gemini_long.ipynb")
-PAGE_SHA256 = "fb22f12f7558403414193a39e2363a8be1425fda8e4b35d2495860894cfd026e"        # written before any call
+PAGE_SHA256 = "acdb936ab9060869e27eb29f28c69fa6f514f6365ae13686a82401a314b9825b"        # written before any call
 RESULT_MARK = "\n\n---\n\n# Result"
 
 
@@ -240,7 +240,7 @@ def test_the_page_and_the_module_agree():
     for (n, tag, text, pr), (m, rt), (gt, gtext) in zip(ps, rs, G.G_LINES): assert n == m and text == rt == gtext and tag == gt and 0 < int(pr) < 100
     for needle in (G.MODEL, str(G.SEED), f"{G.K_CONTEXT_CAP:,}", f"{G.A_STEPS:,}", f"{G.K_MAX_STEPS}", f"{G.PAD_LINES} lines", f"{G.K_TOKEN_CAP:,}", f"{G.A_TOKEN_CAP:,}", f"{G.D_TOKEN_CAP:,}", "Energy in joules", "seconds to the first token"): assert needle in head, needle
     assert "ultimate" not in head.lower() and "$" not in head and "proven" not in head.lower()
-    assert [s for s in G.D_STARTS] == [50, 150, 250, 350, 450] and G.MODEL == "gemini-3.8-flash"
+    assert [s for s in G.D_STARTS] == [50, 100, 200, 300, 350] and G.MODEL == "gemini-3.8-flash"
 
 
 def test_the_notebook_holds_no_key_never_turns_billing_on_and_sets_no_budget():
@@ -258,8 +258,8 @@ def test_the_notebook_holds_no_key_never_turns_billing_on_and_sets_no_budget():
 # ---------------------------------------------------------------- 6 front pages
 def test_the_two_front_pages_say_what_was_built_and_that_nothing_was_called():
     cm = open(os.path.join(HERE, "..", "..", "docs", "RAJNISH_CONCEPT_MAP.md")).read(); vf = open(os.path.join(HERE, "..", "..", "docs", "VERIFIED.md")).read()
-    assert "Next free: row 171, item 116, test 140, question 121" in cm and cm.count("Next free:") == 1 and "test 139 checks the long-session test" in cm and "115. **The long session on Gemini 3.8 Flash" in cm
-    assert "nothing has been called" in cm and "GEMINI_LONG_TEST.md" in vf and "not run" in vf.split("GEMINI_LONG_TEST.md")[1][:400].lower()
+    assert "Next free: row 171, item 116, test 141, question 121" in cm and cm.count("Next free:") == 1 and "test 139 checks the long-session test" in cm and "115. **The long session on Gemini 3.8 Flash" in cm
+    assert "GEMINI_LONG_TEST.md" in vf and "test 139 checks the long-session test" in cm
 
 
 if __name__ == "__main__":

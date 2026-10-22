@@ -58,7 +58,7 @@ The spend was about the same for all three ways of keeping the state. What diffe
 
 Priced at $0.75 per million tokens in and $3.75 out (thinking counted as out), every call counted. The cost column was worked out from the saved files after the results were read, so it is not one of the pre-written reading rules.
 
-**What this does not show.** It is one sampled run on one model and one job; a repeat would give different numbers, and the second run has not been made. The repair rule (a deleted service takes its dependants with it) is the job's own rule, and the model was never told it, so this shows the layer works when the rule is known, not that it can find rules. We did not measure a chat that keeps its history, an agent that reads its state back and corrects itself, or energy.
+**What this does not show.** It is one sampled run on one model and one job; a repeat would give different numbers, and the second run has not been made. The repair rule (a deleted service takes its dependants with it) is the job's own rule, and the model was never told it, so this shows the layer works when the rule is known, not that it can find rules. We did not measure an agent that reads its state back and corrects itself, or energy (a chat that keeps its history is measured in the section below).
 
 Full page, every number, and what it does not show: [`docs/MILLION_TOKEN_TEST_HARD.md`](docs/MILLION_TOKEN_TEST_HARD.md).
 
@@ -68,6 +68,25 @@ Full page, every number, and what it does not show: [`docs/MILLION_TOKEN_TEST_HA
 * Qwen2.5-7B, 30 requests in a row: applying as written corrupted the state in 12 of 12 episodes. The gate corrupted it in 0 of 360 steps.
 
 Both are on synthetic service graphs, in Colab. The tables and what is still open are in [`docs/VERIFIED.md`](docs/VERIFIED.md) and [`docs/EXPERIMENT_RESULTS.md`](docs/EXPERIMENT_RESULTS.md).
+
+<!-- long-session:start -->
+## The long session, with and without AXI (22 Oct 2026)
+
+The same model (Gemini 3.8 Flash), a long job with heavy turns (every request came with about 40 lines of operations log), once with AXI holding the state (1,500 steps) and once with the whole chat kept (457 turns, up to 949,591 tokens).
+
+| | Without AXI (chat kept) | With AXI |
+|---|---|---|
+| Prompt tokens sent per step | 476,835 | **2,824** (169 times fewer) |
+| Tokens sent in all | 217.5 million (457 turns) | **4.6 million** (1,500 steps; 47 times fewer) |
+| State held, exact | until turn 286; wrong on every turn after | **1,500 of 1,500 steps, 0 corrupted** |
+| Distance of the held state from the true state | up to 17 items | **0 at every step** |
+| First token, median | 2.23 s at best, 9.13 s past 500,000 tokens | **2.27 s, flat** |
+| Seconds a step | 7.13 | **3.07** (2.3 times faster) |
+| Exact steps an hour | 488 | **1,157** (2.4 times more) |
+| Thinking tokens a step | 77 early, 239 late | **no climb: 210 early, 247 late** |
+
+One run of each arm on one job. The page for a company that runs the model: [`docs/AXI_FOR_COMPANIES.md`](docs/AXI_FOR_COMPANIES.md). The full page with its pre-written reading rules and every table: [`docs/GEMINI_LONG_TEST.md`](docs/GEMINI_LONG_TEST.md).
+<!-- long-session:end -->
 
 ---
 
