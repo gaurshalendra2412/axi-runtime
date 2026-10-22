@@ -399,7 +399,7 @@ def test_the_result_claims_only_what_the_pages_rule_allows():
 def test_the_two_front_pages_say_what_was_run_what_was_read_and_what_it_does_not_show():
     cm = open(os.path.join(ROOT, "docs", "RAJNISH_CONCEPT_MAP.md")).read(); ve = open(os.path.join(ROOT, "docs", "VERIFIED.md")).read()
     item = next(l for l in cm.split("\n") if l.startswith("114. **")); row = next(l for l in ve.split("\n") if l.startswith("| Provider-side serving test, eighth run"))
-    assert "Next free: row 171, item 117, test 143, question 121" in cm and cm.count("Next free:") == 1 and "test 138 its Result" in cm
+    assert "Next free: row 171, item 118, test 144, question 121" in cm and cm.count("Next free:") == 1 and "test 138 its Result" in cm
     for text in (item, row):
         for s in ("`P0`", "`PN`", "`XR`", "3,200 of 3,200", "94.9 %", "47.8 %", "90.1 %", "12 of 21", "line 18", "2,688", "512", "board", "L4", "nothing here is proven", "mutation check of test 138: not yet run"):
             assert s in text, s
