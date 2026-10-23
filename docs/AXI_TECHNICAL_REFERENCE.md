@@ -286,6 +286,8 @@ This section collects what a company that runs the model gets from the pattern, 
 
 **5.5 Fewer re-runs and clean-ups.** In the runs, the AXI arm used no re-asks in Tests 22 and 23 and a few in Tests 24 and 25 (20 and 7 moves asked again), and no reply was left unusable. A state that is right at every step does not need a clean-up job, a re-run or a support case; that saving is indirect and the repository does not put a number on it.
 
+**5.6 What the turns that ended wrong cost.** The page [`COST_OF_BEING_WRONG.md`](COST_OF_BEING_WRONG.md) counts, from the saved files of Tests 22 and 23, the turns that ended with a wrong held state, the computed tokens and seconds those turns used (the stand-in for energy), the cost of a step through the job and where the kept chat stops being the faster one, and the same job at other cache hit rates and other weights (both assumed). It does not measure the cost of a wrong action in a real business.
+
 ---
 
 ## 6. The realities: where AXI does not help

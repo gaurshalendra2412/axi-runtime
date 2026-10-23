@@ -189,12 +189,13 @@ PYTHONPATH=python python3 python/tools/readme_figures.py docs/img
 ## Start reading here
 
 1. [`docs/AXI_TECHNICAL_REFERENCE.md`](docs/AXI_TECHNICAL_REFERENCE.md): the whole of AXI in one technical document: the architecture as the code has it, the measured results of the last four Gemini runs, the method, the limits.
-2. [`docs/MILLION_TOKEN_TEST_HARD.md`](docs/MILLION_TOKEN_TEST_HARD.md): the 4,000-step run.
-3. [`docs/WHERE_THIS_STANDS.md`](docs/WHERE_THIS_STANDS.md): one page on latency, drift and cost as measured, what is not shown, and where the tensor-level roadmap stands.
-4. [`docs/VERIFIED.md`](docs/VERIFIED.md): what is measured, what is only checked by tests, and what is **not** measured.
-5. [`docs/EXPERIMENT_RESULTS.md`](docs/EXPERIMENT_RESULTS.md): the earlier Qwen runs.
-6. [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md): other groups working on neighbouring ideas, and what we cannot claim against them.
-7. [`docs/RFC-001.md`](docs/RFC-001.md): the original design note.
+2. [`docs/COST_OF_BEING_WRONG.md`](docs/COST_OF_BEING_WRONG.md): what a wrong state costs a company that runs the model, counted from the saved files of the long-session and fuzzy-state runs: the turns that ended wrong and what they used, the cost of a step through the job, the cache sensitivity, what is not measured.
+3. [`docs/MILLION_TOKEN_TEST_HARD.md`](docs/MILLION_TOKEN_TEST_HARD.md): the 4,000-step run.
+4. [`docs/WHERE_THIS_STANDS.md`](docs/WHERE_THIS_STANDS.md): one page on latency, drift and cost as measured, what is not shown, and where the tensor-level roadmap stands.
+5. [`docs/VERIFIED.md`](docs/VERIFIED.md): what is measured, what is only checked by tests, and what is **not** measured.
+6. [`docs/EXPERIMENT_RESULTS.md`](docs/EXPERIMENT_RESULTS.md): the earlier Qwen runs.
+7. [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md): other groups working on neighbouring ideas, and what we cannot claim against them.
+8. [`docs/RFC-001.md`](docs/RFC-001.md): the original design note.
 
 ## Status
 

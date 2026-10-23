@@ -258,7 +258,7 @@ def test_the_notebook_holds_no_key_never_turns_billing_on_and_sets_no_budget():
 # ---------------------------------------------------------------- 6 front pages
 def test_the_two_front_pages_say_what_was_built_and_that_nothing_was_called():
     cm = open(os.path.join(HERE, "..", "..", "docs", "RAJNISH_CONCEPT_MAP.md")).read(); vf = open(os.path.join(HERE, "..", "..", "docs", "VERIFIED.md")).read()
-    assert "Next free: row 172, item 120, test 146, question 121" in cm and cm.count("Next free:") == 1 and "test 139 checks the long-session test" in cm and "115. **The long session on Gemini 3.8 Flash" in cm
+    assert "Next free: row 172, item 121, test 147, question 121" in cm and cm.count("Next free:") == 1 and "test 139 checks the long-session test" in cm and "115. **The long session on Gemini 3.8 Flash" in cm
     assert "GEMINI_LONG_TEST.md" in vf and "test 139 checks the long-session test" in cm
 
 
