@@ -638,7 +638,7 @@ def test_the_front_pages_point_to_the_tests_and_say_what_the_page_expects_and_wh
         assert ("RUN (19 Oct 2026)" in text or "Run (19 Oct 2026" in text) and "not run yet" not in text.lower() and "@@" not in text
         assert "exact steps per GPU hour" in text and "capacity" in text and "line 2" in text
         for n in ("20,878", "29,400", "33,300", "5,923", "727", "667", "88.3, 94.6", "97.2"): assert n in text, n
-    assert "Next free: row 172, item 119, test 145, question 121" in cm and "test 126 checks the capped re-run of the exact-state cells and test 127 its Result, item 108" in cm
+    assert "Next free: row 172, item 120, test 146, question 121" in cm and "test 126 checks the capped re-run of the exact-state cells and test 127 its Result, item 108" in cm
     assert "undeniable proof" in item and "49 GPUs" in item and "not accepted" in item and PAGE_SHA256 in item and PAGE_SHA256[:16] + "…" in row
     for n in ("(19 Oct)", "to clear line 2 of item 107", "\"4,900%\"", "(job 3 at step 16, job 4 at step 18, job 19 at step 12 and so on)", "a 7B 4-bit model, an 80,000-token cache and 30-step jobs", "(97.2 % exact against 100.0 %)",
               "**This test could clear line 2 and nothing else. Status: RUN (19 Oct 2026); the Result is on the page.**", "= **test 126** (23 tests:", "6,231 replies, of which 2 (one reply, in two cells) are outside the new language", "same 30 prompts",

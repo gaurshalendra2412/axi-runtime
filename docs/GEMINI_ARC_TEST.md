@@ -79,3 +79,68 @@ Headline: lines 8 and 13 both read yes ("AXI SENDS FAR FEWER TOKENS AND LOSES NO
 
 ## Guards on the bill
 The notebook never turns billing on. It prints a **pilot** (12 real moves of each arm in the first game) with the real size of a screen in tokens, the speed, the latency and the projected cost of the whole test at the owner's prices, before any budget is set. A **dollar budget** (typed after the pilot) makes the notebook refuse the next call once the saved answers cost that much; a **cap on tokens sent** stops each run (6,000,000 for `A`, 120,000,000 for `K`). Everything finished is saved and the same cell carries on: the games are played again from the saved moves, so a stopped run resumes exactly.
+
+---
+
+# Result
+
+*Written after the run, below the locked text; nothing above this line has been changed (its hash is checked by `tests/test_gemini_arc.py` and again by `tests/test_arc_fuzzy_results.py`). The figures are recomputed from `docs/results/axi_gemini_arc_default.json` by that test; none is typed by hand. One run of each arm, four of the 25 public games, 60 moves each, on 23 Oct 2026.*
+
+**What the page expected, and what came out.** Of the 19 lines **11 read yes and 8 read NO** (lines 6, 9, 10, 13, 16, 17, 18, 19). Lines 1 to 5 (the guards and the first instruments) read yes. **Line 6 reads NO**: 13 of the 240 replies of the kept chat (5.4 %) were not one JSON object with an action, so by the page's rule *no claim is made until the cause is found*. The cause is found in the saved rows and belongs to the kept chat itself, not to the instrument: 9 of the 13 unusable replies are **empty** (the call ended after the model's thinking, 2,759 to 7,862 tokens of it, with no reply written), 2 were **cut off at the token limit** in the middle of a long analysis, and 2 were a reply with the wrong wording. All 13 came at a prompt of 21,041 tokens or more; none came from AXI, whose replies were all usable. So the figures are given as read, with this note. Headline: **MIXED: line 8 yes, line 13 NO**.
+
+**In one paragraph, for a company that runs the model.** On these four games AXI sent **1,951,121 tokens against 25,689,461** for the kept chat (13.2 times fewer), at a prompt that stayed near 4,256 tokens a move where the kept chat's reached 253,440; every one of its replies was usable (100.0 % legal) and 95.0 % of its moves changed the screen, against 94.6 % and 87.5 % for the kept chat. **It was not faster and it did not win more levels**: it completed 1 level against 2, took 28.73 s a move against 15.87, and made 119 effective moves an hour against 200; the model thought 3,863 tokens a move with AXI and 1,714 with the kept chat. Computed tokens for each effective move were about level (9,194 for the kept chat at a prompt of 100,000 tokens or more, 8,550 for AXI) because the service served 94.8 % of the kept chat's prompt tokens from its cache.
+
+## The 19 lines
+
+| # | my probability | what was measured | read |
+|---|---|---|---|
+| 1 | 90 % | [guard] 240 moves in 4 games, every one on file; the replay of the saved replies into fresh copies of the games reproduced every flag (read from the saved file: the games come from the ARC toolkit, which this test does not have) | **yes** |
+| 2 | 85 % | [guard] 240 moves; the replay reproduced every flag and every re-ask (20 moves asked again) | **yes** |
+| 3 | 65 % | [guard] largest prompt 253,440 tokens | **yes** |
+| 4 | 85 % | [instrument] 93.9 % of the calls with a prompt of 10,000 tokens or more had cached tokens | **yes** |
+| 5 | 85 % | [instrument] 0 moves of 240 ended with a reply that could not be used | **yes** |
+| 6 | 90 % | [instrument] 227 of 240 replies were one JSON object with an action (94.6 %) | **NO** |
+| 7 | 80 % | [claim] mean prompt of moves 41 to 60 3,945 against 3,922 for moves 6 to 25 (1.01 times) | **yes** |
+| 8 | 75 % | [claim] tokens sent: arm A 1,951,121, arm K 25,689,461 (arm A sent 7.6 % of arm K's; 13.2 times fewer) | **yes** |
+| 9 | 30 % | [claim] effective moves 1 to 20: 85.0 %; moves 41 to 60: 90.0 % | **NO** |
+| 10 | 55 % | [claim] moves that repeated one that had done nothing from the same screen: arm K 0.42 %, arm A 0.00 % | **NO** |
+| 11 | 40 % | [claim] 5.4 % of arm K's replies were not an action the game offered (13 of 240) | **yes** |
+| 12 | 45 % | [claim] effective moves: arm A 95.0 %, arm K 87.5 % (+7.5 points) | **yes** |
+| 13 | 80 % | [claim] levels completed over the games: arm A 1, arm K 2 | **NO** |
+| 14 | 25 % | [claim] arm A completed 1 level in 1 game of 4 | **yes** |
+| 15 | 25 % | [claim] arm K completed 2 levels in 2 games of 4 | **yes** |
+| 16 | 55 % | [claim] 18.26 s a call at a prompt of 100,000 tokens or more against 28.73 s a move with AXI (0.64 times) | **NO** |
+| 17 | 50 % | [claim] first token, median: 5.96 s against 21.49 s (0.28 times) | **NO** |
+| 18 | 60 % | [claim] effective moves an hour of calls: AXI 119, kept chat 200 (0.60 times) | **NO** |
+| 19 | 70 % | [claim] tokens computed for each effective move at a prompt of 100,000 tokens or more: kept chat 9,194; with AXI 8,550 (1.08 times) | **NO** |
+
+## Speed, latency and tokens
+
+| arm | moves | seconds a move | moves an hour | effective moves an hour | first token median | first token 95th | prompt tokens a move | served from the cache | thinking tokens a move | computed tokens per effective move |
+|---|---|---|---|---|---|---|---|---|---|---|
+| kept chat, all moves | 240 | 15.87 | 227 | 200 | 5.90 | 52.14 | 110,948 | 94.8 % | 1,714 | 8,452 |
+| kept chat, prompt of 100,000 tokens or more | 110 | 18.26 | 197 | 165 | 5.96 | 61.65 | 174,928 | 96.8 % | 2,039 | 9,194 |
+| with AXI, all moves | 240 | 28.73 | 125 | 119 | 21.49 | 52.77 | 4,256 | 0.2 % | 3,863 | 8,550 |
+
+The seconds are the seconds of the calls, read at the notebook (the time to the first token includes the network from the notebook's machine). Tokens: *computed* is the prompt tokens not served from the service's cache plus the reply and the thinking tokens; the page's stand-in for energy, **not joules**. The API gives no joules for the hardware.
+
+## By game
+
+| game | levels to win | arm K: levels | arm K: effective | arm K: largest prompt | arm A: levels | arm A: effective | arm A: largest prompt |
+|---|---|---|---|---|---|---|---|
+| ls20-9607627b | 7 | 0 | 86.7 % | 251,033 | 0 | 100.0 % | 4,631 |
+| g50t-5849a774 | 7 | 0 | 71.7 % | 253,440 | 0 | 85.0 % | 4,665 |
+| ka59-38d34dbb | 7 | 1 | 91.7 % | 230,894 | 0 | 95.0 % | 4,545 |
+| sp80-589a99af | 6 | 1 | 100.0 % | 93,478 | 1 | 100.0 % | 2,030 |
+
+*Levels* are the levels the game itself counted as completed within 60 moves; *effective* is the share of moves that were an action the game offered and changed the screen. 60 moves is a short play of a game that asks for up to 7 levels; the page makes no claim about how either arm would do on a longer play, on the other public games or on the private ones.
+
+## The unusable replies of the kept chat
+
+13 replies, all of arm K: 9 empty, 2 cut at the token limit, 2 with the wrong wording. In the games g50t-5849a774, ka59-38d34dbb, ls20-9607627b; the smallest prompt among them was 21,041 tokens. Each one still counts as a move for the kept chat (a wasted one), because the chat is not asked again; AXI asks again up to 2 times and none of its moves was lost.
+
+## What this says, and what it does not
+
+* **Said:** on this set of games the state-holding arm is **far cheaper to run** (13.2 times fewer tokens sent, a prompt that does not grow) and **ended no move with an unusable reply** (100 % legal, against 94.6 %), and it wastes fewer moves (95.0 % effective against 87.5 %).
+* **Not said, and the run says the opposite:** that AXI makes the model better at the games. It completed 1 level where the kept chat completed 2; it was 1.81 times slower a move, and the model thought 2.3 times as many tokens a move with AXI (3,863 against 1,714); the page did not guess this and the run does not say why. Lines 9, 10, 13, 16, 17, 18 and 19 read NO.
+* **Why it matters:** the games are short and the kept chat's drift is small at 60 moves (line 9 reads NO). What the run shows is the cost side of the comparison and a better floor on unusable moves, not an advantage in play.

@@ -88,6 +88,44 @@ The same model (Gemini 3.8 Flash), a long job with heavy turns (every request ca
 One run of each arm on one job. The page for a company that runs the model: [`docs/AXI_FOR_COMPANIES.md`](docs/AXI_FOR_COMPANIES.md). The full page with its pre-written reading rules and every table: [`docs/GEMINI_LONG_TEST.md`](docs/GEMINI_LONG_TEST.md).
 <!-- long-session:end -->
 
+<!-- fuzzy-and-arc:start -->
+## For a company that runs the model: three more runs, and the whole picture (22 to 24 Oct 2026)
+
+Gemini 3.8 Flash again, on three jobs that are not the dependency graph of the long session: a **400-turn conversation in plain, ambiguous sentences** (Test 23), **four ARC-AGI-3 games** (Test 24) and the same games **with a host-owned explorer** (Test 25). Each job was run once with the chat kept and once with AXI holding the state. The pages with their pre-written reading lines are in [`docs/`](docs/); every figure below is recomputed from the saved files by `python/tests/test_arc_fuzzy_results.py`. The full technical account is [`docs/AXI_TECHNICAL_REFERENCE.md`](docs/AXI_TECHNICAL_REFERENCE.md).
+
+### Where AXI changes the numbers
+
+| What a company counts | Without AXI (chat kept) | With AXI | Run |
+|---|---|---|---|
+| Prompt tokens sent a step, conversation job | 99,809 on average, 188,806 by the end | **1,177** (85 times fewer) | Test 23 |
+| Tokens sent in all, conversation job | 39.9 million | **0.53 million** (76 times fewer) | Test 23 |
+| Tokens sent in all, four ARC games | 25.7 million | **1.95 million** (13.2 times fewer) | Test 24 |
+| The list a firm holds if it applies each reply as it comes | exact on 65.0 % of the turns: one wrong change at turn 191 stayed for **140 turns** | **exact on 400 of 400 steps**, distance 0 | Test 23 |
+| First token, median, once the prompt passes 150,000 tokens | 5.57 s (1.86 s in the first 50 turns) | **2.41 s, flat** (2.31 times lower) | Test 23 |
+| Seconds a step at that prompt size | 5.70 | **2.76** (2.07 times faster) | Test 23 |
+| Tokens computed per exact step at that prompt size | 2,576 | **1,322** (1.95 times fewer) | Test 23 |
+| Replies that could not be used, four ARC games | 13 of 240 (5.4 %) | **0 of 240** (asked again up to 2 times) | Test 24 |
+| Moves that changed the screen, four ARC games | 87.5 % | **95.0 %** | Test 24 |
+| Tokens sent, ARC games with the explorer | 25,689,461 (kept chat) | **1,790,904** (14.3 times fewer) | Test 25 |
+
+### Where it does not, and what the runs say instead
+
+| What a company counts | What was measured | Run |
+|---|---|---|
+| Does the kept chat drift or hallucinate on ambiguous text at this length? | **No.** 398 of 400 replies were exact (99.5 %), none was corrupted, and a fact changed 50 or more turns earlier was answered right 13 times of 14. The risk is not the rate of slips but that **one** slip stays in the state until something overwrites it. | Test 23 |
+| Speed at a short prompt | The kept chat was the faster arm in the first 50 turns (1,609 exact steps an hour against 1,129). From turns 121 to 160 on it was slower; over all 400 steps AXI made 1.33 times the exact steps an hour (the page asked for 1.5). | Test 23 |
+| Speed on ARC-AGI-3 | **AXI was slower**: 28.73 s a move against 15.87, 119 effective moves an hour against 200. The model thought 3,863 tokens a move with AXI and 1,714 without. | Test 24 |
+| Levels completed on ARC-AGI-3 | **AXI did not complete more**: 1 level against 2 (60 moves a game, four games). The explorer did not add one (1). | Tests 24, 25 |
+| Computed tokens on ARC-AGI-3 | About level (9,194 for the kept chat at a prompt of 100,000 tokens or more, 8,550 for AXI): the service served 94.8 % of the kept chat's prompt from its cache. | Test 24 |
+| The explorer's conductor | **Never fired** (0 moves played by the framework): the model was never stuck by the rule. The object view and the untried list gave 95.4 % effective moves against 95.0 % and 22 % fewer thinking tokens a call, below the page's thresholds. | Test 25 |
+
+### How to read the two tables together
+
+AXI is a layer for the company that runs the model, and the runs show what it is for: **the state is kept by the host, so it is exact at every step, the prompt does not grow with the job, and the first token and the step time do not grow with it.** What it costs the model on a hard open-ended task is thinking time, and the ARC-AGI-3 runs show that cost; they do not show a gain in play. Both facts are measured and both are on the pages. A long job where a wrong state is expensive is the case the first table speaks to; a short, open-ended job like these ARC games is the case the second table speaks to.
+
+*Scope: Gemini 3.8 Flash, three jobs, one run of each arm, one seed (four of the 25 public ARC-AGI-3 games, 60 moves each). Joules are not measured; tokens computed and seconds of calls are the stand-in. The ARC pages are not a leaderboard entry. Nothing here is a statement about any company's service.*
+<!-- fuzzy-and-arc:end -->
+
 ---
 
 ## How the tests are done
@@ -150,12 +188,13 @@ PYTHONPATH=python python3 python/tools/readme_figures.py docs/img
 
 ## Start reading here
 
-1. [`docs/MILLION_TOKEN_TEST_HARD.md`](docs/MILLION_TOKEN_TEST_HARD.md): the 4,000-step run.
-2. [`docs/WHERE_THIS_STANDS.md`](docs/WHERE_THIS_STANDS.md): one page on latency, drift and cost as measured, what is not shown, and where the tensor-level roadmap stands.
-3. [`docs/VERIFIED.md`](docs/VERIFIED.md): what is measured, what is only checked by tests, and what is **not** measured.
-4. [`docs/EXPERIMENT_RESULTS.md`](docs/EXPERIMENT_RESULTS.md): the earlier Qwen runs.
-5. [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md): other groups working on neighbouring ideas, and what we cannot claim against them.
-6. [`docs/RFC-001.md`](docs/RFC-001.md): the original design note.
+1. [`docs/AXI_TECHNICAL_REFERENCE.md`](docs/AXI_TECHNICAL_REFERENCE.md): the whole of AXI in one technical document: the architecture as the code has it, the measured results of the last four Gemini runs, the method, the limits.
+2. [`docs/MILLION_TOKEN_TEST_HARD.md`](docs/MILLION_TOKEN_TEST_HARD.md): the 4,000-step run.
+3. [`docs/WHERE_THIS_STANDS.md`](docs/WHERE_THIS_STANDS.md): one page on latency, drift and cost as measured, what is not shown, and where the tensor-level roadmap stands.
+4. [`docs/VERIFIED.md`](docs/VERIFIED.md): what is measured, what is only checked by tests, and what is **not** measured.
+5. [`docs/EXPERIMENT_RESULTS.md`](docs/EXPERIMENT_RESULTS.md): the earlier Qwen runs.
+6. [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md): other groups working on neighbouring ideas, and what we cannot claim against them.
+7. [`docs/RFC-001.md`](docs/RFC-001.md): the original design note.
 
 ## Status
 

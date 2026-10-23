@@ -88,3 +88,118 @@ Headline: lines 7 and 8 both read yes ("AXI HOLDS ON FUZZY TEXT"); otherwise the
 
 ## Guards on the bill
 The notebook never turns billing on. It prints a **pilot** (20 real turns of each arm) with the real size of a turn, the speed, the latency and the projected cost of the whole test at the owner's prices, before any budget is set. A **dollar budget** (typed after the pilot) makes the notebook refuse the next call once the saved answers cost that much; a **cap on tokens sent** stops each run (3,000,000 for `A`, 150,000,000 for `K`, 20,000,000 for `D`). Everything finished is saved and the same cell carries on.
+
+---
+
+# Result
+
+*Written after the run, below the locked text; nothing above this line has been changed (its hash is checked by `tests/test_gemini_fuzzy.py` and again by `tests/test_arc_fuzzy_results.py`). The figures are recomputed from `docs/results/axi_gemini_fuzzy_seed20261122_default.json` by that test; none is typed by hand. One run of each arm, one seed, one job, on 22 Oct 2026.*
+
+**What the page expected, and what came out.** Lines 1 to 6 (the guards and the instruments) all read yes, so by the page's rule the figures of the arms are claimed as read. Of the 24 lines **15 read yes and 9 read NO** (lines 9, 12, 13, 14, 15, 16, 18, 21, 24). Headline: **AXI HOLDS ON FUZZY TEXT**. The NO lines are findings, and most of them are the kept chat *not* doing what the page guessed it might: at 198,405 tokens and 400 turns of ambiguous text the kept chat did not drift and did not hallucinate, and its answers about old facts were within the page's 10-point threshold of those about new ones.
+
+**In one paragraph, for a company that runs the model.** With AXI the held list was exact on all 400 steps (100.0 %), at 1,177 prompt tokens a step on average (946 in the first tenth, 1,332 in the last, as the list grew) and 2.76 s a step. The kept chat sent 99,809 prompt tokens a turn on average (85 times as many; 39.9 million tokens in all against 0.47 million) and its replies were exact on 398 of 400 turns (99.5 %). The two slips mattered differently: the slip at turn 191 (`ref_last`: the reply changed the wrong item) was a change to the list, and a company that applies each reply as it comes **held a wrong list for 140 turns in a row, turns 191 to 330**, until a later message happened to overwrite the cell; the list was exact on 65.0 % of the turns although 99.5 % of the replies were exact. The slip at turn 370 was a wrong answer to a question and changed nothing. On time, the kept chat went from 1.86 s to the first token (turns 1 to 50) to 5.57 s once the prompt passed 150,000 tokens, against 2.41 s with AXI (2.31 times), and from 2.24 s to 5.70 s a call; at a short prompt the kept chat was the faster of the two.
+
+## The 24 lines
+
+| # | my probability | what was measured | read |
+|---|---|---|---|
+| 1 | 90 % | [guard] 400 turns, every one on file; the replay of the saved replies reproduced every flag | **yes** |
+| 2 | 90 % | [guard] 400 steps; the replay reproduced every flag and every re-ask (0 re-asks) | **yes** |
+| 3 | 85 % | [guard] largest prompt 198,405 tokens | **yes** |
+| 4 | 85 % | [instrument] 94.4 % of the calls from the 10th turn had cached tokens; 97.0 % of all prompt tokens | **yes** |
+| 5 | 60 % | [instrument] 0 steps refused after the re-asks, of 400 | **yes** |
+| 6 | 95 % | [instrument] 400 of 400 replies had the right shape (100.0 %) | **yes** |
+| 7 | 65 % | [claim] held list exact on 400 of 400 steps (100.0 %); lowest tenth 100.0 % | **yes** |
+| 8 | 55 % | [claim] corrupted 0 steps; largest distance from the true list 0 cells | **yes** |
+| 9 | 80 % | [claim] mean prompt of the last tenth 1,332 against 979 in the second (1.36 times); seconds a step 2.69 against 2.38 (1.13 times) | **NO** |
+| 10 | 70 % | [claim] 39 of 39 answers exact (100.0 %) | **yes** |
+| 11 | 70 % | [claim] turns 1 to 50: 100.0 % exact | **yes** |
+| 12 | 45 % | [claim] turns 1 to 50: 100.0 % exact; last 100 turns: 99.0 %; a drop of 1.0 points | **NO** |
+| 13 | 40 % | [claim] last 100 turns: 0.0 % of the replies cannot be applied to the true list or have the wrong shape | **NO** |
+| 14 | 55 % | [claim] the held list was corrupted (an item nobody mentioned, an unknown field or a value outside the allowed set) at 0 of 400 turns | **NO** |
+| 15 | 65 % | [claim] the first reply that is not exactly right is turn 191 (prompt 95,262) | **NO** |
+| 16 | 40 % | [claim] exact answers about facts changed less than 10 turns earlier: 100.0 % (n 8); 50 or more turns earlier: 92.9 % (n 14) | **NO** |
+| 17 | 70 % | [claim] arm A: 100.0 % (n 8) against 100.0 % (n 14) | **yes** |
+| 18 | 50 % | [claim] answers exact where the right answer is unknown or ambiguous: arm A 100.0 % (n 7); arm K 100.0 % (n 7) | **NO** |
+| 19 | 85 % | [claim] 5.70 s a call at a prompt of 150,000 tokens or more against 2.76 s a step with AXI (2.07 times) | **yes** |
+| 20 | 80 % | [claim] first token, median: 5.57 s against 2.41 s (2.31 times) | **yes** |
+| 21 | 85 % | [claim] exact steps an hour of calls: AXI 1,306, kept chat 984 (the same 400 steps; 1.33 times) | **NO** |
+| 22 | 80 % | [claim] tokens computed for each exact step at a prompt of 150,000 tokens or more: kept chat 2,576; with AXI 1,322 (1.95 times) | **yes** |
+| 23 | 25 % | [claim] thinking tokens a turn: last 100 turns 11.2, turns 1 to 50 1.8 | **yes** |
+| 24 | 15 % | [claim] exact share at the shallowest start (50): 100.0 %; at the deepest (300): 100.0 % | **NO** |
+
+## Speed, latency and tokens
+
+| arm | steps | seconds a step | steps an hour | exact steps an hour | first token median | first token 95th | prompt tokens a step | served from the cache | thinking tokens a step | computed tokens per exact step |
+|---|---|---|---|---|---|---|---|---|---|---|
+| kept chat, all turns | 400 | 3.64 | 989 | 984 | 2.93 | 6.55 | 99,809 | 97.0 % | 3.3 | 3,035 |
+| kept chat, turns 1 to 50 | 50 | 2.24 | 1,609 | 1,609 | 1.86 | 3.71 | 13,094 | 51.8 % | 1.8 | 6,338 |
+| kept chat, prompt of 150,000 tokens or more | 99 | 5.70 | 631 | 625 | 5.57 | 7.43 | 174,384 | 98.6 % | 11.3 | 2,576 |
+| with AXI, all steps | 400 | 2.76 | 1,306 | 1,306 | 2.41 | 3.75 | 1,177 | 0.0 % | 111.5 | 1,322 |
+| with AXI, steps 1 to 50 | 50 | 3.19 | 1,129 | 1,129 | 2.35 | 3.62 | 959 | 0.0 % | 109.3 | 1,102 |
+
+The seconds are the seconds of the calls, read at the notebook (the time to the first token includes the network from the notebook's machine). Tokens: *computed* is the prompt tokens not served from the service's cache plus the reply and the thinking tokens; the page's stand-in for energy, **not joules**. The API gives no joules for the hardware. The kept chat was served 97.0 % of its prompt tokens from the service's cache, so its *computed* tokens are far fewer than its *sent* tokens (39,936,914 sent, 1,207,926 computed); AXI, which sends a short fresh prompt every step, got no cache (528,836 sent and 528,836 computed). In computed tokens the kept chat is therefore **2.30 times** AXI per exact step over the whole job, not the 76 times of the tokens sent.
+
+## The kept chat, by the size of the prompt
+
+| prompt size (tokens) | turns | n | exact reply | held list exact | seconds a call | first token median | first token 95th | exact steps an hour | computed tokens per exact step |
+|---|---|---|---|---|---|---|---|---|---|
+| 0 to 25,000 | 1 to 49 | 49 | 100.0 % | 100.0 % | 2.21 | 1.86 | 3.71 | 1,628 | 6,416 |
+| 25,000 to 50,000 | 50 to 99 | 50 | 100.0 % | 100.0 % | 2.59 | 2.13 | 4.94 | 1,387 | 2,542 |
+| 50,000 to 100,000 | 100 to 200 | 101 | 99.0 % | 90.1 % | 2.87 | 2.45 | 4.87 | 1,240 | 2,570 |
+| 100,000 to 150,000 | 201 to 301 | 101 | 100.0 % | 0.0 % | 3.60 | 3.21 | 5.02 | 1,000 | 2,544 |
+| 150,000 to 200,000 | 302 to 400 | 99 | 99.0 % | 70.7 % | 5.70 | 5.57 | 7.43 | 625 | 2,576 |
+
+* **Held list** is what a firm holds if it applies each reply as it comes (blind application). A reply that changes the wrong cell leaves it wrong until a later message overwrites that cell: here from turn 191 to turn 330 (140 turns), at most 2 cells from the true list. It was not *corrupted* in the page's sense (no item nobody mentioned, no unknown field, no value outside the allowed set): it was a valid list that was not the true one.
+* **Crossing.** From the tenth of turns 121 to 160 on (prompts around 70,112 tokens) every tenth of the kept chat took more seconds a turn than the mean seconds a step of AXI (2.76); before that the kept chat was the faster arm or about level, in the first 50 turns by 1.43 times in exact steps an hour.
+* **Thinking.** With AXI the model thought 112 tokens a step on average (the model's own default thinking); the kept chat 3.3 a turn on average, 1.8 over turns 1 to 50 and 11.2 over the last 100. Line 23 reads yes only because the early value is tiny; it is not a climb that a company would plan around.
+
+## By tenths of the job
+
+| turns | kept chat: exact reply | kept chat: held list exact | kept chat: prompt a turn | kept chat: seconds a turn | AXI: held list exact | AXI: prompt a step | AXI: seconds a step | AXI: first token median |
+|---|---|---|---|---|---|---|---|---|
+| 1 to 40 | 100.0 % | 100.0 % | 10,600 | 1.98 | 100.0 % | 946 | 3.39 | 2.46 |
+| 41 to 80 | 100.0 % | 100.0 % | 30,416 | 2.82 | 100.0 % | 979 | 2.38 | 2.25 |
+| 81 to 120 | 100.0 % | 100.0 % | 50,246 | 2.44 | 100.0 % | 1,040 | 2.84 | 2.59 |
+| 121 to 160 | 100.0 % | 100.0 % | 70,112 | 3.05 | 100.0 % | 1,033 | 2.80 | 2.65 |
+| 161 to 200 | 97.5 % | 75.0 % | 89,978 | 2.92 | 100.0 % | 1,149 | 2.98 | 2.77 |
+| 201 to 240 | 100.0 % | 0.0 % | 109,674 | 3.20 | 100.0 % | 1,276 | 2.72 | 2.52 |
+| 241 to 280 | 100.0 % | 0.0 % | 129,526 | 3.71 | 100.0 % | 1,335 | 2.47 | 2.29 |
+| 281 to 320 | 100.0 % | 0.0 % | 149,423 | 4.40 | 100.0 % | 1,340 | 2.74 | 2.50 |
+| 321 to 360 | 100.0 % | 75.0 % | 169,306 | 5.51 | 100.0 % | 1,339 | 2.57 | 2.32 |
+| 361 to 400 | 97.5 % | 100.0 % | 188,806 | 6.39 | 100.0 % | 1,332 | 2.69 | 2.41 |
+
+## By kind of turn
+
+| kind of turn | n | kept chat: exact reply | kept chat: held list exact | AXI: exact reply |
+|---|---|---|---|---|
+| add | 67 | 100.0 % | 65.7 % | 100.0 % |
+| correct | 24 | 100.0 % | 54.2 % | 100.0 % |
+| delete | 41 | 100.0 % | 65.9 % | 100.0 % |
+| query:ambiguous | 2 | 100.0 % | 50.0 % | 100.0 % |
+| query:recall | 32 | 96.9 % | 65.6 % | 100.0 % |
+| query:unknown | 5 | 100.0 % | 60.0 % | 100.0 % |
+| ref_last | 48 | 97.9 % | 58.3 % | 100.0 % |
+| ref_owner | 23 | 100.0 % | 69.6 % | 100.0 % |
+| ref_same | 24 | 100.0 % | 70.8 % | 100.0 % |
+| set | 102 | 100.0 % | 69.6 % | 100.0 % |
+| set2 | 32 | 100.0 % | 59.4 % | 100.0 % |
+
+0 of the 400 replies of AXI were not exactly the oracle's; none changed the held list, which stayed exact on every step (the checks and the repair of the framework did what they are for); there were no re-asks and no refused replies.
+
+## The depth probe (a perfect history)
+
+| start (turn) | real turns | mean prompt (tokens) | exact reply | seconds a call | first token median |
+|---|---|---|---|---|---|
+| 50 | 0 | 27,476 | 100.0 % | - | - |
+| 100 | 0 | 52,346 | 100.0 % | - | - |
+| 200 | 10 | 101,875 | 100.0 % | 58.13 | 3.17 |
+| 300 | 10 | 151,459 | 100.0 % | 5.84 | 4.88 |
+
+Ten turns at each of four depths, after a history made of the oracle's own replies (40 replies, all exact; the first two depths were answered from the notebook's saved reply file and have no call time). With ten turns a depth this cannot tell a small rate of slips from none (line 24 reads NO under the page's rule).
+
+## What this says, and what it does not
+
+* **Said:** on this job, ambiguous text for 400 turns, the model alone gave exact replies on 398 of 400 turns, so on this job the kept chat did not fail at this length; what the run shows is that the **one** wrong change that did come stayed in the state for as long as no later message overwrote it (140 turns), because a state kept in a chat has no check against the truth. With the framework holding the state the list was exact on every one of 400 steps, at a prompt that grew only with the list, and a step that took about the same time all through (between 2.38 s and 3.39 s in every tenth). The time to the first token of the kept chat grew with its prompt (1.86 s at the first band, 5.57 s at the last) while that of the AXI arm did not.
+* **Not said:** that the kept chat drifts, hallucinates or forgets with age (it did none of these beyond the page's thresholds here: lines 12, 13, 14, 15 and 16 read NO); that AXI is faster at every length (it was not at a short prompt, and line 21 reads NO: 1.33 times the exact steps an hour, under the 1.5 the page asked); that the two slips would repeat on another seed; anything about another model, another job or any company's service; joules.
+* **The reading rule** of the page is used as written. The headline is AXI HOLDS ON FUZZY TEXT, as the rule gives it (lines 7 and 8 read yes). Line 9 reads NO because the prompt of AXI grew 1.36 times from the second tenth to the last (the list it shows grows with the job) against the 1.3 the page allowed, while the kept chat's grew 6.2 times.

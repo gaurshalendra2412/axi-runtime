@@ -82,3 +82,58 @@ Headline: lines 5 and 7 both read yes ("THE HOST-OWNED EXPLORER WASTES FEWER MOV
 
 ## Guards on the bill
 The notebook never turns billing on. It prints a **pilot** (12 real moves of arm B in the first game) with the share of moves the framework played itself, the speed and the projected cost at the owner's prices, before any budget is set. A **dollar budget** (typed after the pilot) makes the notebook refuse the next call once the saved answers cost that much; a **cap on tokens sent** (8,000,000) stops the run. Everything finished is saved and the same cell carries on.
+
+## Result
+
+*Written after the run, below the locked text; nothing above this line has been changed (its hash is checked by `tests/test_gemini_arc_b.py` and again by `tests/test_arc_fuzzy_results.py`). The figures are recomputed from `docs/results/axi_gemini_arc_b_default.json` by that test; none is typed by hand. Arm B was run once on 24 Oct 2026; arms A and K are the rows of Test 24 (the same rows, checked equal by the test).*
+
+**What the page expected, and what came out.** Lines 1 to 4 (the guards and the instruments) all read yes, so by the page's rule the figures of the arms are claimed as read. Of the 17 lines **10 read yes, 6 read NO** (lines 5, 7, 8, 11, 12, 16) **and 1 was not read** (line 15: the framework never played a move itself). Headline: **MIXED: line 5 NO, line 7 NO**. The explorer did not meet the two lines that decide the headline (5 and 7), though on the cost figures it moved in the same direction (lines 13 and 14 read yes).
+
+**In one paragraph, for a company that runs the model.** Adding the object view and the list of untried moves to arm A changed no rule of the framework and no line of its core. On the same four games, the same 240 moves, it gave 95.4 % effective moves against 95.0 %, 221 screens never seen before against 227, **the same level count** (1 against 1, won in a different game each: g50t-5849a774 for arm B, sp80-589a99af for arm A; arm K, the kept chat, had 2), and **less work for the same result**: 2,773 thinking tokens a call against 3,566 (22 % fewer), 1,784,208 computed tokens against 1,949,418, 23.96 s a move against 28.73, 143 effective moves an hour against 119. Against the kept chat it sent 14.3 times fewer tokens. The differences are small, the games few and the run single, so they are read as a direction, not as a size. The conductor, the part that plays a move itself when the model is stuck, **never fired**: the model was never stuck by the page's rule (4 moves without a new screen, or one screen seen 3 times), so the page says nothing about it.
+
+## The 17 lines
+
+| # | my probability | what was measured | read |
+|---|---|---|---|
+| 1 | 90 % | [guard] 240 moves, every one on file; 0 played by the framework; the replay reproduced every saved flag (read from the saved file: the games come from the ARC toolkit) | **yes** |
+| 2 | 95 % | [guard] 240 moves of arm A (the rows of Test 24); the replay reproduced every saved flag | **yes** |
+| 3 | 65 % | [instrument] 0 of 240 moves played by the framework (0.0 %) | **yes** |
+| 4 | 85 % | [instrument] 0 of the model's 240 moves ended with a reply that could not be used (7 moves asked again) | **yes** |
+| 5 | 65 % | [claim] effective moves: arm B 95.4 %, arm A 95.0 % (+0.4 points) | **NO** |
+| 6 | 80 % | [claim] moves that repeated one that had done nothing from the same screen: arm B 0, arm A 0 | **yes** |
+| 7 | 60 % | [claim] screens never seen before per 1,000 computed tokens: arm B 0.124, arm A 0.116 (1.06 times) | **NO** |
+| 8 | 55 % | [claim] screens never seen before reached: arm B 221, arm A 227 | **NO** |
+| 9 | 60 % | [claim] levels completed over the games: arm B 1, arm A 1 | **yes** |
+| 10 | 35 % | [claim] arm B completed 1 level in 1 game of 4 | **yes** |
+| 11 | 25 % | [claim] levels: arm B 1, arm A 1 | **NO** |
+| 12 | 45 % | [claim] effective moves an hour of calls: arm B 143, arm A 119 (1.20 times) | **NO** |
+| 13 | 30 % | [claim] thinking tokens a call: arm B 2,773, arm A 3,566 (0.78 times) | **yes** |
+| 14 | 45 % | [claim] tokens computed for each effective move: arm B 7,791, arm A 8,550 (0.91 times) | **yes** |
+| 15 | 55 % | [claim] no move was played by the framework, so there is nothing to read (the conductor never fired) | **not read** |
+| 16 | 60 % | [claim] levels: arm B 1, arm K 2 | **NO** |
+| 17 | 85 % | [claim] tokens sent: arm B 1,790,904, arm K 25,689,461 (arm B sent 7.0 % of arm K's; 14.3 times fewer) | **yes** |
+
+## The three arms
+
+| arm | moves | played by the framework | effective moves | repeat no-ops | screens never seen before | per 1,000 computed tokens | levels | thinking tokens a call | seconds a move | effective moves an hour | computed tokens | tokens sent |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| B (explorer) | 240 | 0 | 95.4 % | 0 | 221 | 0.124 | 1 | 2,773 | 23.96 | 143 | 1,784,208 | 1,790,904 |
+| A (Test 24) | 240 | 0 | 95.0 % | 0 | 227 | 0.116 | 1 | 3,566 | 28.73 | 119 | 1,949,418 | 1,951,121 |
+| K (Test 24, kept chat) | 240 | 0 | 87.5 % | 1 | 208 | 0.122 | 2 | 1,719 | 15.87 | 200 | 1,698,881 | 25,689,461 |
+
+*Computed* is the prompt tokens not served from the service's cache plus the reply and the thinking tokens: the page's stand-in for energy, **not joules**. The kept chat's computed tokens are low next to its sent tokens because the service served most of its prompt from the cache. The seconds are the seconds of the calls, read at the notebook.
+
+## By game
+
+| game | levels to win | arm B: levels | arm B: effective | arm A: levels | arm A: effective | arm K: levels | arm K: effective |
+|---|---|---|---|---|---|---|---|
+| ls20-9607627b | 7 | 0 | 98.3 % | 0 | 100.0 % | 0 | 86.7 % |
+| g50t-5849a774 | 7 | 1 | 86.7 % | 0 | 85.0 % | 0 | 71.7 % |
+| ka59-38d34dbb | 7 | 0 | 96.7 % | 0 | 95.0 % | 1 | 91.7 % |
+| sp80-589a99af | 6 | 0 | 100.0 % | 1 | 100.0 % | 1 | 100.0 % |
+
+## What this says, and what it does not
+
+* **Said:** the explorer's additions are cheap and changed the outcome by little: the same number of levels, slightly more effective moves (+0.4 points), fewer thinking tokens a call, fewer computed tokens and a faster move, with no change to the core of the framework, and 6 screens fewer never seen before. None of the differences reaches the size the page set as its threshold: it asked for 3 points on wasted moves and 25 percent on progress per token, and got +0.4 points and 6 percent.
+* **Not said:** that the explorer makes the model solve more ARC levels (it did not: 1 level, as arm A; the kept chat had 2); that the conductor works (it never ran); that the object view is the invariant address frame of Sir's notes (whether the notes match his writing is for Sir to confirm); anything about the private games, other models, a longer play or any company's service.
+* **What is open:** a stall rule that also fires when the same action is sent again and again (Test 24 saw one game where one action was sent 34 times of 60) would give the conductor a case to act on. That is a new test with its own page, not a change to this one.
