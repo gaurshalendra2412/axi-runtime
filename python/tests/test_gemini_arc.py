@@ -303,7 +303,7 @@ def test_the_notebook_holds_no_key_never_turns_billing_on_and_sets_no_budget():
 # ---------------------------------------------------------------- 6 front pages
 def test_the_front_pages_say_what_was_built_and_that_nothing_was_called():
     cm = open(os.path.join(HERE, "..", "..", "docs", "RAJNISH_CONCEPT_MAP.md")).read(); vf = open(os.path.join(HERE, "..", "..", "docs", "VERIFIED.md")).read()
-    assert "Next free: row 172, item 125, test 151, question 121" in cm and cm.count("Next free:") == 1 and "test 143 checks the ARC-AGI-3 test on Gemini 3.8 Flash, item 117" in cm and "117. **Gemini 3.8 Flash on ARC-AGI-3 games" in cm
+    assert "Next free: row 172, item 126, test 152, question 121" in cm and cm.count("Next free:") == 1 and "test 143 checks the ARC-AGI-3 test on Gemini 3.8 Flash, item 117" in cm and "117. **Gemini 3.8 Flash on ARC-AGI-3 games" in cm
     assert "GEMINI_ARC_TEST.md" in vf and "gemini_arc.py" in vf and PAGE_SHA256 in vf
     i = cm.index("117. **"); item = cm[i:cm.index("\n", i)]; assert "Status: run once on Colab" in item and "docs/GEMINI_ARC_TEST.md" in item and "test 143" in item and "not** of how well the model solves new games" in item
 
