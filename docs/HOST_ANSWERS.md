@@ -15,7 +15,7 @@ Until now every question about the state went to the model, which read the whole
 * a description that fits two or more items: "ambiguous";
 * anything it cannot place (no field, two fields, two items, a description that fits nothing): the model is asked, as before.
 
-No model call for the questions the host can place, and an answer it gives cannot be a hallucination: the host never invents a value.
+No model call for the questions the host can place, and the host never invents a value. Since item 127 (`ONE_READING.md`) it also reads every word of the question once, so a word inside a name ("Day" in "Day Spa") is never read as a field too.
 
 ## What it gives on Test 23 (offline)
 

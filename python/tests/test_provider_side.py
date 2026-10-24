@@ -543,7 +543,7 @@ def test_the_front_pages_point_to_the_test_and_its_result_and_say_the_run_was_pa
     for text in (row, item):
         assert "Run in part" in text and "NOT run" not in text and "8 of 13 lines yes" in text.replace("8 of the 13 lines read yes", "8 of 13 lines yes") and "no claim that exact-state is faster" in text.replace("makes no claim that exact-state is faster", "no claim that exact-state is faster")
         assert ("test 123" in text or "and 123 (7" in text) and "1,160" in text and "69.2" in text and "97.3" in text and "5.149" in text and "0.617" in text and "KC` at 64 jobs" in text
-    assert "Next free: row 172, item 127, test 153" in cm and "tests 122 and 123 check the provider-side test and its result, item 106" in cm
+    assert "Next free: row 172, item 128, test 154" in cm and "tests 122 and 123 check the provider-side test and its result, item 106" in cm
 
 
 if __name__ == "__main__":

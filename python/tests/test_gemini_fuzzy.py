@@ -345,7 +345,7 @@ def test_the_notebook_holds_no_key_never_turns_billing_on_and_sets_no_budget():
 # ---------------------------------------------------------------- 7 front pages
 def test_the_front_pages_say_what_was_built_and_that_nothing_was_called():
     cm = open(os.path.join(HERE, "..", "..", "docs", "RAJNISH_CONCEPT_MAP.md")).read(); vf = open(os.path.join(HERE, "..", "..", "docs", "VERIFIED.md")).read()
-    assert "Next free: row 172, item 127, test 153, question 121" in cm and cm.count("Next free:") == 1 and "test 142 checks the fuzzy-state test on Gemini 3.8 Flash, item 116" in cm and "116. **A long conversation in plain sentences" in cm
+    assert "Next free: row 172, item 128, test 154, question 121" in cm and cm.count("Next free:") == 1 and "test 142 checks the fuzzy-state test on Gemini 3.8 Flash, item 116" in cm and "116. **A long conversation in plain sentences" in cm
     assert "GEMINI_FUZZY_TEST.md" in vf and "gemini_fuzzy.py" in vf and "Run once" in vf[vf.index("GEMINI_FUZZY_TEST.md") - 300: vf.index("GEMINI_FUZZY_TEST.md") + 900]
     i = cm.index("116. **"); item = cm[i:cm.index("\n", i)]; assert "Status: run once on Colab" in item and "docs/GEMINI_FUZZY_TEST.md" in item and "test 142" in item
 

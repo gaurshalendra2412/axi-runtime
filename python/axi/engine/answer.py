@@ -1,4 +1,5 @@
-"""R = 0 for questions: the host answers a question about the state it holds (concept-map item 126, docs/HOST_ANSWERS.md, test 152).
+"""R = 0 for questions: the host answers a question about the state it holds (concept-map item 126, docs/HOST_ANSWERS.md, test 152),
+read with one word, one reading (concept-map item 127, docs/ONE_READING.md, test 153).
 
 Prompted by Rajnish Choubey's open letter "The Failure of Thought Imposition" and its Spherical Mind: the radius R is everything the machine
 is made to engage; at R = 0 "the question is the answer" and "how you process: silence"; at R = Max the output is exhaustive and made for
@@ -11,22 +12,53 @@ as an owner) resolved against the held facts (witnesses.resolve). Then:
   * one item, the fact never given -> "unknown";
   * a description that fits two or more items -> "ambiguous";
   * anything the host cannot place (no field, two fields, no item, a description that fits nothing) -> None: the model is asked, as today.
-The host never invents a value, so an answer it gives cannot be a hallucination. It edits no framework file.
+
+One word, one reading (`read`, item 127). Prompted by the text on Devanagari and the Latin alphabet from Rajnish Choubey's conversation
+(pasted 24 Oct): Devanagari has one sound for one symbol, and every consonant has one place, set by where in the mouth it is made; English
+has "their / there / they're" (one sound, several spellings) and "read / read" (one spelling, several sounds). Read separately, the field
+words, the item names and the describing values let one word be read twice: in "how much is Day Spa?" the word "Day" is part of the name
+AND the field "day", and the host answered with the day. `read` looks for every phrase of every kind at once, longest first; a span taken
+by one phrase is never read again inside another; a phrase that belongs to two kinds (an item named "Priya" when Priya is also an owner)
+is reported, and the question goes to the model. The host never invents a value, and with one reading per word it never reads a word
+two ways. It edits no framework file.
 What it does NOT show: how real questions are worded; the questions it was measured on follow the templates of the Test 23 stream."""
 from __future__ import annotations
-from typing import Any, Iterable, Mapping, Optional, Tuple
+import re
+from typing import Any, Dict, Hashable, Iterable, List, Mapping, Optional, Tuple
 
-from axi.engine.focus import mentioned
 from axi.engine.witnesses import resolve
+
+
+def read(text: str, kinds: Mapping[Hashable, Iterable[str]]) -> Tuple[Dict[Hashable, List[str]], List[str]]:
+    """(found, double). `kinds`: kind -> phrases. Every phrase of every kind is looked for at once, as whole words, case ignored, longest
+    first; every occurrence a phrase takes is closed to the shorter phrases inside it. `found[kind]`: the phrases of that kind that were
+    read, each once, longest first. `double`: phrases read that belong to two kinds, or to one kind in two spellings (no reading is chosen)."""
+    owners: Dict[str, set] = {}
+    for k, phrases in kinds.items():
+        for p in phrases: owners.setdefault(str(p).lower(), set()).add((k, str(p)))
+    found: Dict[Hashable, List[str]] = {k: [] for k in kinds}; double: List[str] = []; taken: List[Tuple[int, int]] = []
+    for low in sorted(owners, key=lambda s: (-len(s), s)):
+        hit = False
+        for m in re.finditer(r"(?<!\w)" + re.escape(low) + r"(?!\w)", text, re.I):
+            if any(m.start() < b and a < m.end() for a, b in taken): continue
+            taken.append((m.start(), m.end())); hit = True
+        if not hit: continue
+        if len(owners[low]) > 1: double.append(low)
+        else: (k, p), = owners[low]; found[k].append(p)
+    return found, double
 
 
 def answer(state: Mapping[str, Mapping[str, Any]], question: str, fields: Iterable[str], describers: Optional[Mapping[str, Iterable[str]]] = None) -> Tuple[Optional[str], str]:
     """(answer, how): answer None means the host hands the question to the model."""
-    fs = mentioned(question, list(fields))
+    kinds: Dict[Hashable, List[str]] = {("field",): list(fields), ("item",): list(state)}
+    for df, values in (describers or {}).items(): kinds[("desc", df)] = [str(v) for v in values]
+    found, double = read(question, kinds)
+    if double: return None, "one word, two readings"
+    fs = found[("field",)]
     if len(fs) != 1: return None, "field not placed"
-    f = fs[0]; names = mentioned(question, list(state)); desc, clash = {}, False
-    for df, values in (describers or {}).items():
-        hits = mentioned(question, [str(v) for v in values])
+    f = fs[0]; names = found[("item",)]; desc, clash = {}, False
+    for df in (describers or {}):
+        hits = found[("desc", df)]
         if len(hits) > 1: clash = True
         elif hits: desc[df] = hits[0]
     if clash: return None, "two values for one description"
