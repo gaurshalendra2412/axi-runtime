@@ -813,7 +813,7 @@ FRONT_ITEM = ("111. **The serving side a fifth time: the grammar of the reply ch
               "no deleted service of the 192 scripts has more than 3 connections", "**Credit:**", "(test 130, 26 tests)", "(test 131, 7 tests)", "nothing here is proven")
 FRONT_ROW = ("**Run (the owner's Colab run, seven cells in one session, Tesla T4, vLLM 0.31.0; the file reached the repository work on 20 Oct 2026).**", "(sha256 " + PAGE_SHA256[:16] + "... of the locked text)", "never a multiple of capacity, a count of GPUs saved, dollars, \"100 percent\" or \"proven\"",
              "(1,860 and 1,848 steps compared)", "no false alarm on 5,040 saved steps", "compared with its page character by character (test 131, 7 tests)", "(test 130, 26 tests)", "Not shown: that a grammar raises the exactness on new jobs (the kind grammar did not)")
-FRONT_NEXT = "Next free: row 172, item 121, test 147, question 121"
+FRONT_NEXT = "Next free: row 172, item 122, test 148, question 121"
 
 
 def test_the_front_pages_point_to_the_test_and_say_what_the_page_expects_and_what_it_does_not_show():
@@ -828,8 +828,8 @@ def test_the_front_pages_point_to_the_test_and_say_what_the_page_expects_and_wha
     assert FRONT_NEXT in cm and "test 130 checks the typed-requests test, test 131 the Q = O / M module and test 132 the Result of the typed-requests test, item 111; test 133 checks the 100-step serving test, item 112, and test 134 its Result" in cm
     assert cm.index("110. **") < cm.index("111. **") < cm.index("Next free: row") and ve.index("Provider-side serving test, fourth run") < k
     for name in ("test_provider_side.py", "test_provider_side_constrained.py", "test_provider_side_bounded.py", "test_provider_side_bounded_result.py"):
-        t = open(os.path.join(HERE, name)).read(); assert "row 170, item 112, test 133" not in t and "row 172, item 121, test 147" in t, name
-    assert 'FRONT_NEXT = "Next free: row 172, item 121, test 147, question 121"' in open(os.path.join(HERE, "test_provider_side_retry.py")).read()
+        t = open(os.path.join(HERE, name)).read(); assert "row 170, item 112, test 133" not in t and "row 172, item 122, test 148" in t, name
+    assert 'FRONT_NEXT = "Next free: row 172, item 122, test 148, question 121"' in open(os.path.join(HERE, "test_provider_side_retry.py")).read()
 
 
 if __name__ == "__main__":
