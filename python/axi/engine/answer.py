@@ -29,22 +29,32 @@ from typing import Any, Dict, Hashable, Iterable, List, Mapping, Optional, Tuple
 from axi.engine.witnesses import resolve
 
 
-def read(text: str, kinds: Mapping[Hashable, Iterable[str]]) -> Tuple[Dict[Hashable, List[str]], List[str]]:
-    """(found, double). `kinds`: kind -> phrases. Every phrase of every kind is looked for at once, as whole words, case ignored, longest
-    first; every occurrence a phrase takes is closed to the shorter phrases inside it. `found[kind]`: the phrases of that kind that were
-    read, each once, longest first. `double`: phrases read that belong to two kinds, or to one kind in two spellings (no reading is chosen)."""
+def spans(text: str, kinds: Mapping[Hashable, Iterable[str]]) -> List[Tuple[int, int, Optional[Hashable], str]]:
+    """Every span read, in text order: (start, end, kind, phrase). Every phrase of every kind is looked for at once, as whole words, case
+    ignored, longest first; every occurrence a phrase takes is closed to the shorter phrases inside it. kind None: the phrase belongs to
+    two kinds, or to one kind in two spellings (no reading is chosen), and the phrase is given in lower case."""
     owners: Dict[str, set] = {}
     for k, phrases in kinds.items():
         for p in phrases: owners.setdefault(str(p).lower(), set()).add((k, str(p)))
-    found: Dict[Hashable, List[str]] = {k: [] for k in kinds}; double: List[str] = []; taken: List[Tuple[int, int]] = []
+    taken: List[Tuple[int, int]] = []; out = []; tl = text.lower()
     for low in sorted(owners, key=lambda s: (-len(s), s)):
-        hit = False
+        if low not in tl: continue                                         # a phrase that is not in the text at all needs no search
         for m in re.finditer(r"(?<!\w)" + re.escape(low) + r"(?!\w)", text, re.I):
             if any(m.start() < b and a < m.end() for a, b in taken): continue
-            taken.append((m.start(), m.end())); hit = True
-        if not hit: continue
-        if len(owners[low]) > 1: double.append(low)
-        else: (k, p), = owners[low]; found[k].append(p)
+            taken.append((m.start(), m.end()))
+            if len(owners[low]) > 1: out.append((m.start(), m.end(), None, low))
+            else: (k, p), = owners[low]; out.append((m.start(), m.end(), k, p))
+    return sorted(out, key=lambda s: s[0])
+
+
+def read(text: str, kinds: Mapping[Hashable, Iterable[str]]) -> Tuple[Dict[Hashable, List[str]], List[str]]:
+    """(found, double), from `spans`. `found[kind]`: the phrases of that kind that were read, each once, longest first. `double`: phrases
+    read that belong to two kinds, or to one kind in two spellings (no reading is chosen)."""
+    found: Dict[Hashable, List[str]] = {k: [] for k in kinds}; double: List[str] = []
+    for _, _, k, p in sorted(spans(text, kinds), key=lambda s: (-len(s[3]), s[3].lower(), s[0])):
+        if k is None:
+            if p not in double: double.append(p)
+        elif p not in found[k]: found[k].append(p)
     return found, double
 
 
