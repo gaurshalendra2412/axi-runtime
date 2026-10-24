@@ -78,6 +78,20 @@ def quorum(g: Graph, proposals: Sequence[Optional[StateTransitionDelta]], need: 
     return QuorumResult(from_key(tally[0][0]), "agreed", top, n, len(keys), tally)
 
 
+def tally_keys(keys: Sequence[Optional[Any]], need: Optional[int] = None) -> Tuple[Optional[Any], str, int, List[Tuple[Any, int]]]:
+    """The same rule as `quorum` for proposals already reduced to a canonical key by the caller (None = refused): returns (winning key or
+    None, reason, votes of the leader, tally). `need` defaults to a majority of the keys given. Used where the state is not a CICO graph
+    (the list of the fuzzy-state job, whose canonical key is the list a proposal would leave)."""
+    n = len(keys); need = n // 2 + 1 if need is None else need
+    ks = [k for k in keys if k is not None]
+    if not ks: return None, "none admissible", 0, []
+    tally = sorted(Counter(ks).items(), key=lambda kv: (-kv[1], repr(kv[0])))
+    top = tally[0][1]
+    if top < need: return None, "no quorum", top, tally
+    if sum(1 for _, c in tally if c == top) > 1: return None, "tie", top, tally
+    return tally[0][0], "agreed", top, tally
+
+
 def gate_repair(g: Graph, d: StateTransitionDelta) -> Optional[StateTransitionDelta]:
     """The framework's own repair (diagnostics.ground_and_complete) as a `repair` for `quorum`: the repaired delta, or None."""
     from axi.engine.diagnostics import ground_and_complete
