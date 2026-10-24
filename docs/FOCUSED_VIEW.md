@@ -24,6 +24,10 @@ For a graph, `focus_graph` shows the named nodes, every edge that touches them a
 
 The view changes what the model reads, never what the host checks: the check, the repair and the commit still run on the **whole exact state**.
 
+## Widen on refusal (a rule for use, not measured)
+
+Rajnish Choubey's open letter "The Failure of Thought Imposition" describes a Spherical Mind whose radius R is everything the machine is made to engage, and places intelligence at R = 0. Read for the view: start every step at the smallest view, and widen to the whole state only when the host's check refuses the reply, so that a reply refused for want of context costs one re-ask with the whole state. This rule is written here and not measured: how often it would widen needs a run.
+
 ## What it gives on Test 23 (offline, no call)
 
 Over the 400 steps of the Test 23 stream (seed 20261122), the view held every item the right reply depends on at every step: **400 of 400**, with **no fallback**. The list held 17.5 items on average; the view showed 1.2.

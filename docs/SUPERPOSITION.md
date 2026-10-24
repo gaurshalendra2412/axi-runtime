@@ -4,7 +4,7 @@
 
 ## Where it comes from
 
-Prompted by Rajnish Choubey's essay "The Wave, the Unicorn, and the End of Western Psychology". Light is a particle when observed and a wave when not; observation only decides what is seen. "How can one select one? That would be foolish." The method that carries the idea is a standard one: the host keeps a small set of possible states (possible worlds).
+Prompted by Rajnish Choubey's essay "The Wave, the Unicorn, and the End of Western Psychology". Light is a particle when observed and a wave when not; observation only decides what is seen. "How can one select one? That would be foolish." The method that carries the idea is a standard one: the host keeps a small set of possible states (possible worlds). The same structure is asked for in his open letter "The Failure of Thought Imposition": "Fund Paradox: stop rewarding models for simple coherence and start rewarding them for their ability to hold contradictory truths simultaneously."
 
 Read for structure, two parts of the essay are already in AXI: "replace every OR with AND" is the gate, whose four conditions must all hold, with no ranking among them (a shuffled change never changes the verdict); and "observation decides what we see" is the whole exact state held by the host against the view shown to the model (item 124). One part is new.
 
