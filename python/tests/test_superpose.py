@@ -18,7 +18,7 @@ from axi.experiments import gemini_fuzzy as F
 HERE = os.path.dirname(__file__)
 DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "SUPERPOSITION.md")
-NEXT = "Next free: row 172, item 129, test 155, question 121"
+NEXT = "Next free: row 172, item 132, test 158, question 121"
 
 
 def put(state, n, f, v):

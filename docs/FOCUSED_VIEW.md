@@ -1,6 +1,6 @@
 # The 1 % view: show only what the request needs
 
-*Concept-map item 124. Code: `python/axi/engine/focus.py`. Checked by test 150 (`python/tests/test_focus.py`). No model is called; the figures below are counted offline from the Test 23 stream and its saved calls.*
+*Concept-map item 124, and item 130 for the meeting rings. Code: `python/axi/engine/focus.py`. Checked by test 150 (`python/tests/test_focus.py`) and test 156 (`python/tests/test_focus_meet.py`). No model is called; the figures below are counted offline from the Test 23 stream and its saved calls, and from graphs made by the repository's own generators.*
 
 ## Where it comes from
 
@@ -53,6 +53,43 @@ For a request that names one item, the list part of the prompt, at the same toke
 | 10,000 | about 176,856 tokens | about 24 tokens |
 
 With the whole list AXI's prompt is the size of the state; with the view it is the size of the request. That is the step a company with a large state (an inventory, a ticket queue, a codebase's dependency graph) needs.
+
+## Meeting rings: the view for a request about two things (item 130)
+
+**Where it comes from.** Rajnish Choubey's lines in "The Gen 2 Reset" (Medium, 6 June; a chat with Gemini, so the wording may be the AI's). An old model files a word in a pyramid of folders (animal, reptile, snake). In the new one, every word is a centre with rings expanding around it, and meaning sparks where two words' rings intersect: the snake's ring meets the ring of time.
+
+Read for structure, the rings around one word are `focus_graph` (item 124): the named node, then one ring of edges, then the next. What is new is the second centre. A request can be about two things: how a service is linked to another, or whether one depends on the other through others. For such a request the view should hold the link between them, and a fixed number of rings around each does not know how far apart they are.
+
+**What is new.** `focus_meet(g, a, b)` grows rings from both nodes, one whole ring at a time, the smaller ring first, until the rings intersect. It shows only the nodes and edges of the shortest paths between the two, nothing else. It can follow edges one way (does a reach b along its edges) and only some relations. When the rings run out without meeting, the host knows exactly that the two are **not connected**. The search from both ends is a standard method; what is new is using it to choose the view. As before, the view changes what the model reads, never what the host checks.
+
+**What it gives (no model; graphs made by the repository's own generators).**
+
+The view was checked against a plain search on every pair of nodes: 200 small service graphs (the scope tests' generator) and a 120-node graph (the large KV test's generator), both ways and one way. On every pair it held exactly the nodes and edges of the shortest paths.
+
+On the four 120-node, 200-edge graphs of the large KV test (seeds 21000 to 21003), over every connected pair of nodes:
+
+| View | Holds a path between the two | Nodes | Edges |
+|---|---|---|---|
+| Meeting rings | **24,321 of 24,321** | 6.7 | 6.7 |
+| 1 ring around each | 13.5 % | 9.0 | 7.2 |
+| 2 rings around each | 70.1 % | 29.1 | 30.6 |
+| 3 rings around each | 98.0 % | 66.5 | 88.2 |
+| Whole graph | all | 120 | 200 |
+
+A fixed view holds a path exactly when the two are at most twice its rings apart. In the large test's crude count, the whole graph is 3,554 tokens, the 3-ring view 1,652, and the meeting view 151.
+
+The rings from both ends reached 27.9 nodes on average before meeting. Rings from one end, out to the same distance, reach 70.0.
+
+On a made-up graph of 10,000 nodes with the same density, 252 of 300 random pairs were connected (the other 48 were reported as not connected):
+
+* the meeting view held a path for all 252, with 14.5 nodes on average;
+* the 3-ring view held one for 62 of 252, with 119 nodes;
+* the rings from both ends reached 300 nodes before meeting, where rings from one end reach 5,728;
+* a call takes well under a millisecond on average.
+
+On the 8-node graphs of the scope tests the gain is small: the whole graph is already 8 nodes, and 2 rings around each node hold a path for 99.2 % of pairs.
+
+**What it does not show.** That a model reads a connection better from this view; that needs a run. **No test of AXI asks about a connection yet**: its requests name one node, or two that an edge will join. So this view serves a kind of request the tests do not have. Until a test asks one, it is a tool, not a measured gain in exactness.
 
 ## What this does not show
 
