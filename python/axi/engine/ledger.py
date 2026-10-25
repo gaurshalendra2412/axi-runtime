@@ -256,8 +256,9 @@ class Ledger:
         the comparison in `hidden_state(ignore_ticks=True)`, not the rectangle around them (the first real run showed that the rectangle of a big object with a small notch covers most of the game)."""
         syms = {t["symbol"] for t in self.ticks()}; out = set()
         for r in self.rows:
+            boxes = [b for o in r.ops if o[0] == "move" for b in (o[2], (o[2][0] + o[3][0], o[2][1] + o[3][1], o[2][2] + o[3][0], o[2][3] + o[3][1]))]       # what moved, where it was and where it is
             for s in {o[1] for o in r.ops if o[0] == "resize" and o[1] in syms}:
-                out.update((x, y) for x, y, p, q in r.diff if p == s or q == s)
+                out.update((x, y) for x, y, p, q in r.diff if (p == s or q == s) and not any(b[0] <= x <= b[2] and b[1] <= y <= b[3] for b in boxes))
         return frozenset(out)
 
     @staticmethod

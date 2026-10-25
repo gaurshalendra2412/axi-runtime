@@ -265,6 +265,18 @@ def test_a_strip_that_ticks_every_second_move_is_found_and_a_gate_that_flips_is_
     assert G.ticks() == []
 
 
+def test_a_piece_that_walks_over_the_strips_colour_is_not_hidden_with_the_strip():
+    """ls20 in the second real run: the used part of the bar turns into the colour of the floor, and the player walks on the floor, so the player's own cells (floor to player, player to floor) were taken for strip cells and hidden with it (which could make two different screens look the same)."""
+    from types import SimpleNamespace as NS
+    L = Ledger(background="."); L.ticks = lambda: [dict(symbol="f")]
+    bar = (9, 3, "b", "f")                                                                                   # the used part of the bar turns to the floor colour
+    L.rows = [NS(ops=(("resize", "f", (0, 1, 13, 3), (0, 1, 13, 3), 1), ("move", "p", (3, 1, 3, 1), (1, 0))), diff=[bar, (3, 1, "p", "f"), (4, 1, "f", "p")]),
+              NS(ops=(("resize", "f", (0, 1, 13, 3), (0, 1, 13, 3), 1), ("move", "p", (4, 1, 4, 1), (1, 0))), diff=[(8, 3, "b", "f"), (4, 1, "p", "f"), (5, 1, "f", "p")]),
+              NS(ops=(("resize", "f", (0, 1, 13, 3), (0, 1, 13, 3), 1),), diff=[(7, 3, "b", "f")])]               # a move where only the bar changed
+    assert L.tick_cells() == frozenset({(9, 3), (8, 3), (7, 3)})                                             # only the bar, never a cell the player stood on or went to
+    L2 = Ledger(background="."); walk_rows = _notch_world(); [L2.record("R", b, a) for b, a in walk_rows]; assert L2.hidden_state(ignore_ticks=True) == []
+
+
 def test_a_try_is_counted_once_however_many_pieces_moved():
     L = Ledger(background="."); L.record("a", ("X.X..",), (".X.X.",)); L.record("a", (".X.X.",), ("..X.X",)); L.record("b", ("X....",), (".X...",))
     d = L.dominant(); assert d["a"] == ("X", (1, 0), 2, 2) and d["b"] == ("X", (1, 0), 1, 1)
