@@ -232,13 +232,14 @@ class Ledger:
         strips that change size in most moves (`ticks`): a strip that is used up every move makes every screen different, so the strict
         comparison can almost never find a repeated screen. What is left out is a choice, so it is named (`ignored`), and the strip may itself be
         the reason for a difference: it is not compared, not excluded as a cause."""
-        if not ignore_ticks: outcomes = self.outcomes; boxes: list = []
+        if not ignore_ticks: outcomes = self.outcomes; boxes: list = []; cells: frozenset = frozenset()
         else:
-            boxes = [t["box"] for t in self.ticks()]
-            if not boxes: return []
+            cells = self.tick_cells()
+            if not cells: return []
+            boxes = [_bbox(cells)]
             outcomes = {}
             for r in self.rows:
-                o = outcomes.setdefault((self._mask(r.kb, boxes), r.action), {}); ka = self._mask(r.ka, boxes)
+                o = outcomes.setdefault((self._mask_cells(r.kb, cells), r.action), {}); ka = self._mask_cells(r.ka, cells)
                 if ka in o: o[ka][1] += 1
                 else: o[ka] = [r.i, 1]
         out = []
@@ -246,9 +247,31 @@ class Ledger:
             if len(o) >= 2:
                 first = sorted(v[0] for v in o.values())
                 d = dict(action=action, results=len(o), moves=first, tries=sum(v[1] for v in o.values()))
-                if boxes: d["ignored"] = boxes
+                if boxes: d["ignored"] = boxes; d["ignored_cells"] = len(cells)
                 out.append(d)
         return sorted(out, key=lambda d: d["moves"][0])
+
+    def tick_cells(self) -> frozenset:
+        """The cells that a strip (`ticks`) really changed: in a move where its symbol got smaller or larger, the cells that went to or came from that symbol. Only these are left out of
+        the comparison in `hidden_state(ignore_ticks=True)`, not the rectangle around them (the first real run showed that the rectangle of a big object with a small notch covers most of the game)."""
+        syms = {t["symbol"] for t in self.ticks()}; out = set()
+        for r in self.rows:
+            for s in {o[1] for o in r.ops if o[0] == "resize" and o[1] in syms}:
+                out.update((x, y) for x, y, p, q in r.diff if p == s or q == s)
+        return frozenset(out)
+
+    @staticmethod
+    def _mask_cells(k: tuple, cells) -> tuple:
+        by: Dict[int, List[int]] = defaultdict(list)
+        for x, y in cells: by[y].append(x)
+        rows = list(k)
+        for y, xs in by.items():
+            if 0 <= y < len(rows):
+                r = rows[y]; ls = list(r)
+                for x in xs:
+                    if 0 <= x < len(ls): ls[x] = "?"
+                rows[y] = "".join(ls) if isinstance(r, str) else tuple(ls)
+        return tuple(rows)
 
     @staticmethod
     def _mask(k: tuple, boxes: list) -> tuple:
@@ -264,7 +287,7 @@ class Ledger:
 
     def ticks(self, share: float = 0.7) -> List[dict]:
         """Symbols whose object gets smaller or larger, in at least `share` of the moves that changed the screen between its first and its last
-        resize, and in at least twice `min_law` of them: a strip along an edge that is used up, a gauge that fills. (Counted over the time the strip
+        resize, and in at least twice `min_law` of them (or in at least half of them if it is the same change every time: a strip that ticks every second move): a strip along an edge that is used up, a gauge that fills. (Counted over the time the strip
         lasted, so one that runs out half way still shows; and nearly always in the same direction.) `box` is the area the object has covered; `delta` the usual change in cells; `moves` the
         number of moves it changed in, `of` how many moves that changed the screen lie between its first and last change."""
         changed = [r for r in self.rows if r.changed()]
@@ -280,7 +303,8 @@ class Ledger:
         out = []
         for s, d in sorted(per.items(), key=lambda kv: str(kv[0])):
             span = d["last"] - d["first"] + 1
-            if d["moves"] >= 2 * self.min_law and d["moves"] >= share * span and max(d["signs"].values()) >= share * sum(d["signs"].values()):      # and it keeps changing the same way (always smaller, or always larger): a gate that something walks over alternates
+            n = sum(d["deltas"].values()); steady = max(d["deltas"].values()) >= 0.9 * n                                                       # the same change every time, so also the same direction
+            if d["moves"] >= 2 * self.min_law and ((d["moves"] >= share * span and max(d["signs"].values()) >= share * sum(d["signs"].values())) or (d["moves"] >= 0.5 * span and steady)):      # it keeps changing the same way (always smaller, or always larger: a gate that something walks over alternates); one that is exactly the same each time may skip moves (g50t: every second move, first real run)
                 out.append(dict(symbol=s, moves=d["moves"], of=span, delta=min(d["deltas"].items(), key=lambda kv: (-kv[1], kv[0]))[0], box=d["box"]))
         return out
 
@@ -404,7 +428,7 @@ class Ledger:
         for h in strict[:max_items]:
             out.append(f"From the same screen, '{h['action']}' gave {h['results']} different results (moves {', '.join(str(m) for m in h['moves'])}): the screen does not decide the outcome.")
         for x in tk[:max_items]:
-            b = x["box"]; out.append(f"Something of {x['symbol']} gets smaller or larger in {x['moves']} of the {x['of']} moves that changed the screen while it lasted (usually by {x['delta']:+d} cells), in the area x {b[0]} to {b[2]}, y {b[1]} to {b[3]}: a strip that is used up or a gauge that fills, every move.")
+            b = x["box"]; out.append(f"Something of {x['symbol']} gets smaller or larger in {x['moves']} of the {x['of']} moves that changed the screen while it lasted (usually by {x['delta']:+d} cells), in the area x {b[0]} to {b[2]}, y {b[1]} to {b[3]}: a strip that is used up or a gauge that fills" + (", every move." if x["moves"] >= 0.9 * x["of"] else ", but not in every move (the same change each time)."))
         seen = {(h["action"], h["moves"][0]) for h in strict}
         for h in [h for h in self.hidden_state(ignore_ticks=True) if (h["action"], h["moves"][0]) not in seen][:max_items]:
             out.append(f"From the same screen, not counting the strip that changes every move, '{h['action']}' gave {h['results']} different results (moves {', '.join(str(m) for m in h['moves'])}): the rest of the screen does not decide the outcome (the strip may).")

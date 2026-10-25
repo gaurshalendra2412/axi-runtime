@@ -229,6 +229,42 @@ def test_the_hidden_state_flag_sees_through_a_strip_that_makes_every_screen_diff
         assert (a, b) == (0, 16)
 
 
+def _notch_world(n=8):
+    """12 wide, 3 high. 'z' is an L (the left column and a bottom strip that is used up one cell a move), 'p' walks right along the top, 'q' sits at the far right and turns 'r' while p stands on x=5."""
+    out = []; strip = 9; p = 1
+    def frame(p, strip):
+        top = ["."] * 12; top[0] = "z"; top[p] = "p"; top[11] = "r" if p == 5 else "q"
+        mid = ["z"] + ["."] * 11; low = ["z" * (strip + 1)] ; low = "".join(low) + "." * (11 - strip)
+        return ("".join(top), "".join(mid), low)
+    for _ in range(n):
+        a = frame(p, strip); p += 1; strip -= 1; out.append((a, frame(p, strip)))
+    return out
+
+
+def test_the_strip_is_hidden_by_its_cells_not_by_the_rectangle_round_it():
+    L = Ledger(background=".")
+    for b, a in _notch_world(): L.record("R", b, a)
+    t = L.ticks(); assert [x["symbol"] for x in t] == ["z"] and t[0]["box"][:2] == (0, 0)                  # the object that gets smaller reaches over the whole screen: its box is the whole play area
+    cells = L.tick_cells(); assert cells and all(y == 2 for _, y in cells) and len(cells) == 8             # but only the notch cells (the bottom row) are what the strip changed
+    old = {}                                                                                               # what the rectangle did: p's place is hidden, so two different screens look the same
+    for r in L.rows: old.setdefault((L._mask(r.kb, [t[0]["box"]]), r.action), set()).add(L._mask(r.ka, [t[0]["box"]]))
+    assert any(len(v) >= 2 for v in old.values())                                                          # the rectangle would have called this a hidden state
+    assert L.hidden_state(ignore_ticks=True) == []                                                         # the cells do not: p stood in different places, so the screens were different
+
+
+def test_a_strip_that_ticks_every_second_move_is_found_and_a_gate_that_flips_is_not():
+    """g50t in the first real run: the strip changed by exactly one cell in every second move (60 percent of the moves, below the first rule's 70)."""
+    def frame(p, strip, w=24): return ("." * p + "p" + "." * (w - p - 1), "z" * strip + "." * (w - strip))
+    L = Ledger(background="."); p = 0; strip = 20
+    for k in range(18):
+        a = frame(p, strip); p += 1; strip -= k % 2; L.record("R", a, frame(p, strip))
+    t = L.ticks(); assert [x["symbol"] for x in t] == ["z"] and t[0]["delta"] == -1 and t[0]["moves"] == 9 and any("not in every move" in l for l in L.report())
+    G = Ledger(background="."); p = 0; gate = 6                                                              # a gate that is shut and opened again (+3, -3, +3 ...) is a state, not a strip
+    for k in range(18):
+        a = frame(p, gate); p += 1; gate = 9 - gate if k % 2 == 0 else 6; G.record("R", a, frame(p, gate))
+    assert G.ticks() == []
+
+
 def test_a_try_is_counted_once_however_many_pieces_moved():
     L = Ledger(background="."); L.record("a", ("X.X..",), (".X.X.",)); L.record("a", (".X.X.",), ("..X.X",)); L.record("b", ("X....",), (".X...",))
     d = L.dominant(); assert d["a"] == ("X", (1, 0), 2, 2) and d["b"] == ("X", (1, 0), 1, 1)

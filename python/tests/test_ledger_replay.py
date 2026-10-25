@@ -95,6 +95,7 @@ def test_the_loader_and_the_notebook():
     s = LR.feed(r, T.make_env, "K", games, moves, T.IDENT); strip = lambda d: {g: {k: v for k, v in x.items() if k != "ms_per_move"} for g, x in d.items()}; assert strip(LR.summarize(s)) == strip(LR.summarize(_feed("K", rows)))
     nb = json.load(open(os.path.join(HERE, "..", "colab", "axi_ledger_replay.ipynb"))); src = "\n".join("".join(c["source"]) for c in nb["cells"] if c["cell_type"] == "code")
     assert "ledger_replay" in src and "make_env" in src and "arc-agi arcengine" in src
+    assert "sys.modules" in src and 'hasattr(Ledger, "ticks")' in src and "git -C /content/axi log" in src             # a second run in one session must not use the first run's code, and the commit is printed
     for bad in ("userdata", "GOOGLE_API_KEY", "PAID", "BUDGET", "llm", "generate", "drive.mount", "git push"): assert bad not in src, bad
     assert all(c["outputs"] == [] for c in nb["cells"] if c["cell_type"] == "code")                # nothing was run when it was written
 
