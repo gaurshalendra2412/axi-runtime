@@ -9,7 +9,9 @@ Symbols: '#' wall, '.' floor, 'P' the player, 'B' a pushable block, 'T' a pad, '
 'o' / 'e' the gauge (mode 0 / 1) in the top-left corner. Actions: U D L R (a step) and A (press: nothing happens in these worlds).
 PushWorld: steps and pushes. PadWorld: stepping onto a pad flips the mode; a gate that becomes solid under a block crushes it. With
 `visible=True` the mode shows (the gauge, and an open gate is drawn as floor); with `visible=False` it does not (the gauge never
-changes and both gates are always drawn), which is the hidden-state world."""
+changes and both gates are always drawn), which is the hidden-state world.
+With `strip=True` a row is added at the bottom: a strip of 'z' that is used up from the right, one cell for every move that changed the screen, the used part drawn 'k'
+(the shape the saved ARC-AGI-3 runs showed on 25 Oct: a one-row strip along the screen edge, eaten each move). It is an invented copy of that shape, not the game."""
 from __future__ import annotations
 import random
 from typing import List, Tuple
@@ -33,8 +35,8 @@ PAD_LEVEL = ("##########",
 
 
 class World:
-    def __init__(self, level=PAD_LEVEL, visible: bool = True, pads: bool = True):
-        self.h = len(level); self.w = len(level[0]); self.visible = visible; self.pads = pads; self.mode = 0; self.entries = 0; self.crushed = 0
+    def __init__(self, level=PAD_LEVEL, visible: bool = True, pads: bool = True, strip: bool = False):
+        self.h = len(level); self.w = len(level[0]); self.visible = visible; self.pads = pads; self.mode = 0; self.entries = 0; self.crushed = 0; self.strip = strip; self.used = 0
         self.cells = [list(r) for r in level]; self.player = next((x, y) for y, r in enumerate(level) for x, c in enumerate(r) if c == "P")
         self.cells[self.player[1]][self.player[0]] = "."
         self.blocks = {(x, y) for y, r in enumerate(level) for x, c in enumerate(r) if c == "B"}
@@ -56,9 +58,16 @@ class World:
                 else: row.append(c)
             rows.append("".join(row))
         if self.visible and self.pads: rows[0] = ("o" if self.mode == 0 else "e") + rows[0][1:]
+        if self.strip: rows.append("z" * max(0, self.w - self.used) + "k" * min(self.w, self.used))
         return tuple(rows)
 
     def step(self, a: str) -> Tuple[str, ...]:
+        before = (self.player, frozenset(self.blocks), self.mode)
+        self._step(a)
+        if self.strip and (self.player, frozenset(self.blocks), self.mode) != before: self.used += 1      # only a move that changed the screen is counted
+        return self.frame()
+
+    def _step(self, a: str) -> Tuple[str, ...]:
         if a in STEP:
             dx, dy = STEP[a]; nx, ny = self.player[0] + dx, self.player[1] + dy
             if not self.solid(nx, ny):
@@ -72,6 +81,11 @@ class World:
                     self.blocks = {b for b in self.blocks if not self.solid(*b)}              # a block under a gate that turned solid is crushed
                     self.crushed += n - len(self.blocks)
         return self.frame()
+
+
+def wide(level, w: int = 64) -> Tuple[str, ...]:
+    """The same level on a screen `w` cells wide (walls fill the rest), so that a strip along the bottom is as wide as a real screen's."""
+    return tuple(r.ljust(w, "#") for r in level)
 
 
 def walk(world: World, seed: int, moves: int, ledger=None) -> List[Tuple[str, Tuple[str, ...], Tuple[str, ...]]]:

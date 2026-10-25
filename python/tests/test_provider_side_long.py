@@ -768,7 +768,7 @@ FRONT_ITEM = ("112. **The serving side a sixth time: jobs of 100 steps, the firs
 FRONT_ROW = ("Provider-side serving test, sixth run: jobs of 100 steps (`PROVIDER_SIDE_LONG_TEST.md`, `experiments/provider_side_long.py`, `colab/axi_provider_side_long.ipynb`) |", "**Built and checked here; run once on Colab; the Result is on the page.**", "(sha256 " + PAGE_SHA256[:16] + "... of the locked text)",
              "Every serving run so far had jobs of 30 steps.", "The headline is lines 8 and 9", "(both yes about 45 % on the page). What the Result claims is in the run text at the end of this row.", "never a multiple of capacity, a count of GPUs saved, dollars, \"100 percent\" or \"proven\"", "**No route in this design promises 100 %.**",
              "(three persistent capped slips cost 257 steps there)", "the 64 new jobs against every saved file (192 to 255 are in none)", "Not shown: anything about what a model writes beyond 100 steps (this is the one run there is)", "a retry on top of a grammar")
-FRONT_NEXT = "Next free: row 179, item 134, test 160, question 122"
+FRONT_NEXT = "Next free: row 181, item 135, test 160, question 122"
 
 
 def test_the_front_pages_say_that_the_test_is_built_and_not_run_what_it_expects_and_what_it_does_not_show():
@@ -781,14 +781,14 @@ def test_the_front_pages_say_that_the_test_is_built_and_not_run_what_it_expects_
         assert MUTATION_SENTENCE in text and "380" in text and "317" in text and "63 survived" in text
         assert "@@" not in text and f"(test 133, {n_tests} tests)" in text and "mutation check of test 133: " in text and "capacity" in text and "Result" in text and "RUN (" not in text and "Status: RUN" not in text and "no run yet" not in text and "not run yet" not in text and "nothing has been run" not in text
         assert "proven" in text and "dollars" in text and "energy" in text and "100" in text
-    assert "\n134. **" not in cm and "\n114. **" in cm and "\n113. **" in cm and "\n112. **" in cm and cm.count("112. **") == 1
+    assert "\n135. **" not in cm and "\n114. **" in cm and "\n113. **" in cm and "\n112. **" in cm and cm.count("112. **") == 1
     assert FRONT_NEXT in cm and "test 133 checks the 100-step serving test, item 112, and test 134 its Result" in cm and cm.count("Next free:") == 1
     assert cm.index("111. **") < cm.index("112. **") < cm.index("Next free: row") and ve.index("Provider-side serving test, fifth run") < k < ve.index("\n", k)
     for name in ("test_provider_side.py", "test_provider_side_constrained.py", "test_provider_side_bounded.py", "test_provider_side_bounded_result.py"):
-        t = open(os.path.join(HERE, name)).read(); assert "row 170, item 112, test 133" not in t and "row 179, item 134, test 160" in t, name
+        t = open(os.path.join(HERE, name)).read(); assert "row 170, item 112, test 133" not in t and "row 181, item 135, test 160" in t, name
     for name in ("test_provider_side_retry.py", "test_provider_side_typed.py", "test_provider_side_typed_result.py"):                      # these three name the old counter in the assertion that moves it
-        assert "row 179, item 134, test 160, question 122" in open(os.path.join(HERE, name)).read(), name
-    assert 'FRONT_NEXT = "Next free: row 179, item 134, test 160, question 122"' in open(os.path.join(HERE, "test_provider_side_retry.py")).read()
+        assert "row 181, item 135, test 160, question 122" in open(os.path.join(HERE, name)).read(), name
+    assert 'FRONT_NEXT = "Next free: row 181, item 135, test 160, question 122"' in open(os.path.join(HERE, "test_provider_side_retry.py")).read()
 
 
 MUTATION_SENTENCE = "mutation check of test 133: run twice on the final code. Run 1 (380 small changes to the code, the page, the notebook and the tests) was caught 266 times and survived 114; the real gaps among those were closed with new tests. Run 2 (380 new changes, another seed) was caught 317 times and 63 survived. The 63 were grouped by kind, not each traced: numbers one step off an edge, `and` turned to `or` where both sides are true throughout, one changed word in the locked page or the notebook (the page's sha256 is the lock for those), and display-only text. "

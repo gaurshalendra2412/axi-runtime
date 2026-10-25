@@ -24,12 +24,12 @@ import json, os, sys, time, random
 sys.path.insert(0, os.path.dirname(__file__))
 from collections import Counter
 from axi.engine.ledger import Ledger, match, components, relation_word, UNIT, MIN_LAW
-from axi.experiments.mini_worlds import World, walk, PUSH_LEVEL, PAD_LEVEL
+from axi.experiments.mini_worlds import World, walk, wide, PUSH_LEVEL, PAD_LEVEL
 
 HERE = os.path.dirname(__file__)
 DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "HISTORY_LEDGER.md")
-NEXT = "Next free: row 179, item 134, test 160, question 122"
+NEXT = "Next free: row 181, item 135, test 160, question 122"
 
 
 def ops(a, b, bg="."):
@@ -49,8 +49,8 @@ def test_two_screens_become_an_object_level_change():
 
 def test_ambiguity_and_touching_and_exact_cells():
     L = Ledger(background="."); r = L.record("x", ("B.B...",), (".B.B..",)); assert r.ambiguous and [o[3] for o in r.ops] == [(1, 0), (1, 0)]
-    L = Ledger(background="."); r = L.record("x", ("B..B",), ("..BB",))                         # one block moves up against the other: one object of two cells
-    assert not r.ambiguous and r.touch == ("B",) and r.apart == () and [o[0] for o in r.ops] == ["gone", "gone", "new"]
+    L = Ledger(background="."); r = L.record("x", ("B..B",), ("..BB",))                         # one block moves up against the other: one object of two cells (shown as one that grew and one that is gone; `touch` says why)
+    assert not r.ambiguous and r.touch == ("B",) and r.apart == () and [o[0] for o in r.ops] == ["gone", "resize"]
     assert sorted(r.diff) == [(0, 0, "B", "."), (2, 0, ".", "B")]                                # the exact cells are right whatever the matching says
     L = Ledger(background="."); r = L.record("x", ("B.B.",), ("B...",))
     assert r.ops == (("gone", "B", (2, 0, 2, 0), 1),) and r.diff == ((2, 0, "B", "."),) and r.touch == ()
@@ -94,6 +94,7 @@ def test_effects_apart_equal_the_worlds_own_count_and_the_change_adds_up():
                 for o in r.ops:
                     if o[0] == "gone": d[("cells", o[1])] -= o[3]; d[("objects", o[1])] -= 1
                     elif o[0] == "new": d[("cells", o[1])] += o[3]; d[("objects", o[1])] += 1
+                    elif o[0] == "resize": d[("cells", o[1])] += o[4]
                     elif o[0] == "recolour":
                         d[("cells", o[1])] -= o[4]; d[("cells", o[2])] += o[4]; d[("objects", o[1])] -= 1; d[("objects", o[2])] += 1
                 if {q: v for q, v in d.items() if v} != {q: a - b for q, (b, a) in r.qdelta.items()}: bad += 1
@@ -186,15 +187,63 @@ def test_the_cost_on_64_by_64_screens():
     assert sum(ch) / 100 < 0.02 and sum(eq) / 100 < 0.002                  # a model call took 15.9 to 28.7 s a move in Test 24
 
 
+# ---- what the first run on the real saved runs showed (25 Oct): a strip along the edge that is used up every move ----
+def test_a_thing_that_gets_smaller_or_larger_is_one_thing_with_a_new_state():
+    L = Ledger(background="."); r = L.record("x", ("zzzz",), ("zzz.",)); assert r.ops == (("resize", "z", (0, 0, 3, 0), (0, 0, 2, 0), -1),) and r.qdelta == {("cells", "z"): (4, 3)} and r.touch == ()
+    r = L.record("x", ("zzz.",), ("zzzk",)); assert [o[0] for o in r.ops] == ["new"]                       # something else appears at the end: that is new
+    r = L.record("x", ("z...",), ("zzz.",)); assert r.ops == (("resize", "z", (0, 0, 0, 0), (0, 0, 2, 0), 2),)           # larger
+    r = L.record("x", ("zz.zz",), ("zzzzz",)); assert [o[0] for o in r.ops] == ["gone", "gone", "new"]                  # a gap that fills joins two things: not a resize
+    r = L.record("x", ("zz..",), ("..zz",)); assert [o[0] for o in r.ops] == ["move"]                       # a move is still a move
+    r = L.record("x", ("zz..",), (".zzz",)); assert [o[0] for o in r.ops] == ["gone", "new"]                  # cells that are not inside the old ones (it grew and slid) are not a resize
+    assert Ledger(background=".").record("x", ("zzzz",), ("zzzz",)).ops == ()
+
+
+def test_a_strip_that_is_used_up_every_move_is_found_and_not_taken_for_a_game_effect():
+    found = {}
+    for hidden in (False, True):
+        n = 0
+        for s in range(20):
+            w = World(wide(PAD_LEVEL, 70), not hidden, True, strip=True); L = Ledger(background="."); walk(w, s, 60, L)
+            tk = L.ticks(); n += int(sorted(x["symbol"] for x in tk) == ["k", "z"]); assert tk and all(x["box"][1] == x["box"][3] == 7 and x["box"][2] == 69 or x["symbol"] == "k" for x in tk)
+            z = next(x for x in tk if x["symbol"] == "z"); assert z["delta"] == -1 and z["moves"] == z["of"]
+            assert not any(o[1] in ("z", "k") for r in L.rows for o in r.apart if False) and not [l for l in L.report() if "a change away from what moved: resize ('z'" in l]
+        found[hidden] = n
+    assert found == {False: 20, True: 20}
+    for name, (lv, vis, pads) in {"push": (PUSH_LEVEL, True, False), "visible": (PAD_LEVEL, True, True), "hidden": (PAD_LEVEL, False, True)}.items():     # no strip, none found
+        assert sum(bool(walk_ledger(lv, vis, pads, s).ticks()) for s in range(20)) == 0, name
+    L = Ledger(background="."); L.record("a", ("zzzz",), ("zzz.",)); L.record("a", ("zzz.",), ("zz..",)); assert L.ticks() == []                 # two moves are too few to call a strip
+
+
+def test_the_hidden_state_flag_sees_through_a_strip_that_makes_every_screen_different():
+    for visible, strict, ignoring in ((False, 0, 1), (True, 0, 0)):
+        w = World(wide(PAD_LEVEL, 40), visible, True, strip=True); L = Ledger(background=".")
+        for a in "RR" + "RR" + "R" + "LLL" + "RR" + "R": L.record(a, w.frame(), w.step(a))
+        assert len(L.hidden_state()) == strict                                                              # every screen differs by the strip: the strict flag has nothing to compare
+        h = L.hidden_state(ignore_ticks=True); assert len(h) == ignoring
+        if ignoring: assert h[0]["action"] == "R" and h[0]["results"] == 2 and h[0]["ignored"] and any("not counting the strip" in l for l in L.report())
+    assert Ledger(background=".").hidden_state(ignore_ticks=True) == []                                      # nothing to ignore: nothing returned
+    if os.environ.get("LEDGER_SLOW"):                                                                       # the measurement of the page: 20 seeds of 1,000 moves, about 2 minutes
+        a = b = 0
+        for s in range(20):
+            L = Ledger(background="."); walk(World(wide(PAD_LEVEL, 1100), False, True, strip=True), s, 1000, L); a += bool(L.hidden_state()); b += bool(L.hidden_state(ignore_ticks=True))
+        assert (a, b) == (0, 16)
+
+
+def test_a_try_is_counted_once_however_many_pieces_moved():
+    L = Ledger(background="."); L.record("a", ("X.X..",), (".X.X.",)); L.record("a", (".X.X.",), ("..X.X",)); L.record("b", ("X....",), (".X...",))
+    d = L.dominant(); assert d["a"] == ("X", (1, 0), 2, 2) and d["b"] == ("X", (1, 0), 1, 1)
+    for a, (s, v, n, tries) in d.items(): assert n <= tries
+
+
 def test_the_page_and_the_front_pages():
     page = open(PAGE).read(); low = page.lower()
     for s in ("ledger.py", "Rajnish Choubey", "RFC-001", "for Sir to confirm", "hidden-state", "16 of 20", "732", "60,000", "invented", "not benchmark",
-              "on_arrival", "touch", "came back", "no return", "d4.py", "2 ms", "0.02 ms", "does not show", "test 158", "item 132", "question 121"):
+              "on_arrival", "touch", "came back", "no return", "d4.py", "2 ms", "0.02 ms", "does not show", "test 158", "item 132", "question 121", "resize", "25 Oct", "699 of 699", "not been run on a real"):
         assert s.lower() in low, s
     for bad in ("proven", "$", "dollar", "clears more levels", "solves"): assert bad not in low, bad
     cm = open(os.path.join(DOCS, "RAJNISH_CONCEPT_MAP.md")).read(); vf = open(os.path.join(DOCS, "VERIFIED.md")).read()
     assert NEXT in cm and cm.count("Next free:") == 1 and "test 158 checks the transition ledger, item 132" in cm
-    for n in range(172, 179): assert f"\n| {n} |" in cm, n
+    for n in range(172, 181): assert f"\n| {n} |" in cm, n
     j = cm.index("\n132. **") + 1; item = cm[j:cm.index("\n", j)]
     assert "ledger.py" in item and "HISTORY_LEDGER.md" in item and "test 158" in item and "Rajnish Choubey" in item and "RFC-001" in item
     row = next(l for l in vf.split("\n") if "HISTORY_LEDGER.md" in l); assert "test_ledger.py" in row and "no model" in row.lower()

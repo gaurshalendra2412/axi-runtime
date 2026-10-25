@@ -66,6 +66,7 @@ def _balance_bad(r) -> bool:
     for o in r.ops:
         if o[0] == "gone": d[("cells", o[1])] -= o[3]; d[("objects", o[1])] -= 1
         elif o[0] == "new": d[("cells", o[1])] += o[3]; d[("objects", o[1])] += 1
+        elif o[0] == "resize": d[("cells", o[1])] += o[4]
         elif o[0] == "recolour": d[("cells", o[1])] -= o[4]; d[("cells", o[2])] += o[4]; d[("objects", o[1])] -= 1; d[("objects", o[2])] += 1
     return {q: v for q, v in d.items() if v} != {q: a - b for q, (b, a) in r.qdelta.items()}
 
@@ -74,7 +75,7 @@ def summarize(s: Session) -> Dict[str, dict]:
     """Per game, plain numbers (no text). Pure: the same session gives the same answer."""
     out: Dict[str, dict] = {}
     for (game, lv), L in sorted(s.ledgers.items()):
-        g = out.setdefault(game, dict(levels_seen=0, moves=0, changed=0, ops=Counter(), identity_maybe_lost=0, balance_bad=0, ambiguous=0, reshaped=0, hidden_state=[], laws=0, lost_laws=0, came_back=0, apart=0, touch=0, actions={}))
+        g = out.setdefault(game, dict(levels_seen=0, moves=0, changed=0, ops=Counter(), identity_maybe_lost=0, balance_bad=0, ambiguous=0, reshaped=0, hidden_state=[], hidden_state_ignoring_ticks=[], ticks=[], apart_not_ticks=0, laws=0, lost_laws=0, came_back=0, apart=0, touch=0, actions={}))
         g["levels_seen"] += 1
         for r in L.rows:
             g["moves"] += 1; g["changed"] += int(r.changed()); g["ambiguous"] += int(bool(r.ambiguous)); g["reshaped"] += int(bool(r.reshaped)); g["apart"] += len(r.apart); g["touch"] += int(bool(r.touch))
@@ -82,6 +83,9 @@ def summarize(s: Session) -> Dict[str, dict]:
             gone = {o[1] for o in r.ops if o[0] == "gone"}; new = {o[1] for o in r.ops if o[0] == "new"}
             g["identity_maybe_lost"] += int(bool(gone & new)); g["balance_bad"] += int(_balance_bad(r))
         g["hidden_state"] += [dict(level=lv, **h) for h in L.hidden_state()]
+        tk = L.ticks(); ts = {x["symbol"] for x in tk}; g["ticks"] += [dict(level=lv, **x) for x in tk]
+        g["hidden_state_ignoring_ticks"] += [dict(level=lv, **h) for h in L.hidden_state(ignore_ticks=True)]
+        g["apart_not_ticks"] += sum(1 for r in L.rows for o in r.apart if o[1] not in ts)
         g["laws"] += len(L.laws()); g["lost_laws"] += sum(1 for b in L.breaks if not b["back"]); g["came_back"] += sum(1 for b in L.breaks if b["back"])
         for a, (sym, v, n, t) in L.dominant().items(): g["actions"].setdefault(a, []).append(dict(level=lv, symbol=sym, step=v, n=n, of=t))
     for game, g in out.items():
@@ -96,7 +100,8 @@ def text(s: Session, max_items: int = 6) -> str:
     for game, g in summarize(s).items():
         lines.append(f"== {game}: {g['moves']} moves recorded over {g['levels_seen']} level(s), {g['changed']} changed the screen; not recorded: {g['skipped'] or 'none'}; host time {g['ms_per_move']} ms per move")
         lines.append(f"   operations found: {g['ops'] or 'none'}; one symbol both gone and new in {g['identity_maybe_lost']} moves; does not add up in {g['balance_bad']}; ambiguous {g['ambiguous']}; reshaped {g['reshaped']}; touches {g['touch']}; apart {g['apart']}")
-        lines.append(f"   hidden-state flags: {len(g['hidden_state'])}" + ("".join(f" [level {h['level']}, '{h['action']}', moves {h['moves']}]" for h in g["hidden_state"][:max_items])))
+        lines.append(f"   strips that get smaller or larger every move: {len(g['ticks'])}" + ("".join(f" [level {x['level']}: '{x['symbol']}' {x['moves']} of {x['of']} moves, {x['delta']:+d} cells, area {x['box']}]" for x in g["ticks"][:max_items])) + f"; effects apart from what moved, not counting them: {g['apart_not_ticks']}")
+        lines.append(f"   hidden-state flags: {len(g['hidden_state'])}" + ("".join(f" [level {h['level']}, '{h['action']}', moves {h['moves']}]" for h in g["hidden_state"][:max_items])) + f"; not counting the strips: {len(g['hidden_state_ignoring_ticks'])}" + ("".join(f" [level {h['level']}, '{h['action']}', moves {h['moves']}]" for h in g["hidden_state_ignoring_ticks"][:max_items])))
         lines.append(f"   counts that never changed {g['laws']}, broken and not back {g['lost_laws']}, broken and came back {g['came_back']}")
         for (gm, lv), L in sorted(s.ledgers.items()):
             if gm == game:

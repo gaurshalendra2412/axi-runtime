@@ -216,7 +216,7 @@ def test_the_notebook_holds_no_key_never_turns_billing_on_sets_no_budget_and_nev
 # ---------------------------------------------------------------- 6 front pages
 def test_the_front_pages_say_what_was_built_and_that_nothing_was_called():
     cm = open(os.path.join(DOCS, "RAJNISH_CONCEPT_MAP.md")).read(); vf = open(os.path.join(DOCS, "VERIFIED.md")).read()
-    assert "Next free: row 179, item 134, test 160, question 122" in cm and cm.count("Next free:") == 1 and "test 144 checks the ARC-AGI-3 test with the host-owned explorer, item 118" in cm and "\n118. **Gemini 3.8 Flash on ARC-AGI-3 games with a host-owned explorer" in cm
+    assert "Next free: row 181, item 135, test 160, question 122" in cm and cm.count("Next free:") == 1 and "test 144 checks the ARC-AGI-3 test with the host-owned explorer, item 118" in cm and "\n118. **Gemini 3.8 Flash on ARC-AGI-3 games with a host-owned explorer" in cm
     assert "GEMINI_ARC_B_TEST.md" in vf and "gemini_arc_b.py" in vf and PAGE_SHA256 in vf
     i = cm.index("\n118. **") + 1; item = cm[i:cm.index("\n", i)]; assert "Status: run once on Colab" in item and "docs/GEMINI_ARC_B_TEST.md" in item and "test 144" in item and "Sir's writing is for Sir to confirm" in item and "17 reading lines" in item
 

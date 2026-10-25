@@ -17,7 +17,7 @@ from axi.experiments import ledger_replay as LR
 import test_gemini_arc as T
 
 HERE = os.path.dirname(os.path.abspath(__file__)); DOCS = os.path.join(HERE, "..", "..", "docs")
-NEXT = "Next free: row 179, item 134, test 160, question 122"
+NEXT = "Next free: row 181, item 135, test 160, question 122"
 G2 = T.GAMES2
 
 
@@ -80,7 +80,7 @@ def test_the_summary_and_the_text():
     strip = lambda d: {g: {k: v for k, v in x.items() if k != "ms_per_move"} for g, x in d.items()}; assert strip(LR.summarize(s)) == strip(LR.summarize(s))      # pure (the time differs between calls only because it is measured once, at feed)
     t = LR.text(s)
     for g in sm: assert f"== {g}:" in t
-    assert "hidden-state flags" in t and "ms per move" in t
+    assert "hidden-state flags" in t and "ms per move" in t and "strips that get smaller or larger" in t
 
 
 def test_a_moving_player_is_one_object_that_moved_not_gone_and_new():
@@ -103,6 +103,8 @@ def test_the_front_pages_and_the_counter():
     cm = open(os.path.join(DOCS, "RAJNISH_CONCEPT_MAP.md"), encoding="utf-8").read(); assert NEXT in cm and cm.count("Next free:") == 1
     j = cm.index("\n133. **") + 1; item = cm[j:cm.index("\n", j)]
     assert "ledger_replay.py" in item and "test 159" in item and "Rajnish Choubey" in item and "no model" in item.lower()
+    k = cm.index("\n134. **") + 1; item = cm[k:cm.index("\n", k)]; assert "ticks" in item and "resize" in item and "Rajnish" not in item or "for Sir to confirm" in item
+    assert "| 179 |" in cm and "| 180 |" in cm
     vf = open(os.path.join(DOCS, "VERIFIED.md"), encoding="utf-8").read(); assert any("ledger_replay.py" in l and "test_ledger_replay.py" in l for l in vf.split("\n"))
 
 

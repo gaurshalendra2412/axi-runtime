@@ -1,6 +1,6 @@
 # The transition ledger: what the host can know exactly about a world it was not told the rules of
 
-*Concept-map item 132, rows 172 to 178. Code: `python/axi/engine/ledger.py`, and the invented worlds `python/axi/experiments/mini_worlds.py`. Checked by test 158 (`python/tests/test_ledger.py`). No model is called, and no benchmark game is used.*
+*Concept-map item 132 (rows 172 to 178) and items 133 and 134 (rows 179 and 180). Code: `python/axi/engine/ledger.py`, and the invented worlds `python/axi/experiments/mini_worlds.py`. Checked by test 158 (`python/tests/test_ledger.py`). No model is called, and no benchmark game is used.*
 
 ## Where it comes from
 
@@ -25,6 +25,8 @@ The ledger does not invent a rule and does not name the goal. A model still has 
 | 174 (C) | **The hidden-state flag.** The same screen and the same action gave two different results. | The screen does not decide the outcome, so something that is not on the screen changed. The ledger cannot say what (a mode, a counter, chance, an animation). |
 | 175 (D) | **The actions.** The step each moves an object by; which are the same, opposite or a quarter turn of each other; which of the four unit steps no action has been seen to make; the changes no recorded move was seen to undo. | The four unit steps are one orbit of the 8-element group in `d4.py`; test 158 checks the words against `d4.apply` for all 8 transforms. "No return seen" means only that no tried move put the screen back, not that none can. |
 | 176 (E) | **A claim about the rules, replayed over the history.** | Four closed forms: `moves` (an action moves a symbol by a step), `changes_cell`, `keeps` (a count never changes), `on_arrival` (whenever a symbol arrives at a cell, another cell changes). The moves that contradict it are returned; an action never played is "untested"; an unknown form is refused. |
+| 179 (H) | **A thing that gets smaller or larger is one thing with a new state.** A strip along the edge that is used up, a gauge that fills. A strip that changes the same way in nearly every move is named, with its area. | `resize` change: the same symbol, every cell of the smaller one inside the larger one, one-to-one only (two things that merge stay gone and new, and `touch` says so). `Ledger.ticks`: at least 70 % of the moves that changed the screen while it lasted, at least 6 times, and nearly always in one direction (a gate that something walks over alternates and is not a strip). |
+| 180 (I) | **The hidden-state flag, leaving the strip out.** | The same flag as row 174, with the area of the strips left out of the comparison. What is left out is named in the report, and the strip may itself be the cause of a difference: it is not compared, not excluded as a cause. |
 | 177 (F) | Candidate rules pruned by counterexample, and the probe on which the survivors disagree. | **Not built.** It needs a source of candidate rules, and nothing here supplies one. |
 | 178 (G) | The invented one-mechanic worlds. | Test scaffolding for rows A to E, not a mechanism of Sir's. |
 
@@ -47,10 +49,30 @@ Three small worlds that are **not benchmark games**, one mechanic each: a push w
 ## What this does not show
 
 * That any of this makes a model clear more levels. Test 24 had one level in four games, which is too small to say anything, and no live run was made.
-* Anything on a real benchmark game. The packages (`arc-agi`, `arcengine`) could not be installed where this was written, and the saved runs hold the model's replies, not the screens. Replaying them needs a machine that can install the packages; it needs no model call. The tool for that is `python/axi/experiments/ledger_replay.py` (concept-map item 133, test 159): it plays the saved replies back into fresh copies of the games and shows each move to the ledger, with no model call and nothing paid. It has been run only on the stand-in game so far; the result on the real games is not known yet. In Codespaces, from the `python` folder: `pip install arc-agi arcengine`, then `python -m axi.experiments.ledger_replay ../docs/results/axi_gemini_arc_default.json --arm K`.
+* Anything on a real benchmark game from the first build; see the next section for what the first real run showed, and what was changed after it and has not been run on a real game. The tool for that is `python/axi/experiments/ledger_replay.py` (concept-map item 133, test 159): it plays the saved replies back into fresh copies of the games and shows each move to the ledger, with no model call and nothing paid. It has been run only on the stand-in game so far; the result on the real games is not known yet. In Codespaces, from the `python` folder: `pip install arc-agi arcengine`, then `python -m axi.experiments.ledger_replay ../docs/results/axi_gemini_arc_default.json --arm K`.
 * That real games behave like these worlds. They are ours.
 * The rule forms are four and unconditional except `on_arrival`; a rule that depends on something else is not expressible yet. Row F is not built.
 * Touching objects of one symbol merge into one object, and something hidden behind something else looks as if it had gone; the exact cells are still right.
+
+## What the first run on the real saved runs showed (25 Oct), and what was changed
+
+The owner ran `python/colab/axi_ledger_replay.ipynb` on Colab over the saved runs of Test 24 and Test 25 (3 arms x 4 games, 699 moves; no model, no cost). The toolkit downloaded the four games itself.
+
+| What | Result |
+|---|---|
+| Replay | Every saved flag reproduced on the real games, in all 12 runs. |
+| The change adds up | The object-level change added up to the count change in **699 of 699** moves. |
+| What each action does | The step of every action came out exactly, and the same in the three arms: **5 cells in ls20, 6 in g50t, 3 in ka59, 4 in sp80**. In g50t, ACTION5 went the other way in one run and ACTION4 moved a different piece. |
+| Time | **2.9 to 18.1 ms** a move on Colab (about 2 ms on the invented worlds), against 15.9 to 28.7 s a move for the model. |
+| A strip used up every move | In all 12 runs a strip along an edge of the screen (one row, up to 64 cells) was used up in nearly every move. In both sp80 runs of arms A and B it ran out at move 29; in ls20 a piece of symbol 8 went from 3 to 2 at move 43, 43 and 47. **My reading** is a counter that runs down; it is not checked. |
+
+**What was wrong.** (1) A strip that gets smaller was called "gone" plus "new", so "one symbol both gone and new" fired in nearly every move and the effects apart from what moved were inflated to 100 to 230. (2) The hidden-state flag fired in **0 of 12**: the strip makes every screen different, and the saved runs revisited a screen 0 to 1 times (8 once). (3) "6 of 5 tries": pieces were counted, not tries. (4) Each click position is its own action.
+
+**What was changed** (rows 179 and 180, tests in test 158): the `resize` change and `Ledger.ticks`; the hidden-state flag that leaves the strip out; a try counted once. On an invented world that has such a strip (the shape the real runs showed, **not** the game): found in **20 of 20** seeds, and in **0 of 60** seeds of the three worlds without one; the strict flag finds **0 of 20** with the strip and the one that leaves it out finds **16 of 20** (the same as without a strip), **0 of 20** where the mode shows. The old numbers are unchanged.
+
+**Not changed:** the click positions (one position is seen once or twice, so a per-position step says nothing, and grouping them would hide the one that matters).
+
+**Not shown:** that these changes work on the real games. They were written after the run and have not been run on a real screen (the sandbox cannot install the toolkit). Running the notebook again after the push is the check. The reading in game terms (a thing keeps what it is while its state changes) is for Sir to confirm.
 
 ## Question 121 for Sir
 
