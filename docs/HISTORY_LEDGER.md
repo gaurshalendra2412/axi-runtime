@@ -47,7 +47,7 @@ Three small worlds that are **not benchmark games**, one mechanic each: a push w
 ## What this does not show
 
 * That any of this makes a model clear more levels. Test 24 had one level in four games, which is too small to say anything, and no live run was made.
-* Anything on a real benchmark game. The packages (`arc-agi`, `arcengine`) could not be installed where this was written, and the saved runs hold the model's replies, not the screens. Replaying them needs a machine that can install the packages; it needs no model call.
+* Anything on a real benchmark game. The packages (`arc-agi`, `arcengine`) could not be installed where this was written, and the saved runs hold the model's replies, not the screens. Replaying them needs a machine that can install the packages; it needs no model call. The tool for that is `python/axi/experiments/ledger_replay.py` (concept-map item 133, test 159): it plays the saved replies back into fresh copies of the games and shows each move to the ledger, with no model call and nothing paid. It has been run only on the stand-in game so far; the result on the real games is not known yet. In Codespaces, from the `python` folder: `pip install arc-agi arcengine`, then `python -m axi.experiments.ledger_replay ../docs/results/axi_gemini_arc_default.json --arm K`.
 * That real games behave like these worlds. They are ours.
 * The rule forms are four and unconditional except `on_arrival`; a rule that depends on something else is not expressible yet. Row F is not built.
 * Touching objects of one symbol merge into one object, and something hidden behind something else looks as if it had gone; the exact cells are still right.

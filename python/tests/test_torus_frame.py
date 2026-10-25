@@ -24,7 +24,7 @@ from axi.engine.torus import AddressError, TorusFrame, complete_graph_edges, com
 HERE = os.path.dirname(__file__)
 DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "TORUS_FRAME.md")
-NEXT = "Next free: row 179, item 133, test 159, question 122"
+NEXT = "Next free: row 179, item 134, test 160, question 122"
 P = CICOParser.parse_transition_delta
 
 
