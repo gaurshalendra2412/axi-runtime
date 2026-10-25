@@ -6,7 +6,8 @@ stand-in model of test 143. It checks the INSTRUMENT, not a result on real scree
   3. every move that is played is shown to the ledger once (arm B calls the base `apply` through its own: no double count), except a RESET and a move that completes a level, which are counted, not recorded;
   4. each (game, level) has its own ledger;
   5. the summary: operations found, the matching that gave up, the balance check, the hidden-state flags, the host time, and the text;
-  6. the front pages (concept-map item 133, the counter).
+  6. the loader of a saved result file and the Colab notebook (no key, no model, no Drive, no billing, nothing run);
+  7. the front pages (concept-map item 133, the counter).
 What it does NOT show: anything on a real ARC-AGI-3 screen. That needs `pip install arc-agi arcengine` on a machine that can reach PyPI, then `python -m axi.experiments.ledger_replay <result.json> --arm K|A|B`."""
 import json, os, sys
 sys.path.insert(0, os.path.dirname(__file__))
@@ -76,7 +77,7 @@ def test_the_summary_and_the_text():
         assert v["moves"] == s.moves[g] and v["balance_bad"] == 0 and isinstance(v["ms_per_move"], float) and v["ms_per_move"] >= 0
         assert v["changed"] <= v["moves"] and all("moves" in h for h in v["hidden_state"])
     assert sm["alpha-1"]["ops"].get("move", 0) > 0 and sm["alpha-1"]["actions"]["ACTION4"][0]["step"] == (1, 0)
-    assert LR.summarize(s) == LR.summarize(s)                                                   # pure
+    strip = lambda d: {g: {k: v for k, v in x.items() if k != "ms_per_move"} for g, x in d.items()}; assert strip(LR.summarize(s)) == strip(LR.summarize(s))      # pure (the time differs between calls only because it is measured once, at feed)
     t = LR.text(s)
     for g in sm: assert f"== {g}:" in t
     assert "hidden-state flags" in t and "ms per move" in t
@@ -85,6 +86,17 @@ def test_the_summary_and_the_text():
 def test_a_moving_player_is_one_object_that_moved_not_gone_and_new():
     rows = _rows("K"); s = _feed("K", rows); sm = LR.summarize(s)
     for g, v in sm.items(): assert v["identity_maybe_lost"] == 0, (g, v)
+
+
+def test_the_loader_and_the_notebook():
+    path = T.tmp().replace("r.jsonl", "res.json"); rows = _rows("K"); meta = dict(arm="K", games=list(G2), moves=30)
+    json.dump({"K": dict(rows=rows, meta=meta)}, open(path, "w"))
+    r, games, moves = LR.load(path, "K"); assert r == rows and games == G2 and moves == 30
+    s = LR.feed(r, T.make_env, "K", games, moves, T.IDENT); strip = lambda d: {g: {k: v for k, v in x.items() if k != "ms_per_move"} for g, x in d.items()}; assert strip(LR.summarize(s)) == strip(LR.summarize(_feed("K", rows)))
+    nb = json.load(open(os.path.join(HERE, "..", "colab", "axi_ledger_replay.ipynb"))); src = "\n".join("".join(c["source"]) for c in nb["cells"] if c["cell_type"] == "code")
+    assert "ledger_replay" in src and "make_env" in src and "arc-agi arcengine" in src
+    for bad in ("userdata", "GOOGLE_API_KEY", "PAID", "BUDGET", "llm", "generate", "drive.mount", "git push"): assert bad not in src, bad
+    assert all(c["outputs"] == [] for c in nb["cells"] if c["cell_type"] == "code")                # nothing was run when it was written
 
 
 def test_the_front_pages_and_the_counter():

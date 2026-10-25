@@ -104,16 +104,27 @@ def text(s: Session, max_items: int = 6) -> str:
     return "\n".join(lines)
 
 
+def load(path: str, arm: str):
+    """The rows, the games and the moves-per-game of one arm of a saved result file (the key is the arm: K or A in Test 24's file, B, A or K in Test 25's)."""
+    d = json.load(open(path)); a = d[arm]; meta = a.get("meta", {})
+    return a["rows"], tuple(meta.get("games", G.GAMES)), int(meta.get("moves", G.MOVES))
+
+
+def run_file(path: str, arm: str, make_env: Callable, min_law: int = 3) -> Session:
+    """`load` and `feed` in one call, for the notebook."""
+    rows, games, moves = load(path, arm)
+    return feed(rows, make_env, arm, games, moves, None, min_law)
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("result", help="a saved result file, e.g. docs/results/axi_gemini_arc_default.json"); ap.add_argument("--arm", required=True, choices=["K", "A", "B"])
     ap.add_argument("--json", action="store_true", help="print the numbers as JSON instead of text")
     a = ap.parse_args(argv)
-    d = json.load(open(a.result)); arm = d[a.arm]; rows = arm["rows"]; meta = arm.get("meta", {}); games = tuple(meta.get("games", G.GAMES)); moves = int(meta.get("moves", G.MOVES))
     import arc_agi
 
     def make_env(game): return arc_agi.Arcade().make(game, seed=G.GAME_SEED)
-    s = feed(rows, make_env, a.arm, games, moves)
+    s = run_file(a.result, a.arm, make_env)
     print(json.dumps(summarize(s), indent=1, default=str) if a.json else text(s)); return 0
 
 
