@@ -29,7 +29,7 @@ from axi.experiments.mini_worlds import World, walk, wide, PUSH_LEVEL, PAD_LEVEL
 HERE = os.path.dirname(__file__)
 DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "HISTORY_LEDGER.md")
-NEXT = "Next free: row 186, item 140, test 165, question 122"
+NEXT = "Next free: row 187, item 141, test 166, question 122"
 
 
 def ops(a, b, bg="."):
