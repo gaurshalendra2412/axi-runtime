@@ -400,7 +400,7 @@ def test_the_notebook_has_the_cells_in_order_and_its_code_runs_on_the_double_wit
 def test_the_concept_map_and_the_verified_page_say_what_the_page_and_the_code_say():
     cm = open(os.path.join(ROOT, "docs", "RAJNISH_CONCEPT_MAP.md")).read(); vf = open(os.path.join(ROOT, "docs", "VERIFIED.md")).read()
     item = next(l for l in cm.split("\n") if l.startswith("114. **")); row = next(l for l in vf.split("\n") if l.startswith("| Provider-side serving test, eighth run"))
-    assert "Next free: row 182, item 136, test 161, question 122" in cm and cm.count("Next free:") == 1 and "test 137 checks the bigger-model serving test, item 114" in cm
+    assert "Next free: row 183, item 137, test 162, question 122" in cm and cm.count("Next free:") == 1 and "test 137 checks the bigger-model serving test, item 114" in cm
     assert PAGE_SHA256[:16] in item and PAGE_SHA256[:16] in row and "test 137" in item and "test 137" in row and "mutation check of test 137: not yet run" in item and "mutation check of test 137: not yet run" in row
     for s in ("Qwen2.5-14B-Instruct-AWQ", "NVIDIA L4", "32,000 tokens", "`P0`", "`PN`", "`P4`", "`PC`", "`X0`", "`XW`", "`XR`", "21 reading lines", "lines 8 and 18", "about 22 %", "then run once on Colab", "jobs 192 to 223", "joules", "TPU", "company", "nothing here is proven"): assert s in item, s
     assert "Qwen2.5-14B" in row and "run once on Colab" in row and "21" in row and "PROVIDER_SIDE_BIG_TEST.md" in vf and os.path.exists(PAGE) and os.path.exists(NB)

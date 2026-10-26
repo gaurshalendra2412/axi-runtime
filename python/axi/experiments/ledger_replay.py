@@ -20,6 +20,7 @@ from typing import Callable, Dict, List, Optional, Tuple
 from axi.engine.ledger import Ledger
 from axi.experiments import gemini_arc as G
 from axi.experiments import gemini_arc_b as B
+from axi.experiments import gemini_arc_c as C
 
 
 class Session:
@@ -53,7 +54,9 @@ def watching(cls, session: Session):
 def feed(rows: list, make_env: Callable, arm: str, games=G.GAMES, moves: int = G.MOVES, action_of: Optional[Callable] = None, min_law: int = 3) -> Session:
     """Replay the saved rows of one arm into fresh games and feed the ledger. Raises ReplayMismatch if a saved flag differs, exactly as the plain replay does."""
     s = Session(min_law)
-    if arm == "B":
+    if arm == "C":
+        with watching(C.PlayC, s): C.replay(rows, make_env, games, moves, action_of)
+    elif arm == "B":
         with watching(B.PlayB, s): B.replay(rows, make_env, games, moves, action_of)
     else:
         with watching(G.Play, s): G.replay(rows, make_env, arm, games, moves, action_of)
@@ -123,7 +126,7 @@ def run_file(path: str, arm: str, make_env: Callable, min_law: int = 3) -> Sessi
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("result", help="a saved result file, e.g. docs/results/axi_gemini_arc_default.json"); ap.add_argument("--arm", required=True, choices=["K", "A", "B"])
+    ap.add_argument("result", help="a saved result file, e.g. docs/results/axi_gemini_arc_default.json"); ap.add_argument("--arm", required=True, choices=["K", "A", "B", "C"])
     ap.add_argument("--json", action="store_true", help="print the numbers as JSON instead of text")
     a = ap.parse_args(argv)
     import arc_agi
