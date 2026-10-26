@@ -1,0 +1,348 @@
+{
+ "per_arm": {
+  "K": {
+   "g50t-5849a774": {
+    "moves": 52,
+    "abstained": 10,
+    "predicted": 42,
+    "step_hit": 24,
+    "cell_hit": 24,
+    "known": 42,
+    "known_step_hit": 24,
+    "known_cell_hit": 24,
+    "dnm_floor": 13,
+    "did_not_move": 13,
+    "other_step": 5
+   },
+   "ka59-38d34dbb": {
+    "moves": 56,
+    "abstained": 25,
+    "predicted": 31,
+    "step_hit": 25,
+    "cell_hit": 25,
+    "other_step": 2,
+    "known": 28,
+    "known_step_hit": 24,
+    "known_cell_hit": 24,
+    "cell_said": 1,
+    "cell_right": 0,
+    "dnm_object": 2,
+    "did_not_move": 4,
+    "dnm_floor": 1
+   },
+   "ls20-9607627b": {
+    "moves": 57,
+    "abstained": 8,
+    "predicted": 49,
+    "step_hit": 34,
+    "cell_hit": 34,
+    "known": 49,
+    "known_step_hit": 34,
+    "known_cell_hit": 34,
+    "dnm_object": 11,
+    "did_not_move": 14,
+    "dnm_floor": 3,
+    "other_step": 1
+   },
+   "sp80-589a99af": {
+    "moves": 58,
+    "abstained": 15,
+    "predicted": 43,
+    "step_hit": 9,
+    "cell_hit": 9,
+    "known": 42,
+    "known_step_hit": 8,
+    "known_cell_hit": 8,
+    "dnm_floor": 34,
+    "did_not_move": 34
+   }
+  },
+  "A": {
+   "g50t-5849a774": {
+    "moves": 60,
+    "abstained": 13,
+    "predicted": 47,
+    "step_hit": 27,
+    "cell_hit": 30,
+    "known": 47,
+    "known_step_hit": 27,
+    "known_cell_hit": 30,
+    "other_step": 8,
+    "dnm_unknown": 1,
+    "did_not_move": 12,
+    "dnm_object": 2,
+    "cell_said": 3,
+    "cell_right": 3,
+    "dnm_floor": 9
+   },
+   "ka59-38d34dbb": {
+    "moves": 60,
+    "abstained": 8,
+    "predicted": 52,
+    "step_hit": 46,
+    "cell_hit": 46,
+    "known": 52,
+    "known_step_hit": 46,
+    "known_cell_hit": 46,
+    "dnm_object": 6,
+    "did_not_move": 6
+   },
+   "ls20-9607627b": {
+    "moves": 60,
+    "abstained": 8,
+    "predicted": 52,
+    "step_hit": 29,
+    "cell_hit": 29,
+    "known": 52,
+    "known_step_hit": 29,
+    "known_cell_hit": 29,
+    "dnm_object": 22,
+    "did_not_move": 22,
+    "other_step": 1
+   },
+   "sp80-589a99af": {
+    "moves": 58,
+    "abstained": 17,
+    "predicted": 41,
+    "step_hit": 38,
+    "cell_hit": 40,
+    "known": 40,
+    "known_step_hit": 37,
+    "known_cell_hit": 39,
+    "cell_said": 2,
+    "cell_right": 2,
+    "dnm_floor": 3,
+    "did_not_move": 3
+   }
+  },
+  "B": {
+   "g50t-5849a774": {
+    "moves": 59,
+    "abstained": 19,
+    "predicted": 40,
+    "step_hit": 29,
+    "cell_hit": 29,
+    "known": 40,
+    "known_step_hit": 29,
+    "known_cell_hit": 29,
+    "dnm_object": 3,
+    "did_not_move": 7,
+    "other_step": 4,
+    "dnm_floor": 4,
+    "cell_said": 1,
+    "cell_right": 0
+   },
+   "ka59-38d34dbb": {
+    "moves": 60,
+    "abstained": 8,
+    "predicted": 52,
+    "step_hit": 46,
+    "cell_hit": 46,
+    "known": 49,
+    "known_step_hit": 45,
+    "known_cell_hit": 45,
+    "dnm_floor": 1,
+    "did_not_move": 6,
+    "dnm_object": 3
+   },
+   "ls20-9607627b": {
+    "moves": 60,
+    "abstained": 8,
+    "predicted": 52,
+    "step_hit": 24,
+    "cell_hit": 24,
+    "known": 52,
+    "known_step_hit": 24,
+    "known_cell_hit": 24,
+    "dnm_object": 27,
+    "did_not_move": 27,
+    "other_step": 1
+   },
+   "sp80-589a99af": {
+    "moves": 59,
+    "abstained": 15,
+    "predicted": 44,
+    "step_hit": 42,
+    "cell_hit": 42,
+    "known": 43,
+    "known_step_hit": 41,
+    "known_cell_hit": 41,
+    "dnm_floor": 2,
+    "did_not_move": 2
+   }
+  },
+  "C": {
+   "g50t-5849a774": {
+    "moves": 60,
+    "abstained": 10,
+    "predicted": 50,
+    "step_hit": 36,
+    "cell_hit": 36,
+    "known": 50,
+    "known_step_hit": 36,
+    "known_cell_hit": 36,
+    "other_step": 2,
+    "dnm_floor": 12,
+    "did_not_move": 12
+   },
+   "ka59-38d34dbb": {
+    "moves": 59,
+    "abstained": 17,
+    "predicted": 42,
+    "step_hit": 31,
+    "cell_hit": 31,
+    "known": 33,
+    "known_step_hit": 27,
+    "known_cell_hit": 27,
+    "dnm_floor": 4,
+    "did_not_move": 11,
+    "dnm_unknown": 1,
+    "dnm_object": 1
+   },
+   "ls20-9607627b": {
+    "moves": 59,
+    "abstained": 15,
+    "predicted": 44,
+    "step_hit": 39,
+    "cell_hit": 39,
+    "known": 44,
+    "known_step_hit": 39,
+    "known_cell_hit": 39,
+    "dnm_object": 5,
+    "did_not_move": 5
+   },
+   "sp80-589a99af": {
+    "moves": 59,
+    "abstained": 11,
+    "predicted": 48,
+    "step_hit": 43,
+    "cell_hit": 43,
+    "known": 47,
+    "known_step_hit": 42,
+    "known_cell_hit": 42,
+    "dnm_floor": 5,
+    "did_not_move": 5
+   }
+  }
+ },
+ "per_game": {
+  "g50t-5849a774": {
+   "moves": 231,
+   "abstained": 52,
+   "predicted": 179,
+   "step_hit": 116,
+   "cell_hit": 119,
+   "known": 179,
+   "known_step_hit": 116,
+   "known_cell_hit": 119,
+   "dnm_floor": 38,
+   "did_not_move": 44,
+   "other_step": 19,
+   "dnm_unknown": 1,
+   "dnm_object": 5,
+   "cell_said": 4,
+   "cell_right": 3
+  },
+  "ka59-38d34dbb": {
+   "moves": 235,
+   "abstained": 58,
+   "predicted": 177,
+   "step_hit": 148,
+   "cell_hit": 148,
+   "other_step": 2,
+   "known": 162,
+   "known_step_hit": 142,
+   "known_cell_hit": 142,
+   "cell_said": 1,
+   "cell_right": 0,
+   "dnm_object": 12,
+   "did_not_move": 27,
+   "dnm_floor": 6,
+   "dnm_unknown": 1
+  },
+  "ls20-9607627b": {
+   "moves": 236,
+   "abstained": 39,
+   "predicted": 197,
+   "step_hit": 126,
+   "cell_hit": 126,
+   "known": 197,
+   "known_step_hit": 126,
+   "known_cell_hit": 126,
+   "dnm_object": 65,
+   "did_not_move": 68,
+   "dnm_floor": 3,
+   "other_step": 3
+  },
+  "sp80-589a99af": {
+   "moves": 234,
+   "abstained": 58,
+   "predicted": 176,
+   "step_hit": 132,
+   "cell_hit": 134,
+   "known": 172,
+   "known_step_hit": 128,
+   "known_cell_hit": 130,
+   "dnm_floor": 44,
+   "did_not_move": 44,
+   "cell_said": 2,
+   "cell_right": 2
+  }
+ },
+ "replays": {
+  "K": true,
+  "A": true,
+  "B": true,
+  "C": true
+ },
+ "checks": [
+  [
+   1,
+   "guard",
+   "the saved moves of all four arms (K, A, B and C) replay into fresh copies of the games and reproduce every saved flag",
+   true
+  ],
+  [
+   2,
+   "instrument",
+   "the mover (the group that moves together) is found in at least 60 percent of the predicted moves in each of at least 3 of the 4 games",
+   true
+  ],
+  [
+   3,
+   "claim",
+   "the prediction with walls learned by position is right more often than step only in at least 3 of the 4 games",
+   false
+  ],
+  [
+   4,
+   "claim",
+   "the learned prediction said that the piece does not move at least 20 times in all, and was right in at least 85 percent of them",
+   false
+  ],
+  [
+   5,
+   "claim",
+   "the learned prediction is right in at least 80 percent of the predicted moves, over all four arms and games",
+   false
+  ],
+  [
+   6,
+   "claim",
+   "the learned prediction is right in at least 90 percent of the predicted moves, over all four arms and games",
+   false
+  ],
+  [
+   7,
+   "claim",
+   "of the moves in which the piece did not move, at least half had a colour it had never stepped onto in front of it",
+   false
+  ],
+  [
+   8,
+   "claim",
+   "in no game is the learned prediction more than 2 points worse than step only",
+   true
+  ]
+ ]
+}

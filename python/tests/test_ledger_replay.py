@@ -17,7 +17,7 @@ from axi.experiments import ledger_replay as LR
 import test_gemini_arc as T
 
 HERE = os.path.dirname(os.path.abspath(__file__)); DOCS = os.path.join(HERE, "..", "..", "docs")
-NEXT = "Next free: row 184, item 138, test 163, question 122"
+NEXT = "Next free: row 186, item 140, test 165, question 122"
 G2 = T.GAMES2
 
 

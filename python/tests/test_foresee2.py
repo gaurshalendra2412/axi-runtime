@@ -21,7 +21,7 @@ from tests import test_gemini_arc as T
 HERE = os.path.dirname(os.path.abspath(__file__)); DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "FORESEE_CHECK_2.md"); NB = os.path.join(HERE, "..", "colab", "axi_foresee_check_2.ipynb")
 PAGE_SHA256 = "382d0a7fbff8c961d060b6147c3a6708d3c8523dc87a9b216f0f1d74b554cb5a"; RESULT_MARK = "\n## Result"
-NEXT = "Next free: row 184, item 138, test 163, question 122"
+NEXT = "Next free: row 186, item 140, test 165, question 122"
 
 
 def sprite_world(n, wall_col=None, w=10, other=True):
@@ -174,12 +174,12 @@ def test_the_second_check_runs_over_a_replay_of_arm_c_on_the_stand_in_game():
     assert set(pg) == {"alpha-1", "beta-2"} and sum(c["moves"] for c in pg.values()) == sum(s.moves.values()) and "ALL GAMES" in F2.text(pg) and "found in" in F2.text(pg)
 
 
-def test_the_front_pages_say_what_was_built_and_that_it_was_not_run_on_the_real_games():
+def test_the_front_pages_say_what_was_built_and_that_it_was_run_once_with_the_result_not_written():
     cm = open(os.path.join(DOCS, "RAJNISH_CONCEPT_MAP.md"), encoding="utf-8").read(); vf = open(os.path.join(DOCS, "VERIFIED.md"), encoding="utf-8").read(); hl = open(os.path.join(DOCS, "HISTORY_LEDGER.md"), encoding="utf-8").read()
-    assert NEXT in cm and cm.count("Next free:") == 1 and "\n137. **" in cm and "\n138. **" not in cm
+    assert NEXT in cm and cm.count("Next free:") == 1 and "\n137. **" in cm and "\n138. **" in cm and "\n139. **" in cm and "\n140. **" not in cm
     i = cm.index("\n137. **") + 1; item = cm[i:cm.index("\n", i)]
-    for n in ("FORESEE_CHECK_2.md", "foresee2.py", "test 162", "Rajnish Choubey", "Sir to confirm", "NOT RUN", "8 reading lines", PAGE_SHA256): assert n in item, n
-    assert any("FORESEE_CHECK_2.md" in l and "foresee2.py" in l and PAGE_SHA256 in l and "NOT RUN" in l for l in vf.split("\n"))
+    for n in ("FORESEE_CHECK_2.md", "foresee2.py", "test 162", "Rajnish Choubey", "Sir to confirm", "Result not written", "8 reading lines", PAGE_SHA256): assert n in item, n
+    assert any("FORESEE_CHECK_2.md" in l and "foresee2.py" in l and PAGE_SHA256 in l and "Result is not written" in l for l in vf.split("\n"))
     assert "| 183 (L) |" in hl and "position" in hl
 
 

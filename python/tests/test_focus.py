@@ -19,7 +19,7 @@ from axi.experiments import gemini_fuzzy as F
 HERE = os.path.dirname(__file__)
 DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "FOCUSED_VIEW.md")
-NEXT = "Next free: row 184, item 138, test 163, question 122"
+NEXT = "Next free: row 186, item 140, test 165, question 122"
 DESC = {"owner": F.OWNERS}
 
 
