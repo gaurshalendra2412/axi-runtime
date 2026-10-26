@@ -1,0 +1,284 @@
+{
+ "per_arm": {
+  "K": {
+   "g50t-5849a774": {
+    "moves": 52,
+    "abstained": 10,
+    "predicted": 42,
+    "step_hit": 24,
+    "wall_unknown": 42,
+    "wall_hit": 24,
+    "learned_hit": 24,
+    "did_not_move": 13,
+    "other_step": 5
+   },
+   "ka59-38d34dbb": {
+    "moves": 56,
+    "abstained": 25,
+    "predicted": 31,
+    "step_hit": 25,
+    "wall_unknown": 31,
+    "wall_hit": 25,
+    "other_step": 2,
+    "learned_hit": 25,
+    "did_not_move": 4
+   },
+   "ls20-9607627b": {
+    "moves": 57,
+    "abstained": 8,
+    "predicted": 49,
+    "step_hit": 34,
+    "wall_unknown": 49,
+    "wall_hit": 34,
+    "learned_hit": 34,
+    "did_not_move": 14,
+    "other_step": 1
+   },
+   "sp80-589a99af": {
+    "moves": 58,
+    "abstained": 15,
+    "predicted": 43,
+    "step_hit": 9,
+    "wall_hit": 9,
+    "learned_hit": 9,
+    "did_not_move": 34
+   }
+  },
+  "A": {
+   "g50t-5849a774": {
+    "moves": 60,
+    "abstained": 13,
+    "predicted": 47,
+    "step_hit": 27,
+    "wall_unknown": 47,
+    "wall_hit": 27,
+    "other_step": 8,
+    "learned_hit": 27,
+    "did_not_move": 12
+   },
+   "ka59-38d34dbb": {
+    "moves": 60,
+    "abstained": 8,
+    "predicted": 52,
+    "step_hit": 46,
+    "wall_unknown": 52,
+    "wall_hit": 46,
+    "learned_hit": 46,
+    "did_not_move": 6
+   },
+   "ls20-9607627b": {
+    "moves": 60,
+    "abstained": 8,
+    "predicted": 52,
+    "step_hit": 29,
+    "wall_unknown": 52,
+    "wall_hit": 29,
+    "learned_hit": 29,
+    "did_not_move": 22,
+    "other_step": 1
+   },
+   "sp80-589a99af": {
+    "moves": 58,
+    "abstained": 17,
+    "predicted": 41,
+    "step_hit": 38,
+    "wall_hit": 40,
+    "learned_hit": 39,
+    "blocked_said": 2,
+    "blocked_right": 2,
+    "did_not_move": 3,
+    "learned_said": 1,
+    "learned_right": 1
+   }
+  },
+  "B": {
+   "g50t-5849a774": {
+    "moves": 59,
+    "abstained": 19,
+    "predicted": 40,
+    "step_hit": 29,
+    "wall_unknown": 40,
+    "wall_hit": 29,
+    "learned_hit": 29,
+    "did_not_move": 7,
+    "other_step": 4
+   },
+   "ka59-38d34dbb": {
+    "moves": 60,
+    "abstained": 8,
+    "predicted": 52,
+    "step_hit": 46,
+    "wall_unknown": 52,
+    "wall_hit": 46,
+    "learned_hit": 46,
+    "did_not_move": 6
+   },
+   "ls20-9607627b": {
+    "moves": 60,
+    "abstained": 8,
+    "predicted": 52,
+    "step_hit": 24,
+    "wall_unknown": 52,
+    "wall_hit": 24,
+    "learned_hit": 24,
+    "did_not_move": 27,
+    "other_step": 1
+   },
+   "sp80-589a99af": {
+    "moves": 59,
+    "abstained": 15,
+    "predicted": 44,
+    "step_hit": 42,
+    "wall_hit": 42,
+    "learned_hit": 42,
+    "did_not_move": 2
+   }
+  },
+  "C": {
+   "g50t-5849a774": {
+    "moves": 60,
+    "abstained": 10,
+    "predicted": 50,
+    "step_hit": 36,
+    "wall_unknown": 50,
+    "wall_hit": 36,
+    "other_step": 2,
+    "learned_hit": 36,
+    "did_not_move": 12
+   },
+   "ka59-38d34dbb": {
+    "moves": 59,
+    "abstained": 17,
+    "predicted": 42,
+    "step_hit": 31,
+    "wall_unknown": 42,
+    "wall_hit": 31,
+    "learned_hit": 31,
+    "did_not_move": 11
+   },
+   "ls20-9607627b": {
+    "moves": 59,
+    "abstained": 15,
+    "predicted": 44,
+    "step_hit": 39,
+    "wall_unknown": 44,
+    "wall_hit": 39,
+    "learned_hit": 39,
+    "did_not_move": 5
+   },
+   "sp80-589a99af": {
+    "moves": 59,
+    "abstained": 11,
+    "predicted": 48,
+    "step_hit": 43,
+    "wall_hit": 43,
+    "learned_hit": 43,
+    "did_not_move": 5
+   }
+  }
+ },
+ "per_game": {
+  "g50t-5849a774": {
+   "moves": 231,
+   "abstained": 52,
+   "predicted": 179,
+   "step_hit": 116,
+   "wall_unknown": 179,
+   "wall_hit": 116,
+   "learned_hit": 116,
+   "did_not_move": 44,
+   "other_step": 19
+  },
+  "ka59-38d34dbb": {
+   "moves": 235,
+   "abstained": 58,
+   "predicted": 177,
+   "step_hit": 148,
+   "wall_unknown": 177,
+   "wall_hit": 148,
+   "other_step": 2,
+   "learned_hit": 148,
+   "did_not_move": 27
+  },
+  "ls20-9607627b": {
+   "moves": 236,
+   "abstained": 39,
+   "predicted": 197,
+   "step_hit": 126,
+   "wall_unknown": 197,
+   "wall_hit": 126,
+   "learned_hit": 126,
+   "did_not_move": 68,
+   "other_step": 3
+  },
+  "sp80-589a99af": {
+   "moves": 234,
+   "abstained": 58,
+   "predicted": 176,
+   "step_hit": 132,
+   "wall_hit": 134,
+   "learned_hit": 133,
+   "did_not_move": 44,
+   "blocked_said": 2,
+   "blocked_right": 2,
+   "learned_said": 1,
+   "learned_right": 1
+  }
+ },
+ "replays": {
+  "K": true,
+  "A": true,
+  "B": true,
+  "C": true
+ },
+ "checks": [
+  [
+   1,
+   "guard",
+   "the saved moves of all four arms (K, A, B and C) replay into fresh copies of the games and reproduce every saved flag",
+   true
+  ],
+  [
+   2,
+   "instrument",
+   "a move is predicted (an action with a step seen in at least two earlier tries of the level) in at least 60 percent of the recorded moves (a move that wins a level, and a reset, is not a transition and is not recorded), over the four arms",
+   true
+  ],
+  [
+   3,
+   "claim",
+   "step only is right in at least 70 percent of the predicted moves, over all four arms and games",
+   true
+  ],
+  [
+   4,
+   "claim",
+   "the prediction that learns what stopped the piece is right more often than step only in at least 3 of the 4 games",
+   false
+  ],
+  [
+   5,
+   "claim",
+   "when the learned prediction says the piece does not move it is right in at least 80 percent of those cases",
+   true
+  ],
+  [
+   6,
+   "claim",
+   "the learned prediction is right in at least 90 percent of the predicted moves, over all four arms and games",
+   false
+  ],
+  [
+   7,
+   "claim",
+   "the colours that never changed, taken as walls, are right no more often than the learned prediction in every one of the 4 games",
+   false
+  ],
+  [
+   8,
+   "claim",
+   "in no game is the learned prediction more than 2 points worse than step only",
+   true
+  ]
+ ]
+}

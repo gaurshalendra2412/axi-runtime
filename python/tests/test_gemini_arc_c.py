@@ -12,7 +12,7 @@ from tests import test_gemini_arc as T
 HERE = os.path.dirname(os.path.abspath(__file__)); DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "GEMINI_ARC_C_TEST.md"); NB = os.path.join(HERE, "..", "colab", "axi_gemini_arc_c.ipynb")
 PAGE_SHA256 = "424fbb3f2f41e734df5f49d950c1c019703e2d84fb4d24e7c09b16962fd35a56"; RESULT_MARK = "\n## Result"
-NEXT = "Next free: row 183, item 137, test 162, question 122"
+NEXT = "Next free: row 184, item 138, test 163, question 122"
 G2 = ("alpha-1", "beta-2"); IDENT = T.IDENT; make_env = T.make_env
 
 
