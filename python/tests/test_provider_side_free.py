@@ -452,7 +452,7 @@ def test_the_notebook_has_the_cells_in_order_and_its_code_runs_on_the_double_wit
 def test_the_concept_map_and_the_verified_page_say_what_the_page_and_the_code_say():
     cm = open(os.path.join(ROOT, "docs", "RAJNISH_CONCEPT_MAP.md")).read(); vf = open(os.path.join(ROOT, "docs", "VERIFIED.md")).read()
     item = next(l for l in cm.split("\n") if l.startswith("113. **")); row = next(l for l in vf.split("\n") if l.startswith("| Provider-side serving test, seventh run"))
-    assert "Next free: row 192, item 145, test 170, question 122" in cm and cm.count("Next free:") == 1 and "test 135 checks the free-word serving test, item 113" in cm
+    assert "Next free: row 193, item 146, test 171, question 122" in cm and cm.count("Next free:") == 1 and "test 135 checks the free-word serving test, item 113" in cm
     assert PAGE_SHA256[:16] in item and PAGE_SHA256[:16] in row and "test 135" in item and "test 135" in row and "mutation check of test 135: not yet run" in item and "mutation check of test 135: not yet run" in row
     for s in ("5,380", "1,020", "none wrong", "16 reading lines", "lines 8 and 11", "about 40 %", "then run once on Colab", "jobs 192 to 255", "`C0`", "`W0`", "`WN`", "11 checks", "nothing here is proven"): assert s in item, s
     assert "5,380" in row and "1,020" in row and "run once on Colab" in row and "Next free: row 170, item 113" not in cm

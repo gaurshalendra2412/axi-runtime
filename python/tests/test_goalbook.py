@@ -19,7 +19,7 @@ from tests.test_foresee7 import _bar
 from tests.test_foresee8 import _gk
 
 HERE = os.path.dirname(os.path.abspath(__file__)); DOCS = os.path.join(HERE, "..", "..", "docs"); RUN = os.path.join(HERE, "..", "colab", "run_goalbook_show.py")
-NEXT = "Next free: row 192, item 145, test 170, question 122"
+NEXT = "Next free: row 193, item 146, test 171, question 122"
 
 
 def _col(y, step_cols=None, z=False, w=14, h=14):
@@ -135,7 +135,7 @@ def test_the_readers_are_pure_and_the_ledger_is_not_changed():
 
 def test_the_front_pages_say_what_was_built_and_that_it_was_not_run_on_the_real_games():
     cm = open(os.path.join(DOCS, "RAJNISH_CONCEPT_MAP.md"), encoding="utf-8").read(); vf = open(os.path.join(DOCS, "VERIFIED.md"), encoding="utf-8").read(); hl = open(os.path.join(DOCS, "HISTORY_LEDGER.md"), encoding="utf-8").read()
-    assert NEXT in cm and cm.count("Next free:") == 1 and "\n143. **" in cm and "\n144. **" in cm and "\n145. **" not in cm
+    assert NEXT in cm and cm.count("Next free:") == 1 and "\n143. **" in cm and "\n144. **" in cm and "\n146. **" not in cm
     i = cm.index("\n144. **") + 1; item = cm[i:cm.index("\n", i)]
     for n in ("goalbook.py", "run_goalbook_show.py", "test 169", "Sir to confirm", "Not run on the real games", "row 177", "action_kinds", "carry_over", "paid test"): assert n in item, n
     assert any("goalbook.py" in l and "NOT RUN" in l for l in vf.split("\n"))

@@ -197,7 +197,7 @@ def test_the_claims_rule_and_the_wording_rules():
 
 def test_the_two_front_pages_say_what_was_run_and_read_and_the_counter_moved():
     cm = open(os.path.join(HERE, "..", "..", "docs", "RAJNISH_CONCEPT_MAP.md")).read(); vf = open(os.path.join(HERE, "..", "..", "docs", "VERIFIED.md")).read()
-    assert "Next free: row 192, item 145, test 170, question 122" in cm and cm.count("Next free:") == 1 and "test 139 checks the long-session test on Gemini 3.8 Flash, item 115, and test 140 its Result" in cm
+    assert "Next free: row 193, item 146, test 171, question 122" in cm and cm.count("Next free:") == 1 and "test 139 checks the long-session test on Gemini 3.8 Flash, item 115, and test 140 its Result" in cm
     i = cm.index("115. **The long session on Gemini 3.8 Flash"); item = cm[i:cm.index("\n", i)]
     assert "17 of the 20 lines read yes" in item and "MIXED" in item and "test 140" in item and "nothing has been called" not in item
     row = next(l for l in vf.split("\n") if "GEMINI_LONG_TEST.md" in l); assert "Run once" in row and "17 of 20" in row and "test_gemini_long_result.py" in row

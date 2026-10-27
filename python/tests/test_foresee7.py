@@ -24,7 +24,7 @@ from tests.test_foresee6 import grid, row, three, led, Sess, tall_seq
 HERE = os.path.dirname(os.path.abspath(__file__)); DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "FORESEE_CHECK_7.md"); NB = os.path.join(HERE, "..", "colab", "axi_foresee_check_7.ipynb"); RUN = os.path.join(HERE, "..", "colab", "run_foresee_check_7.py")
 PAGE_SHA256 = "fbfe7110f9d738ac64c7fd2f95c19f06b5590ca0ee81a8ced4081c3b3aa14fbd"; RESULT_MARK = "\n## Result"
-NEXT = "Next free: row 192, item 145, test 170, question 122"
+NEXT = "Next free: row 193, item 146, test 171, question 122"
 KEYS = ("moves", "predicted", "cell_hit", "once_pred", "once_hit", "rot_pred", "rot_hit", "rel_pred", "rel_hit", "nm_pred", "nm_hit", "nc_pred", "nc_hit", "law_pred", "law_hit", "abstained", "scx_n", "scx_same", "scr_n", "scr_same", "scx_fill", "scx_fill_right")
 get = lambda c: {k: c.get(k, 0) for k in KEYS}
 A = ("ACTION1", "ACTION2", "ACTION3", "ACTION4")
@@ -314,7 +314,7 @@ def test_the_seventh_check_runs_over_a_replay_of_arm_c_on_the_stand_in_game_six_
 
 def test_the_front_pages_say_what_was_built_and_that_it_was_not_run_on_the_real_games():
     cm = open(os.path.join(DOCS, "RAJNISH_CONCEPT_MAP.md"), encoding="utf-8").read(); vf = open(os.path.join(DOCS, "VERIFIED.md"), encoding="utf-8").read(); hl = open(os.path.join(DOCS, "HISTORY_LEDGER.md"), encoding="utf-8").read()
-    assert NEXT in cm and cm.count("Next free:") == 1 and "\n141. **" in cm and "\n142. **" in cm and "\n145. **" not in cm
+    assert NEXT in cm and cm.count("Next free:") == 1 and "\n141. **" in cm and "\n142. **" in cm and "\n146. **" not in cm
     i = cm.index("\n142. **") + 1; item = cm[i:cm.index("\n", i)]
     for n in ("FORESEE_CHECK_7.md", "foresee7.py", "test 167", "also run by Sir", "Sir to confirm", "Not run on the real games", "12 reading lines", "other three of four games", PAGE_SHA256): assert n in item, n
     assert any("FORESEE_CHECK_7.md" in l and "foresee7.py" in l and PAGE_SHA256 in l and "RUN by the owner" in l for l in vf.split("\n"))

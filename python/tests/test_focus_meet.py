@@ -24,7 +24,7 @@ from axi.experiments.kv_large import crude_tokens, random_large_graph
 HERE = os.path.dirname(__file__)
 DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "FOCUSED_VIEW.md")
-NEXT = "Next free: row 192, item 145, test 170, question 122"
+NEXT = "Next free: row 193, item 146, test 171, question 122"
 
 
 def graph(nodes, edges):

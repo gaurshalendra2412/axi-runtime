@@ -19,7 +19,7 @@ from axi.experiments import gemini_arc_c as C
 HERE = os.path.dirname(os.path.abspath(__file__)); DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "FORESEE_CHECK.md"); NB = os.path.join(HERE, "..", "colab", "axi_foresee_check.ipynb"); RESULT_C = os.path.join(DOCS, "results", "axi_gemini_arc_c_default.json")
 PAGE_SHA256 = "d9d1e853efeb51d7bb8fb7eb449063f67773efab223404756974b5ed0a5e8b1b"; RESULT_MARK = "\n## Result"
-NEXT = "Next free: row 192, item 145, test 170, question 122"
+NEXT = "Next free: row 193, item 146, test 171, question 122"
 
 
 def row(*cells): return tuple(cells)
@@ -157,7 +157,7 @@ def test_the_replay_tool_reads_arm_c_and_the_saved_result_of_test_26_is_in_the_r
 # ---------------------------------------------------------------- 7 front pages
 def test_the_front_pages_say_what_was_built_and_that_it_was_run_once_with_the_result_not_written():
     cm = open(os.path.join(DOCS, "RAJNISH_CONCEPT_MAP.md"), encoding="utf-8").read(); vf = open(os.path.join(DOCS, "VERIFIED.md"), encoding="utf-8").read(); hl = open(os.path.join(DOCS, "HISTORY_LEDGER.md"), encoding="utf-8").read()
-    assert NEXT in cm and cm.count("Next free:") == 1 and "\n136. **" in cm and "\n137. **" in cm and "\n138. **" in cm and "\n139. **" in cm and "\n140. **" in cm and "\n145. **" not in cm
+    assert NEXT in cm and cm.count("Next free:") == 1 and "\n136. **" in cm and "\n137. **" in cm and "\n138. **" in cm and "\n139. **" in cm and "\n140. **" in cm and "\n146. **" not in cm
     i = cm.index("\n136. **") + 1; item = cm[i:cm.index("\n", i)]
     for n in ("FORESEE_CHECK.md", "foresee.py", "test 161", "Rajnish Choubey", "Sir to confirm", "Result not written", "8 reading lines", "pillar III", PAGE_SHA256): assert n in item, n
     assert any("FORESEE_CHECK.md" in l and "foresee.py" in l and PAGE_SHA256 in l and "Result is not written" in l for l in vf.split("\n"))

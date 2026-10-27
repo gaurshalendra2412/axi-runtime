@@ -22,7 +22,7 @@ from axi.experiments import gemini_fuzzy as F
 HERE = os.path.dirname(__file__)
 DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "ONE_READING.md")
-NEXT = "Next free: row 192, item 145, test 170, question 122"
+NEXT = "Next free: row 193, item 146, test 171, question 122"
 D = {"owner": F.OWNERS}
 COLLIDE = ["Day", "Status", "Amount", "Owner", "Priya", "Marcus", "Elena", "Tomas", "Aiko", "Dmitri", "Fatima", "Lucas"]
 RENAME = {f"{a} {n}": f"{COLLIDE[i]} {n}" for i, a in enumerate(F._ADJ) for n in F._NOUN}

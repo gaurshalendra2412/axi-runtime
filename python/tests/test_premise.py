@@ -22,7 +22,7 @@ from axi.experiments import gemini_fuzzy as F
 HERE = os.path.dirname(__file__)
 DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "PREMISE_CHECK.md")
-NEXT = "Next free: row 192, item 145, test 170, question 122"
+NEXT = "Next free: row 193, item 146, test 171, question 122"
 V = {"owner": F.OWNERS, "day": F.DAYS, "amount": F.AMOUNTS, "status": F.STATUSES}
 PH = {"day": "{n} is on {v}", "amount": "{n} costs {v}", "status": "{n} is {v}", "owner": "{v} is handling {n}"}
 
