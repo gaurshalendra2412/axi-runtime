@@ -19,7 +19,7 @@ from tests import test_gemini_arc as T
 HERE = os.path.dirname(os.path.abspath(__file__)); DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "FORESEE_CHECK_4.md"); NB = os.path.join(HERE, "..", "colab", "axi_foresee_check_4.ipynb")
 PAGE_SHA256 = "aec9788e7defdc121743c1c0abe218c4be89d53995b2f66ed1e3037d042816eb"; RESULT_MARK = "\n## Result"
-NEXT = "Next free: row 189, item 143, test 168, question 122"
+NEXT = "Next free: row 190, item 143, test 168, question 122"
 KEYS = ("moves", "predicted", "step_hit", "cell_hit", "carried_pred", "carried_hit", "known", "cell_said", "cell_right", "held_cells", "dnm_object", "dnm_unknown")
 get = lambda c: {k: c.get(k, 0) for k in KEYS}
 

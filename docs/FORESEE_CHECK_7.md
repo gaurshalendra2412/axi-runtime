@@ -70,3 +70,7 @@ Headline: lines 4 and 5 both read yes ("IN THESE FOUR GAMES A FIRST TRY OF AN AC
 - That a part that gains few right moves here does the same elsewhere: four games, 60 moves each, one run per arm.
 - That the Cinderella Project pages say this in so many words, or which sentences in them are Sir's own.
 - Cost: there is none (no key, no Drive). It is a replay of saved moves.
+
+## Result
+
+Run by the owner on the saved runs (replay of arms K, A, B and C; no model, no cost). Headline printed by the check: **MIXED: line 4 NO, line 5 NO**. Lines 1, 2, 6, 7, 8 and 10 yes; lines 3, 4, 5, 9, 11 and 12 no. Every figure is in `docs/results/foresee_check_7_printout.txt` and `foresee_check_7_all.json`; this page does not restate them. The reading lines above were locked (hash of the text above this heading) before the run and are not changed. Written afterwards, for Sir to confirm.

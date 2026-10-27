@@ -19,7 +19,7 @@ from axi.experiments import gemini_arc_c as C
 HERE = os.path.dirname(os.path.abspath(__file__)); DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "FORESEE_CHECK.md"); NB = os.path.join(HERE, "..", "colab", "axi_foresee_check.ipynb"); RESULT_C = os.path.join(DOCS, "results", "axi_gemini_arc_c_default.json")
 PAGE_SHA256 = "d9d1e853efeb51d7bb8fb7eb449063f67773efab223404756974b5ed0a5e8b1b"; RESULT_MARK = "\n## Result"
-NEXT = "Next free: row 189, item 143, test 168, question 122"
+NEXT = "Next free: row 190, item 143, test 168, question 122"
 
 
 def row(*cells): return tuple(cells)

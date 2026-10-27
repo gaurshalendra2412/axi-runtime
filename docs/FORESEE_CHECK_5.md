@@ -53,3 +53,7 @@ Headline: lines 3 and 5 both read yes ("THE LEDGER KNOWS MOVES THAT WERE WASTED,
 - Whether a part that costs few right moves here is useless elsewhere: four games, 60 moves each, one run per arm.
 - That the Cinderella Project pages say this in so many words, or which sentences in them are Sir's own.
 - Cost: there is none (no key, no Drive). It is a replay of saved moves.
+
+## Result
+
+Run by the owner on the saved runs (replay of arms K, A, B and C; no model, no cost). Headline printed by the check: **THE LEDGER KNOWS MOVES THAT WERE WASTED, AND CAN ANSWER MOVES IT NOW LEAVES TO THE MODEL**. Lines 1 to 5 yes, lines 6 to 8 no. Every figure is in `docs/results/foresee_check_5_printout.txt` and `foresee_check_5_all.json`; this page does not restate them. The reading lines above were locked (hash of the text above this heading) before the run and are not changed. Written afterwards, for Sir to confirm.

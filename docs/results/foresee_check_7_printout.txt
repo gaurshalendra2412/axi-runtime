@@ -1,0 +1,31 @@
+== 1 first tries answered from the NAME (direction from the other games, length from a step seen) and the tiers (against the full version: 603 right of 729 predicted)
+  once: 797 predicted (+68), right 663 (+60); right among predicted 83.2%; by name+seen length 0 right 0 (-), by name+earlier level's length 0 right 0 (-), carried relation 0 right 0, rotation set 0 right 0, one earlier try 68 right 60
+  nm: 756 predicted (+27), right 625 (+22); right among predicted 82.7%; by name+seen length 25 right 20 (80.0%), by name+earlier level's length 2 right 2 (100.0%), carried relation 0 right 0, rotation set 0 right 0, one earlier try 0 right 0
+  all6: 809 predicted (+80), right 672 (+69); right among predicted 83.1%; by name+seen length 0 right 0 (-), by name+earlier level's length 0 right 0 (-), carried relation 10 right 9, rotation set 2 right 0, one earlier try 68 right 60
+  all7: 832 predicted (+103), right 690 (+87); right among predicted 82.9%; by name+seen length 21 right 16 (76.2%), by name+earlier level's length 2 right 2 (100.0%), carried relation 10 right 9, rotation set 2 right 0, one earlier try 68 right 60
+  best: 832 predicted (+103), right 703 (+100); right among predicted 84.5%; by name+seen length 21 right 16 (76.2%), by name+earlier level's length 2 right 2 (100.0%), carried relation 10 right 9, rotation set 2 right 0, one earlier try 68 right 60
+   by game (all7): g50t-5849a774: 197 predicted, 130 right, not predicted 34 (first tries 18); ka59-38d34dbb: 208 predicted, 176 right, not predicted 27 (first tries 14); ls20-9607627b: 222 predicted, 195 right, not predicted 14 (first tries 11); sp80-589a99af: 205 predicted, 189 right, not predicted 29 (first tries 18)
+== 2 the names and the arrangement (all arms and games)
+   levels in which the name prior from the OTHER games named the direction the action really made (levels with a step, levels agreeing): ACTION1: 19, 12; ACTION2: 20, 12; ACTION3: 15, 3; ACTION4: 18, 5; ACTION5: 2, 0
+   arrangement classes (ACTION1 turned north; the directions of ACTION2, ACTION3, ACTION4), levels showing all four: (0,1 -1,0 1,0) in 12; classes seen 1 of 6
+== 3 the screen memory, the strip found from the moves before (all7): scr = the cells the strip has already changed left out; scx = and the cells of its symbol on this screen
+   scr: same action on the same screen 255 repeats in 936 moves; earlier outcome no change: 93, and no change again: 16 (17.2%); the whole screen after identical to last time: 81 of 255; moves no other tier predicted that it covers: 5, identical to last time: 2 (40.0%); moves predicted AND remembered: 250: the tiers right 227, the memory identical 79
+   scx: same action on the same screen 270 repeats in 936 moves; earlier outcome no change: 96, and no change again: 92 (95.8%); the whole screen after identical to last time: 258 of 270; moves no other tier predicted that it covers: 6, identical to last time: 6 (100.0%); moves predicted AND remembered: 264: the tiers right 241, the memory identical 252
+   (sixth check, strip found from the whole level: 268 repeats; earlier no change 93, again 89)
+== 4 the retire question (full): law-tier predictions of an action before and after one of its predictions was wrong by a different step
+   before any such failure: 637 predicted, 547 right (85.9%); after: 92 predicted, 56 right (60.9%); failures 24
+== 5 the edge (full): predictions that the piece stays because the step leaves the board: 7; stayed 5 (71.4%), moved 2
+
+1 guard | yes | the saved moves of all four arms (K, A, B and C) replay into fresh copies of the games and reproduce every saved flag
+2 instrument | yes | with the new parts off the check gives the sixth check's figures on the same runs: the full version 603 right of 729 predicted, once 663 of 797 and all6 (once, rot and rel) 672 of 809
+3 claim | NO | for each of ACTION1 to ACTION4 the direction the other games give (a game never reads its own levels) is the direction the action made in at least 90 percent of the levels in which it made a step (at least 4 levels each)
+4 claim | NO | the name (nm alone, both lengths) predicts at least 35 moves, and at least 75 percent of them are right
+5 claim | NO | with once, rot, rel and nm together (all7) at least 110 more moves are predicted than in the full version, and at least 80 percent of the moves added are right
+6 claim | yes | every level in which all four actions made a step of one length is of one arrangement class, and there are at least 10 such levels
+7 claim | yes | with the strip found from the moves before and the cells of its symbol on the screen left out, the same action on the same screen repeats at least 150 times in the 936 moves (the sixth check, strip found from the whole level: 268)
+8 claim | yes | of those repeats the ones in which the earlier outcome was no change are no change again in at least 90 percent (at least 30 such repeats)
+9 claim | NO | that screen memory covers at least 10 moves that no other tier predicted, and at least 80 percent of them end on exactly the screen they ended on last time
+10 claim | yes | after a law-tier prediction for an action has been wrong by a different step, the later law-tier predictions for that action are right in at most 70 percent (at least 15 of them)
+11 claim | NO | when the step would leave the board and the piece is predicted to stay, it stays in at least 90 percent (at least 5 such predictions)
+12 claim | NO | the best way (all7 with the floor colours and the mover as a group deleted) has at least 40 more right moves than the sixth check's all (672) and at least 82 percent of its predicted moves right
+headline: MIXED: line 4 NO, line 5 NO

@@ -802,7 +802,7 @@ def test_the_front_pages_say_what_the_run_found_and_the_next_free_line_moved():
     for text in (item, row):
         assert f"mutation check of test 132: {MUT132}" in text and "mutation check of test 131: 90 deliberate changes (20 in the code, 45 digits and 25 words of the page with the test's page hash re-pinned), 77 caught; none of the 20 code changes and none of the 45 digits got through, the 13 survivors are words of the prose" in text
         assert "mutation check of test 130: " in text and "mutation check of test 131: " in text and "mutation check of test 132: " in text and "proven" in text and "dollars" in text and "energy" in text and "capacity" in text
-    N_NEXT = "Next free: row 189, item 143, test 168, question 122"
+    N_NEXT = "Next free: row 190, item 143, test 168, question 122"
     assert N_NEXT in cm and "test 130 checks the typed-requests test, test 131 the Q = O / M module and test 132 the Result of the typed-requests test, item 111; test 133 checks the 100-step serving test, item 112, and test 134 its Result" in cm and cm.count("Next free:") == 1
     assert cm.index("110. **") < cm.index("111. **") < cm.index("Next free: row")
     for name in ("test_provider_side.py", "test_provider_side_constrained.py", "test_provider_side_bounded.py", "test_provider_side_bounded_result.py"):

@@ -23,7 +23,7 @@ from tests import test_gemini_arc as T
 HERE = os.path.dirname(os.path.abspath(__file__)); DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "FORESEE_CHECK_6.md"); NB = os.path.join(HERE, "..", "colab", "axi_foresee_check_6.ipynb"); RUN = os.path.join(HERE, "..", "colab", "run_foresee_check_6.py")
 PAGE_SHA256 = "c87fc2296b2afae14ee7a1c0a813c3d433940124c8ada9b26e5b5882682544fc"; RESULT_MARK = "\n## Result"
-NEXT = "Next free: row 189, item 143, test 168, question 122"
+NEXT = "Next free: row 190, item 143, test 168, question 122"
 KEYS = ("moves", "predicted", "cell_hit", "once_pred", "once_hit", "rot_pred", "rot_hit", "rel_pred", "rel_hit", "law_pred", "law_hit", "abstained", "tick_levels", "mrep", "mrep_null", "mrep_null_null", "rep_screen")
 get = lambda c: {k: c.get(k, 0) for k in KEYS}
 
@@ -321,7 +321,7 @@ def test_the_front_pages_say_what_was_built_and_that_it_was_not_run_on_the_real_
     assert NEXT in cm and cm.count("Next free:") == 1 and "\n140. **" in cm and "\n141. **" in cm and "\n143. **" not in cm
     i = cm.index("\n141. **") + 1; item = cm[i:cm.index("\n", i)]
     for n in ("FORESEE_CHECK_6.md", "foresee6.py", "test 166", "Saraswati Choubey", "Radha Gupta", "Rahul Chauhan", "FUTURE OF AI", "Sir to confirm", "Not run on the real games", "9 reading lines", "blind spot", "Sir steered", PAGE_SHA256): assert n in item, n
-    assert any("FORESEE_CHECK_6.md" in l and "foresee6.py" in l and PAGE_SHA256 in l and "NOT RUN" in l for l in vf.split("\n"))
+    assert any("FORESEE_CHECK_6.md" in l and "foresee6.py" in l and PAGE_SHA256 in l and "RUN by the owner" in l for l in vf.split("\n"))
     assert "| 187 (P) |" in hl and "Sir" in hl and "blind spot" in hl and "foresee_check_5_printout.txt" in cm
     assert os.path.exists(os.path.join(DOCS, "results", "foresee_check_5_printout.txt"))
 

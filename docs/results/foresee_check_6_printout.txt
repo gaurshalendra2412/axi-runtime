@@ -1,0 +1,36 @@
+== 1 first tries answered from the shape of the actions already seen (against the full version: 603 right of 729 predicted)
+  once: 797 predicted (+68), right 663 (+60); right among predicted 83.2%; by rotation set 0 right 0 (-), by carried relation 0 right 0 (-), by one earlier try 68 right 60 (88.2%)
+  rot: 731 predicted (+2), right 603 (+0); right among predicted 82.5%; by rotation set 2 right 0 (0.0%), by carried relation 0 right 0 (-), by one earlier try 0 right 0 (-)
+  rel: 739 predicted (+10), right 612 (+9); right among predicted 82.8%; by rotation set 0 right 0 (-), by carried relation 10 right 9 (90.0%), by one earlier try 0 right 0 (-)
+  rot+rel: 741 predicted (+12), right 612 (+9); right among predicted 82.6%; by rotation set 2 right 0 (0.0%), by carried relation 10 right 9 (90.0%), by one earlier try 0 right 0 (-)
+  all: 809 predicted (+80), right 672 (+69); right among predicted 83.1%; by rotation set 2 right 0 (0.0%), by carried relation 10 right 9 (90.0%), by one earlier try 68 right 60 (88.2%)
+== 2 the tiers in the `all` way: where each prediction came from (predicted, right, right share)
+  g50t-5849a774: law 179, 121, 67.6%; once 12, 8, 66.7%; rot 1, 0, 0.0%; rel 1, 0, 0.0%; not predicted 38: click 0, new 22, once_moved 0, once_nomove 10, nolaw 6
+  ka59-38d34dbb: law 177, 148, 83.6%; once 21, 18, 85.7%; rot 0, 0, -; rel 5, 5, 100.0%; not predicted 32: click 12, new 19, once_moved 0, once_nomove 1, nolaw 0
+  ls20-9607627b: law 197, 172, 87.3%; once 16, 15, 93.8%; rot 0, 0, -; rel 2, 2, 100.0%; not predicted 21: click 0, new 18, once_moved 0, once_nomove 3, nolaw 0
+  sp80-589a99af: law 176, 162, 92.0%; once 19, 19, 100.0%; rot 1, 0, 0.0%; rel 2, 2, 100.0%; not predicted 36: click 4, new 25, once_moved 0, once_nomove 4, nolaw 3
+  ALL GAMES: law 729, 603, 82.7%; once 68, 60, 88.2%; rot 2, 0, 0.0%; rel 10, 9, 90.0%; not predicted 127: click 16, new 84, once_moved 0, once_nomove 18, nolaw 9
+== 3 the delete test again: right moves with the floor colours or the mover as a group deleted (full: 603 of 729)
+  -floor: right 618 of 729 (+15); right among predicted 84.8%
+  -group: right 608 of 729 (+5); right among predicted 83.4%
+  -floor-group: right 616 of 729 (+13); right among predicted 84.5%
+== 4 the names: the direction of each action's step on the main mover, in how many levels (all arms and games): ACTION1: (0,-1) in 19; ACTION2: (0,1) in 20; ACTION3: (-1,0) in 15; ACTION4: (1,0) in 18; ACTION5: (-1,0) in 1, (0,-1) in 1
+   the length of the step: ACTION1: 3 cells in 5, 4 cells in 6, 5 cells in 5, 6 cells in 3; ACTION2: 3 cells in 6, 4 cells in 4, 5 cells in 5, 6 cells in 5; ACTION3: 3 cells in 5, 4 cells in 4, 5 cells in 4, 6 cells in 2; ACTION4: 3 cells in 6, 4 cells in 5, 5 cells in 5, 6 cells in 2; ACTION5: 6 cells in 1, 12 cells in 1
+   quarter-turns from the first action of a pair to the second (0 = the same step, 2 = opposite), levels: ACTION1>ACTION2: 2 in 17; ACTION1>ACTION3: 1 in 14; ACTION1>ACTION4: 3 in 15; ACTION1>ACTION5: 0 in 1; ACTION2>ACTION1: 2 in 17; ACTION2>ACTION3: 3 in 14; ACTION2>ACTION4: 1 in 17; ACTION2>ACTION5: 2 in 1; ACTION3>ACTION1: 3 in 14; ACTION3>ACTION2: 1 in 14; ACTION3>ACTION4: 2 in 13; ACTION3>ACTION5: 3 in 1; ACTION4>ACTION1: 1 in 15; ACTION4>ACTION2: 3 in 17; ACTION4>ACTION3: 2 in 13; ACTION5>ACTION1: 0 in 1; ACTION5>ACTION2: 2 in 1; ACTION5>ACTION3: 1 in 1
+== 5 the screen without its clock: the same action on the same screen, with the cells of the ticking strip left out
+  g50t-5849a774: 231 moves, strip found in 5 levels; whole-screen repeats counting the strip 0, without it 51 (earlier outcome no change: 11, and no change again: 10)
+  ka59-38d34dbb: 235 moves, strip found in 6 levels; whole-screen repeats counting the strip 0, without it 54 (earlier outcome no change: 0, and no change again: 0)
+  ls20-9607627b: 236 moves, strip found in 5 levels; whole-screen repeats counting the strip 1, without it 76 (earlier outcome no change: 44, and no change again: 41)
+  sp80-589a99af: 234 moves, strip found in 6 levels; whole-screen repeats counting the strip 0, without it 87 (earlier outcome no change: 38, and no change again: 38)
+  ALL GAMES: 936 moves, strip found in 22 levels; whole-screen repeats counting the strip 1, without it 268 (earlier outcome no change: 93, and no change again: 89)
+
+1 guard | yes | the saved moves of all four arms (K, A, B and C) replay into fresh copies of the games and reproduce every saved flag
+2 instrument | yes | with the new parts off the check gives the third check's figure (603 right of 729 predicted), the fifth check's once (663 right of 797) and the fifth check's deletion of the floor colours (618 right of 729) on the same runs
+3 claim | NO | the rotation set alone (rot) predicts at least 8 moves, and at least 70 percent of them are right
+4 claim | yes | the carried relation alone (rel) predicts at least 10 moves, and at least 70 percent of them are right
+5 claim | NO | with once, rot and rel together (all) at least 90 more moves are predicted than in the full version, and at least 80 percent of the moves added are right
+6 claim | yes | for each of ACTION1 to ACTION4 the direction of its step on the main mover is the same in at least 90 percent of the levels in which it made one (at least 4 levels each), over the four arms and games
+7 claim | yes | for each of the six pairs of ACTION1 to ACTION4 the quarter-turns from the first to the second are the same in at least 90 percent of the levels in which both made a step of the same length (at least 4 levels each)
+8 claim | yes | deleting the floor colours and the mover as a group together gains at least 10 right moves over the full version, over the four arms and games
+9 claim | yes | with the cells of the ticking strip left out, the same action on the same screen repeats at least 30 times in the 936 moves (the fifth check, with the strip: 1)
+headline: MIXED: line 4 yes, line 5 NO

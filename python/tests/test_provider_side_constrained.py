@@ -546,7 +546,7 @@ def test_the_front_pages_point_to_the_tests_and_say_what_the_run_found():
         assert "Run (18 and 19 Oct" in text and "NOT run" not in text and "test 124" in text.replace("Tests 124", "test 124") and "test 125" in text and PAGE_SHA256[:16] in text.replace(PAGE_SHA256, PAGE_SHA256[:16])
         assert "14 of 17 lines" in text.replace("14 of the 17 lines read yes", "14 of 17 lines yes").replace("14 of 17 lines yes", "14 of 17 lines") and ("lines 2, 5 and 6" in text or "line 2 reads NO" in text) and "neither the plain time ratios nor the exact-steps-per-hour figures are claimed" in text.replace("neither the time ratios nor", "neither the plain time ratios nor")
         assert "20,878" in text and "28,748" in text and "32,896" in text and "5,923" in text and "727" in text and "667" in text and "88.3" in text and "97.2" in text
-    assert "Next free: row 189, item 143, test 168, question 122" in cm and "test 124 checks the constrained provider-side test and test 125 its Result, item 107" in cm
+    assert "Next free: row 190, item 143, test 168, question 122" in cm and "test 124 checks the constrained provider-side test and test 125 its Result, item 107" in cm
 
 
 if __name__ == "__main__":
