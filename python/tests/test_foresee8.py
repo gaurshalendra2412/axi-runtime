@@ -26,7 +26,7 @@ from tests.test_foresee7 import four, big, _tall, _bar, NAMES, A, UP, DOWN, LEFT
 HERE = os.path.dirname(os.path.abspath(__file__)); DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "FORESEE_CHECK_8.md"); NB = os.path.join(HERE, "..", "colab", "axi_foresee_check_8.ipynb"); RUN = os.path.join(HERE, "..", "colab", "run_foresee_check_8.py")
 PAGE_SHA256 = "97a8e1d6da1f330073d0652133c942cb677a2780c25b43de5cc9645e172e1491"; RESULT_MARK = "\n## Result"
-NEXT = "Next free: row 191, item 144, test 169, question 122"
+NEXT = "Next free: row 192, item 145, test 170, question 122"
 NEW_KEYS = ("retired_withheld",)
 
 
@@ -342,7 +342,7 @@ def test_the_eighth_check_runs_over_a_replay_of_the_stand_in_game_and_finds_its_
 
 def test_the_front_pages_say_what_was_built_and_that_it_was_not_run_on_the_real_games():
     cm = open(os.path.join(DOCS, "RAJNISH_CONCEPT_MAP.md"), encoding="utf-8").read(); vf = open(os.path.join(DOCS, "VERIFIED.md"), encoding="utf-8").read(); hl = open(os.path.join(DOCS, "HISTORY_LEDGER.md"), encoding="utf-8").read()
-    assert NEXT in cm and cm.count("Next free:") == 1 and "\n142. **" in cm and "\n143. **" in cm and "\n144. **" not in cm
+    assert NEXT in cm and cm.count("Next free:") == 1 and "\n142. **" in cm and "\n143. **" in cm and "\n145. **" not in cm
     i = cm.index("\n143. **") + 1; item = cm[i:cm.index("\n", i)]
     for n in ("FORESEE_CHECK_8.md", "foresee8.py", "test 168", "also run by Sir", "Sir to confirm", "Not run on the real games", "12 reading lines", "retire", "six levels", "break-even", PAGE_SHA256): assert n in item, n
     assert any("FORESEE_CHECK_8.md" in l and "foresee8.py" in l and PAGE_SHA256 in l and "NOT RUN" in l for l in vf.split("\n"))

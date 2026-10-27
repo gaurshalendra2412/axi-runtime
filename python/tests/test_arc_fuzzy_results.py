@@ -564,7 +564,7 @@ def test_the_numbers_typed_into_the_reference_follow_from_the_saved_files():
 
 def test_the_front_pages_say_what_was_run_and_read_and_the_counter_moved():
     cm = open(os.path.join(DOCS, "RAJNISH_CONCEPT_MAP.md")).read(); vf = open(os.path.join(DOCS, "VERIFIED.md")).read()
-    assert "Next free: row 191, item 144, test 169, question 122" in cm and cm.count("Next free:") == 1
+    assert "Next free: row 192, item 145, test 170, question 122" in cm and cm.count("Next free:") == 1
     for n, key, extra in ((116, "116. **", "15 of the 24 lines read yes"), (117, "117. **", "11 of the 19 lines read yes"), (118, "\n118. **", "10 of the 17 lines read yes")):
         i = cm.index(key) + (1 if key.startswith("\n") else 0); item = cm[i:cm.index("\n", i)]
         assert "Status: run once" in item and extra in item and "test 145" in item and "Status: built and checked here; not run" not in item, n

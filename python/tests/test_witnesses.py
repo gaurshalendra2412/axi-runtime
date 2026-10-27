@@ -23,7 +23,7 @@ from axi.experiments import gemini_fuzzy as F
 HERE = os.path.dirname(__file__)
 DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "WITNESSES.md")
-NEXT = "Next free: row 191, item 144, test 169, question 122"
+NEXT = "Next free: row 192, item 145, test 170, question 122"
 P = CICOParser.parse_transition_delta
 
 

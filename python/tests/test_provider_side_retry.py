@@ -664,7 +664,7 @@ FRONT_ITEM = ("109. **The serving side a fourth time, with one retry when the re
               "a TPU is another engine build and would be a different test")
 FRONT_ROW = ("**Run (the owner's Colab run, five cells in one session, Tesla T4, vLLM 0.31.0; the file reached the repository work on 20 Oct 2026).**", "74243e1ab623ec5c… of the locked text", "**The headline reads NO:**", "48 of the 53 lost steps belong to four jobs (3, 4, 19 and 20)", "never on the 507 deletes the repair completes",
              "84 of 1,599 delete replies in the first run (no grammar) and 0 in the second and third", "The files it imports are pinned by sha256 in the test, so the core is unchanged.", "the ceiling at 64 jobs is 1,915 of 1,920 (99.7 %) against 1,867 (97.2 %)", "(test 128, 23 tests)")
-FRONT_NEXT = "Next free: row 191, item 144, test 169, question 122"
+FRONT_NEXT = "Next free: row 192, item 145, test 170, question 122"
 
 
 def test_the_front_pages_point_to_the_test_and_say_what_the_page_expects_and_what_it_does_not_show():
@@ -680,7 +680,7 @@ def test_the_front_pages_point_to_the_test_and_say_what_the_page_expects_and_wha
     assert FRONT_NEXT in cm and "test 128 checks the retry test and test 129 its Result, item 109; test 130" in cm and "test 126 checks the capped re-run of the exact-state cells and test 127 its Result, item 108; test 128" in cm
     assert cm.index("108. **") < cm.index("109. **") < cm.index("Next free: row") and ve.index("Provider-side serving test, third run") < k
     for name in ("test_provider_side.py", "test_provider_side_constrained.py", "test_provider_side_bounded.py", "test_provider_side_bounded_result.py"):
-        t = open(os.path.join(HERE, name)).read(); assert "row 170, item 112, test 133" not in t and "row 191, item 144, test 169" in t, name
+        t = open(os.path.join(HERE, name)).read(); assert "row 170, item 112, test 133" not in t and "row 192, item 145, test 170" in t, name
 
 
 if __name__ == "__main__":
