@@ -21,7 +21,7 @@ from tests import test_gemini_arc as T
 HERE = os.path.dirname(os.path.abspath(__file__)); DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "FORESEE_CHECK_5.md"); NB = os.path.join(HERE, "..", "colab", "axi_foresee_check_5.ipynb")
 PAGE_SHA256 = "ea25e024206aeb2882ec1bdd949e3fa3c0c11ddb824b7dbc129fc62dd858bff3"; RESULT_MARK = "\n## Result"
-NEXT = "Next free: row 190, item 143, test 168, question 122"
+NEXT = "Next free: row 191, item 144, test 169, question 122"
 KEYS = ("moves", "predicted", "step_hit", "cell_hit", "cell_said", "cell_right", "once_pred", "once_hit", "elim_pred", "elim_hit", "rep_pos", "rep_pos_null", "rep_pos_null_null", "rep_screen", "did_not_move", "null_moves", "abstained")
 get = lambda c: {k: c.get(k, 0) for k in KEYS}
 
@@ -247,7 +247,7 @@ def test_the_fifth_check_runs_over_a_replay_of_arm_c_on_the_stand_in_game_nine_w
 
 def test_the_front_pages_say_what_was_built_and_that_it_was_not_run_on_the_real_games():
     cm = open(os.path.join(DOCS, "RAJNISH_CONCEPT_MAP.md"), encoding="utf-8").read(); vf = open(os.path.join(DOCS, "VERIFIED.md"), encoding="utf-8").read(); hl = open(os.path.join(DOCS, "HISTORY_LEDGER.md"), encoding="utf-8").read()
-    assert NEXT in cm and cm.count("Next free:") == 1 and "\n140. **" in cm and "\n143. **" not in cm
+    assert NEXT in cm and cm.count("Next free:") == 1 and "\n140. **" in cm and "\n144. **" not in cm
     i = cm.index("\n140. **") + 1; item = cm[i:cm.index("\n", i)]
     for n in ("FORESEE_CHECK_5.md", "foresee5.py", "test 165", "Saraswati Choubey", "Sir to confirm", "NOT RUN", "8 reading lines", "row D", "Sir steered", "not a new idea", PAGE_SHA256): assert n in item, n
     assert any("FORESEE_CHECK_5.md" in l and "foresee5.py" in l and PAGE_SHA256 in l and "RUN by the owner" in l for l in vf.split("\n"))

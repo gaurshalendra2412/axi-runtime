@@ -25,7 +25,7 @@ PAGE = os.path.join(DOCS, "GEMINI_QUORUM_TEST.md")
 NB = os.path.join(HERE, "..", "colab", "axi_gemini_quorum.ipynb")
 PAGE_SHA256 = "11c77397a82c8fe0c33777ad27052dfbe83e0f648edc84c19dc00c68863e9182"        # written before any call
 RESULT_MARK = "\n\n---\n\n# Result"
-NEXT = "Next free: row 190, item 143, test 168, question 122"
+NEXT = "Next free: row 191, item 144, test 169, question 122"
 SEED = Q.SEED
 
 

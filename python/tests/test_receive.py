@@ -24,7 +24,7 @@ from axi.experiments import gemini_long as GL
 HERE = os.path.dirname(__file__)
 DOCS = os.path.join(HERE, "..", "..", "docs")
 PAGE = os.path.join(DOCS, "RECEIVE_WITHOUT_ADDING.md")
-NEXT = "Next free: row 190, item 143, test 168, question 122"
+NEXT = "Next free: row 191, item 144, test 169, question 122"
 V = {"owner": F.OWNERS, "day": F.DAYS, "amount": F.AMOUNTS, "status": F.STATUSES}
 PH = {"day": "{n} is on {v}", "amount": "{n} costs {v}", "status": "{n} is {v}", "owner": "{v} is handling {n}"}
 COLLIDE = ["Day", "Status", "Amount", "Owner", "Priya", "Marcus", "Elena", "Tomas", "Aiko", "Dmitri", "Fatima", "Lucas"]
