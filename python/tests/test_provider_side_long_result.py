@@ -376,7 +376,7 @@ def test_the_two_front_pages_say_what_was_run_what_was_read_and_what_it_does_not
             if "mutation" in s: assert s in text, s
             else: assert s in run_, s
         assert "@@" not in text and "\"100 percent\"" not in run_ and "dollars" in text and ("nothing here is proven" in text or "proven" in text)
-    assert "Next free: row 187, item 141, test 166, question 122" in cm and cm.count("Next free:") == 1
+    assert "Next free: row 188, item 142, test 167, question 122" in cm and cm.count("Next free:") == 1
     assert "test 133 checks the 100-step serving test, item 112, and test 134 its Result" in cm
     assert "(sha256 " + PAGE_SHA256[:16] + "... of the text above the line at its end)" in item and "(sha256 " + PAGE_SHA256[:16] + "... of the locked text)" in row
 

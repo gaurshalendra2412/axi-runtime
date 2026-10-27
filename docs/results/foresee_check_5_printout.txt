@@ -1,0 +1,33 @@
+== 1 repeats: moves in which the piece did not move, and how many were the same action from the same place that had not moved it before
+  g50t-5849a774: 231 moves, 33 changed no cell; piece did not move in 44 of the 179 predicted; of those a repeat from the same place: 11 (25.0%); same action from a place seen before 54 (the piece had not moved there before: 12); the whole screen repeated 0 times (earlier outcome no change: 0)
+  ka59-38d34dbb: 235 moves, 10 changed no cell; piece did not move in 27 of the 177 predicted; of those a repeat from the same place: 0 (0.0%); same action from a place seen before 45 (the piece had not moved there before: 1); the whole screen repeated 0 times (earlier outcome no change: 0)
+  ls20-9607627b: 236 moves, 8 changed no cell; piece did not move in 68 of the 197 predicted; of those a repeat from the same place: 44 (64.7%); same action from a place seen before 77 (the piece had not moved there before: 47); the whole screen repeated 1 times (earlier outcome no change: 1)
+  sp80-589a99af: 234 moves, 0 changed no cell; piece did not move in 44 of the 176 predicted; of those a repeat from the same place: 33 (75.0%); same action from a place seen before 60 (the piece had not moved there before: 33); the whole screen repeated 0 times (earlier outcome no change: 0)
+  ALL GAMES: 936 moves, 51 changed no cell; piece did not move in 183 of the 729 predicted; of those a repeat from the same place: 88 (48.1%); same action from a place seen before 236 (the piece had not moved there before: 93); the whole screen repeated 1 times (earlier outcome no change: 1)
+== 2 the gap: moves not predicted, by reason (and, in brackets, how many an earlier level's law would have answered)
+  g50t-5849a774: 52 not predicted: click 0 (0), new 24 (3), once_moved 12 (1), once_nomove 10 (1), nolaw 6 (0)
+  ka59-38d34dbb: 58 not predicted: click 12 (0), new 24 (6), once_moved 21 (5), once_nomove 1 (0), nolaw 0 (0)
+  ls20-9607627b: 39 not predicted: click 0 (0), new 20 (4), once_moved 16 (3), once_nomove 3 (0), nolaw 0 (0)
+  sp80-589a99af: 58 not predicted: click 4 (0), new 28 (4), once_moved 19 (3), once_nomove 4 (0), nolaw 3 (0)
+  ALL GAMES: 207 not predicted: click 16 (0), new 96 (17), once_moved 68 (12), once_nomove 18 (1), nolaw 9 (0)
+== 3 once: 797 predicted (+68 against full), right 663 (+60); added by once 68 right 60 (88.2%), by elim 0 right 0 (-); right among predicted 83.2% (full: 82.7%)
+== 3 elim: 729 predicted (+0 against full), right 603 (+0); added by once 0 right 0 (-), by elim 0 right 0 (-); right among predicted 82.7% (full: 82.7%)
+== 3 once+elim: 797 predicted (+68 against full), right 663 (+60); added by once 68 right 60 (88.2%), by elim 0 right 0 (-); right among predicted 83.2% (full: 82.7%)
+== 4 the delete test: right moves with one part deleted alone (full: 603 of 729)
+  without front: right 555 of 729 (-48); right among predicted 76.1%
+  without typed: right 575 of 729 (-28); right among predicted 78.9%
+  without edge: right 598 of 729 (-5); right among predicted 82.0%
+  without floor: right 618 of 729 (+15); right among predicted 84.8%
+  without group: right 608 of 729 (+5); right among predicted 83.4%
+== the step each action made on the main mover, in how many levels (all arms and games): 
+== pairs of actions that moved the same piece, in levels: opposite 38, quarter-turn 70, same 1
+
+1 guard | yes | the saved moves of all four arms (K, A, B and C) replay into fresh copies of the games and reproduce every saved flag
+2 instrument | yes | with every part on and both additions off the check gives the third check's full figure on the same runs: 603 right of 729 predicted
+3 claim | yes | of the moves in which the piece did not move, at least 20 percent were the same action tried before from the same place of the piece, which had not moved it then either
+4 claim | yes | the share of those repeats among the moves in which the piece did not move is lower in arm C (the ledger's read-out in the prompt) than in arm K (the kept chat)
+5 claim | yes | with once and elim together at least 30 more moves are predicted than with them off, and at least 70 percent of the moves added are right
+6 claim | NO | elim alone predicts at least 8 moves, and at least 70 percent of them are right
+7 claim | NO | each of the five parts (the whole front held, the action typed, the edge of the screen, the floor colours, the mover as a group), deleted alone, costs at least 5 right moves over the four arms and games
+8 claim | NO | for each of ACTION1 to ACTION4 the unit step it makes on the main mover is the same in at least 90 percent of the levels in which it made one (at least 4 levels each), over the four arms and games
+headline: THE LEDGER KNOWS MOVES THAT WERE WASTED, AND CAN ANSWER MOVES IT NOW LEAVES TO THE MODEL
