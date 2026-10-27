@@ -216,6 +216,40 @@ def test_the_notebook_holds_no_key_never_turns_billing_on_sets_no_budget_and_run
             body = "\n".join(l for l in "".join(c["source"]).split("\n") if not l.lstrip().startswith("!")); compile(body, "cell", "exec")
 
 
+# ---------------------------------------------------------------- 5b the terminal runner (for when Colab will not give a machine)
+def _runner():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("run_gemini_arc_big", os.path.join(HERE, "..", "colab", "run_gemini_arc_big.py")); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); return m
+
+
+def test_the_terminal_runner_runs_the_same_arms_resumes_reads_and_refuses_without_a_key_prices_or_budget():
+    M = _runner(); out = tempfile.mkdtemp(); res = tempfile.mkdtemp(); buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        for arm in ("K", "C", "D"): assert M.do_run(T.FakeLLM(), make_env, G2, arm, out, moves=30, action_of=IDENT)["stopped"] is None
+        first = {a: open(os.path.join(out, f"arc_big_{a}_default.jsonl")).read() for a in "KCD"}
+        for arm in ("K", "C", "D"): llm = T.FakeLLM(); M.do_run(llm, make_env, G2, arm, out, moves=30, action_of=IDENT); assert llm.n == 0                                          # the same command again: nothing is asked again
+        assert first == {a: open(os.path.join(out, f"arc_big_{a}_default.jsonl")).read() for a in "KCD"}
+        got = M.do_read(make_env, G2, out, res, moves=30, action_of=IDENT)
+        pil = M.do_pilot(T.FakeLLM(), make_env, tempfile.mkdtemp(), 1.0, 10.0, 0.1, action_of=IDENT)
+    assert got["replays"] == {"K": True, "C": True, "D": True} and [i for i, _, _, v in got["checks"][:3] if v] == [1, 2, 3] and len(got["checks"]) == 18
+    saved = json.load(open(os.path.join(res, "gemini_arc_big_all_default.json"))); assert len(saved["checks"]) == 18 and saved["games"] == list(G2) and "headline:" in open(os.path.join(res, "gemini_arc_big_printout.txt")).read()
+    assert pil["rep"]["cost_total"] > 0 and set(pil["rows"]) == {"K", "C", "D"} and "headline:" in buf.getvalue() and "levels completed in each game" in buf.getvalue()
+    mid = tempfile.mkdtemp(); part = M.do_run(T.FakeLLM(), make_env, G2, "D", mid, moves=30, max_tokens=12_000, action_of=IDENT); assert part["stopped"] == "token_cap"                                  # a stopped run is saved and carries on
+    assert M.do_run(T.FakeLLM(), make_env, G2, "D", mid, moves=30, action_of=IDENT)["rows"] == D.run(T.FakeLLM(), make_env, tmp(), games=G2, moves=30, action_of=IDENT)["rows"]
+    keep = {k: os.environ.pop(k, None) for k in ("GOOGLE_API_KEY", "GEMINI_API_KEY")}
+    try:
+        assert M.main(["pilot", "--out", out]) == 2 and M.main(["run", "K", "--out", out]) == 2
+        os.environ["GOOGLE_API_KEY"] = "x"; assert M.main(["run", "K", "--out", out]) == 2 and M.main(["run", "--out", out, "--budget", "5"]) == 2                                                 # no budget, no arm: it stops before any call
+        try: M.guard(type("A", (), dict(price_in=None, price_out=None, price_cached=None))()); raise AssertionError("prices not needed")
+        except AssertionError as e: assert "price" in str(e).lower()
+    finally:
+        os.environ.pop("GOOGLE_API_KEY", None)
+        for k, v in keep.items():
+            if v is not None: os.environ[k] = v
+    src = open(os.path.join(HERE, "..", "colab", "run_gemini_arc_big.py")).read(); assert not re.search(r"AIza[0-9A-Za-z_-]{20,}", src) and "GOOGLE_API_KEY" in src and "enable billing" not in src.lower() and "D.pick_games" in src
+    assert M.CAPS == dict(K=D.K_TOKEN_CAP, C=D.C_TOKEN_CAP, D=D.D_TOKEN_CAP) and "--budget" in src and "docs/results/gemini_arc_big_all_default.json" in src
+
+
 # ---------------------------------------------------------------- 6 front pages
 def test_the_front_pages_say_what_was_built_and_that_nothing_was_called():
     cm = open(os.path.join(DOCS, "RAJNISH_CONCEPT_MAP.md"), encoding="utf-8").read(); vf = open(os.path.join(DOCS, "VERIFIED.md"), encoding="utf-8").read(); hl = open(os.path.join(DOCS, "HISTORY_LEDGER.md"), encoding="utf-8").read()
