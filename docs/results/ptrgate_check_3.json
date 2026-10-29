@@ -1,0 +1,560 @@
+{
+ "part": "multi",
+ "tally": {
+  "TP": 240,
+  "FN": 60,
+  "FP": 14,
+  "TN": 1060,
+  "unsup": 0,
+  "analysed": 1374,
+  "accuracy": 0.9461,
+  "recall": 0.8,
+  "false_alarm_rate": 0.013
+ },
+ "by_variant_and_cwe": {
+  "CWE415": {
+   "TP": 200,
+   "FN": 40,
+   "FP": 14,
+   "TN": 892,
+   "unsup": 0
+  },
+  "CWE416": {
+   "TP": 40,
+   "FN": 20,
+   "FP": 0,
+   "TN": 168,
+   "unsup": 0
+  },
+  "v51": {
+   "TP": 20,
+   "FN": 0,
+   "FP": 0,
+   "TN": 54,
+   "unsup": 0
+  },
+  "v52": {
+   "TP": 20,
+   "FN": 0,
+   "FP": 0,
+   "TN": 110,
+   "unsup": 0
+  },
+  "v53": {
+   "TP": 20,
+   "FN": 0,
+   "FP": 0,
+   "TN": 138,
+   "unsup": 0
+  },
+  "v54": {
+   "TP": 20,
+   "FN": 0,
+   "FP": 14,
+   "TN": 152,
+   "unsup": 0
+  },
+  "v61": {
+   "TP": 20,
+   "FN": 0,
+   "FP": 0,
+   "TN": 54,
+   "unsup": 0
+  },
+  "v62": {
+   "TP": 40,
+   "FN": 0,
+   "FP": 0,
+   "TN": 120,
+   "unsup": 0
+  },
+  "v63": {
+   "TP": 40,
+   "FN": 0,
+   "FP": 0,
+   "TN": 108,
+   "unsup": 0
+  },
+  "v64": {
+   "TP": 0,
+   "FN": 40,
+   "FP": 0,
+   "TN": 108,
+   "unsup": 0
+  },
+  "v65": {
+   "TP": 20,
+   "FN": 0,
+   "FP": 0,
+   "TN": 54,
+   "unsup": 0
+  },
+  "v66": {
+   "TP": 0,
+   "FN": 20,
+   "FP": 0,
+   "TN": 54,
+   "unsup": 0
+  },
+  "v67": {
+   "TP": 20,
+   "FN": 0,
+   "FP": 0,
+   "TN": 54,
+   "unsup": 0
+  },
+  "v68": {
+   "TP": 20,
+   "FN": 0,
+   "FP": 0,
+   "TN": 54,
+   "unsup": 0
+  }
+ },
+ "errors_and_unsupported": [
+  [
+   "64",
+   "CWE415",
+   "CWE415_Double_Free__malloc_free_char_64_bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "CWE415_Double_Free__malloc_free_char_66_bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE415",
+   "CWE415_Double_Free__malloc_free_int64_t_64_bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "CWE415_Double_Free__malloc_free_int64_t_66_bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE415",
+   "CWE415_Double_Free__malloc_free_int_64_bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "CWE415_Double_Free__malloc_free_int_66_bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE415",
+   "CWE415_Double_Free__malloc_free_long_64_bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "CWE415_Double_Free__malloc_free_long_66_bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE415",
+   "CWE415_Double_Free__malloc_free_struct_64_bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "CWE415_Double_Free__malloc_free_struct_66_bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE415",
+   "CWE415_Double_Free__malloc_free_wchar_t_64_bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "CWE415_Double_Free__malloc_free_wchar_t_66_bad",
+   "FN"
+  ],
+  [
+   "54",
+   "CWE415",
+   "good",
+   "FP"
+  ],
+  [
+   "64",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "54",
+   "CWE415",
+   "good",
+   "FP"
+  ],
+  [
+   "64",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "54",
+   "CWE415",
+   "good",
+   "FP"
+  ],
+  [
+   "64",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "54",
+   "CWE415",
+   "good",
+   "FP"
+  ],
+  [
+   "64",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "54",
+   "CWE415",
+   "good",
+   "FP"
+  ],
+  [
+   "64",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "54",
+   "CWE415",
+   "good",
+   "FP"
+  ],
+  [
+   "64",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "54",
+   "CWE415",
+   "good",
+   "FP"
+  ],
+  [
+   "64",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "54",
+   "CWE415",
+   "good",
+   "FP"
+  ],
+  [
+   "64",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "54",
+   "CWE415",
+   "good",
+   "FP"
+  ],
+  [
+   "64",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "54",
+   "CWE415",
+   "good",
+   "FP"
+  ],
+  [
+   "64",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "54",
+   "CWE415",
+   "good",
+   "FP"
+  ],
+  [
+   "64",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "54",
+   "CWE415",
+   "good",
+   "FP"
+  ],
+  [
+   "64",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "54",
+   "CWE415",
+   "good",
+   "FP"
+  ],
+  [
+   "64",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "54",
+   "CWE415",
+   "good",
+   "FP"
+  ],
+  [
+   "64",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "66",
+   "CWE415",
+   "bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "CWE416_Use_After_Free__malloc_free_char_64_bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "CWE416_Use_After_Free__malloc_free_int64_t_64_bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "CWE416_Use_After_Free__malloc_free_int_64_bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "CWE416_Use_After_Free__malloc_free_long_64_bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "CWE416_Use_After_Free__malloc_free_struct_64_bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "CWE416_Use_After_Free__malloc_free_wchar_t_64_bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "bad",
+   "FN"
+  ],
+  [
+   "64",
+   "CWE416",
+   "bad",
+   "FN"
+  ]
+ ]
+}
