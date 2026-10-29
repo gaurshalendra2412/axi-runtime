@@ -1,0 +1,217 @@
+{
+ "part": "held",
+ "files": 666,
+ "tally": {
+  "TP": 648,
+  "FN": 18,
+  "FP": 0,
+  "TN": 2767,
+  "unsupported": 0,
+  "analysed": 3433,
+  "accuracy": 0.9948,
+  "recall": 0.973,
+  "false_alarm_rate": 0.0
+ },
+ "by_variant_[analysed,unsupported]": {
+  "01": [
+   138,
+   0
+  ],
+  "02": [
+   211,
+   0
+  ],
+  "03": [
+   211,
+   0
+  ],
+  "04": [
+   211,
+   0
+  ],
+  "05": [
+   211,
+   0
+  ],
+  "06": [
+   211,
+   0
+  ],
+  "07": [
+   211,
+   0
+  ],
+  "08": [
+   211,
+   0
+  ],
+  "09": [
+   211,
+   0
+  ],
+  "10": [
+   211,
+   0
+  ],
+  "11": [
+   211,
+   0
+  ],
+  "12": [
+   138,
+   0
+  ],
+  "13": [
+   211,
+   0
+  ],
+  "14": [
+   211,
+   0
+  ],
+  "15": [
+   211,
+   0
+  ],
+  "16": [
+   138,
+   0
+  ],
+  "17": [
+   138,
+   0
+  ],
+  "18": [
+   138,
+   0
+  ]
+ },
+ "errors_and_unsupported": [
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_01.c",
+   "CWE416_Use_After_Free__return_freed_ptr_01_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_02.c",
+   "CWE416_Use_After_Free__return_freed_ptr_02_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_03.c",
+   "CWE416_Use_After_Free__return_freed_ptr_03_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_04.c",
+   "CWE416_Use_After_Free__return_freed_ptr_04_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_05.c",
+   "CWE416_Use_After_Free__return_freed_ptr_05_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_06.c",
+   "CWE416_Use_After_Free__return_freed_ptr_06_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_07.c",
+   "CWE416_Use_After_Free__return_freed_ptr_07_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_08.c",
+   "CWE416_Use_After_Free__return_freed_ptr_08_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_09.c",
+   "CWE416_Use_After_Free__return_freed_ptr_09_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_10.c",
+   "CWE416_Use_After_Free__return_freed_ptr_10_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_11.c",
+   "CWE416_Use_After_Free__return_freed_ptr_11_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_12.c",
+   "CWE416_Use_After_Free__return_freed_ptr_12_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_13.c",
+   "CWE416_Use_After_Free__return_freed_ptr_13_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_14.c",
+   "CWE416_Use_After_Free__return_freed_ptr_14_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_15.c",
+   "CWE416_Use_After_Free__return_freed_ptr_15_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_16.c",
+   "CWE416_Use_After_Free__return_freed_ptr_16_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_17.c",
+   "CWE416_Use_After_Free__return_freed_ptr_17_bad",
+   1,
+   "clean",
+   "[]"
+  ],
+  [
+   "CWE416_Use_After_Free__return_freed_ptr_18.c",
+   "CWE416_Use_After_Free__return_freed_ptr_18_bad",
+   1,
+   "clean",
+   "[]"
+  ]
+ ]
+}
