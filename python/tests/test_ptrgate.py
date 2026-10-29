@@ -141,3 +141,37 @@ def test_fourth_page_hash_and_figures():
     assert (a["TP"], a["FN"], a["FP"], a["TN"], a["unsup"]) == (80, 100, 160, 340, 0)
     for needle in ("0.444", "0.320", "0.618", "680"):
         assert needle in t
+
+
+def test_classes_and_containers_are_unsupported():
+    src = "class A { public: virtual void f(char * d); };\nvoid g(){ char *p; p = (char*)malloc(4); free(p); printLine(p); }"
+    assert ptrgate.analyze_source(src)["g"][0] == "unsupported"
+    assert ptrgate.analyze_source("void g(){ vector<char *> v; char *p = (char*)malloc(4); free(p); v.push_back(p); }")["g"][0] == "unsupported"
+    assert ptrgate.analyze_source("void A::h(char * d) const { free(d); }\nvoid g(){ ; }")["g"][0] == "unsupported"
+    assert ptrgate.analyze_source("class T { public: int a; };\nvoid g(){ T * p = new T; delete p; delete p; }")["g"][0] == "vulnerable"
+
+
+def test_model_test_parse_summarize_and_no_leak():
+    from axi.experiments import ptrgate_model as M
+    assert M.parse('{"memory_error": true, "why": "x"}') is True and M.parse('text {"memory_error":"False"}') is False and M.parse("no") is None
+    src = ("void CWE416_bad(){ char *data; data = (char*)malloc(4); free(data); printLine(data); }\n"
+           "static void good1(){ ; }\nvoid CWE416_good(){ good1(); }\nint main(){ CWE416_bad(); CWE416_good(); return 0; }")
+    import random
+    toks, t = M.anonymize(src, "CWE416_bad", random.Random(1))
+    code = M.pretty(toks)
+    assert not M.LEAK.search(code) and "main" not in code and t in code
+    item = dict(id=0, group="hard", variant="21", cwe="416", label=1, target=t, code=code, gate="vulnerable", facts=ptrgate.facts_text(ptrgate.analyze_source(" ".join(toks))[t]))
+    for arm in "PX":
+        text = M.messages(item, arm)[1]["content"].replace("memory_error", "")
+        assert not M.LEAK.search(text), arm
+    assert "checker" in M.messages(item, "X")[1]["content"] and "checker" not in M.messages(item, "P")[1]["content"]
+    rows = [dict(id=0, arm="P", pred=False), dict(id=0, arm="X", pred=True)]
+    s = M.summarize([item], rows)
+    assert s["P"]["all"]["accuracy"] == 0.0 and s["X"]["all"]["accuracy"] == 1.0 and s["X"]["hard"]["recall"] == 1.0
+
+
+def test_model_test_page_is_locked():
+    t = open(os.path.join(DOCS, "PTRGATE_MODEL_TEST.md")).read()
+    head = t.split("\n## Result\n")[0]
+    want = open(os.path.join(DOCS, "results", "ptrgate_model_hash.txt")).read().strip()
+    assert hashlib.sha256((head.rstrip("\n") + "\n").encode()).hexdigest() == want

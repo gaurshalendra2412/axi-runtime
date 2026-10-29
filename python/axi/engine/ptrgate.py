@@ -19,7 +19,8 @@ pointers and with global or static variables is read from its body and not guess
 Scope, stated plainly: C and C++ read by tokens, not by a full parser. One function (and what it
 calls in the same file) at a time; if / else, loops (taken once or not at all), switch on a
 constant, goto to a later label; branches with a constant condition or a global flag whose value
-is known; malloc/calloc/new, free/delete. Anything else (do, try, labels in odd places) makes the
+is known; malloc/calloc/new, free/delete. Anything else (do, try, labels in odd places, and C++ classes with methods or virtual calls, templates
+and standard containers) makes the
 function `unsupported`: the gate says nothing instead of guessing.
 """
 import re
@@ -617,9 +618,36 @@ def analyze_body(body):
     return r[0], r[1]
 
 
+CONTAINERS = {"vector", "deque", "list", "map", "set", "queue", "stack"}
+
+
+def cxx_reason(t):
+    """Why the gate does not read this source (class dispatch, containers, templates), or None."""
+    for i, x in enumerate(t):
+        if x in ("virtual", "template", "~"):
+            return "C++ class or template (%s)" % x
+        if x in CONTAINERS and i + 1 < len(t) and t[i + 1] == "<":
+            return "C++ container (%s)" % x
+        if x == "std" and i + 2 < len(t) and t[i + 1] == "::" and t[i + 2] in CONTAINERS:
+            return "C++ container (std::%s)" % t[i + 2]
+        if x == "::" and 0 < i < len(t) - 2 and IDENT.match(t[i - 1]) and IDENT.match(t[i + 1]) and t[i + 2] == "(" \
+                and t[i - 1] != "std":
+            j = _match(t, i + 2, "(", ")")
+            k = j + 1
+            while k < len(t) and t[k] in ("const", "noexcept"):
+                k += 1
+            if k < len(t) and t[k] == "{":
+                return "C++ method definition (%s::%s)" % (t[i - 1], t[i + 1])
+    return None
+
+
 def analyze_source(src):
     """{function name: (verdict, findings)} for every function in the source text."""
-    funcs, outside = functions(tokens(src))
+    t = tokens(src)
+    funcs, outside = functions(t)
+    why = cxx_reason(t)
+    if why:
+        return {n: ("unsupported", why) for n in funcs}
     names, init = globals_of(outside)
     c = Ctx(funcs, names, init)
     return {n: _analyze_one(n, c)[:2] for n in funcs}
