@@ -136,7 +136,7 @@ def run(llm, items, path, arms=("P", "X"), progress=print):
         for arm in arms:
             if (it["id"], arm) in done:
                 continue
-            text = llm.generate(messages(it, arm), False, 400)
+            text = llm.generate(messages(it, arm), False, 400)[0]   # generate gives (text, tokens, seconds)
             rec = llm.cache.get(llm.key(messages(it, arm))) or {}
             rows.append(dict(id=it["id"], arm=arm, reply=text, pred=parse(text), prompt=rec.get("prompt_tokens"),
                              out=rec.get("tokens"), think=rec.get("think"), seconds=rec.get("seconds")))
