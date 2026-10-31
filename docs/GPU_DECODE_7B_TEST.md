@@ -24,3 +24,35 @@ Test 31 was written for a Google TPU v6e-1; its first run was on a v5e, whose 16
 
 ## How the result will be read
 All figures from `docs/results/gpu_decode7b.json`, recomputed by a test. Each line reads YES or NO. No claim about a real serving engine, price, quality or other chips.
+
+## Result
+*Run on 31 Oct 2026 in Colab on an NVIDIA L4 (23.66 GB total, 8.19 GB free after the 15.23 GB of weights), PyTorch 2.11.0. Figures are recomputed by a test from `docs/results/gpu_decode7b.json`.*
+
+| prompt kept per session | sessions | step time | tokens a second (whole chip) | GB moved a second |
+|---|---|---|---|---|
+| AXI step (2,824 tokens) | 1 | 64.84 ms | 15.4 | 237 |
+| AXI step | 16 | 75.26 ms | 212.6 | 237 |
+| AXI step | 32 | 87.39 ms | **366.2** | 234 |
+| kept chat at 50,000 | 1 | 90.06 ms | 11.1 | 201 |
+| kept chat at 50,000 | 2 | 97.54 ms | 20.5 | 215 |
+| kept chat at 100,000 | 1 | 116.07 ms | **8.6** | 181 |
+| kept chat at 250,000 | 1 | does not fit (14.3 GB of cache) | | |
+| kept chat, mean of the long run (476,835) | 1 | does not fit (27.3 GB of cache) | | |
+
+### The seven lines
+1. The code ran to the end on the first try without a change: **YES**.
+2. The AXI-length rows up to 32 sessions fit and give a time: **YES**.
+3. One kept-chat session at 250,000 tokens does not fit next to the weights: **YES**.
+4. Tokens a second at the AXI length with 32 sessions at least 15 times those at 100,000 tokens with one session: **YES** (366.2 against 8.6 = 42.5 times).
+5. With one session, the step at 100,000 tokens at least 1.2 times the step at the AXI length: **YES** (1.79 times).
+6. At 50,000 tokens with 2 sessions at least 200 GB/s moved: **YES** (215 GB/s).
+7. Tokens a second at the AXI length grow at least 10 times from 1 to 32 sessions: **YES** (23.7 times).
+
+7 of 7 lines read YES.
+
+### A limit that was not on this page before the run
+**This test times decode only. AXI sends a fresh prompt of 2,824 tokens every step, so each AXI step also needs a prefill over those tokens, and prefill is compute-bound; a kept chat with a cache has to process only its newest few tokens.** The prefill of the AXI prompt was not timed, so the 42.5 times above is a decode-only figure and overstates the gain per step. I should have written this on the page before the run. A rough sizing, not a measurement: a prefill of 2,824 tokens through a 7B model is about 43 trillion operations, which is about 0.7 s per session on an L4 at half of its published peak. The arithmetic of a whole step then depends on the reply length (a guess of 40 tokens gives roughly 0.6 s of chip time per AXI step against roughly 4.6 s for a kept chat at 100,000 tokens, which is nearer 7 times than 42). Only a test that times the prefill can say. That is the next test.
+
+### What this says, and what it does not
+* On one L4, with a 7B-shape model, decode is bound by memory bandwidth (181 to 237 GB/s moved, about 60 to 79 % of the published 300 GB/s). More sessions per step share one read of the weights, so tokens a second grow almost in line with the number of sessions (23.7 times from 1 to 32); a kept chat cannot add sessions because its caches fill the memory (2 sessions at 50,000 tokens, 1 at 100,000, none at 250,000 or at the long run's mean).
+* This is decode only, one chip, a small inference GPU, constant weights, one run per row. It is not a serving engine and says nothing about quality or price.

@@ -1,0 +1,84 @@
+{
+ "gpu": "NVIDIA L4",
+ "torch": "2.11.0+cu130",
+ "total_bytes": 23659151360,
+ "free_bytes_after_weights": 8192655360,
+ "weight_bytes": 15230566400,
+ "kv_bytes_per_token": 57344,
+ "rows": [
+  {
+   "name": "AXI step",
+   "tokens": 2824,
+   "sessions": 1,
+   "fits": true,
+   "step_ms": 64.8437728881836,
+   "tokens_per_second": 15.421681303529285,
+   "gb_moved": 15.392505856,
+   "gb_per_s": 237.37831977394023
+  },
+  {
+   "name": "AXI step",
+   "tokens": 2824,
+   "sessions": 16,
+   "fits": true,
+   "step_ms": 75.26092529296875,
+   "tokens_per_second": 212.5937189546459,
+   "gb_moved": 17.821597696,
+   "gb_per_s": 236.79748324413683
+  },
+  {
+   "name": "AXI step",
+   "tokens": 2824,
+   "sessions": 32,
+   "fits": true,
+   "step_ms": 87.3861083984375,
+   "tokens_per_second": 366.19092652685487,
+   "gb_moved": 20.412628992,
+   "gb_per_s": 233.59123510716935
+  },
+  {
+   "name": "kept chat at 50k",
+   "tokens": 50000,
+   "sessions": 1,
+   "fits": true,
+   "step_ms": 90.06182098388672,
+   "tokens_per_second": 11.103484129850244,
+   "gb_moved": 18.0977664,
+   "gb_per_s": 200.94826200813702
+  },
+  {
+   "name": "kept chat at 50k",
+   "tokens": 50000,
+   "sessions": 2,
+   "fits": true,
+   "step_ms": 97.54112243652344,
+   "tokens_per_second": 20.50417249710792,
+   "gb_moved": 20.9649664,
+   "gb_per_s": 214.93464373083583
+  },
+  {
+   "name": "kept chat at 100k",
+   "tokens": 100000,
+   "sessions": 1,
+   "fits": true,
+   "step_ms": 116.07449340820312,
+   "tokens_per_second": 8.615157134334982,
+   "gb_moved": 20.9649664,
+   "gb_per_s": 180.6164798520532
+  },
+  {
+   "name": "kept chat at 250k",
+   "tokens": 250000,
+   "sessions": 1,
+   "fits": false,
+   "need_cache_gb": 14.336
+  },
+  {
+   "name": "kept chat, mean of the long run",
+   "tokens": 476835,
+   "sessions": 1,
+   "fits": false,
+   "need_cache_gb": 27.34362624
+  }
+ ]
+}
