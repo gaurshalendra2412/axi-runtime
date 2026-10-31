@@ -1,0 +1,36 @@
+{
+ "gpu": "NVIDIA L4",
+ "torch": "2.11.0+cu130",
+ "rows": [
+  {
+   "tokens": 100,
+   "prefill_ms": 60.11699295043945,
+   "tokens_per_second": 1663.423186892268,
+   "tflops": 25.334877299262295
+  },
+  {
+   "tokens": 512,
+   "prefill_ms": 118.93452453613281,
+   "tokens_per_second": 4304.889618862959,
+   "tflops": 65.56590718476298
+  },
+  {
+   "tokens": 2824,
+   "prefill_ms": 622.8705444335938,
+   "tokens_per_second": 4533.847402541726,
+   "tflops": 69.05306391187929
+  },
+  {
+   "tokens": 8192,
+   "prefill_ms": 1956.6234130859375,
+   "tokens_per_second": 4186.80464784983,
+   "tflops": 63.76740619290545
+  },
+  {
+   "tokens": 32768,
+   "prefill_ms": 9819.5458984375,
+   "tokens_per_second": 3337.0178559086007,
+   "tflops": 50.82467203240157
+  }
+ ]
+}

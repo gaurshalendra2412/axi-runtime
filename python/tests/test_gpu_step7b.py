@@ -22,3 +22,18 @@ def test_combine_with_made_up_numbers_and_page_lock():
     head = t.split("\n## Result\n")[0]
     want = open(os.path.join(DOCS, "results", "gpu_step7b_hash.txt")).read().strip()
     assert hashlib.sha256((head.rstrip("\n") + "\n").encode()).hexdigest() == want
+
+
+def test_l4_whole_step_result_figures():
+    from axi.experiments import gpu_step7b as S
+    dec = json.load(open(os.path.join(DOCS, "results", "gpu_decode7b.json")))["rows"]
+    pre = json.load(open(os.path.join(DOCS, "results", "gpu_step7b.json")))["rows"]
+    c40 = S.combine(dec, pre, 40)
+    a32, k100 = c40[("AXI step", 32)], c40[("kept chat at 100k", 1)]
+    assert round(a32["steps_per_chip_second"] / k100["steps_per_chip_second"], 2) == 6.49
+    assert round(S.combine(dec, pre, 10)[("kept chat at 50k", 2)]["chip_seconds_per_step"], 3) == 0.573
+    ft = S.first_token(dec, pre)
+    assert round(ft["AXI step"]) == 688 and round(ft["kept chat at 50k, cache kept"]) == 150
+    t = open(os.path.join(DOCS, "GPU_STEP_7B_TEST.md")).read()
+    for needle in ("8 of 9 lines read YES", "6.49 times", "0.88 times", "9,884 ms"):
+        assert needle in t
