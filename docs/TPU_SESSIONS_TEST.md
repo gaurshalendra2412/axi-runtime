@@ -22,3 +22,32 @@ Test 29 counted how many sessions fit in the memory of one NVIDIA T4 GPU (kept c
 
 ## How the result will be read
 Counts come from the saved JSON (`docs/results/tpu_sessions.json`), recomputed by a test. Each line reads YES or NO. The T4 and TPU counts will be shown side by side, and nothing is claimed about speed, price or real deployments.
+
+## Result
+*Run on 31 Oct 2026 in Colab on a TPU v6e-1 ("TPU v6 lite"), JAX 0.11.2. The chip reports a memory limit of 33,546,042,880 bytes (about 33.5 GB). Figures are recomputed by a test from `docs/results/tpu_sessions.json`.*
+
+| prompt kept per session | tokens | TPU v6e-1: sessions held | T4 GPU (Test 29): sessions held |
+|---|---|---|---|
+| AXI step | 2,824 | **927** | 430 |
+| kept chat at 50k | 50,000 | 54 | 23 |
+| kept chat at 100k | 100,000 | 27 | 12 |
+| kept chat at 250k | 250,000 | 10 | 4 |
+| kept chat, mean of the long run | 476,835 | **5** | 2 |
+| kept chat, largest of the long run | 949,591 | **2** | 1 |
+
+**Real bytes a session takes on the chip against the plain count:** 1.0454 times at the AXI length (36,277,760 against 34,701,312 bytes), and between 1.0001 and 1.0011 times at every kept-chat length.
+
+### The six lines
+1. The code ran to the end on the first try without a change: **YES**.
+2. The chip reports at least 30 GB: **YES** (33.5 GB).
+3. Real bytes within 2 % of the nominal at every length: **NO**. The AXI length is 4.5 % over. I guessed the padding would come from the head size of 64; it did not (the long lengths show almost none). The extra at 2,824 tokens is about what rounding the token axis up to a tile size would give (2,824 to 2,944 is 4.2 %); I did not confirm that cause.
+4. AXI sessions at least 100 times the kept-chat mean: **YES** (927 against 5 = 185 times; the memory ratio is 169, and the 185 is larger because the kept-chat count is rounded down from 5.5 to 5).
+5. At the largest kept-chat length at most 2 sessions: **YES** (exactly 2).
+6. Every length within 5 % of the count from the real bytes per session: **YES** (927 against 924 at the AXI length, exact at the others).
+
+5 of 6 lines read YES, 1 reads NO.
+
+### What this says, and what it does not
+* The TPU holds more sessions than the T4 at every length mainly because it has more memory (33.5 GB against 15.5 GB), not because of any speed. The ratio between AXI and a kept chat is the same on both chips, as it must be: about **169 times in memory** (the token ratio 476,835 / 2,824).
+* So on a Google v6e chip, a kept chat at the long run's mean length takes the memory of about 169 AXI-sized sessions, and at the largest length about 336 (949,591 / 2,824).
+* **This is memory only.** Nothing here shows speed, quality, throughput or price, and real servers evict, offload, share prefixes and page memory. The count means sessions in flight at once. No model was run; cache-shaped arrays were allocated.

@@ -1,0 +1,68 @@
+{
+ "device": "TPU v6 lite",
+ "jax": "0.11.2",
+ "shape": [
+  24,
+  2,
+  64
+ ],
+ "nominal_bytes_per_token": 12288,
+ "bytes_limit": 33546042880,
+ "bytes_in_use_at_start": 54272,
+ "counts": {
+  "AXI step": {
+   "tokens": 2824,
+   "sessions_held": 927,
+   "nominal_session_bytes": 34701312,
+   "real_session_bytes": 36277760,
+   "real_over_nominal": 1.0454,
+   "by_nominal": 966,
+   "by_real": 924
+  },
+  "kept chat at 50k": {
+   "tokens": 50000,
+   "sessions_held": 54,
+   "nominal_session_bytes": 614400000,
+   "real_session_bytes": 615084032,
+   "real_over_nominal": 1.0011,
+   "by_nominal": 54,
+   "by_real": 54
+  },
+  "kept chat at 100k": {
+   "tokens": 100000,
+   "sessions_held": 27,
+   "nominal_session_bytes": 1228800000,
+   "real_session_bytes": 1230074368,
+   "real_over_nominal": 1.001,
+   "by_nominal": 27,
+   "by_real": 27
+  },
+  "kept chat at 250k": {
+   "tokens": 250000,
+   "sessions_held": 10,
+   "nominal_session_bytes": 3072000000,
+   "real_session_bytes": 3073470464,
+   "real_over_nominal": 1.0005,
+   "by_nominal": 10,
+   "by_real": 10
+  },
+  "kept chat, mean of the long run": {
+   "tokens": 476835,
+   "sessions_held": 5,
+   "nominal_session_bytes": 5859348480,
+   "real_session_bytes": 5860585984,
+   "real_over_nominal": 1.0002,
+   "by_nominal": 5,
+   "by_real": 5
+  },
+  "kept chat, largest of the long run": {
+   "tokens": 949591,
+   "sessions_held": 2,
+   "nominal_session_bytes": 11668574208,
+   "real_session_bytes": 11669172224,
+   "real_over_nominal": 1.0001,
+   "by_nominal": 2,
+   "by_real": 2
+  }
+ }
+}
