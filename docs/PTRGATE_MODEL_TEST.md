@@ -32,3 +32,35 @@ The pointer gate (`ptrgate.py`) is a program with set rules that reads C/C++ and
 
 ## How the result will be read
 Every figure is recomputed by a test from the saved replies (`docs/results/ptrgate_model.json`). Each line gets YES or NO; a NO is written as plainly as a YES. If arm P is already at the ceiling, the page will say the demonstration shows no gain on this data. No claim will be made about real-world vulnerabilities.
+
+## Result
+*Run on 30 Oct 2026 in Colab, `gemini-3.8-flash`, 600 calls, all replies readable (300 of 300 in each arm). Figures are recomputed by a test from `docs/results/ptrgate_model.json`.*
+
+| group | n | plain: right | plain: false alarms | with gate: right | with gate: false alarms |
+|---|---|---|---|---|---|
+| all | 300 | 295 (0.983) | 2 of 150 clean (0.013) | 297 (0.990) | 0 of 150 (0.000) |
+| hard (data-flow and multi-file) | 260 | 258 (0.992) | 2 of 130 | 260 (1.000) | 0 of 130 |
+| cross-function (variants 45, 54, 61 to 68) | 134 | 133 (0.993) | 1 | 134 (1.000) | 0 |
+| rest (C++ classes and containers; gate says unsupported) | 40 | 37 (0.925) | 0 | 37 (0.925) | 0 |
+
+Recall on vulnerable functions: 0.980 in both arms (the 3 missed ones are the same C++ class/container cases, where the gate said "cannot read").
+
+### The eight lines
+1. Both arms readable on at least 95 %: **YES** (100 % and 100 %).
+2. Plain accuracy at least 0.90: **YES** (0.983). Plain was already near the ceiling.
+3. With-gate accuracy at least 0.97: **YES** (0.990).
+4. With-gate beats plain by at least 3 points: **NO** (0.7 points: 2 items out of 300).
+5. Plain accuracy on the cross-function group at most 0.90: **NO** (0.993). I expected the model to miss freeing done in another function or file; it did not.
+6. With-gate false-alarm rate at most 0.02: **YES** (0.000).
+7. On the 40 unsupported C++ items the arms are within 3 points: **YES** (identical, 0.925).
+8. Plain false-alarm rate higher than with-gate: **YES** (0.013 against 0.000, 2 items).
+
+6 of 8 lines read YES, 2 read NO.
+
+### What this says, and what it does not
+* **On this data the model plain is already almost as good as the gate.** The gate added two corrected false alarms (clean functions the plain model called vulnerable) and no new misses. It did not lift accuracy by the 3 points I guessed. My guess that plain models would miss cross-function cases was wrong for this model on this synthetic data.
+* The two corrected items are tiny numbers (2 of 300). They could be chance; one run, one sample. They are on clean functions where the gate itself said "unsupported", so the gate's facts did not decide them; I do not know why the model did better there.
+* **Where the gate cannot read (C++ classes and containers), neither arm helps:** both miss 3 of 20 vulnerable functions there. Nothing in the host facts fixes that.
+* **Time and thinking (descriptive, not a pre-registered line):** mean seconds per call 7.42 plain against 6.27 with the gate; mean thinking tokens 498 against 299. With the gate the model thought about 40 % less for the same or slightly better answers. One run; not a tested claim.
+* **Not shown:** anything on real vulnerabilities or real repositories; any gain in accuracy on Juliet; any other model. The gate was fitted on these cases, so the with-gate arm is a demonstration and not an independent result. Juliet is small and synthetic, which is the likeliest reason plain Gemini scores so high.
+* **What is supported:** giving the model exact host facts did not hurt it on any group, removed the plain model's two false alarms, and was associated with less thinking per call. A fair next test needs code a model plain does not already solve (real repositories), which this page did not attempt.

@@ -20,3 +20,15 @@ def test_gpu_sessions_formula_page_and_counter():
     head = t.split("\n## Result\n")[0]
     want = open(os.path.join(DOCS, "results", "gpu_sessions_hash.txt")).read().strip()
     assert hashlib.sha256((head.rstrip("\n") + "\n").encode()).hexdigest() == want
+
+
+def test_gpu_sessions_result_figures():
+    import json
+    d = json.load(open(os.path.join(DOCS, "results", "gpu_sessions.json")))
+    assert [m["per_token"] for m in d["measured"]] == [12288.0, 12288.0]
+    c = d["counts"]
+    assert c["AXI step"]["sessions_held"] == 430 and c["kept chat, mean of the long run"]["sessions_held"] == 2
+    assert c["kept chat, largest of the long run"]["sessions_held"] == 1
+    t = open(os.path.join(DOCS, "GPU_SESSIONS_TEST.md")).read()
+    for needle in ("**430**", "4 of 5 lines read YES", "401 AXI-sized sessions", "540 against 3"):
+        assert needle in t

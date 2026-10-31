@@ -1,0 +1,55 @@
+{
+ "model": "Qwen/Qwen2.5-0.5B-Instruct",
+ "gpu": "Tesla T4",
+ "shape": [
+  24,
+  2,
+  64
+ ],
+ "formula_bytes_per_token": 12288,
+ "measured": [
+  {
+   "tokens": 1024,
+   "bytes": 12582912,
+   "per_token": 12288.0
+  },
+  {
+   "tokens": 2824,
+   "bytes": 34701312,
+   "per_token": 12288.0
+  }
+ ],
+ "free_bytes_without_the_model": 15474688000,
+ "counts": {
+  "AXI step": {
+   "tokens": 2824,
+   "sessions_held": 430,
+   "by_formula": 445
+  },
+  "kept chat at 50k": {
+   "tokens": 50000,
+   "sessions_held": 23,
+   "by_formula": 25
+  },
+  "kept chat at 100k": {
+   "tokens": 100000,
+   "sessions_held": 12,
+   "by_formula": 12
+  },
+  "kept chat at 250k": {
+   "tokens": 250000,
+   "sessions_held": 4,
+   "by_formula": 5
+  },
+  "kept chat, mean of the long run": {
+   "tokens": 476835,
+   "sessions_held": 2,
+   "by_formula": 2
+  },
+  "kept chat, largest of the long run": {
+   "tokens": 949591,
+   "sessions_held": 1,
+   "by_formula": 1
+  }
+ }
+}

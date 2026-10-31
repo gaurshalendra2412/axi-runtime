@@ -175,3 +175,16 @@ def test_model_test_page_is_locked():
     head = t.split("\n## Result\n")[0]
     want = open(os.path.join(DOCS, "results", "ptrgate_model_hash.txt")).read().strip()
     assert hashlib.sha256((head.rstrip("\n") + "\n").encode()).hexdigest() == want
+
+
+def test_model_test_result_figures():
+    d = json.load(open(os.path.join(DOCS, "results", "ptrgate_model.json")))["summary"]
+    assert (d["P"]["all"]["accuracy"], d["X"]["all"]["accuracy"]) == (0.9833, 0.99)
+    assert (d["P"]["all"]["false_alarm"], d["X"]["all"]["false_alarm"]) == (0.0133, 0.0)
+    assert d["P"]["parsed"] == d["X"]["parsed"] == 300
+    assert d["P"]["rest"]["accuracy"] == d["X"]["rest"]["accuracy"] == 0.925
+    assert (d["P"]["cross"]["accuracy"], d["X"]["cross"]["accuracy"]) == (0.9925, 1.0)
+    t = open(os.path.join(DOCS, "PTRGATE_MODEL_TEST.md")).read()
+    for needle in ("295 (0.983)", "297 (0.990)", "6 of 8 lines"):
+        assert needle in t
+
