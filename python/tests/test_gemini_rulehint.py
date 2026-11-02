@@ -62,3 +62,21 @@ def test_page_lock():
 if __name__ == "__main__":
     for _n, _f in sorted(globals().items()):
         if _n.startswith("test_") and callable(_f): _f(); print("PASS", _n)
+
+
+def test_rulehint_result_figures():
+    from axi.experiments import gemini_rulehint as R
+    d = json.load(open(os.path.join(DOCS, "results", "gemini_rulehint.json")))
+    assert d["seed"] == R.RH_SEED and d["price_in"] == 0.75 and d["price_out"] == 3.75 and set(d["arms"]) == set(R.ARM_ORDER)
+    S = {a: R.arm_stats(d["arms"][a], d["price_in"], d["price_out"]) for a in R.ARM_ORDER}
+    assert [S[a]["exact"] for a in R.ARM_ORDER] == [400, 400, 400, 41, 41]
+    assert [S[a]["corrupted"] for a in R.ARM_ORDER] == [0, 0, 0, 246, 0]
+    assert [S[a]["raw"]["slips"] for a in R.ARM_ORDER] == [7, 0, 0, 2, 2] and S["repair"]["raw"]["by_kind"]["delete_pair"] == (7, 9)
+    assert round(S["blind"]["last100_distance"], 2) == 3.95 and round(S["gate"]["last100_distance"], 2) == 7.94
+    assert [round(S[a]["cost_per_exact"], 4) for a in R.ARM_ORDER] == [0.0012, 0.0011, 0.0011, 0.0115, 0.013]
+    assert round(sum(S[a]["cost"] for a in R.ARM_ORDER), 2) == 2.38 and round(S["blind"]["cost_per_exact"] / S["repair"]["cost_per_exact"], 1) == 9.3
+    v = R.verdict_rulehint(d["arms"], d["price_in"], d["price_out"])
+    assert [x[2] for x in v] == ["yes"] * 5 + ["NO"] + ["yes"] * 7 and R.headline(v) == "REPEATS"
+    t = open(os.path.join(DOCS, "GEMINI_RULEHINT_TEST.md")).read()
+    for needle in ("12 read yes and 1 reads NO", "$2.38 in all", "9.3 times", "7 of 9 such requests", "THE FIRST RESULT REPEATS ON A SECOND SEED"):
+        assert needle in t
