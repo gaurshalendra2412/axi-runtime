@@ -145,6 +145,13 @@ git clone https://github.com/gaurshalendra2412/axi-runtime
 cd axi-runtime
 ```
 
+**Check the headline numbers in a few seconds** (no key, no model, no GPU: it replays the saved replies of the 4,000-request run with this repository's own code and prints 4,000 of 4,000, 3,954 of 4,000, 85 of 400 and the 4.5 times above):
+
+```bash
+cd python
+python3 quickstart_replay.py
+```
+
 **Python tests** (needs Python 3 and numpy; takes about three minutes; the four tests that need PyTorch or a GPU are skipped):
 
 ```bash
