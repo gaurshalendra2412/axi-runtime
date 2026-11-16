@@ -4,6 +4,8 @@
 
 <p align="center"><sub>First 400 requests of the same stream, three ways of keeping the state. The whole run was 4,000 requests.</sub></p>
 
+<p align="center">AXI is a layer on the host side, between a model and the state it edits. The model is unchanged.<br>Architecture by <b>Rajnish Choubey</b>; tests built and run by Shalendra Gaur.<br>White paper: <a href="https://doi.org/10.5281/zenodo.23958737">AXI: The Cure for the Cost Crisis in AI</a> (Zenodo, 4 November 2026)</p>
+
 <p align="center"><a href="https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml/badge.svg"></a></p>
 
 <p align="center">

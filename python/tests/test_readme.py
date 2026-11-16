@@ -33,7 +33,7 @@ def links_and_paths(text):
 
 def check_links(text, rel_dir=""):
     for u in re.findall(r"https?://[^\s)\"`<>]+", text):
-        assert u.startswith("https://github.com/gaurshalendra2412/axi-runtime"), ("address", u)
+        assert u.startswith("https://github.com/gaurshalendra2412/axi-runtime") or u == "https://doi.org/10.5281/zenodo.23958737", ("address", u)    # the repository, and the white paper's DOI
     links, paths = links_and_paths(text)
     for l in links:
         assert os.path.exists(os.path.join(ROOT, os.path.normpath(os.path.join(rel_dir, l)))), ("missing link", l)
@@ -133,7 +133,8 @@ def check_words(text):
     for w in ["billion", "trillion", "hyperscaler", "industry", "market", "profit", "openai", "anthropic", "google", "kwh", "watt", "carbon", "valuation", "frontier"]:
         assert w not in low, ("word the pages do not support", w)
     assert low.count("energy") == 1 and "or energy" in low
-    assert not re.findall(r"\d{8,}", text) and all(sum(ch.isdigit() for ch in m) < 10 for m in re.findall(r"\+?\d[\d \-()]{8,}\d", text.replace(",", ""))), "phone-like digits"
+    plain = text.replace("10.5281/zenodo.23958737", "DOI")            # the white paper's own DOI is the one long number the page may carry; any other 8-digit run is still refused
+    assert not re.findall(r"\d{8,}", plain) and all(sum(ch.isdigit() for ch in m) < 10 for m in re.findall(r"\+?\d[\d \-()]{8,}\d", plain.replace(",", ""))), "phone-like digits"
     assert not re.findall(r"\S+@\S+\.\S+", text), "e-mail address"
     for must in ["The idea, the framework, the architecture and the structural maps of AXI are by **Rajnish Choubey**",
                  "The assistant is a tool here: it is not an author and it owns nothing in this work",

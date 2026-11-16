@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the white paper. The architecture is by Rajnish Choubey; the tests were built and run by Shalendra Gaur."
+title: "AXI Runtime: a host-side layer between a model and the state it edits"
+type: software
+authors:
+  - family-names: Choubey
+    given-names: Rajnish
+  - family-names: Gaur
+    given-names: Shalendra
+repository-code: "https://github.com/gaurshalendra2412/axi-runtime"
+preferred-citation:
+  type: generic
+  title: "AXI: The Cure for the Cost Crisis in AI"
+  authors:
+    - family-names: Choubey
+      given-names: Rajnish
+    - family-names: Gaur
+      given-names: Shalendra
+  doi: "10.5281/zenodo.23958737"
+  url: "https://doi.org/10.5281/zenodo.23958737"
+  year: 2026
+  month: 11
+  publisher:
+    name: Zenodo
+  notes: "Preprint (white paper), version 1, published 4 November 2026, CC BY-ND 4.0."
