@@ -1,0 +1,9 @@
+{
+ "note": "32B screen lines (Qwen2.5-32B-Instruct-AWQ, L4, cpu_offload_gb 10). Cells without a saved summary file are read from the printed CELL lines.",
+ "X0": {"machine":"A (19:56 UTC VM)","steps":3200,"exact":100.0,"corrupt":0,"parsed":100.0,"s_step":2.718,"steps_h":1324.0,"computed":156.5,"cached":64.67,"growth":0.98,"stopped":0},
+ "P0": {"machine":"A (19:56 UTC VM)","steps":3200,"exact":99.69,"corrupt":0,"parsed":100.0,"s_step":2.444,"steps_h":1473.0,"computed":97.1,"cached":70.88,"growth":0.87,"stopped":0},
+ "P4": {"machine":"A (19:56 UTC VM)","steps":400,"exact":100.0,"corrupt":0,"parsed":100.0,"s_step":6.749,"steps_h":533.0,"computed":125.4,"cached":67.11,"growth":0.7,"stopped":0},
+ "P4_first_run": {"machine":"first A (lost)","steps":400,"exact":100.0,"corrupt":0,"s_step":6.751,"steps_h":533.0,"computed":125.4,"cached":67.11,"growth":0.71},
+ "PC_first_run": {"machine":"first A (lost)","steps":184,"exact":100.0,"corrupt":0,"s_step":8.019,"steps_h":449.0,"computed":155.5,"cached":96.23,"growth":1.81,"stopped":4},
+ "XW": {"machine":"first B (lost)","steps":3200,"exact":97.91,"corrupt":0,"parsed":100.0,"s_step":3.06,"steps_h":1176.0,"computed":155.6,"cached":64.82,"growth":1.02,"stopped":0}
+}

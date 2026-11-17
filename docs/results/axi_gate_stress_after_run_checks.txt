@@ -1,0 +1,143 @@
+Test 39: checks made AFTER the run, on segments 75 and 94 (the two whose full replay B2 did not match), and two direct reproductions.
+None of these edits gate_stress.py or any framework file; the scripts import it and patch functions in memory. Harness sha256 1416a1eb4a104c331fd18dc5cb8e60b86e0e23db71918985630e9026be4c2065.
+Run from the python folder: python3 <script> <segment>. Each re-runs the segment with its fixed seed (20261116000 + segment).
+
+=================== t39_b2_diag.py
+import sys, json
+sys.path.insert(0, "/home/claude/axi-runtime/python")
+import axi.experiments.gate_stress as G
+seg = int(sys.argv[1])
+rec = []
+orig = G.rt_state
+def rs(rt):
+    s = orig(rt); rec.append(s); return s
+G.rt_state = rs
+S = G.run_segment((seg, 100000))
+print("seg", seg, "B1", S["B1"], "B2", S["B2"], "B3", S["B3"], "B_ex", S["B_ex"], flush=True)
+live, st2 = rec[0], rec[1]
+names = ["nodes", "edges", "table", "free_list", "live_count"]
+for nm, a, b in zip(names, live, st2):
+    same = (a == b)
+    line = [nm, "same" if same else "DIFFERENT"]
+    if not same:
+        if isinstance(a, dict):
+            ka, kb = set(a), set(b)
+            line += ["only_live", len(ka - kb), "only_replay", len(kb - ka), "value_diff", sum(1 for k in ka & kb if a[k] != b[k])]
+            ex = list(ka - kb)[:3] + list(kb - ka)[:3]
+            line += ["examples", ex]
+        elif isinstance(a, list):
+            line += ["len_live", len(a), "len_replay", len(b), "same_set", sorted(a) == sorted(b), "first_diff_index", next((i for i, (x, y) in enumerate(zip(a, b)) if x != y), None)]
+        else:
+            line += [a, b]
+    print(*line, flush=True)
+print("pages_fail", S["pages_fail"], "of", S["pages_checks"], "raised", dict(S["raised"]), flush=True)
+
+----- output
+[segment 75]
+seg 75 B1 True B2 False B3 True B_ex {'B1': True, 'B2': False, 'B3': True, 'committed': 30096, 'log': 99836}
+nodes same
+edges same
+table DIFFERENT only_live 0 only_replay 0 value_diff 1 examples []
+free_list DIFFERENT len_live 16235 len_replay 16235 same_set False first_diff_index 15904
+live_count same
+pages_fail 56 of 100 raised {9: 895, 2: 15}
+[segment 94]
+seg 94 B1 True B2 False B3 True B_ex {'B1': True, 'B2': False, 'B3': True, 'committed': 29994, 'log': 99823}
+nodes same
+edges same
+table same
+free_list DIFFERENT len_live 17547 len_replay 17547 same_set True first_diff_index 14505
+live_count same
+pages_fail 50 of 100 raised {9: 814, 2: 12}
+
+=================== t39_b2_diag2.py
+import sys, json
+sys.path.insert(0, "/home/claude/axi-runtime/python")
+import axi.experiments.gate_stress as G
+seg = int(sys.argv[1])
+big = []
+orig = G.Runtime.propose
+def wrapped(self, text, *a, **k):
+    if len(text) > G.BIG_TEXT:
+        fb = len(self.pager._free); tb = len(self.pager._table)
+        try:
+            o = orig(self, text, *a, **k); res = (o.committed, o.stage, o.reason[:60] if o.reason else "")
+        except Exception as e:
+            o = None; res = ("raised", type(e).__name__, str(e)[:60])
+        big.append(dict(n=len(text), res=res, free_before=fb, free_after=len(self.pager._free), table_before=tb, table_after=len(self.pager._table)))
+        if o is None: raise
+        return o
+    return orig(self, text, *a, **k)
+G.Runtime.propose = wrapped
+S = G.run_segment((seg, 100000))
+print("seg", seg, "B2", S["B2"], "big texts", len(big), flush=True)
+changed = [b for b in big if b["free_before"] != b["free_after"] or b["table_before"] != b["table_after"] or b["res"][0] is True]
+print("big texts committed or that touched pages:", len(changed), flush=True)
+for b in changed[:5]: print(b, flush=True)
+from collections import Counter
+print("big outcomes", Counter((b["res"][0], b["res"][1]) for b in big), flush=True)
+print("DONE", flush=True)
+
+----- output
+[segment 75]
+seg 75 B2 False big texts 164
+big texts committed or that touched pages: 0
+big outcomes Counter({(False, 'parse'): 116, (False, 'gate'): 48})
+DONE
+[segment 94]
+seg 94 B2 False big texts 177
+big texts committed or that touched pages: 0
+big outcomes Counter({(False, 'parse'): 141, (False, 'gate'): 36})
+DONE
+
+=================== t39_b2_diag3.py
+import sys
+sys.path.insert(0, "/home/claude/axi-runtime/python")
+import axi.experiments.gate_stress as G
+seg = int(sys.argv[1])
+G.BIG_TEXT = 10**12          # replay also the texts over 256 KB (the harness file itself is not edited)
+S = G.run_segment((seg, 100000))
+print("seg", seg, "B1", S["B1"], "B2", S["B2"], "B3", S["B3"], "B_ex", S["B_ex"], "DONE", flush=True)
+
+----- output
+[segment 75]
+seg 75 B1 True B2 True B3 True B_ex None DONE
+[segment 94]
+seg 94 B1 True B2 True B3 True B_ex None DONE
+
+=================== t39_b2_diag4.py
+import sys
+sys.path.insert(0, "/home/claude/axi-runtime/python")
+import axi.experiments.gate_stress as G
+from collections import Counter
+seg = int(sys.argv[1])
+orig = G.Runtime.propose
+stats = Counter(); first = []
+def wrapped(self, text, *a, **k):
+    fb = list(self.pager._free); tb = dict(self.pager._table)
+    o = orig(self, text, *a, **k)
+    if not o.committed:
+        stats["refused", o.stage] += 1
+        fa = list(self.pager._free)
+        if fa != fb:
+            stats["refused_free_list_changed", o.stage] += 1
+            if sorted(fa) == sorted(fb): stats["  of which same set, other order", o.stage] += 1
+            if len(first) < 2: first.append((o.stage, len(text), (o.reason or "")[:80], len(fb), len(fa)))
+        if self.pager._table != tb: stats["refused_table_changed", o.stage] += 1
+    return o
+G.Runtime.propose = wrapped
+S = G.run_segment((seg, 20000))
+print("seg", seg, "(first 20,000 proposals only)", dict(stats), first, "DONE", flush=True)
+
+----- output
+[segment 75]
+seg 75 (first 20,000 proposals only) {('refused', 'parse'): 28364, ('refused', 'gate'): 5936, ('refused_free_list_changed', 'gate'): 1373, ('  of which same set, other order', 'gate'): 1373} [('gate', 26, "identification: edge ((1, 1), (1, 0), 'write') already exists", 19992, 19992), ('gate', 265343, "identification: repeated edge op ADD((2050, 0), (2044, 75), 'sync')", 19560, 19560)] DONE
+
+=================== direct reproduction (run inline from the python folder)
+rt = Runtime(CAP); rt.propose("ADD[0,65536:1]"); rt.propose("ADD[1,0:2]")
+  -> both commit; services 2, mapped pages 1 (both have page 65536)
+rt.propose("DEL[1,0]")
+  -> commits; services 1 (node (0,65536) remains), mapped pages 0; pages_ok False (the page of the remaining service was unmapped)
+Runtime(CAP).propose("ADD[6,22:" + "1"*5000 + "]")      -> raises ValueError: Exceeds the limit (4300 digits) for integer string conversion: value has 5000 digits
+Runtime(CAP).propose("ADD[6,22:" + "1"*4000 + "]")      -> commits
+Runtime(CAP).propose("ADD[6" + "0"*4999 + ",22:1]")     -> raises the same ValueError (5000-digit coordinate)

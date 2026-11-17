@@ -1,0 +1,384 @@
+{
+ "DeepSeek-R1-Distill-Qwen-7B (fp16, plan settings)": {
+  "P0": {
+   "cached_pct": 94.01,
+   "computed_per_step": 22.6,
+   "exact_pct": 0.0,
+   "parsed_pct": 0.94,
+   "raw_sha256_prefix": "9f5ba1424d7b",
+   "seconds_per_step": 0.203,
+   "steps": 3200,
+   "steps_per_hour": 17739
+  },
+  "P4": {
+   "cached_pct": 79.98,
+   "computed_per_step": 139.15,
+   "exact_pct": 0.5,
+   "parsed_pct": 68.75,
+   "raw_sha256_prefix": "6dcf6a92",
+   "seconds_per_step": 1.2066,
+   "steps": 400,
+   "steps_per_hour": 2983
+  },
+  "PC": {
+   "cached_pct": 91.12,
+   "computed_per_step": 326.1,
+   "exact_pct": 2.15,
+   "kept_chat_steps_per_job": [
+    22,
+    24,
+    24,
+    23
+   ],
+   "parsed_pct": 67.74,
+   "raw_sha256_prefix": "816cbf2265a4",
+   "seconds_per_step": 1.351,
+   "steps": 93,
+   "steps_per_hour": 2665
+  },
+  "PN": {
+   "cached_pct": 80.89,
+   "computed_per_step": 125.3,
+   "exact_pct": 1.53,
+   "parsed_pct": 65.88,
+   "raw_sha256_prefix": "0cec4f21f752",
+   "seconds_per_step": 0.218,
+   "steps": 3200,
+   "steps_per_hour": 16523
+  },
+  "X0": {
+   "cached_pct": 89.79,
+   "computed_per_step": 49.1,
+   "exact_pct": 0.0,
+   "parsed_pct": 2.88,
+   "raw_sha256_prefix": "ea5c60e10f15",
+   "seconds_per_step": 0.212,
+   "steps": 3200,
+   "steps_per_hour": 16970
+  },
+  "XR": {
+   "cached_pct": 78.66,
+   "computed_per_step": 147.2,
+   "exact_pct": 0.91,
+   "parsed_pct": 60.84,
+   "raw_sha256_prefix": "6c0386dc133f",
+   "seconds_per_step": 0.226,
+   "steps": 3200,
+   "steps_per_hour": 15939
+  },
+  "XW": {
+   "cached_pct": 88.4,
+   "computed_per_step": 53.4,
+   "exact_pct": 0.0,
+   "parsed_pct": 12.16,
+   "raw_sha256_prefix": "85c424cb53dd",
+   "seconds_per_step": 0.213,
+   "steps": 3200,
+   "steps_per_hour": 16914
+  }
+ },
+ "_format": "entries are [read, total, at_cap] for the by-kind table",
+ "deepseek_r1_replies_by_kind_read_over_total_and_at_96_token_cap": {
+  "P0": {
+   "add_edge": [
+    2,
+    1039,
+    1039
+   ],
+   "add_node": [
+    15,
+    1069,
+    1067
+   ],
+   "delete_dep": [
+    11,
+    738,
+    738
+   ],
+   "delete_leaf": [
+    2,
+    354,
+    354
+   ]
+  },
+  "P4": {
+   "add_edge": [
+    150,
+    150,
+    0
+   ],
+   "add_node": [
+    125,
+    125,
+    0
+   ],
+   "delete_dep_and_leaf": [
+    0,
+    125,
+    125
+   ]
+  },
+  "PC": {
+   "add_edge": [
+    45,
+    45,
+    0
+   ],
+   "add_node": [
+    18,
+    18,
+    0
+   ],
+   "delete_dep": [
+    0,
+    24,
+    24
+   ],
+   "delete_leaf": [
+    0,
+    6,
+    6
+   ]
+  },
+  "PN": {
+   "add_edge": [
+    1039,
+    1039,
+    0
+   ],
+   "add_node": [
+    1069,
+    1069,
+    0
+   ],
+   "delete_dep": [
+    0,
+    738,
+    738
+   ],
+   "delete_leaf": [
+    0,
+    354,
+    354
+   ]
+  },
+  "PN_first_unread_step_index_over_32_jobs": {
+   "jobs_with_an_unread_reply": 32,
+   "max": 15,
+   "median": 1,
+   "min": 0
+  },
+  "X0": {
+   "add_edge": [
+    76,
+    1039,
+    1035
+   ],
+   "add_node": [
+    6,
+    1069,
+    1067
+   ],
+   "delete_dep": [
+    8,
+    738,
+    736
+   ],
+   "delete_leaf": [
+    8,
+    354,
+    353
+   ]
+  },
+  "XR": {
+   "add_edge": [
+    860,
+    1039,
+    223
+   ],
+   "add_node": [
+    1069,
+    1069,
+    0
+   ],
+   "delete_dep": [
+    16,
+    738,
+    730
+   ],
+   "delete_leaf": [
+    2,
+    354,
+    353
+   ]
+  },
+  "XW": {
+   "add_edge": [
+    317,
+    1039,
+    1020
+   ],
+   "add_node": [
+    23,
+    1069,
+    1048
+   ],
+   "delete_dep": [
+    39,
+    738,
+    723
+   ],
+   "delete_leaf": [
+    10,
+    354,
+    351
+   ]
+  }
+ },
+ "gemma-3-4b-it (unsloth copy, bf16, 4,000 blocks: CHANGED settings)": {
+  "P0": {
+   "cached_pct": 71.75,
+   "computed_per_step": 100.2,
+   "exact_pct": 94.03,
+   "parsed_pct": 100.0,
+   "raw_sha256_prefix": "17ab0368",
+   "steps": 3200
+  },
+  "P4": {
+   "cached_pct": 68.05,
+   "computed_per_step": 128.83,
+   "exact_pct": 100.0,
+   "parsed_pct": 100.0,
+   "raw_sha256_prefix": "1d041217",
+   "seconds_per_step": 0.1444,
+   "steps": 400,
+   "steps_per_hour": 24927
+  },
+  "PC": {
+   "cached_pct": 95.82,
+   "computed_per_step": 172.44,
+   "exact_pct": 100.0,
+   "kept_chat_steps_per_job": [
+    27,
+    61,
+    50,
+    41
+   ],
+   "parsed_pct": 100.0,
+   "raw_sha256_prefix": "19c69c93",
+   "steps": 179,
+   "steps_per_hour": 18931
+  },
+  "PN": {
+   "cached_pct": 71.62,
+   "computed_per_step": 100.9,
+   "exact_pct": 100.0,
+   "parsed_pct": 100.0,
+   "raw_sha256_prefix": "b591e939",
+   "steps": 3200,
+   "steps_per_hour": 104157
+  },
+  "X0": {
+   "cached_pct": 64.76,
+   "computed_per_step": 164.7,
+   "exact_pct": 99.88,
+   "parsed_pct": 100.0,
+   "raw_sha256_prefix": "41413cfc",
+   "steps": 3200
+  },
+  "XR": {
+   "cached_pct": 65.45,
+   "computed_per_step": 161.8,
+   "exact_pct": 58.84,
+   "parsed_pct": 100.0,
+   "raw_sha256_prefix": "bca18454",
+   "steps": 3200
+  },
+  "XW": {
+   "cached_pct": 65.0,
+   "computed_per_step": 167.7,
+   "exact_pct": 19.34,
+   "parsed_pct": 99.97,
+   "raw_sha256_prefix": "07b1b98b",
+   "steps": 3200
+  }
+ },
+ "mistral-7b-instruct-v0.3 (unsloth copy, fp16, plan settings)": {
+  "P0": {
+   "cached_pct": 72.92,
+   "computed_per_step": 98.1,
+   "exact_pct": 100.0,
+   "parsed_pct": 100.0,
+   "raw_sha256_prefix": "ef4d4953",
+   "steps": 3200
+  },
+  "P4": {
+   "cached_pct": 69.24,
+   "computed_per_step": 126.3,
+   "exact_pct": 100.0,
+   "parsed_pct": 100.0,
+   "raw_sha256_prefix": "f32d7d9d",
+   "seconds_per_step": 0.2652,
+   "steps": 400,
+   "steps_per_hour": 13577
+  },
+  "PC": {
+   "cached_pct": 87.44,
+   "computed_per_step": 519.5,
+   "exact_pct": 100.0,
+   "kept_chat_steps_per_job": [
+    27,
+    62,
+    51,
+    41
+   ],
+   "parsed_pct": 100.0,
+   "raw_sha256_prefix": "fd14ac75",
+   "seconds_per_step": 0.4736,
+   "steps": 181,
+   "steps_per_hour": 7601
+  },
+  "PN": {
+   "cached_pct": 72.92,
+   "computed_per_step": 98.1,
+   "exact_pct": 100.0,
+   "parsed_pct": 100.0,
+   "raw_sha256_prefix": "ee493a69",
+   "steps": 3200,
+   "steps_per_hour": 58446
+  },
+  "X0": {
+   "cached_pct": 66.22,
+   "computed_per_step": 162.0,
+   "exact_pct": 85.44,
+   "parsed_pct": 100.0,
+   "raw_sha256_prefix": "966eb869",
+   "steps": 3200
+  },
+  "XR": {
+   "cached_pct": 66.73,
+   "computed_per_step": 161.3,
+   "exact_pct": 24.03,
+   "parsed_pct": 100.0,
+   "raw_sha256_prefix": "4ad4ff38",
+   "steps": 3200
+  },
+  "XW": {
+   "cached_pct": 70.51,
+   "computed_per_step": 142.5,
+   "exact_pct": 9.88,
+   "parsed_pct": 94.91,
+   "raw_sha256_prefix": "a6f75bca",
+   "steps": 3200
+  }
+ },
+ "note": "Printed figures of Test 37 (other families), read 16 Nov 2026 from the Colab machines; raw per-step files stay on the machines. Gemma ran only with changed settings (bf16, 4,000 blocks); the plan's fp16 run was refused by the engine.",
+ "settings": {
+  "cache_tokens_plan": 32000,
+  "engine": "vLLM 0.31.0",
+  "gemma_cache_tokens_changed": 64000,
+  "gpu": "NVIDIA L4",
+  "jobs": "192-223 (100 steps each; P4/PC first 4)",
+  "max_new_tokens": 96
+ }
+}
