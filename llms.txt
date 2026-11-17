@@ -1,0 +1,56 @@
+# AXI Runtime
+
+> AXI is a layer on the host side, between a model and the state it edits. The model is unchanged: it proposes one change at a time, AXI checks it against the rules, completes what the rules can complete, commits it all or not at all, and shows the model the exact state again. The framework, the architecture and the structural maps are by Rajnish Choubey. The code, tests and measurements in this repository were built and run by Shalendra Gaur, working with an AI coding assistant that is a tool and not an author. This is a reference prototype and a set of measurements, not a product. Everything is measured on synthetic service graphs and a few synthetic worlds, on the models named on each page.
+
+Each test page was written before its run, and its result goes below a line at the end; a result that read NO is printed as NO. Figures below are the ones on the pages, with the scope the pages give.
+
+## Problems this answers (each figure is scoped on its test page)
+
+- **Token cost of a long chat.** A kept chat computed 1.24 to 4.11 times the prompt tokens per step of the exact-state arm on 11 open models (Tests 35, 37, 41 and 42); on a 14B it took 123.1 joules a step against 21.8 for the exact state (Test 44).
+- **Agent drift.** The host's state was exactly right on 80,000 of 80,000 steps on a 7B model (Test 43) and on 4,000 of 4,000 steps on Gemini 3.8 Flash; replies applied with no check were exact on 0.39 to 0.69 percent of steps in Test 44.
+- **Latency and the context limit.** The exact-state prompt stayed near 620 tokens and a step took 0.1605 s early and 0.1651 s late (Test 43); a kept chat ended after 108 to 337 steps at its window's limit and slowed from 0.35 s to 1.36 s a step in the larger window (Test 42).
+- **GPU capacity.** 256 sessions on one L4: 105,230 exact steps per GPU hour at 2.458 joules per exact step (Test 38).
+- **Prompt injection.** 0 of 1,401,041 injection proposals committed, among 10,000,000 proposals against the Python reference model on a CPU (Test 39).
+- **Growing state.** The focused view shown to the model stayed at a median of 207 to 323 characters while the whole state grew to 378,399 characters (Test 40).
+
+## Start here
+
+- [README](https://github.com/gaurshalendra2412/axi-runtime/blob/main/README.md): what AXI is, the headline 4,000-step run, the ten engineering questions answered on open models, and how to run the tests.
+- [White paper: AXI: The Cure for the Cost Crisis in AI](https://doi.org/10.5281/zenodo.23958737): the white paper (Zenodo, 4 November 2026).
+- [Technical reference](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/AXI_TECHNICAL_REFERENCE.md): the architecture as the code has it, the measured tables, the method and the limits.
+- [What is verified](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/VERIFIED.md): what is measured, what is only checked by tests, and what is not measured.
+
+## The long run on a paid model
+
+- [The 4,000-step run](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/MILLION_TOKEN_TEST_HARD.md): one run on Gemini 3.8 Flash, 4,000 of 4,000 steps with exactly the right state, 3.7 million tokens, 46 of 46 slips repaired by a fixed rule.
+- [The cost of being wrong](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/COST_OF_BEING_WRONG.md): what a wrong state costs a company that runs the model, counted from the saved files.
+- [Where this stands](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/WHERE_THIS_STANDS.md): latency, drift and cost as measured, and what is not shown.
+
+## Tests on open models (Tests 35 to 45): cost, drift, capacity and the front door
+
+One NVIDIA L4 on Colab, vLLM 0.31.0, greedy decoding, no retry, unless a page says otherwise.
+
+- [Test 43, endurance](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/ENDURANCE_7B_TEST.md): a 7B model, four jobs of 20,000 steps: 80,000 of 80,000 steps with the host's state exactly right, the prompt near 620 tokens and never above 660, a step 0.1605 s early and 0.1651 s late.
+- [Test 42, how long a kept chat lasts](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/KEPT_CHAT_LONG_TEST.md): a kept chat ended after 108 to 235 steps in a 32,768-token window and 337 steps in a 131,072-token window; over the same steps it computed 1.78 times the prompt tokens and took 1.51 times the seconds of the exact-state arm, which ran 1,500 of 1,500 steps.
+- [Test 38, sessions per chip](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/SESSIONS_PER_CHIP_TEST.md): 8, 32, 128 and 256 sessions on one L4, all exact; 105,230 exact steps per GPU hour at 256 sessions, 2.458 joules per exact step, the card full at about 128 sessions.
+- [Test 35, five models](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/MODEL_LADDER_TEST.md): 3B, 7B, Qwen3-8B, Phi-3.5-mini and Llama 3.1 8B all 100.0 percent exact; the kept chat computed 1.24 to 1.37 times the tokens per step.
+- [Test 37, model families](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/MODEL_FAMILIES_TEST.md): Mistral 7B and Gemma 3 4B (with changed settings) 100.0 percent exact; a DeepSeek-R1 distill at 1.53 percent exact because every reply to a delete ran to the 96-token cap and was not read (0 corrupted steps).
+- [Test 41, model sizes](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/MODEL_LADDER_COMPLETE_TEST.md): 1.5B, 14B and 32B all 100.00 percent exact; the kept chat computed 1.236 to 1.240 times the tokens per step. The 32B ran with 10 GB of weights offloaded to the CPU, so its times are not comparable.
+- [Test 36, ordinary words](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/MODEL_LADDER_WORDS_TEST.md): requests in ordinary words; when the host reads the sentence, the exact share rose on every model, for example 41.53 to 64.0 percent on the 7B.
+- [Test 44, memory arms](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/MEMORY_ARMS_TEST.md): a 14B; six ways of keeping context all ended exact once the host's check was in the loop; 21.8 joules a step for the exact state against 123.1 for the kept chat.
+- [Test 45, other kinds of state](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/STATE_KINDS_TEST.md): a table, a schedule, source code and tool calls; with the world's own rule check, the held state broke no rule in any of the 3,600 steps of that arm (four worlds, two models, 450 steps each).
+- [Test 39, hostile input](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/GATE_STRESS_TEST.md): 10,000,000 proposals against the reference model; 0 of 1,401,041 injection proposals committed; four items to harden are listed.
+- [Test 40, growing state](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/STATE_SIZE_SCALING_TEST.md): at 20,001 items the whole state is 378,399 characters on an even graph, while the focused view shown to the model stayed at a median of 207 to 323 characters.
+
+## Scope and limits
+
+- Tests 39 and 40 ran on a CPU against the Python reference model, not the Rust crates.
+- The per-step raw files of Tests 37, 38 and 42 to 45 stayed on the Colab machines; the compact files in docs/results carry the figures and the sha256 of the raw files, and Tests 35 and 36 are printed lines only.
+- Sessions in Test 38 run in lock-step. Joules are the card's board power read during the run.
+- Nothing here is a statement about any company's servers.
+
+## Optional
+
+- [Credits](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/CREDITS.md): prior work this builds on, cited and not claimed.
+- [Related work](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/RELATED_WORK.md): neighbouring work and what we cannot claim against it.
+- [Original design note](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/RFC-001.md): the first design note, kept as written.

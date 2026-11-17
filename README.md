@@ -24,6 +24,8 @@
 
 **Why a model that is right 98% of the time can leave the state right on only 21% of the steps:** a slip that nothing catches stays in the state, and every later step builds on it. In these 400 requests the model slipped 7 times (393 replies right, 98%). Four of those slips, marked on the chart, each started a stretch in which the state was wrong, and together those stretches covered 315 of the 400 steps. The gate refuses bad replies, so it never held a broken state, but its state was off the right one from step 210 to the end. AXI's line is flat at zero.
 
+The same idea was also tested on open models we host ourselves, which lets the host read cost, capacity and hostile input directly: [ten engineering questions, Tests 35 to 45](#ten-engineering-questions-answered-on-open-models-tests-35-to-45). Those runs add to the Gemini runs on this page; they do not replace them.
+
 ---
 
 ## What AXI is
@@ -130,6 +132,63 @@ AXI is a layer for the company that runs the model, and the runs show what it is
 
 ---
 
+## Ten engineering questions, answered on open models (Tests 35 to 45)
+
+The headline runs above used a paid model (Gemini 3.8 Flash) through an API, which shows what a model does on a long, hard job. These runs complement them: they used open models that we serve ourselves with vLLM on one NVIDIA L4, so every number can be read from the host's side: what state the host holds, what a step costs it, how many sessions a chip carries, and what a hostile input does. In every run the model is unchanged and the state is the host's. The framework is **Rajnish Choubey's**; the tests were built and run by Shalendra Gaur.
+
+| Question an engineer asks | What was measured | Page |
+|---|---|---|
+| Does the host's state stay exact over a long job? | 80,000 of 80,000 steps exact on a 7B model, in four jobs of 20,000 steps. The prompt stayed near 620 tokens and never passed 660; a step took 0.1605 s early and 0.1651 s late (+2.8 percent). | [Test 43](docs/ENDURANCE_7B_TEST.md) |
+| What does keeping the whole chat cost the host instead? | The kept chat computed 1.24 to 4.11 times the prompt tokens per step on 11 models, and 1.78 times the tokens and 1.51 times the seconds on a like-for-like pair (7B). | [Tests 35](docs/MODEL_LADDER_TEST.md), [37](docs/MODEL_FAMILIES_TEST.md), [41](docs/MODEL_LADDER_COMPLETE_TEST.md), [42](docs/KEPT_CHAT_LONG_TEST.md) |
+| How long can a kept chat go? | It ended after 108 to 235 steps in a 32,768-token window, and after 337 steps in a 131,072-token window, where a step slowed from 0.35 s to 1.36 s. The exact-state jobs ran 1,500 of 1,500 steps in every run, at a flat 0.28 to 0.31 s. | [Test 42](docs/KEPT_CHAT_LONG_TEST.md) |
+| How many sessions does one chip carry? | 8, 32, 128 and 256 sessions on one L4 (7B): 100 percent exact in every cell; exact steps per GPU hour 51,134 at 8 sessions, 88,635 at 32, 105,043 at 128 and 105,230 at 256; joules per exact step 5.035 at 8 sessions and 2.458 at 256. The card is full at about 128 sessions. | [Test 38](docs/SESSIONS_PER_CHIP_TEST.md) |
+| Does it hold on other models? | 100.00 percent exact in the main cell on 10 of 11 model runs, from 1.5B to 32B, with 0 corrupted steps in every cell. The eleventh, a DeepSeek-R1 distill, is explained below. | [Tests 35](docs/MODEL_LADDER_TEST.md), [37](docs/MODEL_FAMILIES_TEST.md), [41](docs/MODEL_LADDER_COMPLETE_TEST.md) |
+| What about requests written in ordinary words? | When the host reads the sentence itself, the exact share rose on every one of the 11 models, for example 47.72 to 90.72 percent on the 14B, 97.91 to 100.0 on the 32B and 41.53 to 64.0 on the 7B. | [Tests 36](docs/MODEL_LADDER_WORDS_TEST.md), [37](docs/MODEL_FAMILIES_TEST.md), [41](docs/MODEL_LADDER_COMPLETE_TEST.md) |
+| Does the way the chat is remembered matter? | On a 14B, six ways of keeping context all ended with the exact state (100.0 percent) once the host's check was in the loop. They differ in cost: the exact state took 0.30 s and 21.8 joules a step, summaries, a window and retrieval 0.55 to 0.66 s and 39.4 to 48.0 joules, the kept chat 1.72 s and 123.1 joules. | [Test 44](docs/MEMORY_ARMS_TEST.md) |
+| Does it work for state that is not a service graph? | Four worlds (a table, a schedule, source code, tool calls) on a 7B and a 14B: with the world's own rule check, the held state broke no rule on any of the steps of that arm (four worlds, two models, 450 steps each). On the 7B the share of steps right went from 57.11 to 79.11 percent as written to 94.0 to 99.78 with the check. | [Test 45](docs/STATE_KINDS_TEST.md) |
+| What does a hostile input do? | 10,000,000 proposals against the reference model, 1,401,041 of them injection attempts: 0 of the injection proposals committed and 0 state mismatches. The run also found four things to harden (one is an integer-size limit that raised an exception on 90,943 proposals); the page lists them. | [Test 39](docs/GATE_STRESS_TEST.md) |
+| What happens when the state gets big? | At 20,001 items the whole state is 378,399 characters on an even graph (at least 985 times its size at 20 items), while the focused view the model is shown stayed at a median of 207 to 323 characters. | [Test 40](docs/STATE_SIZE_SCALING_TEST.md) |
+
+### Does the host's state stay exact over a very long job?
+
+Yes, in the runs here. On a 7B model, four jobs of 20,000 steps each ended with the state the host held equal to the true state on every one of 80,000 steps. The prompt the model was given stayed at about 620 tokens (largest 660), because the host shows the exact state, not the history. In Test 42 the exact-state jobs ran 1,500 steps each, 9,000 of 9,000 exact across three cells ([Test 42](docs/KEPT_CHAT_LONG_TEST.md)).
+
+### What does it cost a host to keep the chat instead?
+
+The kept chat in these tests was exact too, because it shows the whole state in every message. What it costs is compute and time. Over the same steps it computed 1.78 times the prompt tokens and took 1.51 times the seconds per step ([Test 42](docs/KEPT_CHAT_LONG_TEST.md)); in a 131,072-token window, 1.48 times the tokens and 2.76 times the seconds, with a last prompt of 129,759 tokens. On a 14B, the kept chat took 123.1 joules a step against 21.8 for the exact state ([Test 44](docs/MEMORY_ARMS_TEST.md)).
+
+### How many sessions does one chip carry?
+
+On one L4 with a 7B model, exact steps per GPU hour rose from 51,134 at 8 sessions to 105,043 at 128 and stayed there at 256 (105,230), with every step exact and the median round at 8.49 s for 256 sessions ([Test 38](docs/SESSIONS_PER_CHIP_TEST.md)). In this setup the card is full at about 128 sessions.
+
+### What if the model gets a step wrong?
+
+The host completes or refuses it. In the exact-state arm of Test 44 the model's own reply was right on 81.89 percent of steps (21.63 percent on deletes of a service with edges), and the state the host held was exact on 100.0 percent, because the gate checked each change and the repair completed what the rules could complete. Replies applied with no check were exact on 0.39 to 0.69 percent of steps in the same runs ([Test 44](docs/MEMORY_ARMS_TEST.md)). On the DeepSeek-R1 distill, every reply to a delete ran to the 96-token cap and could not be read; the host dropped those replies, so its state stayed well formed (0 corrupted steps) but fell behind the true state, which is why that one model is at 1.53 percent exact ([Test 37](docs/MODEL_FAMILIES_TEST.md)).
+
+### What does a hostile input do?
+
+Test 39 sent 10,000,000 proposals (legal ones, mutated ones, numeric extremes, injection texts, replays of old ones and more) through the gate of the Python reference model on a CPU. 3,007,418 committed, 6,901,639 were refused and 90,943 raised an uncaught exception of one kind. None of the 1,401,041 injection proposals committed, and the graph and the set of accepted changes matched an independent reference at every comparison (0 state mismatches). The run also found four things to harden, and the page lists them: a number of 4,300 or more digits makes Python's own limit raise an error instead of a refusal; two services whose coordinates land on one page can unmap each other's page; a crash in the middle of a commit leaves the pager failing its audit; and without a lock, 32 threads raise errors ([Test 39](docs/GATE_STRESS_TEST.md)).
+
+### What happens when the state gets big?
+
+At 20,001 items the whole state is 378,399 characters on an even graph (371,793 with hubs), about 124,000 to 126,000 tokens at 3 characters per token, which nearly fills a 128,000-token window. The focused view the model is shown stayed at a median of 207 to 323 characters from 20 to 20,000 items; a request that names the biggest hub shows 355 items (5,553 characters, 1.8 percent of the state). The gate's check does grow: 3.9 microseconds at 201 items and 257 at 20,001 (297 with hubs) ([Test 40](docs/STATE_SIZE_SCALING_TEST.md)).
+
+### Reproduce Test 40 on your own machine
+
+It needs only Python, takes about 3 seconds and writes one JSON file into the folder you name:
+
+```bash
+mkdir -p /tmp/axi_out
+cd python
+python3 -m axi.experiments.state_size_scaling /tmp/axi_out
+```
+
+It prints the tables and the thirteen reading lines of the page; the sizes and the 11 YES and 2 NO readings are the page's, while the microsecond timings vary by machine.
+
+*Scope: open models on vLLM 0.31.0 and one NVIDIA L4 on Colab, greedy decoding, no retry; synthetic service graphs in Tests 35 to 38 and 41 to 44, four synthetic worlds in Test 45. The 32B ran with 10 GB of its weights offloaded to the CPU, so its seconds and steps per hour are not comparable with the others. Test 38's sessions run in lock-step. Tests 39 and 40 ran on a CPU against the Python reference model, not the Rust crates. Joules are the card's board power read during the run; the Gemini runs above measured none. The per-step raw files of Tests 37, 38 and 42 to 45 stayed on the Colab machines: the compact files in `docs/results` carry the figures and the sha256 of the raw files, and Tests 35 and 36 are printed lines only. Each page says which of its readings were NO. Nothing here is a statement about any company's servers.*
+
+---
+
 ## How the tests are done
 
 * **Written before the run.** Each page for a model run fixes the questions, the predictions and the reading rules before any number exists.
@@ -190,7 +249,7 @@ PYTHONPATH=python python3 python/tools/readme_figures.py docs/img
 | `python/tests/` | The test files; most say in their header what they show and what they do not |
 | `python/colab/` | Colab notebooks used for the model runs |
 | `docs/` | Every test page (written before its run) and the honest status table |
-| `docs/results/` | The raw run files: every request and every model reply |
+| `docs/results/` | The run files: for the earlier runs every request and every model reply; for Tests 35 to 45 the drivers and compact exports (see the scope line under the ten questions) |
 | `docs/img/` | The pictures on this page |
 
 **A few words used above.** *State:* the graph of services and the edges between them. *Change* (or *delta*): one proposed edit, written in a small strict language. *Gate:* the deterministic check that accepts or refuses a change. *Dangling edge:* an edge left pointing at a service that was deleted.
