@@ -1,0 +1,374 @@
+{
+ "runs": [
+  {
+   "kind": "even",
+   "target_items": 20,
+   "items": 21,
+   "services": 7,
+   "edges": 14,
+   "build_seconds": 0.0,
+   "rss_kb_before": 16692,
+   "rss_kb_after": 16756,
+   "full_chars": 384,
+   "chars_per_item": 18.285714285714285,
+   "max_degree": 5,
+   "random": {
+    "median": 14.0,
+    "p95": 16,
+    "p99": 16,
+    "max": 16,
+    "share_over_10pct": 1.0,
+    "median_chars": 242.0,
+    "scan_checked": 200,
+    "scan_ok": true
+   },
+   "hub_targeted": {
+    "median": 13.0,
+    "p95": 16,
+    "max": 16,
+    "share_over_10pct": 1.0,
+    "median_chars": 246.0
+   },
+   "host_us": {
+    "gate_check": 1.276,
+    "focus_graph": 6.911,
+    "contain_scope": 0.418,
+    "serialize_full": 10.3675
+   }
+  },
+  {
+   "kind": "even",
+   "target_items": 200,
+   "items": 201,
+   "services": 67,
+   "edges": 134,
+   "build_seconds": 0.001,
+   "rss_kb_before": 16904,
+   "rss_kb_after": 16908,
+   "full_chars": 3250,
+   "chars_per_item": 16.16915422885572,
+   "max_degree": 8,
+   "random": {
+    "median": 16.0,
+    "p95": 25,
+    "p99": 29,
+    "max": 33,
+    "share_over_10pct": 0.202,
+    "median_chars": 253.0,
+    "scan_checked": 200,
+    "scan_ok": true
+   },
+   "hub_targeted": {
+    "median": 24.0,
+    "p95": 30,
+    "max": 33,
+    "share_over_10pct": 0.958,
+    "median_chars": 367.0
+   },
+   "host_us": {
+    "gate_check": 3.8885,
+    "focus_graph": 17.065,
+    "contain_scope": 0.649,
+    "serialize_full": 175.8555
+   }
+  },
+  {
+   "kind": "even",
+   "target_items": 2000,
+   "items": 2001,
+   "services": 667,
+   "edges": 1334,
+   "build_seconds": 0.004,
+   "rss_kb_before": 16972,
+   "rss_kb_after": 17176,
+   "full_chars": 36146,
+   "chars_per_item": 18.063968015992003,
+   "max_degree": 10,
+   "random": {
+    "median": 18.0,
+    "p95": 26,
+    "p99": 28,
+    "max": 34,
+    "share_over_10pct": 0.0,
+    "median_chars": 307.0,
+    "scan_checked": 200,
+    "scan_ok": true
+   },
+   "hub_targeted": {
+    "median": 30.0,
+    "p95": 34,
+    "max": 40,
+    "share_over_10pct": 0.0,
+    "median_chars": 503.0
+   },
+   "host_us": {
+    "gate_check": 15.066,
+    "focus_graph": 8.344,
+    "contain_scope": 0.433,
+    "serialize_full": 1226.354
+   }
+  },
+  {
+   "kind": "even",
+   "target_items": 20000,
+   "items": 20001,
+   "services": 6667,
+   "edges": 13334,
+   "build_seconds": 0.033,
+   "rss_kb_before": 17556,
+   "rss_kb_after": 22524,
+   "full_chars": 378399,
+   "chars_per_item": 18.91900404979751,
+   "max_degree": 11,
+   "random": {
+    "median": 18.0,
+    "p95": 24,
+    "p99": 28,
+    "max": 34,
+    "share_over_10pct": 0.0,
+    "median_chars": 323.0,
+    "scan_checked": 200,
+    "scan_ok": true
+   },
+   "hub_targeted": {
+    "median": 32.0,
+    "p95": 38,
+    "max": 42,
+    "share_over_10pct": 0.0,
+    "median_chars": 556.0
+   },
+   "host_us": {
+    "gate_check": 256.9625,
+    "focus_graph": 22.7645,
+    "contain_scope": 0.818,
+    "serialize_full": 21617.844
+   }
+  },
+  {
+   "kind": "hub",
+   "target_items": 20,
+   "items": 21,
+   "services": 8,
+   "edges": 13,
+   "build_seconds": 0.0,
+   "rss_kb_before": 24024,
+   "rss_kb_after": 24024,
+   "full_chars": 360,
+   "chars_per_item": 17.142857142857142,
+   "max_degree": 6,
+   "random": {
+    "median": 12.0,
+    "p95": 17,
+    "p99": 18,
+    "max": 18,
+    "share_over_10pct": 1.0,
+    "median_chars": 207.0,
+    "scan_checked": 200,
+    "scan_ok": true
+   },
+   "hub_targeted": {
+    "median": 15.0,
+    "p95": 18,
+    "max": 18,
+    "share_over_10pct": 1.0,
+    "median_chars": 253.0
+   },
+   "host_us": {
+    "gate_check": 2.589,
+    "focus_graph": 13.452,
+    "contain_scope": 0.85,
+    "serialize_full": 17.8605
+   }
+  },
+  {
+   "kind": "hub",
+   "target_items": 200,
+   "items": 201,
+   "services": 68,
+   "edges": 133,
+   "build_seconds": 0.0,
+   "rss_kb_before": 24052,
+   "rss_kb_after": 24052,
+   "full_chars": 3241,
+   "chars_per_item": 16.124378109452735,
+   "max_degree": 19,
+   "random": {
+    "median": 14.0,
+    "p95": 40,
+    "p99": 46,
+    "max": 68,
+    "share_over_10pct": 0.1925,
+    "median_chars": 227.0,
+    "scan_checked": 200,
+    "scan_ok": true
+   },
+   "hub_targeted": {
+    "median": 44.0,
+    "p95": 50,
+    "max": 68,
+    "share_over_10pct": 1.0,
+    "median_chars": 653.0
+   },
+   "host_us": {
+    "gate_check": 5.0475,
+    "focus_graph": 9.129,
+    "contain_scope": 0.859,
+    "serialize_full": 150.886
+   }
+  },
+  {
+   "kind": "hub",
+   "target_items": 2000,
+   "items": 2001,
+   "services": 668,
+   "edges": 1333,
+   "build_seconds": 0.004,
+   "rss_kb_before": 24052,
+   "rss_kb_after": 24052,
+   "full_chars": 35300,
+   "chars_per_item": 17.641179410294853,
+   "max_degree": 74,
+   "random": {
+    "median": 14.0,
+    "p95": 36,
+    "p99": 80,
+    "max": 161,
+    "share_over_10pct": 0.0,
+    "median_chars": 239.0,
+    "scan_checked": 200,
+    "scan_ok": true
+   },
+   "hub_targeted": {
+    "median": 154.0,
+    "p95": 173,
+    "max": 288,
+    "share_over_10pct": 0.01,
+    "median_chars": 2321.0
+   },
+   "host_us": {
+    "gate_check": 23.7775,
+    "focus_graph": 9.1775,
+    "contain_scope": 0.8115,
+    "serialize_full": 1517.079
+   }
+  },
+  {
+   "kind": "hub",
+   "target_items": 20000,
+   "items": 20001,
+   "services": 6668,
+   "edges": 13333,
+   "build_seconds": 0.045,
+   "rss_kb_before": 24116,
+   "rss_kb_after": 24120,
+   "full_chars": 371793,
+   "chars_per_item": 18.5887205639718,
+   "max_degree": 174,
+   "random": {
+    "median": 14.0,
+    "p95": 38,
+    "p99": 62,
+    "max": 356,
+    "share_over_10pct": 0.0,
+    "median_chars": 254.0,
+    "scan_checked": 200,
+    "scan_ok": true
+   },
+   "hub_targeted": {
+    "median": 355.0,
+    "p95": 368,
+    "max": 489,
+    "share_over_10pct": 0.0,
+    "median_chars": 5553.0
+   },
+   "host_us": {
+    "gate_check": 297.0555,
+    "focus_graph": 18.1095,
+    "contain_scope": 0.85,
+    "serialize_full": 15694.081
+   }
+  }
+ ],
+ "lines": [
+  {
+   "n": 1,
+   "tag": "instrument",
+   "text": "eight graphs built within 5 percent of target items; every view matched the plain scan",
+   "yes": true
+  },
+  {
+   "n": 2,
+   "tag": "claim",
+   "text": "chars per item of the whole state differ by less than 25 percent across sizes (even 16.2..18.9, hub 16.1..18.6)",
+   "yes": true
+  },
+  {
+   "n": 3,
+   "tag": "claim",
+   "text": "whole state at 20,000 items is at least 500 times the characters at 20 items (smallest ratio 985)",
+   "yes": true
+  },
+  {
+   "n": 4,
+   "tag": "claim",
+   "text": "even: median view at 20,000 at most 3 times that at 200 (ratio 1.12; 18.0 vs 16.0 items)",
+   "yes": true
+  },
+  {
+   "n": 5,
+   "tag": "claim",
+   "text": "even: p99 view at 20,000 at most 3 times that at 200 (ratio 0.97; 28 vs 29)",
+   "yes": true
+  },
+  {
+   "n": 6,
+   "tag": "claim",
+   "text": "hub, random requests: p99 view at 20,000 at most 3 times that at 200 (ratio 1.35; 62 vs 46)",
+   "yes": true
+  },
+  {
+   "n": 7,
+   "tag": "claim",
+   "text": "hub, random requests: largest view at 20,000 at least 3 times the largest at 200 (ratio 5.24; 356 vs 68)",
+   "yes": true
+  },
+  {
+   "n": 8,
+   "tag": "claim",
+   "text": "hub, hub-targeted: median view at 20,000 items is between 1 and 10 percent of the whole state (1.77 percent; max degree 174)",
+   "yes": true
+  },
+  {
+   "n": 9,
+   "tag": "claim",
+   "text": "gate.check of a one-edit delta at 20,000 at most 3 times that at 200 (ratio 66.08; 257.0 vs 3.9 us)",
+   "yes": false
+  },
+  {
+   "n": 10,
+   "tag": "claim",
+   "text": "focus_graph on the even graph at 20,000 at most 3 times that at 200 (ratio 1.33; 22.8 vs 17.1 us)",
+   "yes": true
+  },
+  {
+   "n": 11,
+   "tag": "claim",
+   "text": "serialising the whole state at 20,000 at least 50 times that at 200 (ratio 123)",
+   "yes": true
+  },
+  {
+   "n": 12,
+   "tag": "claim",
+   "text": "whole state over 24,576 characters at 2,000 items and under it at 200 items (2,000: [36146, 35300]; 200: [3250, 3241])",
+   "yes": true
+  },
+  {
+   "n": 13,
+   "tag": "claim",
+   "text": "whole state at 20,000 items over 384,000 characters (even, hub: [378399, 371793])",
+   "yes": false
+  }
+ ],
+ "python": "3.13.18 (main, Oct 26 2026, 14:08:19) [Clang 23.1.3 ]",
+ "seed": 20261116
+}

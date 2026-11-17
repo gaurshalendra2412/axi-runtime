@@ -1,0 +1,39 @@
+Test 43, checks made on the Colab machine after the driver finished (16 Nov 2026, about 19:50 UTC).
+The raw file is /content/out/t43_E4.json (19,737,449 bytes, sha256 96cc365c06787441db8c9abeda77091ba6589211e63885aec44f7432f09601f6).
+It holds the 20,000 rounds and, per job, the log of 20,000 steps. This cell was run once on it. Its code:
+
+    import json
+    d = json.load(open('/content/out/t43_E4.json'))
+    print('ENGINE', json.dumps(d['engine'])[:500])
+    for s in d['sessions']:
+        L = s['log']; n = len(L)
+        f = [x['n_prompt'] for x in L if x['t'] <= 1000]; l = [x['n_prompt'] for x in L if x['t'] > n - 1000]
+        mx = max(x['n_prompt'] for x in L)
+        f5 = sum(1 for x in L if x['t'] <= 5000 and x['exact']); l5 = sum(1 for x in L if x['t'] > n - 5000 and x['exact'])
+        kinds = {}
+        for x in L: kinds[x['kind']] = kinds.get(x['kind'], 0) + 1
+        print('JOB', s['seed'] % 1000, 'n', n, 'prompt_first1000', round(sum(f)/len(f), 1), 'prompt_last1000', round(sum(l)/len(l), 1), 'ratio', round(sum(l)/len(l)/(sum(f)/len(f)), 3), 'max_prompt', mx, 'exact_first5000', f5, 'exact_last5000', l5, 'in_language', sum(1 for x in L if x['in_language']), 'admitted', sum(1 for x in L if x['admitted']), 'kinds', json.dumps(kinds))
+    R = d['rounds']
+    sp = [r['seconds'] / max(1, r['active']) for r in R]
+    print('SECPERSTEP first2000', round(sum(sp[:2000]) / 2000, 4), 'last2000', round(sum(sp[-2000:]) / 2000, 4), 'ratio', round((sum(sp[-2000:]) / 2000) / (sum(sp[:2000]) / 2000), 4), 'min', round(min(sp), 4), 'max', round(max(sp), 4))
+    print('ACTIVE all4', sum(1 for r in R if r['active'] == 4), 'of', len(R))
+    pt = sum(r['prompt_tokens'] for r in R); ct = sum(r['cached_tokens'] for r in R); nt = sum(r['new_tokens'] for r in R)
+    print('TOTALS prompt', pt, 'cached', ct, 'share', round(ct / pt, 4), 'new_tokens', nt)
+
+Its output, copied as printed (the ENGINE line is cut where the notebook cut it):
+
+ENGINE {"kind": "vllm", "name": "Qwen/Qwen2.5-7B-Instruct-AWQ", "version": "0.31.0", "gpu": "NVIDIA L4", "capacity_tokens": 32000, "capacity_source": "override", "block_size": 16, "kv_bytes_per_token": 57344, "model": "Qwen/Qwen2.5-7B-Instruct-AWQ", "python": "3.13.16", "constraint": {"kind": "regex_per_request", "api": "structured_outputs(regex), one set of sampling parameters per request", "regex": "(?:ADD\\[[0-9]+,[0-9]+:-?[0-9]+\\]|DEL\\[[0-9]+,[0-9]+\\]|(?:ADD|DEL)\\[\\([0-9]+,[0-9]+\\)->\\([0-9]+
+JOB 192 n 20000 prompt_first1000 595.5 prompt_last1000 606.8 ratio 1.019 max_prompt 660 exact_first5000 5000 exact_last5000 5000 in_language 20000 admitted 15178 kinds {"add_edge": 5977, "delete_dep": 4822, "delete_leaf": 2189, "add_node": 7012}
+JOB 232 n 20000 prompt_first1000 575.9 prompt_last1000 642.4 ratio 1.115 max_prompt 660 exact_first5000 5000 exact_last5000 5000 in_language 20000 admitted 15298 kinds {"add_node": 7627, "delete_leaf": 2920, "add_edge": 4751, "delete_dep": 4702}
+JOB 241 n 20000 prompt_first1000 564.5 prompt_last1000 626.3 ratio 1.109 max_prompt 660 exact_first5000 5000 exact_last5000 5000 in_language 20000 admitted 15223 kinds {"add_edge": 5432, "delete_leaf": 2505, "delete_dep": 4777, "add_node": 7286}
+JOB 290 n 20000 prompt_first1000 561.3 prompt_last1000 602.7 ratio 1.074 max_prompt 660 exact_first5000 5000 exact_last5000 5000 in_language 20000 admitted 15245 kinds {"add_node": 7047, "delete_leaf": 2293, "delete_dep": 4755, "add_edge": 5905}
+SECPERSTEP first2000 0.1605 last2000 0.1651 ratio 1.0282 min 0.0545 max 0.215
+ACTIVE all4 20000 of 20000
+TOTALS prompt 49476766 cached 24863904 share 0.5025 new_tokens 816529
+
+Worked out afterwards from those lines (not printed by the cell):
+  admitted: 15,178 + 15,298 + 15,223 + 15,245 = 60,944 of 80,000 (76.18 percent)
+  not admitted per job: 20,000 - admitted = 4,822, 4,702, 4,777, 4,755, which is the count of steps of kind delete_dep in each job
+  wall 13,230.4 s / 80,000 steps = 0.1654 s a step (0.6615 s a round of four); 21,768 steps an hour
+  board energy 951,222.96 J / 80,000 = 11.89 J a step (mean 71.73 W, maximum 76.58 W, 26,514 samples over 13,260.3 s)
+  prompt tokens a step 618.5, computed 307.7, cached 50.25 percent
