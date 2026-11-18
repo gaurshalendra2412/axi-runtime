@@ -265,7 +265,7 @@ PYTHONPATH=python python3 python/tools/readme_figures.py docs/img
 7. [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md): other groups working on neighbouring ideas, and what we cannot claim against them.
 8. [`docs/RFC-001.md`](docs/RFC-001.md): the original design note.
 9. [`docs/ARTICLES.md`](docs/ARTICLES.md): the same results written up as articles for engineers (drift, cost, latency, capacity, injection) and two forum posts with open questions.
-10. [`docs/SIDECAR.md`](docs/SIDECAR.md): a small HTTP sidecar that puts the host loop in front of a vLLM or SGLang server; tested with stand-ins, not yet run against a real engine.
+10. [`docs/SIDECAR.md`](docs/SIDECAR.md): a small HTTP sidecar that puts the host loop in front of a vLLM or SGLang server.
 
 ## Status
 

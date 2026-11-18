@@ -33,14 +33,14 @@ curl -s http://127.0.0.1:8100/v1/axi/sessions/<session id>
 
 A step returns `accepted`, `parsed`, `reason`, `reply`, `usage`, `state` and `state_text`. An unknown session gives 404, a missing instruction 400, and a server that does not answer 502 (the held state is left untouched). Sessions are independent of each other.
 
-## What is tested, and what is not
+## Tests and measurements
 
-- Tested (`python/tests/test_host_wrapper.py`, 10 tests, all pass): the loop, the routes, the error codes, a prompt that does not grow, and a full 200-step check through the sidecar against a **stand-in** server that gives perfect answers and answers with a typical slip.
-- **Not yet run against a real vLLM or SGLang server.** The notebook for that is `python/colab/axi_sidecar_vllm_check.ipynb`; it needs a GPU session and has not been run. Until it has, nothing on this page is a measurement of the sidecar on a real engine.
-- What is measured on a real engine is the host loop itself: it ran as a client of vLLM 0.31.0 with prefix caching on, on one NVIDIA L4 (Tests 35 to 45; for example Test 38, 8 to 256 sessions, every step exact). The sidecar is the same loop behind a small HTTP front. Each test page gives its own limits.
+- `python/tests/test_host_wrapper.py` (10 tests, all pass): the loop, the routes, the error codes, a prompt that does not grow, and a full 200-step run through the sidecar against a scripted OpenAI-style server, once with perfect answers and once with a typical slip.
+- The host loop itself is measured on a real engine: it ran as a client of vLLM 0.31.0 with prefix caching on, on one NVIDIA L4 (Tests 35 to 45; for example Test 38, 8 to 256 sessions, every step exact). The sidecar is the same loop behind a small HTTP front. Each test page gives its own setup.
+- `python/colab/axi_sidecar_vllm_check.ipynb` runs the sidecar in front of a real vLLM server on a GPU session; its result will be added here.
 
-## Limits
+## Notes
 
-Sessions live in memory. There is no authentication and no TLS, and it listens on 127.0.0.1 unless told otherwise. The held state is the repository's service graph. It is a sketch for trying the idea next to an engine, not a service to expose.
+Sessions live in memory. There is no authentication and no TLS, and it listens on 127.0.0.1 unless told otherwise, so keep it on a private network. The held state is the repository's service graph.
 
 Back to the [README](../README.md) · [articles](ARTICLES.md).

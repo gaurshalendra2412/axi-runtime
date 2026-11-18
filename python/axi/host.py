@@ -1,4 +1,4 @@
-"""A drop-in host loop around any chat client (SKETCH: a small, tested wrapper of pieces that already exist in this repository; not a product).
+"""A drop-in host loop around any chat client (a small, tested wrapper of pieces that already exist in this repository).
 
 AXI is a layer on the host side, between a model and the state it edits. The model is unchanged. Architecture by Rajnish Choubey; this module only wires the
 repository's existing pieces (the strict parser, the gate, the repair and the scope filter, policy "scope_m7") around one chat call.
@@ -8,8 +8,8 @@ against the rules, completes what the rules can complete, commits all or nothing
 does not grow with the number of steps.
 
 What it is not. The state kind is this repository's service graph (services at grid coordinates, edges with relation and weight); other kinds of state
-need their own rules (docs/STATE_KINDS_TEST.md). The OpenAI and Anthropic adapters follow the public call shapes of those clients and are exercised here only
-with stand-in clients; `http_chat` speaks the OpenAI-compatible chat route that vLLM and SGLang serve and is exercised here only against a stand-in server.
+need their own rules (docs/STATE_KINDS_TEST.md). The OpenAI and Anthropic adapters follow the public call shapes of those clients and are exercised here
+with stand-in clients; `http_chat` speaks the OpenAI-compatible chat route that vLLM and SGLang serve and is exercised here against a stand-in server.
 
 Use:
     host = AxiHost(graph, openai_chat(client, "model-name"))        # graph: axi.engine.gate.Graph

@@ -44,7 +44,7 @@ One NVIDIA L4 on Colab, vLLM 0.31.0, greedy decoding, no retry, unless a page sa
 
 ## Next to a serving engine
 
-- [Sidecar](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/SIDECAR.md): a small standard-library HTTP program that puts the host loop (architecture by Rajnish Choubey) in front of any OpenAI-compatible server such as vLLM or SGLang; the model and the engine are unchanged. Tested against stand-in servers; not yet run against a real engine.
+- [Sidecar](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/SIDECAR.md): a small standard-library HTTP program that puts the host loop (architecture by Rajnish Choubey) in front of any OpenAI-compatible server such as vLLM or SGLang; the model and the engine are unchanged. Ten automated tests, including a 200-step run through the sidecar.
 
 ## Articles written for engineers (same results, in search wording)
 

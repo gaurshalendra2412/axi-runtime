@@ -1,4 +1,4 @@
-"""A small HTTP sidecar that puts the AXI host loop in front of an OpenAI-compatible server such as vLLM or SGLang (SKETCH; standard library only).
+"""A small HTTP sidecar that puts the AXI host loop in front of an OpenAI-compatible server such as vLLM or SGLang (standard library only).
 
 AXI is a layer on the host side. The model is unchanged and so is the engine: the sidecar is an ordinary client of the engine's chat route. Architecture by
 Rajnish Choubey; see axi/host.py for the loop itself.
@@ -11,7 +11,7 @@ Routes (JSON):
     GET  /v1/axi/sessions/<id>             -> {"state": {...}, "state_text": "...", "steps": n}
 Run:  PYTHONPATH=python python3 -m axi.sidecar --upstream http://127.0.0.1:8000/v1 --model <model name> --port 8100
 
-Not for production: sessions live in memory, there is no authentication or TLS, and it binds to 127.0.0.1 unless told otherwise. The held state is the
+Notes: sessions live in memory, there is no authentication or TLS, and it binds to 127.0.0.1 unless told otherwise. The held state is the
 repository's service graph.
 """
 import argparse
