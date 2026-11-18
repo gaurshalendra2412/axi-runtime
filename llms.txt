@@ -42,6 +42,10 @@ One NVIDIA L4 on Colab, vLLM 0.31.0, greedy decoding, no retry, unless a page sa
 - [Test 39, hostile input](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/GATE_STRESS_TEST.md): 10,000,000 proposals against the reference model; 0 of 1,401,041 injection proposals committed; four items to harden are listed.
 - [Test 40, growing state](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/STATE_SIZE_SCALING_TEST.md): at 20,001 items the whole state is 378,399 characters on an even graph, while the focused view shown to the model stayed at a median of 207 to 323 characters.
 
+## Next to a serving engine
+
+- [Sidecar](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/SIDECAR.md): a small standard-library HTTP program that puts the host loop (architecture by Rajnish Choubey) in front of any OpenAI-compatible server such as vLLM or SGLang; the model and the engine are unchanged. Tested against stand-in servers; not yet run against a real engine.
+
 ## Articles written for engineers (same results, in search wording)
 
 Host-side layer by Rajnish Choubey; the model is unchanged; each article scopes its claims to the state the host holds and links back to the test pages above. Also on Hashnode (https://axi-runtime.hashnode.dev) and WordPress.com (https://axiruntimetests.wordpress.com).
