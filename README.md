@@ -242,7 +242,7 @@ PYTHONPATH=python python3 python/tools/readme_figures.py docs/img
 
 | Folder | What it holds |
 |---|---|
-| `crates/` | Rust prototype, early stage. The `axi-ir` crate includes four small modules (coordinate tuples, schema, router, positional encoding). The graph-rewrite check (`axi-dpo`) and the shadow pager are written but not yet included in a crate, and `axi-cache` is a placeholder. The gate and pager that are tested and measured are the Python ones below. |
+| `crates/` | Rust implementation, early stage. The `axi-ir` crate includes four small modules (coordinate tuples, schema, router, positional encoding). The graph-rewrite check (`axi-dpo`) and the shadow pager are written but not yet included in a crate, and `axi-cache` is a placeholder. The gate and pager that are tested and measured are the Python ones below. |
 | `python/axi/engine/` | The gate, the diagnosis and repair, the scope filter, the strict parser for the change language, the pager, the end-to-end runtime |
 | `python/axi/experiments/` | The experiment code, including the 4,000-step run and the code that rebuilds its result page |
 | `python/tools/` | The code that draws the pictures on this page from the saved run files |
@@ -269,7 +269,7 @@ PYTHONPATH=python python3 python/tools/readme_figures.py docs/img
 
 ## Status
 
-A reference prototype and a set of measurements, not a product. The working, tested parts are in Python; the Rust crates are a partly wired sketch of the same design. Everything was measured on synthetic service graphs and grids, on the models named in `docs/`. The goals in the original design note (speed, cost, constant-time swaps) are what the design is meant to achieve; `docs/VERIFIED.md` says which of them have been measured here.
+This repository holds AXI's host side in Python, which is what every measurement here runs on, and the measurements themselves. The Rust crates are an early-stage, partly wired version of the same design, and the tensor-level work, which is Rajnish Choubey's, is not in this repository. Everything was measured on synthetic service graphs and grids, on the models named in `docs/`. The goals in the original design note (speed, cost, constant-time swaps) are what the design is meant to achieve; `docs/VERIFIED.md` says which of them have been measured here.
 
 ## Credits
 

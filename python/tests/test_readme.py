@@ -141,7 +141,7 @@ def check_words(text):
                  "They are his to accept or reject",
                  "**What this does not show.**", "one sampled run on one model and one job", "the model was never told it",
                  "We did not measure an agent that reads its state back and corrects itself, or energy (a chat that keeps its history is measured in the section below)",
-                 "not a product", "the Rust crates are a partly wired sketch"]:
+                 "Rust crates are an early-stage, partly wired version of the same design", "tensor-level work, which is Rajnish Choubey's, is not in this repository"]:
         assert must in text, ("missing", must)
     for h in ["## What AXI is", "## The run, in plain words", "## What it cost", "## The long session, with and without AXI (22 Oct 2026)", "## How the tests are done", "## Run it yourself", "## What is where", "## Start reading here", "## Status", "## Credits"]:
         assert h in text, ("missing section", h)
