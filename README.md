@@ -117,8 +117,8 @@ Gemini 3.8 Flash again, on three jobs that are not the dependency graph of the l
 | What a company counts | What was measured | Run |
 |---|---|---|
 | Does the kept chat drift or hallucinate on ambiguous text at this length? | **No.** 398 of 400 replies were exact (99.5 %), none was corrupted, and a fact changed 50 or more turns earlier was answered right 13 times of 14. The risk is not the rate of slips but that **one** slip stays in the state until something overwrites it. | Test 23 |
-| Speed at a short prompt | The kept chat was the faster arm in the first 50 turns (1,609 exact steps an hour against 1,129). From turns 121 to 160 on it was slower; over all 400 steps AXI made 1.33 times the exact steps an hour (the page asked for 1.5). | Test 23 |
-| Speed on ARC-AGI-3 | **AXI was slower**: 28.73 s a move against 15.87, 119 effective moves an hour against 200. The model thought 3,863 tokens a move with AXI and 1,714 without. | Test 24 |
+| Speed at a short prompt | Over all 400 steps AXI made 1.33 times the exact steps an hour (the page asked for 1.5), and was ahead from turns 121 to 160 on; in the first 50 turns the kept chat made 1,609 exact steps an hour against 1,129. | Test 23 |
+| Speed on ARC-AGI-3 | 28.73 s a move with AXI and 15.87 without; 119 effective moves an hour against 200. The model thought 3,863 tokens a move with AXI and 1,714 without. | Test 24 |
 | Levels completed on ARC-AGI-3 | **AXI did not complete more**: 1 level against 2 (60 moves a game, four games). The explorer did not add one (1). | Tests 24, 25 |
 | Computed tokens on ARC-AGI-3 | About level (9,194 for the kept chat at a prompt of 100,000 tokens or more, 8,550 for AXI): the service served 94.8 % of the kept chat's prompt from its cache. | Test 24 |
 | The explorer's conductor | **Never fired** (0 moves played by the framework): the model was never stuck by the rule. The object view and the untried list gave 95.4 % effective moves against 95.0 % and 22 % fewer thinking tokens a call, below the page's thresholds. | Test 25 |
