@@ -213,6 +213,15 @@ cd python
 python3 quickstart_replay.py
 ```
 
+**Run the AXI step live on your own Gemini key** (a free Gemini key from AI Studio is enough; 15 live steps; the three checks, with what each prints, are in [`docs/TRY_IT.md`](docs/TRY_IT.md)):
+
+```bash
+export GEMINI_API_KEY=your_key
+python3 live_check.py
+```
+
+If the Gemini SDK is missing, the script says which `pip install` line to run.
+
 **Python tests** (needs Python 3 and numpy; takes about three minutes; the four tests that need PyTorch or a GPU are skipped):
 
 ```bash
