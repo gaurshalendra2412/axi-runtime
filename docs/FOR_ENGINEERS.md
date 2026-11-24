@@ -42,6 +42,6 @@ Result on one run: 4,000 of 4,000 steps with exactly the right state on Gemini 3
 ## Where to look next
 
 * The full list of tests and their pages: [`README.md`](../README.md); what is verified and what is not: [`VERIFIED.md`](VERIFIED.md).
-* The technical report, six pages with the design, the measurements, the scope and the references: [`TECHNICAL_REPORT.md`](TECHNICAL_REPORT.md) ([PDF](AXI_Technical_Report.pdf)).
+* The technical report, six pages with the design, the measurements, the scope and the references: [doi:10.5281/zenodo.24508592](https://doi.org/10.5281/zenodo.24508592) (Zenodo, 24 November 2026); the same text is in the repository as [`TECHNICAL_REPORT.md`](TECHNICAL_REPORT.md) and [PDF](AXI_Technical_Report.pdf).
 * The white paper: [AXI: The Cure for the Cost Crisis in AI](https://doi.org/10.5281/zenodo.23958737).
 * Questions, or a run on your own model or job: open an issue on the repository.

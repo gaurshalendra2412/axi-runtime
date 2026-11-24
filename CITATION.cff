@@ -25,6 +25,20 @@ keywords:
   - atomic commit
   - cost per correct step
   - host-side runtime
+references:
+  - type: report
+    title: "AXI Runtime: a host-side layer between a model and the state it edits. Technical report: design, and measurements on Gemini 3.8 Flash and open models"
+    authors:
+      - family-names: Choubey
+        given-names: Rajnish
+      - family-names: Gaur
+        given-names: Shalendra
+    doi: "10.5281/zenodo.24508592"
+    url: "https://doi.org/10.5281/zenodo.24508592"
+    year: 2026
+    month: 11
+    publisher:
+      name: Zenodo
 preferred-citation:
   type: generic
   title: "AXI: The Cure for the Cost Crisis in AI"
