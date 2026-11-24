@@ -23,6 +23,8 @@ The idea of a commit boundary around what an agent changes is also built by othe
 
 * **Cordon: Semantic Transactions for Tool-Using LLM Agents**, Chen, Liu, Xu, Dong, Li, Pu and Zhai, arXiv 2606.17573 (16 Jun 2026). A runtime that stages and checks irreversible agent actions before they take effect; shadow state, an outbox for external effects, a recovery log. On 45 risk-bearing workflows it stopped all 45 policy-violating effects before commit, against 14 for defences adapted from existing boundaries.
 * **MemTX: Transactional Belief Commit for Stateful Agent Memory**, Li, Wang, Lu, Chen, Li, Song, Zheng and Cai, arXiv 2607.23929. Memory writes staged in snapshot-isolated transactions, irreversible tool calls blocked until in-flight beliefs are resolved, typed cascading repair on retraction.
+* **State-Aware Runtime for Long-Horizon LLM Agents: A Conceptual Framework and Research Agenda**, Xiwei Chen, Cambridge Open Engage (non-peer-reviewed working paper, 11 Jul 2026). Describes a runtime layer that separates model generation from canonical state, with validation, commit and rollback; a framework and an agenda, with no experiments in the abstract.
+* **Beyond Memory: Harnessing Long-Horizon Agents with Explicit Belief States**, arXiv 2610.01415 (Oct 2026). An explicit belief state kept outside the chat, with each candidate update audited by a checker built on the same model; four benchmarks, three backbones.
 
 AXI's measured results are for a graph of services edited step by step, with a gate, a repair rule and an all-or-nothing commit on the host, on Gemini 3.8 Flash and on open models. These systems have not been run against each other.
 
