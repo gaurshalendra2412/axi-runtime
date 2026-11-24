@@ -2,6 +2,8 @@
 
 AXI is a layer on the host side, between a model and the state it edits. The model is unchanged. Architecture by **Rajnish Choubey**; tests built and run by Shalendra Gaur.
 
+Prefer a browser? [Open the notebook in Colab](https://colab.research.google.com/github/gaurshalendra2412/axi-runtime/blob/main/python/colab/axi_try_it.ipynb) and run the cells: check 1 needs no key. The published bottlenecks these results map to, with sources, are in [`FOR_ENGINEERS.md`](FOR_ENGINEERS.md).
+
 Three checks, each one command, from the shortest to the longest. Start in a copy of the repository:
 
 ```bash

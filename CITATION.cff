@@ -8,6 +8,23 @@ authors:
   - family-names: Gaur
     given-names: Shalendra
 repository-code: "https://github.com/gaurshalendra2412/axi-runtime"
+url: "https://github.com/gaurshalendra2412/axi-runtime"
+abstract: "AXI is a layer on the host side, between a model and the state it edits. The model is unchanged: it proposes one change at a time, the host checks it against the rules, completes what the rules can complete, commits it all or not at all, and shows the model the exact state again. On Gemini 3.8 Flash over 4,000 steps the host-held state was exactly right on 4,000 of 4,000 steps; on a 7B open model, on 80,000 of 80,000. The prompt is rebuilt from the held state at every step, so its size and the time of a step follow the state, not the number of steps taken. Architecture by Rajnish Choubey; tests built and run by Shalendra Gaur."
+keywords:
+  - LLM agents
+  - agent state
+  - context engineering
+  - context window
+  - KV cache
+  - prompt caching
+  - time to first token
+  - agent drift
+  - long-horizon agents
+  - structured output
+  - deterministic validation
+  - atomic commit
+  - cost per correct step
+  - host-side runtime
 preferred-citation:
   type: generic
   title: "AXI: The Cure for the Cost Crisis in AI"
