@@ -220,7 +220,7 @@ export GEMINI_API_KEY=your_key
 python3 live_check.py
 ```
 
-If the Gemini SDK is missing, the script says which `pip install` line to run.
+If the Gemini SDK is missing, the script says which `pip install` line to run. For engineers: the bottlenecks people publish about agent context, mapped to what was measured, with sources and the one-click notebook, are in [`docs/FOR_ENGINEERS.md`](docs/FOR_ENGINEERS.md).
 
 **Python tests** (needs Python 3 and numpy; takes about three minutes; the four tests that need PyTorch or a GPU are skipped):
 

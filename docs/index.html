@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AXI Runtime: a host-side layer between a model and the state it edits</title>
+<meta name="description" content="AXI is a layer on the host side, between a model and the state it edits. The model is unchanged. Gemini 3.8 Flash over 4,000 steps: held state exactly right on 4,000 of 4,000; prompt and step time follow the state, not the number of steps. Check it in seconds, no key.">
+<meta name="keywords" content="LLM agents, agent state, context engineering, context window, KV cache, prompt caching, time to first token, agent drift, long-horizon agents, structured output, deterministic validation, atomic commit, cost per correct step, host-side runtime">
+<meta name="author" content="Rajnish Choubey, Shalendra Gaur">
+<link rel="canonical" href="https://gaurshalendra2412.github.io/axi-runtime/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AXI Runtime: a host-side layer between a model and the state it edits">
+<meta property="og:description" content="The model is unchanged. The host holds the exact state, checks each proposal, commits all or nothing, and rebuilds a short prompt every step. 4,000 of 4,000 steps exact on Gemini 3.8 Flash; check it in seconds.">
+<meta property="og:url" content="https://gaurshalendra2412.github.io/axi-runtime/">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://github.com/gaurshalendra2412/axi-runtime",
+      "name": "AXI Runtime: a host-side layer between a model and the state it edits",
+      "description": "AXI is a layer on the host side, between a model and the state it edits. The model is unchanged: it proposes one change at a time, the host checks it against the rules, completes what the rules can complete, commits it all or not at all, and shows the model the exact state again. On Gemini 3.8 Flash over 4,000 steps the host-held state was exactly right on 4,000 of 4,000 steps; on a 7B open model, on 80,000 of 80,000.",
+      "codeRepository": "https://github.com/gaurshalendra2412/axi-runtime",
+      "url": "https://gaurshalendra2412.github.io/axi-runtime/",
+      "programmingLanguage": ["Python", "Rust"],
+      "author": [
+        { "@type": "Person", "name": "Rajnish Choubey", "description": "Architecture" },
+        { "@type": "Person", "name": "Shalendra Gaur", "description": "Tests built and run" }
+      ],
+      "keywords": ["LLM agents", "agent state", "context engineering", "context window", "KV cache", "prompt caching", "time to first token", "agent drift", "long-horizon agents", "structured output", "deterministic validation", "atomic commit", "cost per correct step", "host-side runtime"],
+      "citation": { "@id": "https://doi.org/10.5281/zenodo.23958737" }
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "@id": "https://doi.org/10.5281/zenodo.23958737",
+      "name": "AXI: The Cure for the Cost Crisis in AI",
+      "url": "https://doi.org/10.5281/zenodo.23958737",
+      "identifier": "https://doi.org/10.5281/zenodo.23958737",
+      "datePublished": "2026-11-04",
+      "publisher": { "@type": "Organization", "name": "Zenodo" },
+      "author": [
+        { "@type": "Person", "name": "Rajnish Choubey" },
+        { "@type": "Person", "name": "Shalendra Gaur" }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+:root {
+  --bg: #fbfaf7;
+  --ink: #1d1d1b;
+  --muted: #5d5b55;
+  --line: #dcd8cf;
+  --accent: #0b5cad;
+  --code-bg: #f0ede6;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161614;
+    --ink: #ecebe6;
+    --muted: #a6a39a;
+    --line: #35342f;
+    --accent: #6cb2f5;
+    --code-bg: #232320;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161614;
+  --ink: #ecebe6;
+  --muted: #a6a39a;
+  --line: #35342f;
+  --accent: #6cb2f5;
+  --code-bg: #232320;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 17px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif;
+}
+main { max-width: 760px; margin: 0 auto; padding: 40px 16px 64px; }
+h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 12px; }
+h2 { font-size: 1.25rem; margin: 40px 0 10px; }
+p, li { margin: 0 0 12px; }
+a { color: var(--accent); }
+.lead { font-size: 1.1rem; }
+.credit { color: var(--muted); font-size: 0.95rem; }
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9rem; }
+pre { background: var(--code-bg); padding: 12px 14px; border-radius: 6px; overflow-x: auto; margin: 0 0 14px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; min-width: 560px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; font-size: 0.85rem; }
+footer { margin-top: 48px; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+</head>
+<body>
+<main>
+<h1>AXI Runtime: a host-side layer between a model and the state it edits</h1>
+<p class="lead">AXI sits on the host side, between a model and the state it edits. The model is unchanged. It proposes one change at a time; the host checks the proposal against the rules, completes what the rules can complete, commits it all or not at all, and shows the model the exact state again in a short prompt rebuilt from what the host holds.</p>
+<p class="credit">Architecture by <strong>Rajnish Choubey</strong>. Tests built and run by Shalendra Gaur, with an AI coding assistant as a tool; the assistance is disclosed in the repository. Not affiliated with any model provider.</p>
+
+<h2>Check it in a few seconds, with no key</h2>
+<pre>git clone https://github.com/gaurshalendra2412/axi-runtime
+cd axi-runtime/python
+python3 quickstart_replay.py</pre>
+<p>It replays the saved real replies of the 4,000-step Gemini 3.8 Flash run through the repository's own code and recomputes the held state step by step. Prefer a browser? <a href="https://colab.research.google.com/github/gaurshalendra2412/axi-runtime/blob/main/python/colab/axi_try_it.ipynb">Open the notebook in Colab</a>. With your own Gemini key, a free one is enough, <code>live_check.py</code> runs the same harness live. Details: <a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/TRY_IT.md">TRY_IT.md</a>.</p>
+
+<h2>What was measured</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>Result</th><th>Where it is written</th></tr></thead>
+<tbody>
+<tr><td>Gemini 3.8 Flash, 4,000 steps: the state the host holds was exactly right on <strong>4,000 of 4,000</strong> steps. The model's own replies were exactly the ideal reply on 3,954; the other 46 were completed by the fixed repair rule.</td><td><a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/MILLION_TOKEN_TEST_HARD.md">MILLION_TOKEN_TEST_HARD.md</a></td></tr>
+<tr><td>First 400 requests of that run: replies applied as written left the right state on 85 of 400; gate and repair with AXI, 400 of 400. Cost of a step with the right state: 4.5 times lower with AXI.</td><td><a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/MILLION_TOKEN_TEST_HARD.md">MILLION_TOKEN_TEST_HARD.md</a></td></tr>
+<tr><td>Long job on Gemini 3.8 Flash: 476,835 prompt tokens a step on average with the chat kept, 2,824 flat with AXI (169 times fewer). First token past 500,000 tokens of prompt: 9.13 s against 2.27 s flat.</td><td><a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/GEMINI_LONG_TEST.md">GEMINI_LONG_TEST.md</a>, <a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/AXI_FOR_COMPANIES.md">AXI_FOR_COMPANIES.md</a></td></tr>
+<tr><td>7B open model, four jobs of 20,000 steps: held state exact on 80,000 of 80,000; the prompt stayed near 620 tokens; a step took 0.1605 s early and 0.1651 s late.</td><td><a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/ENDURANCE_7B_TEST.md">ENDURANCE_7B_TEST.md</a></td></tr>
+<tr><td>Gate stress: 10,000,000 hostile proposals through the gate of the Python reference model; none of the 1,401,041 injection proposals was committed.</td><td><a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/GATE_STRESS_TEST.md">GATE_STRESS_TEST.md</a></td></tr>
+<tr><td>256 sessions on one NVIDIA L4: 105,230 exact steps per GPU hour.</td><td><a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/SESSIONS_PER_CHIP_TEST.md">SESSIONS_PER_CHIP_TEST.md</a></td></tr>
+</tbody>
+</table>
+</div>
+<p>Every number above is about the state the host holds. Each page says how its run was done, and the code is in the repository; the first two rows can be recomputed from the saved replies in a few seconds.</p>
+
+<h2>The bottlenecks people publish, next to the result</h2>
+<p><a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/FOR_ENGINEERS.md">FOR_ENGINEERS.md</a> lists what is said in public about agent context (cost and time to first token rising with context, stale context, caching, the input-to-output token ratio of agent loops, multi-turn unreliability, context rot), with the source for each, and puts next to each the result AXI measured on the same quantity.</p>
+
+<h2>Technical report</h2>
+<p>Design, measurements, scope, related work and references in six pages: <a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/AXI_Technical_Report.pdf">PDF</a>, or <a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/TECHNICAL_REPORT.md">Markdown</a>.</p>
+
+<h2>Related work</h2>
+<p>A commit boundary around what an agent changes is also built by others: Cordon (arXiv 2606.17573) and MemTX (arXiv 2607.23929). Their settings and evaluations differ from AXI's, and the systems have not been run against each other. See <a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/RELATED_WORK.md">RELATED_WORK.md</a>.</p>
+
+<h2>Cite</h2>
+<p>Choubey, R., and Gaur, S. <em>AXI: The Cure for the Cost Crisis in AI.</em> Zenodo, 2026. <a href="https://doi.org/10.5281/zenodo.23958737">doi:10.5281/zenodo.23958737</a>. Machine-readable: <a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/CITATION.cff">CITATION.cff</a>. For language models and crawlers: <a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/llms.txt">llms.txt</a>.</p>
+
+<footer>
+Repository: <a href="https://github.com/gaurshalendra2412/axi-runtime">github.com/gaurshalendra2412/axi-runtime</a>. This is not ARM AMBA AXI.
+</footer>
+</main>
+</body>
+</html>
