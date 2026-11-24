@@ -30,7 +30,26 @@
         { "@type": "Person", "name": "Shalendra Gaur", "description": "Tests built and run" }
       ],
       "keywords": ["LLM agents", "agent state", "context engineering", "context window", "KV cache", "prompt caching", "time to first token", "agent drift", "long-horizon agents", "structured output", "deterministic validation", "atomic commit", "cost per correct step", "host-side runtime"],
-      "citation": { "@id": "https://doi.org/10.5281/zenodo.23958737" }
+      "citation": [
+        { "@id": "https://doi.org/10.5281/zenodo.23958737" },
+        { "@id": "https://doi.org/10.5281/zenodo.24508592" }
+      ]
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://doi.org/10.5281/zenodo.24508592",
+      "name": "AXI Runtime: a host-side layer between a model and the state it edits. Technical report: design, and measurements on Gemini 3.8 Flash and open models",
+      "url": "https://doi.org/10.5281/zenodo.24508592",
+      "identifier": "https://doi.org/10.5281/zenodo.24508592",
+      "datePublished": "2026-11-24",
+      "license": "https://creativecommons.org/licenses/by-nd/4.0/",
+      "publisher": { "@type": "Organization", "name": "Zenodo" },
+      "author": [
+        { "@type": "Person", "name": "Rajnish Choubey" },
+        { "@type": "Person", "name": "Shalendra Gaur" }
+      ],
+      "about": { "@id": "https://github.com/gaurshalendra2412/axi-runtime" },
+      "keywords": ["LLM agents", "agent state", "context engineering", "KV cache", "prompt caching", "time to first token", "long-horizon agents", "structured output", "deterministic validation", "atomic commit", "host-side runtime"]
     },
     {
       "@type": "ScholarlyArticle",
@@ -130,12 +149,13 @@ python3 quickstart_replay.py</pre>
 <p><a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/FOR_ENGINEERS.md">FOR_ENGINEERS.md</a> lists what is said in public about agent context (cost and time to first token rising with context, stale context, caching, the input-to-output token ratio of agent loops, multi-turn unreliability, context rot), with the source for each, and puts next to each the result AXI measured on the same quantity.</p>
 
 <h2>Technical report</h2>
-<p>Design, measurements, scope, related work and references in six pages: <a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/AXI_Technical_Report.pdf">PDF</a>, or <a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/TECHNICAL_REPORT.md">Markdown</a>.</p>
+<p>Design, measurements, scope, related work and references in six pages, with a DOI: <a href="https://doi.org/10.5281/zenodo.24508592">doi:10.5281/zenodo.24508592</a> (Zenodo, 24 November 2026). The same text is in the repository as <a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/AXI_Technical_Report.pdf">PDF</a> and <a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/TECHNICAL_REPORT.md">Markdown</a>.</p>
 
 <h2>Related work</h2>
 <p>A commit boundary around what an agent changes is also built by others: Cordon (arXiv 2606.17573) and MemTX (arXiv 2607.23929). Their settings and evaluations differ from AXI's, and the systems have not been run against each other. See <a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/RELATED_WORK.md">RELATED_WORK.md</a>.</p>
 
 <h2>Cite</h2>
+<p>Choubey, R., and Gaur, S. <em>AXI Runtime: a host-side layer between a model and the state it edits. Technical report: design, and measurements on Gemini 3.8 Flash and open models.</em> Zenodo, 2026. <a href="https://doi.org/10.5281/zenodo.24508592">doi:10.5281/zenodo.24508592</a>.</p>
 <p>Choubey, R., and Gaur, S. <em>AXI: The Cure for the Cost Crisis in AI.</em> Zenodo, 2026. <a href="https://doi.org/10.5281/zenodo.23958737">doi:10.5281/zenodo.23958737</a>. Machine-readable: <a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/CITATION.cff">CITATION.cff</a>. For language models and crawlers: <a href="https://github.com/gaurshalendra2412/axi-runtime/blob/main/llms.txt">llms.txt</a>.</p>
 
 <footer>

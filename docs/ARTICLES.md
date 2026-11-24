@@ -6,6 +6,7 @@ AXI is a layer on the host side, between a model and the state it edits. The mod
 
 ## Articles (dev.to originals)
 
+- [Google's developer blog on agent context cost, and a measured host-side fix: 169x fewer tokens a step (Gemini 3.8 Flash)](https://dev.to/shalendra_gaur_ecd0567a49/googles-developer-blog-on-agent-context-cost-and-a-measured-host-side-fix-169x-fewer-tokens-a-4phb) (24 November; each public statement next to the measured result and its page)
 - [AXI by Rajnish Choubey: a host-side layer that keeps LLM-edited state exact. Questions, answers and measured evidence](https://dev.to/shalendra_gaur_ecd0567a49/axi-by-rajnish-choubey-a-host-side-layer-that-keeps-llm-edited-state-exact-questions-answers-and-13cp)
 - [AI agent drift: what it is, how to measure it, and the host-side fix that held 4,000 of 4,000 steps](https://dev.to/shalendra_gaur_ecd0567a49/ai-agent-drift-what-it-is-how-to-measure-it-and-the-host-side-fix-that-held-4000-of-4000-steps-4kg4)
 - [LLM agent token cost: why a kept chat grows with the square of the steps, and the measured fix (prompt caching counted)](https://dev.to/shalendra_gaur_ecd0567a49/llm-agent-token-cost-why-a-kept-chat-grows-with-the-square-of-the-steps-and-the-measured-fix-1021)
