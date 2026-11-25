@@ -29,6 +29,7 @@ Each test page was written before its run, and its result goes below a line at t
 - [The 4,000-step run](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/MILLION_TOKEN_TEST_HARD.md): one run on Gemini 3.8 Flash, 4,000 of 4,000 steps with exactly the right state, 3.7 million tokens, 46 of 46 slips repaired by a fixed rule.
 - [The cost of being wrong](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/COST_OF_BEING_WRONG.md): what a wrong state costs a company that runs the model, counted from the saved files.
 - [Where this stands](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/WHERE_THIS_STANDS.md): latency, drift and cost as measured, and what is not shown.
+- [Checked against Google's bill](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/BILLING_CHECK.md): the dollar figures of the Gemini tests set against Google's own billing report; its rates are the typed ones and the totals come within about 1 percent of our logs.
 
 ## Tests on open models (Tests 35 to 45): cost, drift, capacity and the front door
 

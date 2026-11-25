@@ -1,0 +1,48 @@
+{
+  "what": "Lines of Google's own billing report for the owner's paid Gemini API billing account, copied by hand from the on-screen table on 25 Nov 2026. The report is Google Cloud console > Billing > Reports, Group by SKU, a custom date range by charge period; its Download CSV button gives the same rows. Currency: Indian rupees (the report does not print an exchange rate). The report shows no tax line. Account, project and key identifiers are left out on purpose.",
+  "read_on": "2026-11-25",
+  "currency": "INR",
+  "day_boundary": "UTC+5:30 (the report's own)",
+  "ranges": {
+    "1_to_25_nov": {
+      "total_inr": 4249.85,
+      "tax": null,
+      "lines": [
+        {"sku_id": "4F40-96C8-648E", "sku": "Generate content input token count gemini 3.8 flash text", "tokens": 47731389, "cost_inr": 3409.10},
+        {"sku_id": "A1C3-9773-AA71", "sku": "Generate content cached input token count gemini 3.8 flash text", "tokens": 57158454, "cost_inr": 408.24},
+        {"sku_id": "C5EE-B267-EE7E", "sku": "Generate content output token count gemini 3.8 flash text", "tokens": 1062778, "cost_inr": 379.53},
+        {"sku_id": "07D6-73CA-C859", "sku": "Generate_content cached text input token count for gemini 3 flash", "tokens": 6260384, "cost_inr": 29.81},
+        {"sku_id": "F2C1-F842-5D84", "sku": "Generate_content text input token count for gemini 3 flash", "tokens": 301180, "cost_inr": 14.34},
+        {"sku_id": "A78C-B91C-FD61", "sku": "Generate_content cached image input token count for gemini 3 flash", "tokens": 766528, "cost_inr": 3.65},
+        {"sku_id": "ACA6-865B-F153", "sku": "Generate_content text output token count for gemini 3 flash", "tokens": 11976, "cost_inr": 3.42},
+        {"sku_id": "1918-CC56-A445", "sku": "Generate_content image input token count for gemini 3 flash", "tokens": 36981, "cost_inr": 1.76},
+        {"sku_id": "7166-DCCD-7D46", "sku": "Generate content search query gemini 3 free", "tokens": 29, "cost_inr": 0.00}
+      ]
+    },
+    "22_nov": {
+      "total_inr": 2805.00,
+      "tax": null,
+      "lines": [
+        {"sku_id": "4F40-96C8-648E", "sku": "Generate content input token count gemini 3.8 flash text", "tokens": 38894516, "cost_inr": 2777.94},
+        {"sku_id": "C5EE-B267-EE7E", "sku": "Generate content output token count gemini 3.8 flash text", "tokens": 75084, "cost_inr": 26.81},
+        {"sku_id": "A1C3-9773-AA71", "sku": "Generate content cached input token count gemini 3.8 flash text", "tokens": 33833, "cost_inr": 0.24}
+      ]
+    },
+    "1_to_3_nov": {
+      "total_inr": 168.92,
+      "tax": null,
+      "lines": [
+        {"sku_id": "C5EE-B267-EE7E", "sku": "Generate content output token count gemini 3.8 flash text", "tokens": 264232, "cost_inr": 94.36},
+        {"sku_id": "4F40-96C8-648E", "sku": "Generate content input token count gemini 3.8 flash text", "tokens": 1043909, "cost_inr": 74.56}
+      ]
+    }
+  },
+  "ai_studio_usage_page_last_28_days": {
+    "note": "AI Studio > Usage, project Gemini Project, 28 days to 26 Nov 2026, days in UTC-8. Includes 28 Oct, which the report ranges above do not.",
+    "input_tokens": 118088503,
+    "output_tokens": 1338221,
+    "requests": 5099,
+    "day_28_oct": {"input_tokens": 270000, "output_tokens": 263310, "model": "gemini 3.8 flash", "note": "chart tooltip, rounded: 0.27M and 263.31K"}
+  },
+  "ai_studio_spend_page_1_to_25_nov_inr": 4249.84
+}
