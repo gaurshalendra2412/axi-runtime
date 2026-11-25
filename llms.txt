@@ -15,6 +15,7 @@ Each test page was written before its run, and its result goes below a line at t
 
 ## Start here
 
+- [For companies that run models](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/AXI_COMPANY_BRIEF.md): one page, host side, any LLM application that holds state; drift, cost, compute, latency, speed, efficiency and hostile input, each with its measured number and its test page.
 - [Check it yourself](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/TRY_IT.md): three checks, from a few seconds with no key (the 4,000-step run recomputed from the saved replies) to a live run on your own Gemini key; also a one-click Colab notebook.
 - [For engineers](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/FOR_ENGINEERS.md): the bottlenecks people publish about agent context (cost, time to first token, drift, caching), each next to the result AXI measured on the same thing and the page that holds it; related work on commit boundaries.
 - [Technical report](https://doi.org/10.5281/zenodo.24508592) (Zenodo, 24 November 2026, doi:10.5281/zenodo.24508592; same text as [Markdown](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/TECHNICAL_REPORT.md) and [PDF](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/AXI_Technical_Report.pdf) in the repository): design, measurements on Gemini 3.8 Flash and open models, scope, related work, references.
