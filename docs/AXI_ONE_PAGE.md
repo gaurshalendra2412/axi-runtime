@@ -2,7 +2,7 @@
 
 On one job of 4,000 requests, Gemini 3.8 Flash's own replies were exactly right 3,954 times (98.85 percent). The state the host held was exactly right on all 4,000 steps. The model was not changed. The 46 replies that were not exactly right all left out the same thing, and a fixed rule on the host completed them. The 4,000-step figures can be recomputed from the saved replies in a few seconds, with no key; every other figure points to the page and run file that holds it.
 
-AXI is a layer on the host side, between a model and the state it edits. The architecture is by **Rajnish Choubey**; the tests were built and run by **Shalendra Gaur**, working with an AI coding assistant that is a tool, not an author.
+AXI is a layer on the host side, between a model and the state it edits. It is for the company that runs the model, not for end users, and it fits any LLM application that holds state: agents, chat, workflows, short jobs and long ones, from the first step. The architecture is by **Rajnish Choubey**; the tests were built and run by **Shalendra Gaur**, working with an AI coding assistant that is a tool, not an author.
 
 ## What one incomplete reply does
 

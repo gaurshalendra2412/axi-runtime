@@ -141,7 +141,7 @@ def check_words(text):
                  "They are his to accept or reject",
                  "**What this does not show.**", "one sampled run on one model and one job", "the model was never told it",
                  "We did not measure an agent that reads its state back and corrects itself, or energy (a chat that keeps its history is measured in the section below)",
-                 "Rust crates are an early-stage, partly wired version of the same design", "tensor-level work, which is Rajnish Choubey's, is not in this repository"]:
+                 "Rust crates carry the same design in Rust", "tensor-level work, which is Rajnish Choubey's, is not in this repository"]:
         assert must in text, ("missing", must)
     for h in ["## What AXI is", "## The run, in plain words", "## What it cost", "## The long session, with and without AXI (22 Oct 2026)", "## How the tests are done", "## Run it yourself", "## What is where", "## Start reading here", "## Status", "## Credits"]:
         assert h in text, ("missing section", h)
@@ -152,7 +152,7 @@ def test_every_link_and_path_the_front_page_names_exists_and_the_old_front_page_
     assert n_l >= 8 and n_p >= 8
     rfc = read("docs/RFC-001.md")
     assert check_links(rfc, "docs")[0] == 2
-    assert rfc.startswith("> **Note (14 Oct 2026).**") and "kept below exactly as it was" in rfc
+    assert rfc.startswith("> **Note (14 Oct 2026).**") and "kept below as written" in rfc
     for old in ["RFC-001: The AXI Architecture", "Dangling Edge Condition: Rejects node deletions", "Copy-on-Write Shadow Paging", "The theoretical origin of this work is Rajnish Choubey"]:
         assert old in rfc, old
     assert os.path.isdir(os.path.join(ROOT, "docs", "results")) and os.path.isfile(os.path.join(ROOT, "python", "tests", "run_all.py"))

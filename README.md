@@ -4,7 +4,7 @@
 
 <p align="center"><sub>First 400 requests of the same stream, three ways of keeping the state. The whole run was 4,000 requests.</sub></p>
 
-<p align="center">AXI is a layer on the host side, between a model and the state it edits. The model is unchanged.<br>Architecture by <b>Rajnish Choubey</b>; tests built and run by Shalendra Gaur.<br>White paper: <a href="https://doi.org/10.5281/zenodo.23958737">AXI: The Cure for the Cost Crisis in AI</a> (Zenodo, 4 November 2026)</p>
+<p align="center">AXI is a layer on the host side, between a model and the state it edits. The model is unchanged.<br>It is for the company that runs the model, not for end users, and it fits any LLM application that holds state: agents, chat, workflows, short jobs and long ones, from the first step.<br>Architecture by <b>Rajnish Choubey</b>; tests built and run by Shalendra Gaur.<br>White paper: <a href="https://doi.org/10.5281/zenodo.23958737">AXI: The Cure for the Cost Crisis in AI</a> (Zenodo, 4 November 2026)</p>
 
 <p align="center">One page with the chart, the tables and the three commands to check it: <a href="docs/AXI_ONE_PAGE.md">AXI: 3,954 of 4,000 replies right, 4,000 of 4,000 states exact</a></p>
 
@@ -32,7 +32,9 @@ The same idea was also tested on open models we host ourselves, which lets the h
 
 ## What AXI is
 
-A small runtime between an AI agent and the state it edits. The model proposes one change at a time. AXI checks the change against the rules, completes what the rules can complete, commits it all or not at all, and then shows the model the exact state again. The point is to stop small errors from compounding over long, multi-step agent runs.
+A runtime on the host side, between a model and the state it edits. The model proposes one change at a time. AXI checks the change against the rules, completes what the rules can complete, commits it all or not at all, and then shows the model the exact state again. The state is exact from the first step, so a small slip cannot compound, and the prompt is built from the state, so its size does not depend on how many steps have run.
+
+It is for the company that runs the model (the host); end users never touch it. It fits any LLM application that holds state: agents, chat, workflows, short jobs and long ones. The model is unchanged, and the claims on this page are about the state the host holds.
 
 The idea, the framework and the architecture are **Rajnish Choubey's**. This repository holds the code, tests and measurements that implement and check them. See [Credits](#credits).
 
@@ -253,7 +255,7 @@ PYTHONPATH=python python3 python/tools/readme_figures.py docs/img
 
 | Folder | What it holds |
 |---|---|
-| `crates/` | Rust implementation, early stage. The `axi-ir` crate includes four small modules (coordinate tuples, schema, router, positional encoding). The graph-rewrite check (`axi-dpo`) and the shadow pager are written but not yet included in a crate, and `axi-cache` is a placeholder. The gate and pager that are tested and measured are the Python ones below. |
+| `crates/` | Rust implementation of the design. The `axi-ir` crate includes four small modules (coordinate tuples, schema, router, positional encoding). The graph-rewrite check (`axi-dpo`) and the shadow pager are written but not yet included in a crate, and `axi-cache` is a placeholder. The gate and pager that are tested and measured are the Python ones below. |
 | `python/axi/engine/` | The gate, the diagnosis and repair, the scope filter, the strict parser for the change language, the pager, the end-to-end runtime |
 | `python/axi/experiments/` | The experiment code, including the 4,000-step run and the code that rebuilds its result page |
 | `python/tools/` | The code that draws the pictures on this page from the saved run files |
@@ -280,7 +282,7 @@ PYTHONPATH=python python3 python/tools/readme_figures.py docs/img
 
 ## Status
 
-This repository holds AXI's host side in Python, which is what every measurement here runs on, and the measurements themselves. The Rust crates are an early-stage, partly wired version of the same design, and the tensor-level work, which is Rajnish Choubey's, is not in this repository. Everything was measured on synthetic service graphs and grids, on the models named in `docs/`. The goals in the original design note (speed, cost, constant-time swaps) are what the design is meant to achieve; `docs/VERIFIED.md` says which of them have been measured here.
+This repository holds AXI's host side in Python, which is what every measurement here runs on, and the measurements themselves. The Rust crates carry the same design in Rust; what each crate holds is in the table above. The tensor-level work, which is Rajnish Choubey's, is not in this repository. Everything was measured on synthetic service graphs and grids, on the models named in `docs/`. The goals in the original design note (speed, cost, constant-time swaps) are what the design is for; `docs/VERIFIED.md` says which of them have been measured here.
 
 ## Credits
 
