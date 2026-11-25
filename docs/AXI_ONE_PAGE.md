@@ -38,6 +38,8 @@ At every step the model sees a short prompt built from the held state and propos
 
 On that conversation job the chat kept sent 99,809 prompt tokens a turn on average (85 times as many as AXI's 1,177 a step); in all, 39.9 million tokens against 0.53 million for AXI, with its replies and thinking counted too (76 times fewer). With 97.0 percent of the kept chat's prompt served from the cache, its first token took a median 5.57 s once the prompt passed 150,000 tokens, against 1.86 s in its first 50 turns, where it was the faster of the two. With AXI the first token took a median 2.41 s over all 400 steps. (`docs/GEMINI_FUZZY_TEST.md`, Test 23)
 
+**Against the provider's own bill.** The dollar figures above are logged tokens times typed prices. The provider's billing report for the account carries the same rates (an output token 5.000 times an input token, a cached token 0.100 of one), and on the day of the cache pair test its total came within 1.3 percent of the logged one ($29.45 against $29.09; for Test 34, $1.77 against $1.75). At those rates one verified step of this 400-turn job costs $0.0014 with AXI, $0.0870 with the chat kept and its cache cold (61 times) and $0.0148 with the chat kept and its cache warm (10.4 times; counting every step, right or wrong, 51.4 and 6.8 times). The bill gives the total for the day, not each arm; the warm figure is worked out from its tokens. Lines, arithmetic and the check: [`BILLING_CHECK.md`](BILLING_CHECK.md).
+
 The long job is heavier: a dense service graph, a block of 40 log lines with every request, and the chat kept until the next prompt would have passed 950,000 tokens.
 
 | 1,500-step long job, Gemini 3.8 Flash | Chat kept | AXI |
