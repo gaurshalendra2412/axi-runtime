@@ -281,6 +281,7 @@ PYTHONPATH=python python3 python/tools/readme_figures.py docs/img
 8. [`docs/RFC-001.md`](docs/RFC-001.md): the original design note.
 9. [`docs/ARTICLES.md`](docs/ARTICLES.md): the same results written up as articles for engineers (drift, cost, latency, capacity, injection) and two forum posts with open questions.
 10. [`docs/SIDECAR.md`](docs/SIDECAR.md): a small HTTP sidecar that puts the host loop in front of a vLLM or SGLang server.
+11. [`docs/BILLING_CHECK.md`](docs/BILLING_CHECK.md): the dollar figures of the Gemini tests set against the model provider's own billing report: its rates are the typed ones, and the 22 Nov cache pair day and Test 34 come within about 1 percent of our logs.
 
 ## Status
 
