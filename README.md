@@ -6,6 +6,8 @@
 
 <p align="center">AXI is a layer on the host side, between a model and the state it edits. The model is unchanged.<br>It is for the company that runs the model, not for end users, and it fits any LLM application that holds state: agents, chat, workflows, short jobs and long ones, from the first step.<br>Architecture by <b>Rajnish Choubey</b>; tests built and run by Shalendra Gaur.<br>White paper: <a href="https://doi.org/10.5281/zenodo.23958737">AXI: The Cure for the Cost Crisis in AI</a> (Zenodo, 4 November 2026)</p>
 
+<p align="center">For companies that run models, one page with drift, cost, compute, latency, speed and efficiency, each with its measured number: <a href="docs/AXI_COMPANY_BRIEF.md">AXI for companies that run models</a></p>
+
 <p align="center">One page with the chart, the tables and the three commands to check it: <a href="docs/AXI_ONE_PAGE.md">AXI: 3,954 of 4,000 replies right, 4,000 of 4,000 states exact</a></p>
 
 <p align="center"><a href="https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml/badge.svg"></a></p>
