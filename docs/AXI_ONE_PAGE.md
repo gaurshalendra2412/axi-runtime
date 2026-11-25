@@ -62,6 +62,8 @@ The same layer ran on an open 7B model, Qwen2.5-7B-Instruct-AWQ, served with vLL
 
 One card, one quantised model, one seed, synthetic service graphs; each page lists its own limits.
 
+On memory alone, with no model run, one TPU v6e chip held 927 sessions at the size of one AXI step (2,824 tokens), against 5 at the mean length of the kept chat in the long run (476,835 tokens) and 2 at its largest (949,591): [`TPU_SESSIONS_TEST.md`](TPU_SESSIONS_TEST.md), Test 30.
+
 ## Check it yourself
 
 Three checks, quickest first. The first needs no key and no account.
