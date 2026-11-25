@@ -18,8 +18,9 @@ AXI is a layer on the host side, between a model and the state it edits. The mod
 - [LLM agent memory compared: whole chat, summary, sliding window, retrieval and host-held state on a 14B model](https://dev.to/shalendra_gaur_ecd0567a49/llm-agent-memory-compared-whole-chat-summary-sliding-window-retrieval-and-host-held-state-on-a-371i)
 - [What happens when an LLM agent's chat outgrows the context window? Measured: 108 to 235 steps in 32k, 337 in 131k](https://dev.to/shalendra_gaur_ecd0567a49/what-happens-when-an-llm-agents-chat-outgrows-the-context-window-measured-108-to-235-steps-in-2fah)
 - [LLM tool calls and structured edits: on a 7B model 57 to 79 percent of steps right as written, 94 to 99.8 with a rule check](https://dev.to/shalendra_gaur_ecd0567a49/llm-tool-calls-and-structured-edits-on-a-7b-model-57-to-79-percent-of-steps-right-as-written-94-om5)
+- [LLM agent token cost and state drift: the fixes compared, with the authors' papers and measured numbers](https://dev.to/shalendra_gaur_ecd0567a49/llm-agent-token-cost-and-state-drift-the-fixes-compared-with-authors-papers-and-measured-numbers-2ae2)
 
-The same articles are also on [Hashnode](https://axi-runtime.hashnode.dev) and on the [WordPress.com blog](https://axiruntimetests.wordpress.com).
+The same articles are also on [Hashnode](https://axi-runtime.hashnode.dev) and on the [WordPress.com blog](https://axiruntimetests.wordpress.com). The comparison article is also on [Hashnode](https://axi-runtime.hashnode.dev/llm-agent-token-cost-and-state-drift-the-fixes-compared-with-authors-papers-and-measured-numbers) and on [Medium](https://medium.com/@gaur.shalendra2412/llm-agent-token-cost-and-state-drift-the-fixes-compared-with-authors-papers-and-measured-numbers-e21daf29f407).
 
 ## Forum posts with open questions
 
