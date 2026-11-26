@@ -130,8 +130,14 @@ def check_numbers(text):
 
 def check_words(text):
     low = text.lower()
-    for w in ["billion", "trillion", "hyperscaler", "industry", "market", "profit", "openai", "anthropic", "google", "kwh", "watt", "carbon", "valuation", "frontier"]:
+    for w in ["billion", "trillion", "hyperscaler", "industry", "market", "profit", "openai", "kwh", "watt", "carbon", "valuation", "frontier"]:
         assert w not in low, ("word the pages do not support", w)
+    # Company names: only in the one list item that names the sources of the list prices (docs/PRICE_CHECK.md, which recomputes every figure); nowhere else on the page.
+    price_item = [ln for ln in text.splitlines() if ln.lstrip().startswith("12. [`docs/PRICE_CHECK.md`]")]
+    assert len(price_item) == 1, "the price-check list item is missing or occurs twice"
+    rest = text.replace(price_item[0], "").lower()
+    for w in ["anthropic", "google", "xai"]:
+        assert w not in rest, ("company name outside the price-check item", w)
     assert low.count("energy") == 1 and "or energy" in low
     plain = text.replace("10.5281/zenodo.23958737", "DOI")            # the white paper's own DOI is the one long number the page may carry; any other 8-digit run is still refused
     assert not re.findall(r"\d{8,}", plain) and all(sum(ch.isdigit() for ch in m) < 10 for m in re.findall(r"\+?\d[\d \-()]{8,}\d", plain.replace(",", ""))), "phone-like digits"
@@ -235,7 +241,7 @@ def test_a_doctored_front_page_is_noticed():
                      ("3.7 million tokens", "4.7 million tokens"), ("twelve passed, one read NO", "thirteen passed, one read NO"), ("36 to 150 steps", "36 to 100 steps"), ("0 of 360 steps", "0 of 300 steps"),
                      ("$0.75 per million tokens in", "$0.50 per million tokens in")]:
         assert old in t and fails(check_numbers, t.replace(old, new, 1)), old
-    for bad in ["a market worth billions", "Energy use fell", "call 98765 43210", "write to someone@example.com"]:
+    for bad in ["a market worth billions", "Energy use fell", "call 98765 43210", "write to someone@example.com", "Google adopted it", "Anthropic confirms the figures"]:
         assert fails(check_words, t + "\n" + bad), bad
     assert fails(check_words, t.replace("**What this does not show.**", "**Note.**")) and fails(check_words, t.replace("is not an author", "is an author"))
     assert fails(lambda x: check_links(x), t.replace("docs/VERIFIED.md", "docs/NOPE.md", 1))
