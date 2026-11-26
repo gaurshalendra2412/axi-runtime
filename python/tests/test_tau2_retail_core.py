@@ -46,6 +46,7 @@ def test_confirmation_detector():
     assert is_confirmation("Yes, please go ahead.")
     assert is_confirmation("yes, cancel it, no longer needed")  # a cancel reason is not a refusal
     assert is_confirmation("Okay, do it")
+    assert is_confirmation("That works for me.") and is_confirmation("No problem, go ahead") and is_confirmation("Perfect, let's do it")
     assert not is_confirmation("Yes, but can you also change the address?")
     assert not is_confirmation("No, wait")
     assert not is_confirmation("I'm not sure")

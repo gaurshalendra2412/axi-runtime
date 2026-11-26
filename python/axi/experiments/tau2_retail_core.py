@@ -67,7 +67,8 @@ USER_ID_RE = re.compile(r"^[a-z]+(?:_[a-z]+)*_\d+$")
 _YES_RE = re.compile(
     r"\b(yes|yeah|yep|yup|sure|confirm(?:ed)?|proceed|go ahead|go for it|do it|"
     r"please do|that'?s right|that is correct|correct|sounds good|ok|okay|"
-    r"absolutely|definitely|affirmative)\b"
+    r"absolutely|definitely|affirmative|that works|works for me|perfect|alright|all right|"
+    r"i agree|agreed|let'?s do (?:it|that))\b"
 )
 _HEDGE_RE = re.compile(
     r"\b(no|not|don'?t|do not|wait|hold on|stop|never ?mind|instead|but|however|rather)\b"
@@ -77,7 +78,8 @@ _HEDGE_RE = re.compile(
 def is_confirmation(text: str) -> bool:
     """True when a customer message is an explicit yes with no hedge in it."""
     t = text.lower().replace("’", "'")
-    t = t.replace("no longer needed", " ")  # a cancel reason, not a refusal
+    for phrase in ("no longer needed", "no problem", "not a problem"):  # not refusals
+        t = t.replace(phrase, " ")
     return bool(_YES_RE.search(t)) and not _HEDGE_RE.search(t)
 
 
