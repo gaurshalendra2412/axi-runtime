@@ -31,6 +31,7 @@ Each test page was written before its run, and its result goes below a line at t
 - [Where this stands](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/WHERE_THIS_STANDS.md): latency, drift and cost as measured, and what is not shown.
 - [AXI checked against Google's bill: $0.0014 per verified step vs $0.0870 (kept chat, cold) and $0.0148 (warm)](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/BILLING_CHECK.md): the dollar figures of the Gemini tests set against Google's own billing report; its rates are the typed ones and the totals come within about 1 percent of our logs.
 - [AXI at Claude, Grok and Gemini list prices: $0.0038 per verified step on Claude Sonnet 5.5 vs $0.2319 (kept chat, cold) and $0.0246 (warm)](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/PRICE_CHECK.md): the same measured token counts priced at Anthropic's, xAI's and Google's list prices (61x to 79x cold, 6.5x to 26x warm per verified step), plus Llama's cache memory; the arithmetic is recomputed by a test.
+- [AXI and the AgentX numbers: 1,177 prompt tokens a step with the state held by the host vs 99,809 for the kept chat](https://github.com/gaurshalendra2412/axi-runtime/blob/main/docs/AGENTX_NOTE.md): the SemiAnalysis AgentX median (142k input tokens a request) and the WEKA/Nebius prefill figures (60 percent HBM only, 6.8 percent with an NVMe tier), each named with its source, beside one measured state-editing job.
 
 ## Tests on open models (Tests 35 to 45): cost, drift, capacity and the front door
 
