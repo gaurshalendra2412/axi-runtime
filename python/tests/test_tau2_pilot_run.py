@@ -83,6 +83,52 @@ def test_line_8_does_not_apply_without_a_pass_on_both_sides():
     assert R.readings(by, tot, tasks)[-1][1] is None
 
 
+class FakeClock:
+    def __init__(self):
+        self.t = 0.0
+        self.sleeps = []
+
+    def now(self):
+        return self.t
+
+    def sleep(self, s):
+        self.sleeps.append(s)
+        self.t += s
+
+
+class RateLimitError(Exception):
+    pass
+
+
+def test_throttle_limits_calls_a_minute_and_retries_one_call():
+    c = FakeClock()
+    seen = []
+
+    def real(*a, **k):
+        seen.append(c.t)
+        return "ok"
+
+    th = R.make_throttled(real, 4, clock=c.now, sleep=c.sleep)
+    assert [th(i) for i in range(10)] == ["ok"] * 10
+    for i in range(len(seen)):
+        assert sum(1 for t in seen if seen[i] - 60.0 < t <= seen[i]) <= 4  # never more than 4 in any 60 s
+    fails = {"n": 0}
+
+    def flaky(*a, **k):
+        fails["n"] += 1
+        if fails["n"] < 3:
+            raise RateLimitError("429")
+        return "done"
+
+    c2 = FakeClock()
+    assert R.make_throttled(flaky, 4, clock=c2.now, sleep=c2.sleep)() == "done" and fails["n"] == 3  # the same call, asked again
+    try:
+        R.make_throttled(lambda: (_ for _ in ()).throw(ValueError("bad request")), 4, clock=c2.now, sleep=c2.sleep)()
+        raise AssertionError("a non-transient error must pass through")
+    except ValueError:
+        pass
+
+
 def test_arms_and_tasks_of_the_plan_page():
     assert R.TASKS == ["0", "1", "2", "3", "4", "6", "7", "8", "10", "11"]
     assert R.AGENT_OF == {"B": "llm_agent", "G": "gate_chat", "A": "held_state"}
