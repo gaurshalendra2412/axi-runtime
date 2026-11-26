@@ -1,0 +1,180 @@
+{
+ "device": "TPU v5 lite (v5e-1, Colab)",
+ "jax": "0.11.2",
+ "run": "26 Nov 2026",
+ "hlo_layout": "bf16[2,1,2,T,64]{3,4,2,1,0:T(8,128)(2,1)}",
+ "rows": [
+  {
+   "tokens": 2824,
+   "nominal_bytes": 1445888,
+   "bytes_in_use_delta": 1602560,
+   "on_device_size_in_bytes": 1507328,
+   "layout_in_compiled_hlo": [
+    "bf16[2,1,2,2824,64]{3,4,2,1,0:T(8,128)(2,1)}"
+   ],
+   "argument_size_in_bytes": 1507328,
+   "output_size_in_bytes": 1507328,
+   "temp_size_in_bytes": 0,
+   "alias_size_in_bytes": 0
+  },
+  {
+   "tokens": 2944,
+   "nominal_bytes": 1507328,
+   "bytes_in_use_delta": 1507328,
+   "on_device_size_in_bytes": 1507328,
+   "layout_in_compiled_hlo": [
+    "bf16[2,1,2,2944,64]{3,4,2,1,0:T(8,128)(2,1)}"
+   ],
+   "argument_size_in_bytes": 1507328,
+   "output_size_in_bytes": 1507328,
+   "temp_size_in_bytes": 0,
+   "alias_size_in_bytes": 0
+  },
+  {
+   "tokens": 50000,
+   "nominal_bytes": 25600000,
+   "bytes_in_use_delta": 25667072,
+   "on_device_size_in_bytes": 25624576,
+   "layout_in_compiled_hlo": [
+    "bf16[2,1,2,50000,64]{3,4,2,1,0:T(8,128)(2,1)}"
+   ],
+   "argument_size_in_bytes": 25624576,
+   "output_size_in_bytes": 25624576,
+   "temp_size_in_bytes": 0,
+   "alias_size_in_bytes": 0
+  },
+  {
+   "tokens": 50048,
+   "nominal_bytes": 25624576,
+   "bytes_in_use_delta": 25624576,
+   "on_device_size_in_bytes": 25624576,
+   "layout_in_compiled_hlo": [
+    "bf16[2,1,2,50048,64]{3,4,2,1,0:T(8,128)(2,1)}"
+   ],
+   "argument_size_in_bytes": 25624576,
+   "output_size_in_bytes": 25624576,
+   "temp_size_in_bytes": 0,
+   "alias_size_in_bytes": 0
+  },
+  {
+   "tokens": 100000,
+   "nominal_bytes": 51200000,
+   "bytes_in_use_delta": 51292160,
+   "on_device_size_in_bytes": 51249152,
+   "layout_in_compiled_hlo": [
+    "bf16[2,1,2,100000,64]{3,4,2,1,0:T(8,128)(2,1)}"
+   ],
+   "argument_size_in_bytes": 51249152,
+   "output_size_in_bytes": 51249152,
+   "temp_size_in_bytes": 0,
+   "alias_size_in_bytes": 0
+  },
+  {
+   "tokens": 100096,
+   "nominal_bytes": 51249152,
+   "bytes_in_use_delta": 51249152,
+   "on_device_size_in_bytes": 51249152,
+   "layout_in_compiled_hlo": [
+    "bf16[2,1,2,100096,64]{3,4,2,1,0:T(8,128)(2,1)}"
+   ],
+   "argument_size_in_bytes": 51249152,
+   "output_size_in_bytes": 51249152,
+   "temp_size_in_bytes": 0,
+   "alias_size_in_bytes": 0
+  },
+  {
+   "tokens": 250000,
+   "nominal_bytes": 128000000,
+   "bytes_in_use_delta": 128099840,
+   "on_device_size_in_bytes": 128057344,
+   "layout_in_compiled_hlo": [
+    "bf16[2,1,2,250000,64]{3,4,2,1,0:T(8,128)(2,1)}"
+   ],
+   "argument_size_in_bytes": 128057344,
+   "output_size_in_bytes": 128057344,
+   "temp_size_in_bytes": 0,
+   "alias_size_in_bytes": 0
+  },
+  {
+   "tokens": 250112,
+   "nominal_bytes": 128057344,
+   "bytes_in_use_delta": 128057344,
+   "on_device_size_in_bytes": 128057344,
+   "layout_in_compiled_hlo": [
+    "bf16[2,1,2,250112,64]{3,4,2,1,0:T(8,128)(2,1)}"
+   ],
+   "argument_size_in_bytes": 128057344,
+   "output_size_in_bytes": 128057344,
+   "temp_size_in_bytes": 0,
+   "alias_size_in_bytes": 0
+  },
+  {
+   "tokens": 476835,
+   "nominal_bytes": 244139520,
+   "bytes_in_use_delta": 244230144,
+   "on_device_size_in_bytes": 244187136,
+   "layout_in_compiled_hlo": [
+    "bf16[2,1,2,476835,64]{3,4,2,1,0:T(8,128)(2,1)}"
+   ],
+   "argument_size_in_bytes": 244187136,
+   "output_size_in_bytes": 244187136,
+   "temp_size_in_bytes": 0,
+   "alias_size_in_bytes": 0
+  },
+  {
+   "tokens": 476928,
+   "nominal_bytes": 244187136,
+   "bytes_in_use_delta": 244187136,
+   "on_device_size_in_bytes": 244187136,
+   "layout_in_compiled_hlo": [
+    "bf16[2,1,2,476928,64]{3,4,2,1,0:T(8,128)(2,1)}"
+   ],
+   "argument_size_in_bytes": 244187136,
+   "output_size_in_bytes": 244187136,
+   "temp_size_in_bytes": 0,
+   "alias_size_in_bytes": 0
+  },
+  {
+   "tokens": 949591,
+   "nominal_bytes": 486190592,
+   "bytes_in_use_delta": 486254080,
+   "on_device_size_in_bytes": 486211584,
+   "layout_in_compiled_hlo": [
+    "bf16[2,1,2,949591,64]{3,4,2,1,0:T(8,128)(2,1)}"
+   ],
+   "argument_size_in_bytes": 486211584,
+   "output_size_in_bytes": 486211584,
+   "temp_size_in_bytes": 0,
+   "alias_size_in_bytes": 0
+  },
+  {
+   "tokens": 949632,
+   "nominal_bytes": 486211584,
+   "bytes_in_use_delta": 486211584,
+   "on_device_size_in_bytes": 486211584,
+   "layout_in_compiled_hlo": [
+    "bf16[2,1,2,949632,64]{3,4,2,1,0:T(8,128)(2,1)}"
+   ],
+   "argument_size_in_bytes": 486211584,
+   "output_size_in_bytes": 486211584,
+   "temp_size_in_bytes": 0,
+   "alias_size_in_bytes": 0
+  }
+ ],
+ "per_array": [
+  {
+   "tokens": 2824,
+   "arrays": 24,
+   "delta_per_array": 1507328.0,
+   "nominal": 1445888,
+   "extra_per_array": 61440.0
+  },
+  {
+   "tokens": 2944,
+   "arrays": 24,
+   "delta_per_array": 1507328.0,
+   "nominal": 1507328,
+   "extra_per_array": 0.0
+  }
+ ]
+}
