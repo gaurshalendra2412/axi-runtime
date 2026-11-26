@@ -129,6 +129,30 @@ def test_throttle_limits_calls_a_minute_and_retries_one_call():
         pass
 
 
+def test_a_spent_daily_quota_stops_the_run_and_is_not_asked_again():
+    calls = {"n": 0}
+    said = []
+
+    def real(*a, **k):
+        calls["n"] += 1
+        raise RateLimitError("Quota exceeded for metric: generate_content_free_tier_requests, limit: 20, "
+                             "description: Generate content requests per day limit exceeded on Free Tier. quotaId: GenerateRequestsPerDayPerProjectPerModel-FreeTier")
+
+    c = FakeClock()
+    th = R.make_throttled(real, 4, clock=c.now, sleep=c.sleep, stop=said.append)
+    try:
+        th()
+        raise AssertionError("the error must pass through")
+    except RateLimitError:
+        pass
+    assert calls["n"] == 1 and c.sleeps == [] and said == [R.DAILY_QUOTA_MESSAGE]  # asked once, no waiting, the stop message said
+    assert R.is_daily_quota(RateLimitError("limit exceeded ... PerDay ...")) and not R.is_daily_quota(RateLimitError("429 per minute"))
+    assert "billing" in R.DAILY_QUOTA_MESSAGE and "no result" in R.DAILY_QUOTA_MESSAGE
+    c0 = FakeClock()  # rpm 0: no waiting between calls
+    th0 = R.make_throttled(lambda: "ok", 0, clock=c0.now, sleep=c0.sleep)
+    assert [th0() for _ in range(50)] == ["ok"] * 50 and c0.sleeps == []
+
+
 def test_arms_and_tasks_of_the_plan_page():
     assert R.TASKS == ["0", "1", "2", "3", "4", "6", "7", "8", "10", "11"]
     assert R.AGENT_OF == {"B": "llm_agent", "G": "gate_chat", "A": "held_state"}

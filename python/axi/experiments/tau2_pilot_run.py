@@ -31,7 +31,29 @@ P_IN, P_CACHED, P_OUT = 0.75, 0.075, 3.75
 TRANSIENT = ("RateLimitError", "ServiceUnavailableError", "InternalServerError", "APIConnectionError", "Timeout")
 
 
-def make_throttled(real, rpm: int, clock=None, sleep=None, max_attempts: int = 12):
+DAILY_QUOTA_MESSAGE = (
+    "STOP: the key's daily request quota is used up (the error says 'per day'). Asking again today cannot work, "
+    "and the benchmark would only retry the conversation. Use a key with billing on (Colab Secrets, name "
+    "GEMINI_API_KEY, then RPM = 0 in Cell 2), or wait for the quota to reset. Nothing was scored: runs that "
+    "stopped here have no result."
+)
+
+
+def _stop_run(message: str) -> None:
+    """Default reaction to a spent daily quota: say so and end the process (the benchmark would retry for a long time)."""
+    import os
+    import sys
+
+    print(message, file=sys.stderr, flush=True)
+    os._exit(3)
+
+
+def is_daily_quota(error: Exception) -> bool:
+    text = str(error)
+    return "PerDay" in text or "per day" in text.lower()
+
+
+def make_throttled(real, rpm: int, clock=None, sleep=None, max_attempts: int = 12, stop=None):
     """Wrap a completion function: at most `rpm` calls in any 60 seconds, and a transient failure
     (rate limit, 503, connection) waits and asks again for that one call. A call that failed returned
     nothing and used no tokens, so the conversation, the prompts and the counts are the same as without
@@ -49,7 +71,7 @@ def make_throttled(real, rpm: int, clock=None, sleep=None, max_attempts: int = 1
             with lock:
                 now = clock()
                 stamps[:] = [t for t in stamps if now - t < 60.0]
-                if len(stamps) < rpm:
+                if not rpm or len(stamps) < rpm:
                     stamps.append(now)
                     return
                 wait = 60.0 - (now - stamps[0]) + 0.5
@@ -61,6 +83,9 @@ def make_throttled(real, rpm: int, clock=None, sleep=None, max_attempts: int = 1
             try:
                 return real(*args, **kwargs)
             except Exception as e:  # noqa: BLE001
+                if type(e).__name__ in TRANSIENT and is_daily_quota(e):
+                    (stop or _stop_run)(DAILY_QUOTA_MESSAGE)
+                    raise
                 if type(e).__name__ not in TRANSIENT or attempt == max_attempts - 1:
                     raise
                 sleep(min(60, 10 * (attempt + 1)))
@@ -85,8 +110,7 @@ def run_arm(arm: str, tasks, tag: str, concurrency: int, temperature: float, mod
     from axi.experiments import tau2_retail_agents
 
     tau2_retail_agents.register()
-    if rpm:
-        install_throttle(rpm)
+    install_throttle(rpm)  # rpm 0: no waiting between calls, but a failed call is still asked again, and a spent daily quota stops the run
     from tau2.cli import main
 
     args = json.dumps({"temperature": temperature})
@@ -236,7 +260,7 @@ def main(argv=None) -> None:
     r.add_argument("--concurrency", type=int, default=2)
     r.add_argument("--temperature", type=float, default=0.0)
     r.add_argument("--tag", default="t47")
-    r.add_argument("--rpm", type=int, default=0, help="client-side limit on model calls a minute (0: none); for a key on a free tier")
+    r.add_argument("--rpm", type=int, default=0, help="client-side limit on model calls a minute (0: no waiting); for a key with a per-minute cap")
     s = sub.add_parser("summary")
     s.add_argument("--tag", default="t47")
     s.add_argument("--tasks", nargs="+", default=TASKS)
