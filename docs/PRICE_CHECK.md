@@ -97,4 +97,6 @@ This is the arithmetic of Tests 29 and 30, which put real cache-shaped arrays on
 1. `python -m pytest python/tests/test_price_check.py` recomputes every figure above from the saved result files and the prices in `docs/results/price_check.json`, and checks that the page carries them.
 2. To use other prices, change the numbers in `docs/results/price_check.json` and run `python -c "import sys; sys.path.insert(0,'python'); from axi import price_check as P; print(P.table())"`.
 
+This page is also written up as an [article on dev.to](https://dev.to/shalendra_gaur_ecd0567a49/axi-at-claude-grok-and-gemini-list-prices-61x-to-79x-cheaper-per-verified-step-than-a-kept-chat-i5j) (26 November 2026).
+
 Back to the [README](../README.md).
