@@ -1,4 +1,4 @@
-# Checked against Google's own bill: what the Gemini tests cost, as Google charged it
+# AXI, checked against Google's own bill: $0.0014 per verified step against $0.0870 for a kept chat (cold) and $0.0148 (warm)
 
 *The architecture is Rajnish Choubey's; the code, the tests and every measurement are the owner's, with an AI assistant as a tool. AXI is a layer on the host side, for the company that runs the model, not for end users. The model is unchanged, and everything below is about the state the host holds. It fits any LLM application that holds state, short jobs and long, from the first step. Written 25 Nov 2026, after the runs. No model was called for this page and nothing was bought. Saved data: `docs/results/google_bill_check_2026-11-25.json`. Check: `python/tests/test_billing_check.py`.*
 
