@@ -285,6 +285,7 @@ PYTHONPATH=python python3 python/tools/readme_figures.py docs/img
 10. [`docs/SIDECAR.md`](docs/SIDECAR.md): a small HTTP sidecar that puts the host loop in front of a vLLM or SGLang server.
 11. [`docs/BILLING_CHECK.md`](docs/BILLING_CHECK.md): the dollar figures of the Gemini tests set against the model provider's own billing report: its rates are the typed ones, and the 22 Nov cache pair day and Test 34 come within about 1 percent of our logs.
 12. [`docs/PRICE_CHECK.md`](docs/PRICE_CHECK.md): the same measured token counts priced at the published list prices of Anthropic (Claude Sonnet 5.5, Opus 5.5), xAI (Grok 4.3, 4.7) and Google, with Llama's cache memory: 61x to 79x cheaper per verified step than a kept chat cold, 6.5x to 26x warm; every figure is recomputed by a test, and no Anthropic or xAI bill was read.
+13. [`docs/AGENTX_NOTE.md`](docs/AGENTX_NOTE.md): the AgentX and WEKA/Nebius serving numbers of this autumn (median 142k input tokens a request; 60 percent redundant prefill with HBM only, 6.8 percent with an NVMe tier) set beside one job whose state the host holds: 1,177 prompt tokens a step against 99,809 for the kept chat (84.8 times), with each public figure credited to its source.
 
 ## Status
 
