@@ -284,6 +284,7 @@ PYTHONPATH=python python3 python/tools/readme_figures.py docs/img
 9. [`docs/ARTICLES.md`](docs/ARTICLES.md): the same results written up as articles for engineers (drift, cost, latency, capacity, injection) and two forum posts with open questions.
 10. [`docs/SIDECAR.md`](docs/SIDECAR.md): a small HTTP sidecar that puts the host loop in front of a vLLM or SGLang server.
 11. [`docs/BILLING_CHECK.md`](docs/BILLING_CHECK.md): the dollar figures of the Gemini tests set against the model provider's own billing report: its rates are the typed ones, and the 22 Nov cache pair day and Test 34 come within about 1 percent of our logs.
+12. [`docs/PRICE_CHECK.md`](docs/PRICE_CHECK.md): the same measured token counts priced at the published list prices of Anthropic (Claude Sonnet 5.5, Opus 5.5), xAI (Grok 4.3, 4.7) and Google, with Llama's cache memory: 61x to 79x cheaper per verified step than a kept chat cold, 6.5x to 26x warm; every figure is recomputed by a test, and no Anthropic or xAI bill was read.
 
 ## Status
 
