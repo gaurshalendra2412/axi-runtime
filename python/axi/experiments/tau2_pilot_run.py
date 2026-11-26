@@ -28,16 +28,65 @@ SEED = 300
 P_IN, P_CACHED, P_OUT = 0.75, 0.075, 3.75
 
 
+TRANSIENT = ("RateLimitError", "ServiceUnavailableError", "InternalServerError", "APIConnectionError", "Timeout")
+
+
+def make_throttled(real, rpm: int, clock=None, sleep=None, max_attempts: int = 12):
+    """Wrap a completion function: at most `rpm` calls in any 60 seconds, and a transient failure
+    (rate limit, 503, connection) waits and asks again for that one call. A call that failed returned
+    nothing and used no tokens, so the conversation, the prompts and the counts are the same as without
+    the wrapper; only the timing changes. The benchmark itself would restart the whole conversation."""
+    import threading
+    import time
+
+    clock = clock or time.monotonic
+    sleep = sleep or time.sleep
+    lock = threading.Lock()
+    stamps: list = []
+
+    def take_slot() -> None:
+        while True:
+            with lock:
+                now = clock()
+                stamps[:] = [t for t in stamps if now - t < 60.0]
+                if len(stamps) < rpm:
+                    stamps.append(now)
+                    return
+                wait = 60.0 - (now - stamps[0]) + 0.5
+            sleep(wait)
+
+    def throttled(*args, **kwargs):
+        for attempt in range(max_attempts):
+            take_slot()
+            try:
+                return real(*args, **kwargs)
+            except Exception as e:  # noqa: BLE001
+                if type(e).__name__ not in TRANSIENT or attempt == max_attempts - 1:
+                    raise
+                sleep(min(60, 10 * (attempt + 1)))
+
+    throttled.waits = stamps
+    return throttled
+
+
+def install_throttle(rpm: int) -> None:
+    import tau2.utils.llm_utils as LU  # noqa: WPS433
+
+    LU.completion = make_throttled(LU.completion, rpm)
+
+
 def run_dir(tag: str, arm: str) -> str:
     from tau2.utils.utils import DATA_DIR  # noqa: WPS433
 
     return os.path.join(str(DATA_DIR), "simulations", f"{tag}_{arm}")
 
 
-def run_arm(arm: str, tasks, tag: str, concurrency: int, temperature: float, model: str = MODEL) -> None:
+def run_arm(arm: str, tasks, tag: str, concurrency: int, temperature: float, model: str = MODEL, rpm: int = 0) -> None:
     from axi.experiments import tau2_retail_agents
 
     tau2_retail_agents.register()
+    if rpm:
+        install_throttle(rpm)
     from tau2.cli import main
 
     args = json.dumps({"temperature": temperature})
@@ -187,13 +236,14 @@ def main(argv=None) -> None:
     r.add_argument("--concurrency", type=int, default=2)
     r.add_argument("--temperature", type=float, default=0.0)
     r.add_argument("--tag", default="t47")
+    r.add_argument("--rpm", type=int, default=0, help="client-side limit on model calls a minute (0: none); for a key on a free tier")
     s = sub.add_parser("summary")
     s.add_argument("--tag", default="t47")
     s.add_argument("--tasks", nargs="+", default=TASKS)
     a = ap.parse_args(argv)
     if a.cmd == "run":
         for arm in a.arms:
-            run_arm(arm, a.tasks, a.tag, a.concurrency, a.temperature)
+            run_arm(arm, a.tasks, a.tag, a.concurrency, a.temperature, rpm=a.rpm)
     else:
         summary(a.tag, a.tasks)
 
