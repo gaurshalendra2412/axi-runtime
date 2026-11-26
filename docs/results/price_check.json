@@ -1,0 +1,26 @@
+{
+  "what": "Published list prices, typed in by hand from each provider's own price page, used by python/axi/price_check.py to price the measured token counts of the cache-pair job. Dollars per million tokens.",
+  "read_on": "2026-11-26",
+  "sources": {
+    "Gemini 3.8 Flash": "Rates read from Google's own billing report, see docs/BILLING_CHECK.md: input 0.75, cached input 0.075 (0.100 of input), output 3.75 (5.000 times input).",
+    "Claude Sonnet 5.5": "https://platform.claude.com/docs/en/about-claude/pricing , model pricing table: base input $2, cache hits and refreshes $0.10 (0.05x base), output $10.",
+    "Claude Opus 5.5": "https://platform.claude.com/docs/en/about-claude/pricing , model pricing table: base input $4, cache hits and refreshes $0.20 (0.05x base), output $20.",
+    "Grok 4.3": "https://docs.x.ai/docs/pricing , page text 'Last updated: October 10, 2026', text API table, under 200k tokens: input $1.25, cached input $0.20, output $2.50.",
+    "Grok 4.7": "https://docs.x.ai/docs/pricing , same page, under 200k tokens: input $2.00, cached input $0.50, output $6.00."
+  },
+  "prices": {
+    "Gemini 3.8 Flash": {"input": 0.75, "cached": 0.075, "output": 3.75},
+    "Claude Sonnet 5.5": {"input": 2.00, "cached": 0.10, "output": 10.00},
+    "Claude Opus 5.5": {"input": 4.00, "cached": 0.20, "output": 20.00},
+    "Grok 4.3": {"input": 1.25, "cached": 0.20, "output": 2.50},
+    "Grok 4.7": {"input": 2.00, "cached": 0.50, "output": 6.00}
+  },
+  "long_context_tiers": {
+    "Grok": "Prompts of 200,000 tokens or more are priced at double. The largest prompt of the kept chat cells is 198,405 tokens (warm) and 193,411 (cold), so the higher tier is never reached.",
+    "Claude Sonnet 5.5 and Opus 5.5": "The Claude page lists no long-context surcharge for these models (1M context at standard pricing)."
+  },
+  "llama_public_configs": {
+    "Llama 3.1 8B": {"layers": 32, "kv_heads": 8, "head_dim": 128},
+    "Llama 3.1 70B": {"layers": 80, "kv_heads": 8, "head_dim": 128}
+  }
+}
