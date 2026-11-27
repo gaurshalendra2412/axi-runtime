@@ -199,6 +199,61 @@ def test_multi_tool_message_input():
     assert st.held.user_id == "noah_brown_6181" and m2.content == "ok"
 
 
+def _summary_agent(replies, compact_over=4, keep_last=2):
+    import tau2.agent.llm_agent as LA  # arm S answers through the benchmark's own agent, which calls its own `generate`
+
+    s = Script(replies)
+    A.generate = s
+    LA.generate = s
+    ag = A.SummaryLLMAgent([], "POLICY TEXT", llm="fake", llm_args={}, compact_over=compact_over, keep_last=keep_last)
+    return ag, ag.get_init_state(), s
+
+
+def _chat(ag, st, texts):
+    out = []
+    for t in texts:
+        m, st = ag.generate_next_message(UserMessage(role="user", content=t), st)
+        out.append(m)
+    return out, st
+
+
+def test_arm_s_rolls_up_the_older_chat_and_counts_the_summary_call():
+    ag, st, s = _summary_agent(["A1", "A2", "A3", "SUMMARY TEXT", "A4"])
+    out, st = _chat(ag, st, ["u1", "u2", "u3"])
+    assert len(s.sent) == 3 and all("axi" not in (m.raw_data or {}) for m in out)  # no summary yet: the plain benchmark agent
+    out4, st = _chat(ag, st, ["u4"])
+    m4 = out4[0]
+    assert len(s.sent) == 5  # the summary call, then the answer
+    sum_call, main_call = s.sent[3], s.sent[4]
+    assert sum_call[0].content == A.SUMMARY_SYSTEM and "CUSTOMER: u1" in sum_call[1].content and "AGENT: A2" in sum_call[1].content
+    assert "u3" not in sum_call[1].content  # the last two messages stay in the chat
+    assert [getattr(m, "content", "") for m in main_call[1:]][0].startswith(A.SUMMARY_PREFIX)
+    assert [m.content for m in main_call[2:]] == ["u3", "A3", "u4"]
+    assert m4.usage["prompt_tokens"] == s.ptoks[3] + s.ptoks[4] and m4.usage["completion_tokens"] == 10
+    assert abs(m4.cost - 0.002) < 1e-12
+    ax = m4.raw_data["axi"]
+    assert ax["summary_calls"] == 1 and ax["summary_applied"] is True and ax["llm_calls"] == 2 and ax["cached_tokens"] == 6
+    assert st.summaries == 1 and len(st.messages) == 5  # summary, u3, A3, u4, A4
+
+
+def test_arm_s_an_empty_summary_keeps_the_chat_whole_but_the_call_is_counted():
+    ag, st, s = _summary_agent(["A1", "A2", "A3", "", "A4"])
+    out, st = _chat(ag, st, ["u1", "u2", "u3", "u4"])
+    main_call = s.sent[4]
+    assert [m.content for m in main_call[1:]][0] == "u1" and len(main_call) == 1 + 7
+    ax = out[3].raw_data["axi"]
+    assert ax["summary_calls"] == 1 and ax["summary_applied"] is False and st.summaries == 0
+
+
+def test_arm_s_a_second_roll_up_folds_the_first_summary_in():
+    # with compact_over=4 and keep_last=2 the chat is still over the limit right after a roll-up, so the next turn rolls up again
+    ag, st, s = _summary_agent(["A1", "A2", "A3", "S1", "A4", "S2", "A5"], compact_over=4, keep_last=2)
+    out, st = _chat(ag, st, ["u1", "u2", "u3", "u4", "u5"])
+    second = [c for c in s.sent if c[0].content == A.SUMMARY_SYSTEM][1]
+    assert "EARLIER SUMMARY: S1" in second[1].content
+    assert st.summaries == 2 and st.messages[0].content.startswith(A.SUMMARY_PREFIX) and "S2" in st.messages[0].content
+
+
 if __name__ == "__main__":
     n = 0
     for name, fn in sorted(globals().items()):

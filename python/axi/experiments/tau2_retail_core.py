@@ -299,3 +299,18 @@ class RetailHeld:
             "Reply with either one message to the customer or one tool call, as the policy says."
         )
         return "\n".join(lines)
+
+
+def summary_cut(roles, keep_last: int) -> int:
+    """Where a kept chat is cut when everything before the cut is summarised and everything from it on is kept (arm S, docs/TAU2_PILOT.md).
+
+    `roles` is the role of each message of the chat in order ("user", "assistant", "tool"). The cut leaves at least `keep_last`
+    messages after it, and it never lands on a tool result: a result must stay behind the assistant message whose call it answers,
+    so the cut moves back to that assistant message. Returns 0 when there is nothing to summarise.
+    """
+    cut = len(roles) - max(int(keep_last), 1)
+    if cut <= 0:
+        return 0
+    while cut > 0 and roles[cut] == "tool":
+        cut -= 1
+    return max(cut, 0)

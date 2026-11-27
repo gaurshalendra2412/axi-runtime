@@ -209,6 +209,15 @@ def test_fallback_messages():
     assert h.refusals == [("CONFIRM", "cancel_pending_order")]
 
 
+def test_summary_cut_never_lands_on_a_tool_result():
+    from axi.experiments.tau2_retail_core import summary_cut
+    assert summary_cut(["user", "assistant"] * 3, 4) == 2
+    assert summary_cut(["user", "assistant", "tool", "tool", "assistant", "user", "assistant"], 3) == 4
+    assert summary_cut(["user", "assistant", "tool", "tool", "tool"], 2) == 1  # moved back to the call the results answer
+    assert summary_cut(["user", "assistant"], 10) == 0
+    assert summary_cut(["tool", "tool", "tool", "assistant"], 2) == 0  # nothing can be cut without splitting a call from its results
+
+
 if __name__ == "__main__":
     n = 0
     for name, fn in sorted(globals().items()):
