@@ -1,14 +1,14 @@
-"""Test 47 runner: ten tau2-bench retail tasks, three arms, one model (docs/TAU2_PILOT.md).
+"""Test 47 runner: tau2-bench retail tasks (the benchmark's own frozen 50-task set), four arms, one model (docs/TAU2_PILOT.md).
 
 Usage (inside the notebook `python/colab/axi_tau2_pilot.ipynb`, after `pip install` of tau2-bench
 and with GEMINI_API_KEY set):
 
-    python tau2_pilot_run.py run     --arms B G A [--tasks 0 1 2 ...] [--concurrency 2] [--tag t47]
-    python tau2_pilot_run.py summary [--tag t47]
+    python tau2_pilot_run.py run     --arms B G A S [--taskset retail_50 | --tasks 0 1 2 ...] [--concurrency 2] [--tag t47]
+    python tau2_pilot_run.py summary [--taskset retail_50 | --tasks 0 1 2 ...] [--tag t47]
 
 `run` calls the benchmark's own command line with the two registered agents; the results land where
 the benchmark puts them (`<data dir>/simulations/<tag>_<arm>/results.json`). `summary` reads those
-files, prints the tables of the plan page and the eight readings, and writes `<tag>_summary.json`.
+files, prints the tables of the plan page, the eight readings and the paired comparisons, and writes `<tag>_summary.json`.
 """
 from __future__ import annotations
 
@@ -21,7 +21,15 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", ".."))
 
 MODEL = "gemini/gemini-3.8-flash"
-TASKS = ["0", "1", "2", "3", "4", "6", "7", "8", "10", "11"]
+TASKS = ["0", "1", "2", "3", "4", "6", "7", "8", "10", "11"]  # the first ten of the base split: the smoke-test and pilot set
+# The benchmark's own frozen, stratified 50-task retail subset (data/tau2/task_subsets/retail_50.json at the pinned commit;
+# seed 42, frame = the 114 retail base tasks). Held here so the plan page can be checked against the code, and checked
+# against the installed benchmark's file by `frozen_ids` before every run.
+RETAIL_50 = ["6", "8", "11", "13", "14", "16", "17", "18", "19", "21", "22", "23", "25", "26", "30", "32", "36", "38", "39", "40",
+             "42", "47", "49", "50", "52", "53", "56", "58", "59", "63", "64", "65", "66", "68", "70", "71", "74", "78", "79", "80",
+             "83", "85", "86", "89", "97", "102", "104", "105", "107", "112"]
+TASKSETS = {"retail_50": RETAIL_50, "first10": TASKS}
+GATED_FALLBACK_SHARE = 0.15  # reading 7: at most this share of the gated runs may end in the host's fallback message (3 of 20 on ten tasks)
 AGENT_OF = {"B": "llm_agent", "G": "gate_chat", "A": "held_state", "S": "summary_chat"}  # S: the chat rolled up by the model (extra arm, docs/TAU2_PILOT.md)
 SEED = 300
 # Google's list prices for the model, dollars per million tokens (docs/PRICE_CHECK.md)
@@ -106,6 +114,37 @@ def run_dir(tag: str, arm: str) -> str:
     return os.path.join(str(DATA_DIR), "simulations", f"{tag}_{arm}")
 
 
+def frozen_ids(name: str = "retail_50") -> list:
+    """The task ids of the benchmark's own frozen subset `name`, read from the installed benchmark's data directory."""
+    from tau2.utils.utils import DATA_DIR  # noqa: WPS433
+
+    with open(os.path.join(str(DATA_DIR), "tau2", "task_subsets", f"{name}.json")) as f:
+        return [str(t) for t in json.load(f)["task_ids"]]
+
+
+def choose_tasks(taskset, tasks, check=True) -> list:
+    """`--tasks` wins when given; otherwise the named set. A frozen set is compared with the benchmark's file, and a
+    difference stops the run (the plan page names these ids)."""
+    if tasks:
+        return [str(t) for t in tasks]
+    ids = TASKSETS[taskset]
+    if check and taskset == "retail_50":
+        on_file = frozen_ids("retail_50")
+        if on_file != ids:
+            raise SystemExit(f"retail_50 in the installed benchmark differs from the ids on the plan page: {on_file}")
+    return list(ids)
+
+
+def build_argv(arm: str, tasks, tag: str, concurrency: int, temperature: float, model: str = MODEL) -> list:
+    """The benchmark's own command line for one arm."""
+    args = json.dumps({"temperature": temperature})
+    return ["tau2", "run", "--domain", "retail", "--agent", AGENT_OF[arm], "--user", "user_simulator",
+            "--agent-llm", model, "--user-llm", model, "--agent-llm-args", args, "--user-llm-args", args,
+            "--task-ids", *tasks, "--num-trials", "1", "--seed", str(SEED), "--max-steps", "200",
+            "--max-concurrency", str(concurrency), "--save-to", f"{tag}_{arm}", "--log-level", "ERROR",
+            "--auto-resume"]  # a stopped run (quota, closed tab) continues from its saved file instead of asking
+
+
 def run_arm(arm: str, tasks, tag: str, concurrency: int, temperature: float, model: str = MODEL, rpm: int = 0) -> None:
     from axi.experiments import tau2_retail_agents
 
@@ -113,11 +152,7 @@ def run_arm(arm: str, tasks, tag: str, concurrency: int, temperature: float, mod
     install_throttle(rpm)  # rpm 0: no waiting between calls, but a failed call is still asked again, and a spent daily quota stops the run
     from tau2.cli import main
 
-    args = json.dumps({"temperature": temperature})
-    argv = ["tau2", "run", "--domain", "retail", "--agent", AGENT_OF[arm], "--user", "user_simulator",
-            "--agent-llm", model, "--user-llm", model, "--agent-llm-args", args, "--user-llm-args", args,
-            "--task-ids", *tasks, "--num-trials", "1", "--seed", str(SEED), "--max-steps", "200",
-            "--max-concurrency", str(concurrency), "--save-to", f"{tag}_{arm}", "--log-level", "ERROR"]
+    argv = build_argv(arm, tasks, tag, concurrency, temperature, model)
     print("RUN", arm, " ".join(argv[2:]))
     sys.argv = argv
     try:
@@ -197,6 +232,32 @@ def totals(rows: list) -> dict:
     }
 
 
+def sign_test_p(x: int, y: int) -> float:
+    """Exact two-sided sign test: x and y are the tasks that exactly one of two arms passed; no ties to adjust."""
+    from math import comb
+
+    n = x + y
+    if n == 0:
+        return 1.0
+    k = min(x, y)
+    return min(1.0, 2 * sum(comb(n, i) for i in range(k + 1)) / 2 ** n)
+
+
+def paired(rows_a: list, rows_b: list) -> dict:
+    """Pass/fail of two arms task by task (only tasks on file in both): who passed what alone, and the sign-test p."""
+    ra = {r["task"]: (r["reward"] or 0) >= 1.0 for r in rows_a}
+    rb = {r["task"]: (r["reward"] or 0) >= 1.0 for r in rows_b}
+    common = [t for t in ra if t in rb]
+    a_only = sum(1 for t in common if ra[t] and not rb[t])
+    b_only = sum(1 for t in common if rb[t] and not ra[t])
+    both = sum(1 for t in common if ra[t] and rb[t])
+    return {"tasks": len(common), "a_only": a_only, "b_only": b_only, "both": both, "neither": len(common) - a_only - b_only - both,
+            "p": sign_test_p(a_only, b_only)}
+
+
+PAIRS = [("A", "B"), ("G", "B"), ("S", "B"), ("A", "S")]
+
+
 def readings(rows_by_arm: dict, tot: dict, tasks=None) -> list:
     """The eight lines of the plan page, in the same order: (label, yes/no/None, detail)."""
     out = []
@@ -215,7 +276,9 @@ def readings(rows_by_arm: dict, tot: dict, tasks=None) -> list:
     out.append(("6 the gate refuses at least one call in G or A", (G["refusals"] + A["refusals"]) >= 1,
                 f"G {G['refusals']}, A {A['refusals']} refusals"))
     fb = G["runs_with_fallback"] + A["runs_with_fallback"]
-    out.append(("7 the host's fallback message replaces the model's in at most 3 of the 20 gated runs", fb <= 3, f"{fb} of 20 runs"))
+    gated = 2 * len(tasks)  # arms G and A
+    cap = int(GATED_FALLBACK_SHARE * gated + 1e-9)
+    out.append((f"7 the host's fallback message replaces the model's in at most {cap} of the {gated} gated runs", fb <= cap, f"{fb} of {gated} runs"))
     if B["passed"] and A["passed"]:
         out.append(("8 cost per passed task of A at most that of B", A["usd_per_pass_list"] <= B["usd_per_pass_list"],
                     f"A ${A['usd_per_pass_list']:.4f} vs B ${B['usd_per_pass_list']:.4f} per pass (list price, agent side)"))
@@ -250,11 +313,18 @@ def summary(tag: str, tasks=None) -> dict:
               f"completion {T['completion']:,}, mean prompt/call {T['mean_prompt_per_call']:.0f}, "
               f"list ${T['usd_list']:.2f} (cached rate ${T['usd_cached_rate']:.2f}), refusals {T['refusals']}, runs with fallback {T['runs_with_fallback']}"
               + (f", summary calls {T['summary_calls']}" if arm == "S" else ""))
+    pairs = {}
+    print("\npaired pass/fail, task by task (X only / Y only = tasks that only that arm passed; exact two-sided sign test)")
+    for x, y in PAIRS:
+        if x in rows_by_arm and y in rows_by_arm:
+            c = paired(rows_by_arm[x], rows_by_arm[y])
+            pairs[f"{x}_vs_{y}"] = c
+            print(f"{x} vs {y}: {x} only {c['a_only']}, {y} only {c['b_only']}, both {c['both']}, neither {c['neither']} of {c['tasks']}; p = {c['p']:.3f}")
     rd = readings(core, {k: tot[k] for k in core}, tasks)
     print("\nreadings (plan page order)")
     for label, val, detail in rd:
         print(("YES " if val else "NO  " if val is not None else "n/a ") + label + "  --  " + detail)
-    out = {"tag": tag, "model": MODEL, "tasks": tasks, "rows": rows_by_arm, "totals": tot,
+    out = {"tag": tag, "model": MODEL, "tasks": tasks, "rows": rows_by_arm, "totals": tot, "paired": pairs,
            "readings": [{"line": l, "yes": v, "detail": d} for l, v, d in rd]}
     json.dump(out, open(f"{tag}_summary.json", "w"), indent=1)
     print(f"\nwrote {tag}_summary.json")
@@ -265,21 +335,24 @@ def main(argv=None) -> None:
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
     r = sub.add_parser("run")
-    r.add_argument("--arms", nargs="+", default=["B", "G", "A"], choices=list(AGENT_OF))
-    r.add_argument("--tasks", nargs="+", default=TASKS)
+    r.add_argument("--arms", nargs="+", default=["B", "G", "A", "S"], choices=list(AGENT_OF))
+    r.add_argument("--taskset", default="retail_50", choices=list(TASKSETS))
+    r.add_argument("--tasks", nargs="+", default=None, help="explicit ids; they win over --taskset")
     r.add_argument("--concurrency", type=int, default=2)
     r.add_argument("--temperature", type=float, default=0.0)
     r.add_argument("--tag", default="t47")
     r.add_argument("--rpm", type=int, default=0, help="client-side limit on model calls a minute (0: no waiting); for a key with a per-minute cap")
     s = sub.add_parser("summary")
     s.add_argument("--tag", default="t47")
-    s.add_argument("--tasks", nargs="+", default=TASKS)
+    s.add_argument("--taskset", default="retail_50", choices=list(TASKSETS))
+    s.add_argument("--tasks", nargs="+", default=None)
     a = ap.parse_args(argv)
     if a.cmd == "run":
+        tasks = choose_tasks(a.taskset, a.tasks)
         for arm in a.arms:
-            run_arm(arm, a.tasks, a.tag, a.concurrency, a.temperature, rpm=a.rpm)
+            run_arm(arm, tasks, a.tag, a.concurrency, a.temperature, rpm=a.rpm)
     else:
-        summary(a.tag, a.tasks)
+        summary(a.tag, choose_tasks(a.taskset, a.tasks, check=False))
 
 
 if __name__ == "__main__":
