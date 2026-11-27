@@ -163,6 +163,61 @@ def test_arms_and_tasks_of_the_plan_page():
         assert s in plan, s
 
 
+def test_the_frozen_retail_50_set_is_the_benchmarks_own_and_is_named_on_the_plan_page():
+    ids = R.RETAIL_50
+    assert len(ids) == 50 and len(set(ids)) == 50 and R.TASKSETS["retail_50"] is ids and R.TASKSETS["first10"] == R.TASKS
+    plan = open(os.path.join(HERE, "..", "..", "docs", "TAU2_PILOT.md"), encoding="utf-8").read()
+    assert ", ".join(ids) in plan  # the page lists exactly the ids the code runs
+    src = os.environ.get("TAU2_SRC")
+    f = os.path.join(src, "..", "data", "tau2", "task_subsets", "retail_50.json") if src else ""
+    if os.path.exists(f):
+        with open(f) as fh:
+            d = json.load(fh)
+        assert [str(t) for t in d["task_ids"]] == ids and d["seed"] == 42 and d["domain"] == "retail"
+
+
+def test_choose_tasks_explicit_ids_win_and_the_default_is_the_frozen_set():
+    assert R.choose_tasks("retail_50", ["3", "1"]) == ["3", "1"]
+    assert R.choose_tasks("first10", None) == R.TASKS
+    assert R.choose_tasks("retail_50", None, check=False) == R.RETAIL_50
+
+
+def test_command_line_of_an_arm_resumes_and_carries_the_task_ids():
+    argv = R.build_argv("S", R.RETAIL_50, "t47", 2, 0.0)
+    assert argv[:2] == ["tau2", "run"] and "--auto-resume" in argv and argv[argv.index("--agent") + 1] == "summary_chat"
+    i = argv.index("--task-ids") + 1
+    assert argv[i:i + 50] == R.RETAIL_50 and argv[i + 50] == "--num-trials"
+    assert argv[argv.index("--save-to") + 1] == "t47_S" and argv[argv.index("--seed") + 1] == "300"
+
+
+def test_sign_test_is_exact_and_two_sided():
+    assert R.sign_test_p(0, 0) == 1.0 and R.sign_test_p(3, 3) == 1.0
+    assert abs(R.sign_test_p(5, 0) - 2 / 32) < 1e-12 and abs(R.sign_test_p(0, 6) - 2 / 64) < 1e-12
+    assert abs(R.sign_test_p(2, 10) - 2 * sum(__import__("math").comb(12, i) for i in range(3)) / 4096) < 1e-12
+    assert R.sign_test_p(1, 0) == 1.0  # one discordant task can never be a result
+
+
+def test_paired_counts_tasks_only_one_arm_passed():
+    mk = lambda pairs: [{"task": t, "reward": r} for t, r in pairs]  # noqa: E731
+    a = mk([("1", 1.0), ("2", 1.0), ("3", 0.0), ("4", 0.0), ("5", 1.0)])
+    b = mk([("1", 1.0), ("2", 0.0), ("3", 0.0), ("4", 1.0), ("6", 1.0)])
+    c = R.paired(a, b)
+    assert (c["tasks"], c["a_only"], c["b_only"], c["both"], c["neither"]) == (4, 1, 1, 1, 1) and c["p"] == 1.0
+
+
+def test_reading_7_scales_with_the_number_of_gated_runs():
+    def labels(n):
+        tasks = [str(i) for i in range(n)]
+        with tempfile.TemporaryDirectory() as d:
+            by = {a: R.summarize_run(write(d, "t", a, [sim(t, 1.0, [100]) for t in tasks])) for a in "BGA"}
+        tot = {k: R.totals(v) for k, v in by.items()}
+        return {r[0].split()[0]: r for r in R.readings(by, tot, tasks)}
+
+    assert "at most 3 of the 20 gated runs" in labels(10)["7"][0]  # the ten-task plan: 3 of 20
+    r50 = labels(50)
+    assert "at most 15 of the 100 gated runs" in r50["7"][0] and "150 runs on file" in r50["1"][0]  # 50 tasks, three plan-page arms
+
+
 def test_arm_s_is_reported_next_to_the_plan_page_arms_and_adds_no_reading_line():
     ax_s = {"llm_calls": 2, "summary_calls": 1, "summary_applied": True, "refusals": [], "fallbacks": 0}
     with tempfile.TemporaryDirectory() as d:
