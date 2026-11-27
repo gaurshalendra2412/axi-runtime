@@ -155,12 +155,34 @@ def test_a_spent_daily_quota_stops_the_run_and_is_not_asked_again():
 
 def test_arms_and_tasks_of_the_plan_page():
     assert R.TASKS == ["0", "1", "2", "3", "4", "6", "7", "8", "10", "11"]
-    assert R.AGENT_OF == {"B": "llm_agent", "G": "gate_chat", "A": "held_state"}
+    assert R.AGENT_OF == {"B": "llm_agent", "G": "gate_chat", "A": "held_state", "S": "summary_chat"}
     assert (R.P_IN, R.P_CACHED, R.P_OUT) == (0.75, 0.075, 3.75) and R.SEED == 300 and R.MODEL == "gemini/gemini-3.8-flash"
     plan = open(os.path.join(HERE, "..", "..", "docs", "TAU2_PILOT.md"), encoding="utf-8").read()
     for s in ("0, 1, 2, 3, 4, 6, 7, 8, 10, 11", "seed 300", "gemini/gemini-3.8-flash", "0.75 input, 3.75 output",
               "768f3d8fe8528b4f32a5096f9ed008ae50f48ead"):
         assert s in plan, s
+
+
+def test_arm_s_is_reported_next_to_the_plan_page_arms_and_adds_no_reading_line():
+    ax_s = {"llm_calls": 2, "summary_calls": 1, "summary_applied": True, "refusals": [], "fallbacks": 0}
+    with tempfile.TemporaryDirectory() as d:
+        write(d, "t", "B", [sim("0", 1.0, [1000] * 4)])
+        write(d, "t", "G", [sim("0", 1.0, [1000] * 4)])
+        write(d, "t", "A", [sim("0", 1.0, [300] * 4, axi={"llm_calls": 1, "refusals": []})])
+        write(d, "t", "S", [sim("0", 1.0, [1500] * 3, axi=ax_s)])
+        rows = R.summarize_run(os.path.join(d, "t_S", "results.json"))
+        assert rows[0]["summary_calls"] == 3 and rows[0]["summary_applied"] == 3 and rows[0]["llm_calls"] == 6
+        assert R.totals(rows)["summary_calls"] == 3
+        old_run_dir, old_cwd = R.run_dir, os.getcwd()
+        R.run_dir = lambda tag, arm: os.path.join(d, f"{tag}_{arm}")
+        os.chdir(d)
+        try:
+            out = R.summary("t", ["0"])
+        finally:
+            R.run_dir = old_run_dir
+            os.chdir(old_cwd)
+    assert set(out["rows"]) == {"B", "G", "A", "S"} and len(out["readings"]) == 8
+    assert out["readings"][0]["yes"] is True  # the guard counts the three plan-page arms only: one task, three runs
 
 
 if __name__ == "__main__":

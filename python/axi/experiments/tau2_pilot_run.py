@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.join(HERE, "..", ".."))
 
 MODEL = "gemini/gemini-3.8-flash"
 TASKS = ["0", "1", "2", "3", "4", "6", "7", "8", "10", "11"]
-AGENT_OF = {"B": "llm_agent", "G": "gate_chat", "A": "held_state"}
+AGENT_OF = {"B": "llm_agent", "G": "gate_chat", "A": "held_state", "S": "summary_chat"}  # S: the chat rolled up by the model (extra arm, docs/TAU2_PILOT.md)
 SEED = 300
 # Google's list prices for the model, dollars per million tokens (docs/PRICE_CHECK.md)
 P_IN, P_CACHED, P_OUT = 0.75, 0.075, 3.75
@@ -172,6 +172,8 @@ def summarize_run(path: str) -> list:
             "dropped_calls": sum(a.get("dropped_calls", 0) for a in ax),
             "dropped_text": sum(a.get("dropped_text", 0) for a in ax),
             "empty_retries": sum(a.get("empty_retries", 0) for a in ax),
+            "summary_calls": sum(a.get("summary_calls", 0) for a in ax),
+            "summary_applied": sum(1 for a in ax if a.get("summary_applied")),
             "agent_cost_reported": s.get("agent_cost"),
         })
     rows.sort(key=lambda r: int(r["task"]) if str(r["task"]).isdigit() else 0)
@@ -190,6 +192,7 @@ def totals(rows: list) -> dict:
         "usd_per_pass_cached_rate": (dollars(pt, ct, cached) / passed) if passed else None,
         "refusals": sum(len(r["refusals"]) for r in rows),
         "runs_with_fallback": sum(1 for r in rows if r["fallbacks"]),
+        "summary_calls": sum(r.get("summary_calls", 0) for r in rows),
         "user_prompt": sum(r["user_prompt"] for r in rows), "user_completion": sum(r["user_completion"] for r in rows),
     }
 
@@ -227,20 +230,27 @@ def summary(tag: str, tasks=None) -> dict:
     for arm in ("B", "G", "A"):
         rows_by_arm[arm] = summarize_run(os.path.join(run_dir(tag, arm), "results.json"))
         tot[arm] = totals(rows_by_arm[arm])
+    core = dict(rows_by_arm)  # the eight readings of the plan page are about B, G and A only
+    s_path = os.path.join(run_dir(tag, "S"), "results.json")
+    if os.path.exists(s_path):  # the extra arm S is reported next to them when it was run; it has no reading line of its own
+        rows_by_arm["S"] = summarize_run(s_path)
+        tot["S"] = totals(rows_by_arm["S"])
+    arms = list(rows_by_arm)
     print("\nper task (reward, agent calls, prompt tokens, gate refusals, fallback)")
     for t in tasks:
         cells = []
-        for arm in ("B", "G", "A"):
+        for arm in arms:
             r = next((x for x in rows_by_arm[arm] if x["task"] == t), None)
             cells.append("-" if r is None else f"{arm}: {r['reward']} {r['agent_calls']}c {r['prompt']:,}p {len(r['refusals'])}r {r['fallbacks']}f [{r['termination']}]")
         print(f"task {t:>2}  " + "  |  ".join(cells))
     print("\ntotals")
-    for arm in ("B", "G", "A"):
+    for arm in arms:
         T = tot[arm]
         print(f"{arm}: passed {T['passed']}/{T['tasks']}, calls {T['agent_calls']}, prompt {T['prompt']:,} (cached {T['cached']:,}), "
               f"completion {T['completion']:,}, mean prompt/call {T['mean_prompt_per_call']:.0f}, "
-              f"list ${T['usd_list']:.2f} (cached rate ${T['usd_cached_rate']:.2f}), refusals {T['refusals']}, runs with fallback {T['runs_with_fallback']}")
-    rd = readings(rows_by_arm, tot, tasks)
+              f"list ${T['usd_list']:.2f} (cached rate ${T['usd_cached_rate']:.2f}), refusals {T['refusals']}, runs with fallback {T['runs_with_fallback']}"
+              + (f", summary calls {T['summary_calls']}" if arm == "S" else ""))
+    rd = readings(core, {k: tot[k] for k in core}, tasks)
     print("\nreadings (plan page order)")
     for label, val, detail in rd:
         print(("YES " if val else "NO  " if val is not None else "n/a ") + label + "  --  " + detail)

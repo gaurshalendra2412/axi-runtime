@@ -12,6 +12,7 @@ Arm B is the benchmark's `llm_agent`, unchanged.
 """
 from __future__ import annotations
 
+import json
 import os
 import sys
 from typing import Any, List, Optional
@@ -28,7 +29,7 @@ from tau2.data_model.message import (  # noqa: E402
 )
 from tau2.utils.llm_utils import generate  # noqa: E402
 
-from axi.experiments.tau2_retail_core import RetailHeld  # noqa: E402
+from axi.experiments.tau2_retail_core import RetailHeld, summary_cut  # noqa: E402
 
 HELD_STATE_NOTE = """
 <host_state_note>
@@ -198,6 +199,98 @@ class GatedLLMAgent(LLMAgent):
         return event
 
 
+SUMMARY_PREFIX = "[Summary of the earlier part of this conversation, written by you when the chat grew long]"
+SUMMARY_SYSTEM = (
+    "You keep the memory of a customer-service agent for an online retail company. Below is the earlier part of the agent's "
+    "conversation with a customer: the customer's messages, the agent's messages, the agent's tool calls and the tools' results. "
+    "It is about to be removed from the agent's chat and replaced by your summary, so the summary must carry everything the agent "
+    "needs to carry on correctly: who the customer is and whether the identity is verified, the orders and items looked up (ids, "
+    "statuses, prices, payment methods), what the customer asked for, what the agent proposed and what the customer confirmed or "
+    "refused, every change already made to the database, and anything still open. If the text starts with an earlier summary, "
+    "fold it in. Write the summary only, as plain text, as short as it can be without losing a fact the agent needs."
+)
+MAX_PART = 4000  # characters kept of one message when it is written out for the summary call
+
+
+def _written_out(m) -> str:
+    """One message of the chat as a line of text for the summary call."""
+    text = (getattr(m, "content", None) or "").strip()
+    if text.startswith(SUMMARY_PREFIX):
+        return "EARLIER SUMMARY: " + text[len(SUMMARY_PREFIX):].strip()[:MAX_PART]
+    role = getattr(m, "role", "")
+    if role == "tool":
+        return ("TOOL ERROR: " if getattr(m, "error", False) else "TOOL RESULT: ") + text[:MAX_PART]
+    if role == "assistant":
+        calls = getattr(m, "tool_calls", None) or []
+        if calls:
+            return "AGENT CALLED: " + "; ".join(f"{c.name}({json.dumps(c.arguments, sort_keys=True, default=str)})" for c in calls)
+        return "AGENT: " + text[:MAX_PART]
+    return "CUSTOMER: " + text[:MAX_PART]
+
+
+class SummaryState(LLMAgentState):
+    summaries: int = 0
+
+
+class SummaryLLMAgent(LLMAgent):
+    """Arm S: the benchmark's own agent (no gate, no held state) whose chat is rolled up by the model itself when it grows.
+
+    When the chat holds more than `compact_over` messages, everything but the last `keep_last` messages is written out and sent to the
+    same model with one instruction (SUMMARY_SYSTEM); the reply replaces those messages as one message at the top of the chat, and
+    the summary call is added to the tokens and the cost of the agent message it precedes. This is the plain compaction that agent
+    frameworks and chat products offer, built here from that description; it is not a copy of any product.
+    """
+
+    def __init__(self, tools, domain_policy, llm, llm_args=None, additional_stop_tool_names=frozenset(),
+                 compact_over: int = 24, keep_last: int = 10):
+        super().__init__(tools=tools, domain_policy=domain_policy, llm=llm, llm_args=llm_args,
+                         additional_stop_tool_names=additional_stop_tool_names)
+        self.compact_over = compact_over
+        self.keep_last = keep_last
+
+    def get_init_state(self, message_history=None) -> SummaryState:
+        return SummaryState(system_messages=[SystemMessage(role="system", content=self.system_prompt)],
+                            messages=list(message_history or []))
+
+    def _roll_up(self, state: SummaryState):
+        """Replace the older part of the chat by a summary; return (the summary call's message, whether it replaced the chat), or (None, False)."""
+        msgs = state.messages
+        if len(msgs) <= self.compact_over:
+            return None, False
+        cut = summary_cut([getattr(m, "role", "") for m in msgs], self.keep_last)
+        if cut <= 0:
+            return None, False
+        text_out = "\n".join(_written_out(m) for m in msgs[:cut])
+        sm = generate(model=self.llm, messages=[SystemMessage(role="system", content=SUMMARY_SYSTEM),
+                                                UserMessage(role="user", content=text_out)],
+                      call_name="agent_summary", **self.llm_args)
+        text = (sm.content or "").strip()
+        if not text:
+            return sm, False  # an empty reply: the chat is kept whole this time; the call is still counted
+        state.messages = [UserMessage(role="user", content=f"{SUMMARY_PREFIX}\n{text}")] + msgs[cut:]
+        state.summaries += 1
+        return sm, True
+
+    def generate_next_message(self, message, state: SummaryState):
+        sm, applied = self._roll_up(state)
+        am, state = super().generate_next_message(message, state)
+        if sm is not None:
+            su = sm.usage or {}
+            u = dict(am.usage or {})
+            u["prompt_tokens"] = (u.get("prompt_tokens", 0) or 0) + (su.get("prompt_tokens", 0) or 0)
+            u["completion_tokens"] = (u.get("completion_tokens", 0) or 0) + (su.get("completion_tokens", 0) or 0)
+            am.usage = u
+            am.cost = None if (am.cost is None or sm.cost is None) else am.cost + sm.cost
+            raw = dict(am.raw_data or {})
+            raw["axi"] = {"llm_calls": 2, "summary_calls": 1, "summary_prompt_tokens": su.get("prompt_tokens", 0) or 0,
+                          "summary_completion_tokens": su.get("completion_tokens", 0) or 0,
+                          "summary_applied": applied,
+                          "cached_tokens": _cached(raw) + _cached(sm.raw_data),
+                          "refusals": [], "fallbacks": 0, "dropped_calls": 0, "dropped_text": 0, "empty_retries": 0}
+            am.raw_data = raw
+        return am, state
+
+
 def create_gate_chat_agent(tools, domain_policy, **kwargs):
     return GatedLLMAgent(tools=tools, domain_policy=domain_policy, llm=kwargs.get("llm"),
                          llm_args=kwargs.get("llm_args"),
@@ -212,9 +305,16 @@ def create_held_state_agent(tools, domain_policy, **kwargs):
                          hold_state=True)
 
 
+def create_summary_agent(tools, domain_policy, **kwargs):
+    return SummaryLLMAgent(tools=tools, domain_policy=domain_policy, llm=kwargs.get("llm"),
+                           llm_args=kwargs.get("llm_args"),
+                           additional_stop_tool_names=kwargs.get("additional_stop_tool_names", frozenset()))
+
+
 def register() -> None:
     from tau2.registry import registry  # imported here: the registry loads every domain of the benchmark
 
-    for name, factory in (("gate_chat", create_gate_chat_agent), ("held_state", create_held_state_agent)):
+    for name, factory in (("gate_chat", create_gate_chat_agent), ("held_state", create_held_state_agent),
+                          ("summary_chat", create_summary_agent)):
         if registry.get_agent_factory(name) is None:
             registry.register_agent_factory(factory, name)
