@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -29,6 +30,11 @@ RETAIL_50 = ["6", "8", "11", "13", "14", "16", "17", "18", "19", "21", "22", "23
              "42", "47", "49", "50", "52", "53", "56", "58", "59", "63", "64", "65", "66", "68", "70", "71", "74", "78", "79", "80",
              "83", "85", "86", "89", "97", "102", "104", "105", "107", "112"]
 TASKSETS = {"retail_50": RETAIL_50, "first10": TASKS}
+# 16 of the 50 tasks carry written ("natural-language") assertions, which the benchmark checks with an LLM judge (default
+# model: an OpenAI one, for which this run has no key). The runner points that judge at the run's own model (`install_judge`);
+# the other 34 tasks are scored by the benchmark's database check alone, with no judge.
+JUDGED = ["16", "19", "21", "36", "38", "39", "40", "47", "59", "63", "68", "70", "89", "104", "105", "107"]
+JUDGE_ARGS = {"temperature": 0.0}
 GATED_FALLBACK_SHARE = 0.15  # reading 7: at most this share of the gated runs may end in the host's fallback message (3 of 20 on ten tasks)
 AGENT_OF = {"B": "llm_agent", "G": "gate_chat", "A": "held_state", "S": "summary_chat"}  # S: the chat rolled up by the model (extra arm, docs/TAU2_PILOT.md)
 SEED = 300
@@ -108,6 +114,40 @@ def install_throttle(rpm: int) -> None:
     LU.completion = make_throttled(LU.completion, rpm)
 
 
+_FENCE = re.compile(r"^\s*```[A-Za-z]*\s*(.*?)\s*```\s*$", re.S)
+
+
+def strip_fence(text):
+    """The benchmark's judge reads the model's reply with json.loads; take off a ```json fence if the model added one."""
+    m = _FENCE.match(text or "")
+    return m.group(1) if m else text
+
+
+def patch_judge(E, model: str, args: dict) -> None:
+    """Point the written-assertion judge module `E` at `model` and make its reply parse (no change to its prompt or rule)."""
+    E.DEFAULT_LLM_NL_ASSERTIONS = model
+    E.DEFAULT_LLM_NL_ASSERTIONS_ARGS = dict(args)
+    real = E.generate
+
+    def generate(*a, **kw):
+        m = real(*a, **kw)
+        cleaned = strip_fence(getattr(m, "content", None))
+        if cleaned != getattr(m, "content", None):
+            try:
+                m.content = cleaned
+            except Exception:  # a message object that refuses assignment
+                m = m.model_copy(update={"content": cleaned})
+        return m
+
+    E.generate = generate
+
+
+def install_judge(model: str = MODEL) -> None:
+    import tau2.evaluator.evaluator_nl_assertions as E  # noqa: WPS433
+
+    patch_judge(E, model, JUDGE_ARGS)
+
+
 def run_dir(tag: str, arm: str) -> str:
     from tau2.utils.utils import DATA_DIR  # noqa: WPS433
 
@@ -150,6 +190,7 @@ def run_arm(arm: str, tasks, tag: str, concurrency: int, temperature: float, mod
 
     tau2_retail_agents.register()
     install_throttle(rpm)  # rpm 0: no waiting between calls, but a failed call is still asked again, and a spent daily quota stops the run
+    install_judge(model)  # the judge of the 16 tasks with written assertions is the run's own model (no OpenAI key here)
     from tau2.cli import main
 
     argv = build_argv(arm, tasks, tag, concurrency, temperature, model)
@@ -243,10 +284,10 @@ def sign_test_p(x: int, y: int) -> float:
     return min(1.0, 2 * sum(comb(n, i) for i in range(k + 1)) / 2 ** n)
 
 
-def paired(rows_a: list, rows_b: list) -> dict:
-    """Pass/fail of two arms task by task (only tasks on file in both): who passed what alone, and the sign-test p."""
-    ra = {r["task"]: (r["reward"] or 0) >= 1.0 for r in rows_a}
-    rb = {r["task"]: (r["reward"] or 0) >= 1.0 for r in rows_b}
+def paired(rows_a: list, rows_b: list, skip=()) -> dict:
+    """Pass/fail of two arms task by task (only tasks on file in both, minus `skip`): who passed what alone, and the sign-test p."""
+    ra = {r["task"]: (r["reward"] or 0) >= 1.0 for r in rows_a if r["task"] not in skip}
+    rb = {r["task"]: (r["reward"] or 0) >= 1.0 for r in rows_b if r["task"] not in skip}
     common = [t for t in ra if t in rb]
     a_only = sum(1 for t in common if ra[t] and not rb[t])
     b_only = sum(1 for t in common if rb[t] and not ra[t])
@@ -320,11 +361,23 @@ def summary(tag: str, tasks=None) -> dict:
             c = paired(rows_by_arm[x], rows_by_arm[y])
             pairs[f"{x}_vs_{y}"] = c
             print(f"{x} vs {y}: {x} only {c['a_only']}, {y} only {c['b_only']}, both {c['both']}, neither {c['neither']} of {c['tasks']}; p = {c['p']:.3f}")
+    nojudge = {}
+    if set(tasks) == set(RETAIL_50):  # the same pairs on the 34 tasks that no judge scores
+        print(f"\non the {len(RETAIL_50) - len(JUDGED)} tasks without written assertions (database check only, no judge):")
+        for arm in arms:
+            kept = [r for r in rows_by_arm[arm] if r["task"] not in JUDGED]
+            nojudge[arm] = {"tasks": len(kept), "passed": sum(1 for r in kept if (r["reward"] or 0) >= 1.0)}
+            print(f"{arm}: passed {nojudge[arm]['passed']}/{nojudge[arm]['tasks']}")
+        for x, y in PAIRS:
+            if x in rows_by_arm and y in rows_by_arm:
+                c = paired(rows_by_arm[x], rows_by_arm[y], skip=set(JUDGED))
+                pairs[f"{x}_vs_{y}_no_judge"] = c
+                print(f"{x} vs {y}: {x} only {c['a_only']}, {y} only {c['b_only']}, both {c['both']}, neither {c['neither']} of {c['tasks']}; p = {c['p']:.3f}")
     rd = readings(core, {k: tot[k] for k in core}, tasks)
     print("\nreadings (plan page order)")
     for label, val, detail in rd:
         print(("YES " if val else "NO  " if val is not None else "n/a ") + label + "  --  " + detail)
-    out = {"tag": tag, "model": MODEL, "tasks": tasks, "rows": rows_by_arm, "totals": tot, "paired": pairs,
+    out = {"tag": tag, "model": MODEL, "tasks": tasks, "rows": rows_by_arm, "totals": tot, "paired": pairs, "no_judge_passed": nojudge,
            "readings": [{"line": l, "yes": v, "detail": d} for l, v, d in rd]}
     json.dump(out, open(f"{tag}_summary.json", "w"), indent=1)
     print(f"\nwrote {tag}_summary.json")

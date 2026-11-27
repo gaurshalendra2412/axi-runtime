@@ -190,6 +190,58 @@ def test_command_line_of_an_arm_resumes_and_carries_the_task_ids():
     assert argv[argv.index("--save-to") + 1] == "t47_S" and argv[argv.index("--seed") + 1] == "300"
 
 
+def test_judge_is_pointed_at_the_runs_model_and_its_reply_parses():
+    import types
+
+    assert R.strip_fence('```json\n{"results": []}\n```') == '{"results": []}' and R.strip_fence('{"a": 1}') == '{"a": 1}'
+    assert R.strip_fence("```\n[1]\n```") == "[1]" and R.strip_fence(None) is None
+
+    class Msg:
+        def __init__(self, content):
+            self.content = content
+
+    E = types.SimpleNamespace(DEFAULT_LLM_NL_ASSERTIONS="gpt-5.4-mini-2026-03-17", DEFAULT_LLM_NL_ASSERTIONS_ARGS={"reasoning_effort": "low"},
+                              generate=lambda *a, **kw: Msg('```json\n{"results": []}\n```'))
+    R.patch_judge(E, R.MODEL, R.JUDGE_ARGS)
+    assert E.DEFAULT_LLM_NL_ASSERTIONS == "gemini/gemini-3.8-flash" and E.DEFAULT_LLM_NL_ASSERTIONS_ARGS == {"temperature": 0.0}
+    assert json.loads(E.generate(model="m", messages=[]).content) == {"results": []}  # the fenced reply now parses
+
+
+def test_the_16_judged_tasks_are_those_with_written_assertions_and_are_named_on_the_plan_page():
+    assert len(R.JUDGED) == 16 and set(R.JUDGED) <= set(R.RETAIL_50) and len(set(R.JUDGED)) == 16
+    plan = open(os.path.join(HERE, "..", "..", "docs", "TAU2_PILOT.md"), encoding="utf-8").read()
+    assert ", ".join(R.JUDGED) in plan
+    src = os.environ.get("TAU2_SRC")
+    f = os.path.join(src, "..", "data", "tau2", "domains", "retail", "tasks.json") if src else ""
+    if os.path.exists(f):
+        with open(f) as fh:
+            tasks = {str(t["id"]): t for t in json.load(fh)}
+        with_nl = [i for i in R.RETAIL_50 if (tasks[i].get("evaluation_criteria") or {}).get("nl_assertions")]
+        assert with_nl == R.JUDGED
+
+
+def test_summary_reports_the_34_tasks_without_a_judge_separately():
+    import contextlib
+    import io
+
+    with tempfile.TemporaryDirectory() as d:
+        cwd = os.getcwd()
+        os.chdir(d)
+        try:
+            for arm in "BGA":
+                sims = [sim(t, 0.0 if (arm == "A" and t in ("6", "8")) else 1.0, [100]) for t in R.RETAIL_50]
+                write(d, "t", arm, sims)
+            R.run_dir = lambda tag, arm: os.path.join(d, f"{tag}_{arm}")
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                out = R.summary("t", R.RETAIL_50)
+        finally:
+            os.chdir(cwd)
+    assert out["no_judge_passed"]["B"] == {"tasks": 34, "passed": 34} and out["no_judge_passed"]["A"] == {"tasks": 34, "passed": 32}
+    assert out["paired"]["A_vs_B_no_judge"]["b_only"] == 2 and out["paired"]["A_vs_B"]["b_only"] == 2
+    assert "without written assertions" in buf.getvalue()
+
+
 def test_sign_test_is_exact_and_two_sided():
     assert R.sign_test_p(0, 0) == 1.0 and R.sign_test_p(3, 3) == 1.0
     assert abs(R.sign_test_p(5, 0) - 2 / 32) < 1e-12 and abs(R.sign_test_p(0, 6) - 2 / 64) < 1e-12
