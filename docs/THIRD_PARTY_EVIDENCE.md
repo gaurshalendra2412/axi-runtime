@@ -64,6 +64,15 @@ This page puts papers written by other people next to AXI's own test pages. Four
 
 **Not shown.** Providers with explicit cache breakpoints, and engines other than vLLM, were not tested. What is shown is that on one provider's automatic-cache billing the rebuilt prompt was billed more per task than the chat; the savings AXI measures are in prompt size, time and compute.
 
+**Many agent sessions at once: the cache itself can collapse**
+
+- **Bursts That Outlast Themselves** (Huang of Microsoft and Liu; arXiv [2611.13412](https://arxiv.org/pdf/2611.13412), Nov 2026; vLLM, Qwen3-8B, one AMD MI300X with a 400K-token KV pool). A short burst of extra arrivals pushed the server into a state that outlasted the burst in 9 of 12 paired runs: the prefix hit ratio settled near **0.10** against 0.94 to 0.95 in the healthy twins, because the sessions' combined context outgrew the KV pool. With prefix caching switched off the same load did not produce it. Their prevention bounds the resident KV demand of the active sessions to the pool.
+- **Inside the Trap** (Valse and Jannesari, Iowa State University; arXiv [2611.08902](https://arxiv.org/pdf/2611.08902), Nov 2026; SGLang and vLLM on one A100 or H200). In all 30 burst runs of the paired tests the hit rate stayed at zero until the end of the run, 7,500 s after the burst, and a trapped run's prefill cost was about **16 times** that of a session whose turns all hit. A client-side session cap prevented it in all 30 capped runs.
+
+**What AXI measured.** A session's footprint is one short prompt. In memory alone, one TPU v6e chip held **927 AXI-sized sessions against 5** with a kept chat at its long-run mean length (no model run). With a real 7B model on one NVIDIA L4, **256 sessions at once** ran 25,557 steps, every one exact, at 105,230 exact steps per GPU hour. [`TPU_SESSIONS_TEST.md`](TPU_SESSIONS_TEST.md), [`SESSIONS_PER_CHIP_TEST.md`](SESSIONS_PER_CHIP_TEST.md) (Test 38)
+
+**Not shown.** AXI has not been run under bursty arrivals: Test 38 advances its sessions in lock-step rounds, and a real service has arrivals at random times. Both papers use synthetic sessions on one GPU, and their remedies are admission control, which AXI does not provide. That a smaller session leaves less resident KV demand is arithmetic; that it avoids the collapse under real arrival patterns is not measured here.
+
 ---
 
 ## D. A deterministic check outside the model is a recognised pattern
