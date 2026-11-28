@@ -83,10 +83,10 @@ class Script:
                                 raw_data={"usage": {"prompt_tokens_details": {"cached_tokens": 3}}})
 
 
-def agent(hold, replies):
+def agent(hold, replies, dlg=False):
     s = Script(replies)
     A.generate = s
-    f = A.create_held_state_agent if hold else A.create_gate_chat_agent
+    f = (A.create_held_state_dialogue_first_agent if dlg else A.create_held_state_agent) if hold else A.create_gate_chat_agent
     ag = f([], "POLICY TEXT", llm="fake", llm_args={})
     st = ag.get_init_state([AssistantMessage(role="assistant", content="Hi! How can I help you today?")])
     return ag, st, s
@@ -97,7 +97,7 @@ def tool_result(call_msg, content, error=False):
     return ToolMessage(id=c.id, role="tool", content=content, error=error)
 
 
-def drive_cancel(hold):
+def drive_cancel(hold, dlg=False):
     """A whole cancel conversation: authenticate, read, list the details, get a yes, cancel."""
     ag, st, s = agent(hold, [
         ("", [("find_user_id_by_email", {"email": "n@example.com"})]),
@@ -105,7 +105,7 @@ def drive_cancel(hold):
         ("Order #W1 is pending. Cancel it, reason 'no longer needed'? (yes/no)", []),
         ("", [("cancel_pending_order", {"order_id": "#W1", "reason": "no longer needed"})]),
         ("Done, the order is cancelled.", []),
-    ])
+    ], dlg=dlg)
     out = []
     m, st = ag.generate_next_message(UserMessage(role="user", content="Cancel #W1, my email is n@example.com"), st)
     out.append(m)
@@ -137,6 +137,38 @@ def test_arm_a_flow_prompts_stay_short_and_state_is_held():
     assert "get_order_details" not in last  # the old copy of the order was replaced by the updated one
     assert "customer: Cancel #W1" in last and "Order #W1 is pending." in last
     assert out[0].raw_data["axi"]["llm_calls"] == 1 and out[0].raw_data["axi"]["cached_tokens"] == 3
+
+
+def _common_prefix(a: str, b: str) -> int:
+    n = min(len(a), len(b))
+    i = 0
+    while i < n and a[i] == b[i]:
+        i += 1
+    return i
+
+
+def test_arm_a2_does_the_same_work_with_the_dialogue_first_and_repeats_more_of_its_prompt():
+    ag, st, s, out = drive_cancel(hold=True, dlg=True)
+    ag0, st0, s0, out0 = drive_cancel(hold=True)
+    assert [bool(m.tool_calls) for m in out] == [bool(m.tool_calls) for m in out0]  # the same flow, call for call
+    assert st.held.changes == st0.held.changes and st.held.orders == st0.held.orders and st.messages == []
+    assert ag.dialogue_first and not ag0.dialogue_first
+    for sent in s.sent:
+        assert len(sent) == 2 and sent[0].role == "system" and sent[1].role == "user"
+        assert "host_state_note" in sent[0].content and sent[0].content.index("dialogue_so_far") < sent[0].content.index("authenticated_customer")
+        assert sent[1].content.startswith("<held_state>\ndialogue_so_far:")
+    assert out[0].raw_data["axi"]["dialogue_first"] is True and out0[0].raw_data["axi"]["dialogue_first"] is False
+    # the same pieces of text, in another order
+    for new, old in zip(s.sent, s0.sent):
+        assert sorted(new[1].content.split("\n")) == sorted(old[1].content.split("\n"))
+
+    def reused(sent):
+        full = [m[0].content + "\n" + m[1].content for m in sent]
+        return sum(_common_prefix(full[i], full[i + 1]) for i in range(len(full) - 1)), sum(len(f) for f in full[1:])
+
+    kept_a2, total_a2 = reused(s.sent)
+    kept_a, total_a = reused(s0.sent)
+    assert kept_a2 / total_a2 > kept_a / total_a  # a larger share of each prompt is what the previous prompt began with
 
 
 def test_arm_g_keeps_the_chat():

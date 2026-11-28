@@ -175,6 +175,38 @@ def test_held_state_keeps_one_latest_copy_of_each_read():
     assert len(h.changes) == 1
 
 
+def test_dialogue_first_order_changes_nothing_but_the_order():
+    h = RetailHeld("policy text")
+    h.on_agent_text("Hi! How can I help you today?")
+    h.on_user("I want to return an item; my email is n@example.com")
+    h.on_tool("find_user_id_by_email", {"email": "n@example.com"}, "noah_brown_6181")
+    h.on_tool("get_order_details", {"order_id": "#W1"}, json.dumps(order("#W1", "delivered")))
+    ev = ("tool", "get_order_details", {"order_id": "#W1"}, json.dumps(order("#W1", "delivered")))
+    a = h.render(ev)
+    a2 = h.render(ev, dialogue_first=True)
+    assert a == h.render(ev, dialogue_first=False)  # arm A's order is the default
+    assert sorted(a.split("\n")) == sorted(a2.split("\n")) and a != a2
+    assert a2.startswith("<held_state>\ndialogue_so_far:") and a.startswith("<held_state>\nauthenticated_customer:")
+    assert a2.index("dialogue_so_far") < a2.index("authenticated_customer") < a2.index("facts_read") < a2.index("changes_made") < a2.index("<new_event>")
+
+    def shared(x, y):
+        i = 0
+        while i < min(len(x), len(y)) and x[i] == y[i]:
+            i += 1
+        return i
+
+    # two steps later (another read, then the customer speaks): the start of the dialogue-first prompt is the longer match
+    h2 = RetailHeld("policy text")
+    h2.on_agent_text("Hi!"); h2.on_user("return please, n@example.com")
+    h2.on_tool("find_user_id_by_email", {"email": "n@example.com"}, "noah_brown_6181")
+    first = (h2.render(("tool", "find_user_id_by_email", {"email": "n@example.com"}, "noah_brown_6181")),
+             h2.render(("tool", "find_user_id_by_email", {"email": "n@example.com"}, "noah_brown_6181"), dialogue_first=True))
+    h2.on_tool("get_user_details", {"user_id": "noah_brown_6181"}, json.dumps({"user_id": "noah_brown_6181", "payment_methods": {}, "orders": ["#W1"]}))
+    ev2 = ("tool", "get_user_details", {"user_id": "noah_brown_6181"}, json.dumps({"user_id": "noah_brown_6181", "payment_methods": {}, "orders": ["#W1"]}))
+    second = (h2.render(ev2), h2.render(ev2, dialogue_first=True))
+    assert shared(first[1], second[1]) > shared(first[0], second[0])
+
+
 def test_render_is_short_and_never_replays_the_past():
     h = RetailHeld("policy text")
     h.on_agent_text("Hi! How can I help you today?")

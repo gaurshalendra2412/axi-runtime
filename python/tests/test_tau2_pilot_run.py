@@ -155,7 +155,8 @@ def test_a_spent_daily_quota_stops_the_run_and_is_not_asked_again():
 
 def test_arms_and_tasks_of_the_plan_page():
     assert R.TASKS == ["0", "1", "2", "3", "4", "6", "7", "8", "10", "11"]
-    assert R.AGENT_OF == {"B": "llm_agent", "G": "gate_chat", "A": "held_state", "S": "summary_chat"}
+    assert R.AGENT_OF == {"B": "llm_agent", "G": "gate_chat", "A": "held_state", "S": "summary_chat", "A2": "held_state_dlg"}
+    assert [a for a in R.AGENT_OF if a != "A2"] == ["B", "G", "A", "S"]  # the default arms of a run; A2 is added with --arms A2
     assert (R.P_IN, R.P_CACHED, R.P_OUT) == (0.75, 0.075, 3.75) and R.SEED == 300 and R.MODEL == "gemini/gemini-3.8-flash"
     plan = open(os.path.join(HERE, "..", "..", "docs", "TAU2_PILOT.md"), encoding="utf-8").read()
     for s in ("0, 1, 2, 3, 4, 6, 7, 8, 10, 11", "seed 300", "gemini/gemini-3.8-flash", "0.75 input, 3.75 output",
@@ -290,6 +291,34 @@ def test_arm_s_is_reported_next_to_the_plan_page_arms_and_adds_no_reading_line()
             os.chdir(old_cwd)
     assert set(out["rows"]) == {"B", "G", "A", "S"} and len(out["readings"]) == 8
     assert out["readings"][0]["yes"] is True  # the guard counts the three plan-page arms only: one task, three runs
+
+
+def test_arm_a2_is_reported_with_its_own_six_lines_and_the_plan_page_readings_do_not_change():
+    ax = {"llm_calls": 1, "refusals": [], "fallbacks": 0}
+    tasks = ["0", "1"]
+    with tempfile.TemporaryDirectory() as d:
+        write(d, "t", "B", [sim(t, 1.0, [1000] * 4, cached=800) for t in tasks])
+        write(d, "t", "G", [sim(t, 1.0, [1000] * 4, cached=800, axi=ax) for t in tasks])
+        write(d, "t", "A", [sim(t, 1.0, [900] * 4, cached=50, axi=ax) for t in tasks])
+        write(d, "t", "A2", [sim(t, 1.0, [900] * 4, cached=500, axi=ax) for t in tasks])
+        old_run_dir, old_cwd = R.run_dir, os.getcwd()
+        R.run_dir = lambda tag, arm: os.path.join(d, f"{tag}_{arm}")
+        os.chdir(d)
+        try:
+            out = R.summary("t", tasks)
+        finally:
+            R.run_dir = old_run_dir
+            os.chdir(old_cwd)
+    assert R.AGENT_OF["A2"] == "held_state_dlg" and "A2" in R.PAIRS[-1] + R.PAIRS[-2]
+    assert set(out["rows"]) == {"B", "G", "A", "A2"} and len(out["readings"]) == 8 and len(out["readings_a2"]) == 6
+    assert out["readings"][0]["yes"] is True  # the guard is about B, G and A: two tasks, three arms
+    assert {"A2_vs_B", "A2_vs_A"} <= set(out["paired"])
+    rd = {r["line"].split()[0]: r for r in out["readings_a2"]}
+    assert rd["A2-1"]["yes"] is True and rd["A2-3"]["yes"] is False  # two tasks passed: fewer than 42
+    assert rd["A2-2"]["yes"] is True  # 500 of 900 per call cached: 56 %
+    assert rd["A2-4"]["yes"] is True  # more cached tokens than A: cheaper per pass at the cached price
+    assert rd["A2-5"]["yes"] is False  # B has 800 of 1,000 per call cached, A2 500 of 900: B is cheaper per pass at the cached price
+    assert rd["A2-6"]["yes"] is False  # 900 against 1000 per call is not 0.7
 
 
 if __name__ == "__main__":
