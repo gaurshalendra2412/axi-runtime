@@ -21,6 +21,10 @@ The host holds the exact state and builds a short prompt from it at every step. 
 
 The prompt is built from the held state, so its size follows the state and not the number of steps already run; cost, time to first token and compute per step stay flat from step 1. The state is exact because the host commits only changes that pass its rules, so a slip never reaches it.
 
+## What other groups measured on the same failures
+
+On OSWorld 2.0 (XLANG Lab, University of Hong Kong, 26 Jun 2026: 108 long computer-use workflows, leading agents averaging more than 300 steps) the best 500-step configuration completes 20.6% of tasks, and the authors report that agents cannot hold a task-level model together over a long horizon and spend under 7% of their budget on repairing their own errors. AXI keeps that state on the host, checked by the gate, so the model does not have to hold it: 80,000 of 80,000 steps exact on a 7B model ([Test 43](ENDURANCE_7B_TEST.md)). [`THIRD_PARTY_EVIDENCE.md`](THIRD_PARTY_EVIDENCE.md) sets thirteen papers and one engineering post by other groups beside the AXI test that measures the same thing, with what each shows and does not show; none of the papers uses AXI.
+
 ## Check it yourself
 
 No key, no GPU, about 3 seconds. It replays the saved replies of the 4,000-step run and recomputes the held state with the repository's own code.
