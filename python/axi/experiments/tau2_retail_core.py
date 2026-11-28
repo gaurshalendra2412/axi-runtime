@@ -83,6 +83,34 @@ def is_confirmation(text: str) -> bool:
     return bool(_YES_RE.search(t)) and not _HEDGE_RE.search(t)
 
 
+
+# The notes that arm A and arm A2 add to the system prompt (the prompt is built by `RetailHeld.render`; the notes describe its parts).
+HELD_STATE_NOTE = """
+<host_state_note>
+At every step the host sends you its held state and the one new event, instead of the whole earlier chat.
+- authenticated_customer: the user id the host has recorded.
+- facts_read: the latest result of every distinct read you made (a read made again replaces the earlier copy; a change replaces the order with the updated order).
+- changes_made: the changes already made to the database.
+- dialogue_so_far: the messages between you and the customer.
+- new_event: the customer's new message, a tool's result, or a refusal by the host of the call you proposed.
+The host checks every tool call against the policy before it runs. A refused call did not run: use the reason it gives.
+</host_state_note>
+""".strip()
+
+# arm A2: the same note, the parts listed in the order they now come in the prompt
+HELD_STATE_NOTE_DIALOGUE_FIRST = """
+<host_state_note>
+At every step the host sends you its held state and the one new event, instead of the whole earlier chat.
+- dialogue_so_far: the messages between you and the customer.
+- authenticated_customer: the user id the host has recorded.
+- facts_read: the latest result of every distinct read you made (a read made again replaces the earlier copy; a change replaces the order with the updated order).
+- changes_made: the changes already made to the database.
+- new_event: the customer's new message, a tool's result, or a refusal by the host of the call you proposed.
+The host checks every tool call against the policy before it runs. A refused call did not run: use the reason it gives.
+</host_state_note>
+""".strip()
+
+
 @dataclass(frozen=True)
 class Verdict:
     ok: bool
@@ -251,32 +279,38 @@ class RetailHeld:
         return f"I'm sorry, I can't do that: {verdict.reason}."
 
     # ---- the prompt of arm A ---------------------------------------------
-    def render(self, event: Tuple[str, ...]) -> str:
+    def render(self, event: Tuple[str, ...], dialogue_first: bool = False) -> str:
         """The short prompt: the held state and the one new event.
 
         `event` is ("customer", text), ("tool", name, args, content) or
         ("refused", name, args, reason).
+
+        `dialogue_first` (arm A2, added after the result of arm A, docs/TAU2_PILOT.md) puts the dialogue, which only ever grows
+        at its end, before the parts that change in the middle (facts read, changes made); the text and the content are the
+        same, only the order differs, so that a provider's prefix cache can reuse the start of the prompt from one step to the
+        next. The default order is arm A's and is unchanged.
         """
-        lines: List[str] = ["<held_state>"]
-        lines.append(f"authenticated_customer: {self.user_id or 'none yet'}")
-        lines.append("facts_read (latest result of each distinct read):")
+        state_lines: List[str] = [f"authenticated_customer: {self.user_id or 'none yet'}"]
+        state_lines.append("facts_read (latest result of each distinct read):")
         held_reads = list(self.reads.values())
         if event[0] == "tool":
             held_reads = held_reads[:-1]  # the newest result is the new event, shown once, below
         if not held_reads:
-            lines.append("  (none yet)")
+            state_lines.append("  (none yet)")
         for name, args, content in held_reads:
-            lines.append(f"  {name}({json.dumps(args, sort_keys=True, default=str)}) -> {content}")
-        lines.append("changes_made:")
+            state_lines.append(f"  {name}({json.dumps(args, sort_keys=True, default=str)}) -> {content}")
+        state_lines.append("changes_made:")
         if not self.changes:
-            lines.append("  (none yet)")
+            state_lines.append("  (none yet)")
         for c in self.changes:
-            lines.append(f"  {c}")
-        lines.append("dialogue_so_far:")
+            state_lines.append(f"  {c}")
+        dialogue_lines: List[str] = ["dialogue_so_far:"]
         if not self.dialogue:
-            lines.append("  (nothing yet)")
+            dialogue_lines.append("  (nothing yet)")
         for who, text in self.dialogue:
-            lines.append(f"  {who}: {text}")
+            dialogue_lines.append(f"  {who}: {text}")
+        lines: List[str] = ["<held_state>"]
+        lines.extend(dialogue_lines + state_lines if dialogue_first else state_lines + dialogue_lines)
         lines.append("</held_state>")
         kind = event[0]
         if kind == "customer":

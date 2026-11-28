@@ -36,7 +36,7 @@ TASKSETS = {"retail_50": RETAIL_50, "first10": TASKS}
 JUDGED = ["16", "19", "21", "36", "38", "39", "40", "47", "59", "63", "68", "70", "89", "104", "105", "107"]
 JUDGE_ARGS = {"temperature": 0.0}
 GATED_FALLBACK_SHARE = 0.15  # reading 7: at most this share of the gated runs may end in the host's fallback message (3 of 20 on ten tasks)
-AGENT_OF = {"B": "llm_agent", "G": "gate_chat", "A": "held_state", "S": "summary_chat"}  # S: the chat rolled up by the model (extra arm, docs/TAU2_PILOT.md)
+AGENT_OF = {"B": "llm_agent", "G": "gate_chat", "A": "held_state", "S": "summary_chat", "A2": "held_state_dlg"}  # S: the chat rolled up by the model (extra arm, docs/TAU2_PILOT.md)
 SEED = 300
 # Google's list prices for the model, dollars per million tokens (docs/PRICE_CHECK.md)
 P_IN, P_CACHED, P_OUT = 0.75, 0.075, 3.75
@@ -296,7 +296,7 @@ def paired(rows_a: list, rows_b: list, skip=()) -> dict:
             "p": sign_test_p(a_only, b_only)}
 
 
-PAIRS = [("A", "B"), ("G", "B"), ("S", "B"), ("A", "S")]
+PAIRS = [("A", "B"), ("G", "B"), ("S", "B"), ("A", "S"), ("A2", "B"), ("A2", "A")]  # S and A2 are extra arms: a pair is reported when both arms were run
 
 
 def readings(rows_by_arm: dict, tot: dict, tasks=None) -> list:
@@ -328,6 +328,30 @@ def readings(rows_by_arm: dict, tot: dict, tasks=None) -> list:
     return out
 
 
+def readings_a2(rows_a2: list, tot: dict, tasks=None) -> list:
+    """The six lines written for arm A2 on the plan page before it was run: (label, yes/no, detail). Needs the totals of B, A and A2."""
+    tasks = tasks or TASKS
+    A2, A, B = tot["A2"], tot["A"], tot["B"]
+    out = []
+    ok = len(rows_a2) == len(tasks) and all(r["reward"] is not None and r["termination"] != "infrastructure_error" for r in rows_a2)
+    out.append((f"A2-1 [guard] {len(tasks)} runs of arm A2 on file, none an infrastructure error, every reward present", ok, f"{len(rows_a2)} runs"))
+    share = (A2["cached"] / A2["prompt"]) if A2["prompt"] else 0.0
+    out.append(("A2-2 at least 40 % of the prompt tokens of A2 are cached tokens", share >= 0.40,
+                f"A2 {100 * share:.0f} % (A {100 * A['cached'] / A['prompt']:.0f} %, B {100 * B['cached'] / B['prompt']:.0f} %)"))
+    out.append(("A2-3 A2 passes at least 42 of the 50 tasks", A2["passed"] >= 42, f"A2 {A2['passed']} (A {A['passed']}, B {B['passed']}) of {A2['tasks']}"))
+    pa2, pa, pb = (T["usd_per_pass_cached_rate"] for T in (A2, A, B))
+    if A2["passed"]:
+        out.append(("A2-4 cost per passed task of A2 at the cached price is at most that of A", pa2 <= pa, f"A2 ${pa2:.4f} vs A ${pa:.4f}"))
+        out.append(("A2-5 cost per passed task of A2 at the cached price is at most that of B", pa2 <= pb, f"A2 ${pa2:.4f} vs B ${pb:.4f}"))
+    else:
+        out.append(("A2-4 cost per passed task of A2 at the cached price is at most that of A", None, "a pass count of 0: the line does not apply"))
+        out.append(("A2-5 cost per passed task of A2 at the cached price is at most that of B", None, "a pass count of 0: the line does not apply"))
+    ratio = (A2["prompt"] / B["prompt"]) if B["prompt"] else None
+    out.append(("A2-6 total agent prompt tokens of A2 at most 0.7 of B's", ratio is not None and ratio <= 0.7,
+                f"A2 {A2['prompt']:,} / B {B['prompt']:,} = {ratio:.3f}" if ratio is not None else "no B tokens"))
+    return out
+
+
 def summary(tag: str, tasks=None) -> dict:
     tasks = tasks or TASKS
     rows_by_arm, tot = {}, {}
@@ -339,6 +363,10 @@ def summary(tag: str, tasks=None) -> dict:
     if os.path.exists(s_path):  # the extra arm S is reported next to them when it was run; it has no reading line of its own
         rows_by_arm["S"] = summarize_run(s_path)
         tot["S"] = totals(rows_by_arm["S"])
+    a2_path = os.path.join(run_dir(tag, "A2"), "results.json")
+    if os.path.exists(a2_path):  # the extra arm A2 (dialogue first in the prompt), designed after the result of arm A; it has its own six lines
+        rows_by_arm["A2"] = summarize_run(a2_path)
+        tot["A2"] = totals(rows_by_arm["A2"])
     arms = list(rows_by_arm)
     print("\nper task (reward, agent calls, prompt tokens, gate refusals, fallback)")
     for t in tasks:
@@ -354,6 +382,7 @@ def summary(tag: str, tasks=None) -> dict:
               f"completion {T['completion']:,}, mean prompt/call {T['mean_prompt_per_call']:.0f}, "
               f"list ${T['usd_list']:.2f} (cached rate ${T['usd_cached_rate']:.2f}), refusals {T['refusals']}, runs with fallback {T['runs_with_fallback']}"
               + (f", summary calls {T['summary_calls']}" if arm == "S" else ""))
+    print("cached share of the prompt tokens: " + ", ".join(f"{arm} {100 * tot[arm]['cached'] / tot[arm]['prompt']:.0f} %" for arm in arms if tot[arm]["prompt"]))
     pairs = {}
     print("\npaired pass/fail, task by task (X only / Y only = tasks that only that arm passed; exact two-sided sign test)")
     for x, y in PAIRS:
@@ -379,6 +408,12 @@ def summary(tag: str, tasks=None) -> dict:
         print(("YES " if val else "NO  " if val is not None else "n/a ") + label + "  --  " + detail)
     out = {"tag": tag, "model": MODEL, "tasks": tasks, "rows": rows_by_arm, "totals": tot, "paired": pairs, "no_judge_passed": nojudge,
            "readings": [{"line": l, "yes": v, "detail": d} for l, v, d in rd]}
+    if "A2" in rows_by_arm:
+        rd2 = readings_a2(rows_by_arm["A2"], tot, tasks)
+        print("\nreadings of arm A2 (plan page order)")
+        for label, val, detail in rd2:
+            print(("YES " if val else "NO  " if val is not None else "n/a ") + label + "  --  " + detail)
+        out["readings_a2"] = [{"line": l, "yes": v, "detail": d} for l, v, d in rd2]
     json.dump(out, open(f"{tag}_summary.json", "w"), indent=1)
     print(f"\nwrote {tag}_summary.json")
     return out

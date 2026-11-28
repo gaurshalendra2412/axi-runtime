@@ -126,7 +126,7 @@ Arm A's cached share (10 %) against the chat's (63 %) needed an explanation, and
 | `append` | chat shape (arms B and G): each prompt is the previous prompt plus more | 15,066 to 21,116 | 94 to 95 % | 86 % (80 % already on call 2) |
 | `tail` | the same 15,000 tokens, only the last few characters change | 15,070 | about 100 % | 0 % |
 | `rebuild` | arm A shape: the held reads, the dialogue, then the new event, rebuilt every step | 15,807 to 20,872 | 89 to 90 % | 0 % |
-| `rebuild2` | the same with the dialogue first (the order tried in arm A2, not run) | 15,808 to 20,873 | 41 to 46 % | 0 % |
+| `rebuild2` | the same with the dialogue first (the order built as arm A2, which was not run) | 15,808 to 20,873 | 41 to 46 % | 0 % |
 
 - **What it shows:** in this run the cache gave a discount when each prompt was the whole previous prompt plus more (`append`), and for an identical prompt from the third call on (`same`). It gave none in any of the 18 calls of the three shapes that share most of their start with the previous prompt but differ before their end (`tail`, `rebuild`, `rebuild2`). Arm A rebuilds its prompt every step, which is the `rebuild` shape; its 10 % against the chat's 63 % is consistent with that. Moving the dialogue to the front (`rebuild2`) did not change it.
 - **Whose behaviour it is:** the provider's. The same prompts a host sends are billed differently by how the provider's cache matches them, and the host chooses the prompt's shape. This run does not test a held-state arm built for what the cache rewards.

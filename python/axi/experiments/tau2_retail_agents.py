@@ -7,6 +7,8 @@ Two agents are registered with the benchmark:
 
 * `gate_chat` (arm G): the benchmark's own agent, whole chat kept, plus the gate.
 * `held_state` (arm A): the host holds the state and rebuilds a short prompt at every step.
+* `held_state_dlg` (arm A2, added after the result of arm A): the same, with the dialogue first in the prompt and the parts that
+  change in the middle after it, so that a prefix cache can reuse the start of the prompt from one step to the next.
 
 Arm B is the benchmark's `llm_agent`, unchanged.
 """
@@ -29,20 +31,8 @@ from tau2.data_model.message import (  # noqa: E402
 )
 from tau2.utils.llm_utils import generate  # noqa: E402
 
-from axi.experiments.tau2_retail_core import RetailHeld, summary_cut  # noqa: E402
-
-HELD_STATE_NOTE = """
-<host_state_note>
-At every step the host sends you its held state and the one new event, instead of the whole earlier chat.
-- authenticated_customer: the user id the host has recorded.
-- facts_read: the latest result of every distinct read you made (a read made again replaces the earlier copy; a change replaces the order with the updated order).
-- changes_made: the changes already made to the database.
-- dialogue_so_far: the messages between you and the customer.
-- new_event: the customer's new message, a tool's result, or a refusal by the host of the call you proposed.
-The host checks every tool call against the policy before it runs. A refused call did not run: use the reason it gives.
-</host_state_note>
-""".strip()
-
+from axi.experiments.tau2_retail_core import (HELD_STATE_NOTE, HELD_STATE_NOTE_DIALOGUE_FIRST, RetailHeld,  # noqa: E402,F401
+                                              summary_cut)
 
 class GatedState(LLMAgentState):
     held: Any = None
@@ -66,16 +56,19 @@ class GatedLLMAgent(LLMAgent):
     """The benchmark's LLM agent with the host's gate; optionally with the held state in place of the chat."""
 
     def __init__(self, tools, domain_policy, llm, llm_args=None, additional_stop_tool_names=frozenset(),
-                 hold_state: bool = False, max_reasks: int = 2):
+                 hold_state: bool = False, max_reasks: int = 2, dialogue_first: bool = False):
         super().__init__(tools=tools, domain_policy=domain_policy, llm=llm, llm_args=llm_args,
                          additional_stop_tool_names=additional_stop_tool_names)
         self.hold_state = hold_state
         self.max_reasks = max_reasks
+        self.dialogue_first = dialogue_first and hold_state
 
     @property
     def system_prompt(self) -> str:
         base = SYSTEM_PROMPT.format(domain_policy=self.domain_policy, agent_instruction=AGENT_INSTRUCTION)
-        return base + "\n" + HELD_STATE_NOTE if self.hold_state else base
+        if not self.hold_state:
+            return base
+        return base + "\n" + (HELD_STATE_NOTE_DIALOGUE_FIRST if self.dialogue_first else HELD_STATE_NOTE)
 
     def get_init_state(self, message_history=None) -> GatedState:
         history = list(message_history or [])
@@ -107,7 +100,7 @@ class GatedLLMAgent(LLMAgent):
         final: Optional[AssistantMessage] = None
         while final is None:
             if self.hold_state:
-                msgs = state.system_messages + [UserMessage(role="user", content=held.render(event))]
+                msgs = state.system_messages + [UserMessage(role="user", content=held.render(event, dialogue_first=self.dialogue_first))]
             else:
                 msgs = state.system_messages + state.messages
             am = generate(model=self.llm, tools=self.tools, messages=msgs, call_name="agent_response",
@@ -167,7 +160,7 @@ class GatedLLMAgent(LLMAgent):
         final.cost = cost
         raw = dict(last_raw or {})
         raw["axi"] = dict(stats, prompt_tokens=usage["prompt_tokens"], completion_tokens=usage["completion_tokens"],
-                          cached_tokens=cached, hold_state=self.hold_state)
+                          cached_tokens=cached, hold_state=self.hold_state, dialogue_first=self.dialogue_first)
         final.raw_data = raw
         if not self.hold_state:
             state.messages.append(final)
@@ -305,6 +298,13 @@ def create_held_state_agent(tools, domain_policy, **kwargs):
                          hold_state=True)
 
 
+def create_held_state_dialogue_first_agent(tools, domain_policy, **kwargs):
+    return GatedLLMAgent(tools=tools, domain_policy=domain_policy, llm=kwargs.get("llm"),
+                         llm_args=kwargs.get("llm_args"),
+                         additional_stop_tool_names=kwargs.get("additional_stop_tool_names", frozenset()),
+                         hold_state=True, dialogue_first=True)
+
+
 def create_summary_agent(tools, domain_policy, **kwargs):
     return SummaryLLMAgent(tools=tools, domain_policy=domain_policy, llm=kwargs.get("llm"),
                            llm_args=kwargs.get("llm_args"),
@@ -315,6 +315,6 @@ def register() -> None:
     from tau2.registry import registry  # imported here: the registry loads every domain of the benchmark
 
     for name, factory in (("gate_chat", create_gate_chat_agent), ("held_state", create_held_state_agent),
-                          ("summary_chat", create_summary_agent)):
+                          ("held_state_dlg", create_held_state_dialogue_first_agent), ("summary_chat", create_summary_agent)):
         if registry.get_agent_factory(name) is None:
             registry.register_agent_factory(factory, name)
