@@ -7,7 +7,7 @@ This page puts papers written by other people next to AXI's own test pages. Four
 1. Every figure from a paper is the paper's, with its name, date and link, as read on 28 Nov 2026. Every AXI figure links to the page that carries it.
 2. **None of these papers reports a run of AXI.** AXI has been run on exactly one benchmark that someone else wrote: τ²-bench retail ([`TAU2_PILOT.md`](TAU2_PILOT.md), Test 47).
 3. A paper naming a failure is not a paper showing AXI fixes it. Each section ends with what is not shown.
-4. Where a paper's own text disagrees with itself, the abstract or table figure is used and the page says so (section E).
+4. Where a paper's own text disagrees with itself, the abstract or table figure is used and the page says so (section G).
 
 ---
 
@@ -89,7 +89,49 @@ This page puts papers written by other people next to AXI's own test pages. Four
 
 ---
 
-## E. What these papers do not say, and where they disagree with themselves
+## E. How serving fleets absorb the history of agent sessions
+
+**What others measured**
+
+- **Crossflow: Prefill–Decode Elasticity for Agentic LLM Serving** (Xu et al., Meta Platforms; arXiv [2609.27085](https://arxiv.org/pdf/2609.27085), 22 Sep 2026). Prefill–decode disaggregation gives each phase a fixed pool, but the demand for each shifts fast and moving a replica takes tens of minutes; sizing each pool at its 95th percentile leaves up to 17% of capacity unused. Crossflow lets decode nodes lend bounded compute to prefill through short, revocable leases, with a 6.7K-line user-space shim around an SGLang cluster router, and reports **16.2% to 17.4%** higher geometric-mean token throughput than static pools, up to **43.4%** at high load. The paper's figure that agent requests use 4 to 15 times the tokens of chat is quoted from another source, not measured by the authors.
+- **Continuum: Efficient and Robust Multi-Turn LLM Agent Scheduling with KV Cache Time-to-Live** (Li et al., UC Berkeley, Stanford, Tsinghua; arXiv [2511.02230](https://arxiv.org/abs/2511.02230), first posted 4 Nov 2025, version 7 of 8 Sep 2026). Engines evict a finished request's KV cache when other requests are waiting, which defeats reuse for agents that pause for tool calls. Continuum pins the cache for a time-to-live set from the reload cost and queueing delay. Across three hardware and model setups it reduces delay by **1.12 to 3.66 times** and raises throughput by 1.10 to 3.22 times; on a real SWE-agent workload on an industry testbed the delay fell by up to 8.18 times (the abstract states an improvement of over 8 times in average job completion time).
+- **InferCept** (Abhyankar et al.; ICML 2024, arXiv [2402.01869](https://arxiv.org/abs/2402.01869)). Systems that end generation at each tool call and restart afterwards recompute the context they had already processed; the paper puts that at **37% to 40%** of total model forwarding time and reports a **1.6 to 2 times** higher serving throughput.
+- **Mooncake** (Qin et al.; arXiv [2407.00079](https://arxiv.org/abs/2407.00079), version 5 of 8 Oct 2026; FAST 2025 under the title "Trading More Storage for Less Computation"). The serving platform behind Moonshot AI's Kimi: a KV-cache-centric architecture that separates prefill and decoding clusters and uses idle CPU, DRAM and SSD to hold a distributed cache. The abstract reports that Kimi handles **75%** more requests and up to a 525% throughput increase in certain simulated scenarios within the latency targets.
+- **Bursts That Outlast Themselves** and **Inside the Trap**: section C.
+
+**What AXI does about it.** The prompt is rebuilt from the held state, so a session sends one short prompt however many steps it has run. That is a smaller prefill per step and a smaller footprint per session, which is what these systems spend scheduling and storage to manage. What that would change inside these systems is arithmetic here, not a measurement.
+
+**What AXI measured**
+
+- Test 43 (7B model, one NVIDIA L4): about **620 prompt tokens, never above 660**, over 80,000 steps. [`ENDURANCE_7B_TEST.md`](ENDURANCE_7B_TEST.md)
+- Test 42 (vLLM 0.31.0, prefix caching on): over the same 108 steps the kept chat computed **1.78 times** the prompt tokens and took 1.51 times the seconds per step. [`KEPT_CHAT_LONG_TEST.md`](KEPT_CHAT_LONG_TEST.md)
+- On one conversation job the kept chat sent 99,809 prompt tokens a turn on average and the host-held state 1,177 (**84.8 times fewer**). [`AGENTX_NOTE.md`](AGENTX_NOTE.md)
+- 256 sessions at once on one L4 with a real 7B model, every one of 25,557 steps exact, 71.46% of prompt tokens served from the cache. [`SESSIONS_PER_CHIP_TEST.md`](SESSIONS_PER_CHIP_TEST.md) (Test 38). In memory alone, one TPU v6e chip held **927 AXI-sized sessions against 5** with a kept chat. [`TPU_SESSIONS_TEST.md`](TPU_SESSIONS_TEST.md)
+
+**Not shown.** AXI has not been run on Meta's traces, on a disaggregated SGLang fleet, or under Continuum's or Mooncake's schedulers. Test 38 advances its sessions in lock-step rounds on one card, so it has no random arrivals and no tool pauses of varying length, which is the situation Continuum and InferCept study. Test 42 is one engine's prefix cache, not these systems.
+
+---
+
+## F. Cost per completed task, and memory as managed state
+
+**What others measured**
+
+- **AI Agents That Matter** (Kapoor, Stroebl, Siegel, Nadgir, Narayanan, Princeton; arXiv [2407.01502](https://arxiv.org/abs/2407.01502), Jul 2024). A narrow focus on accuracy leads to agents that are needlessly complex and costly; the authors propose optimising accuracy and cost together.
+- **Holistic Agent Leaderboard (HAL)** (Kapoor et al.; arXiv [2510.11977](https://arxiv.org/abs/2510.11977), Oct 2025; ICLR 2026). **21,730** agent rollouts across 9 models and 9 benchmarks, at a total cost of about **$40,000**; the cheapest benchmark averages $13 per evaluation and the most expensive, Online Mind2Web, over $450. In 21 of 36 model, agent and benchmark combinations, more reasoning effort gave equal or lower accuracy. Agents almost never completed a run without at least one failed tool call, even when they succeeded.
+- **Beyond Semantic Organization: Memory as Execution State Management for Long-Horizon Agents (MAGE)** (Chen et al.; arXiv [2606.06090](https://arxiv.org/pdf/2606.06090), Jun 2026). Similarity-based retrieval fragments decision trajectories and mixes valid and erroneous traces. MAGE keeps memory as a hierarchical state tree with four operations (Grow, Compress, Maintain, Revise). On MemoryArena, with Qwen3.6-27B as the main backend, it raises task success by **7.8 to 20.4 points** over baselines that include Mem0, HippoRAG2 and MemoRAG, and uses **55.1%** fewer tokens than the full-context approach.
+
+**What AXI does about it.** Keeping the exact state as managed data, with a check on each change, is the same direction MAGE takes inside an agent; AXI does it on the host, around any model and any agent. The cost of a step is the prompt it sends, which stays short.
+
+**What AXI measured**
+
+- On 4,000 Gemini 3.8 Flash requests a step with the right state cost **$0.0012** with AXI and $0.0052 with replies applied as written (4.5 times). [`MILLION_TOKEN_TEST_HARD.md`](MILLION_TOKEN_TEST_HARD.md). At the provider's own rates, one verified step of the 400-turn job cost $0.0014 with AXI, $0.0148 with the chat kept and its cache warm, and $0.0870 with the cache cold. [`BILLING_CHECK.md`](BILLING_CHECK.md)
+- Test 44 (14B model, one L4, 600-step jobs): against a kept chat, a generic summary, a summary that writes the state out, a sliding window and retrieval, the state the host held was the oracle's on every step of every arm. Of the 22 summaries that wrote the state out, none equalled the oracle's. [`MEMORY_ARMS_TEST.md`](MEMORY_ARMS_TEST.md)
+
+**Not shown.** AXI has not been run on HAL's benchmarks or on MemoryArena, and it has not been compared with MAGE. HAL's cost figures are the price of evaluating agents, not of serving them. Test 44 is one 14B model on three jobs of one synthetic family; what it measures is how each way of keeping a chat short holds on to the state.
+
+---
+
+## G. What these papers do not say, and where they disagree with themselves
 
 - Mittal's context-compression result (steeper decay with compressed context) is read by its author as step count, not context length, driving degradation; the paper also warns that naive truncation of context is likely to backfire. So "a shorter prompt prevents drift" is not what that paper supports. AXI does not truncate history: it rebuilds the prompt from state the host holds exactly, and its claim is narrower, that the held state is exact whatever the model's per-step accuracy (Test 43). That difference is an argument, not a measurement: AXI has not been run on Mittal's tasks.
 - HKUST states the quadratic growth of input as an explanation; it does not present a measurement of it.
@@ -98,7 +140,7 @@ This page puts papers written by other people next to AXI's own test pages. Four
 - Mittal's abstract says every model falls to near zero by 16 steps; its Table 2 has two models at 0.33 and 0.27. The table is used here.
 - The context-length paper names Claude 3.7 Sonnet in its text and 3.5 in a table. Don't Break the Cache gives 13% to 31% for time to first token in its abstract and 6% to 31% in its body; the abstract's figure is used.
 
-## F. How to quote these (an email, a post, a reply)
+## H. How to quote these (an email, a post, a reply)
 
 Name the paper, its date and the link. Give the paper's number in one sentence and AXI's in a separate sentence with its page. Say once that AXI is a host-side layer with the model unchanged, and include one limit. Example:
 
@@ -106,7 +148,10 @@ Name the paper, its date and the link. Give the paper's number in one sentence a
 
 Do not write that a paper "confirms", "proves" or "validates" AXI, that AXI "solves" a failure a paper names, or that AXI was tested on a paper's benchmark. None of those is true.
 
-## G. Read and left out
+## I. Read and left out
+
+- Figures offered in a secondary summary of some of these papers that are not in the papers: a 58.2% share of delay for Continuum, a 26% GPU waste and "over 25% of workload time" for InferCept, a 115% request gain and an "8x400 Gbps" link for Mooncake, and a $180 to $1,600 range for HAL. Each was searched for in the paper's text and not found. Not used; the figures in section E and F are the ones in the papers. The same summary's "0.69 s against 9.9 s or more on an L4" for AXI is not on any AXI test page. Not used.
+- Venues not confirmed from the papers' own text: Continuum's PDF is formatted for PVLDB while a conference listing shows ICLR 2026, and MAGE is reported elsewhere as EMNLP 2026. Neither venue is stated on this page.
 
 - **Agent Drift** (arXiv 2601.04170): its results come from a simulation framework with a table labelled "projected", and its conclusion's 67 to 81% figure does not match its tables (51.9 to 81.5%). Not used.
 - A title suggested while this page was prepared (a paper on per-step model routing) could not be found on arXiv or by search. Not used.

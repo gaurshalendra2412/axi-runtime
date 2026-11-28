@@ -10,7 +10,7 @@
 
 <p align="center">One page with the chart, the tables and the three commands to check it: <a href="docs/AXI_ONE_PAGE.md">AXI: 3,954 of 4,000 replies right, 4,000 of 4,000 states exact</a></p>
 
-<p align="center">Papers by other groups on long-job state loss, growing context, prompt caching, serving many agent sessions and checks outside the model, each next to AXI's own test page and what is not shown: <a href="docs/THIRD_PARTY_EVIDENCE.md">What other people measured, next to what AXI measured</a></p>
+<p align="center">Papers by other groups on long-job state loss, growing context, prompt caching, serving many agent sessions, how serving fleets absorb agent history, cost per completed task and checks outside the model, each next to AXI's own test page and what is not shown: <a href="docs/THIRD_PARTY_EVIDENCE.md">What other people measured, next to what AXI measured</a></p>
 
 <p align="center"><a href="https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/gaurshalendra2412/axi-runtime/actions/workflows/ci.yml/badge.svg"></a></p>
 
